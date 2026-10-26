@@ -1,0 +1,7 @@
+name: local_host
+description: Serveur local embarqué dans le téléphone du maître du jeu.
+version: 0.1.0
+publish_to: none
+environment:
+  sdk: ^3.12.0
+
