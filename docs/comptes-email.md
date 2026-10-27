@@ -52,7 +52,8 @@ est refusé au lieu de transmettre les identifiants et les codes sans chiffremen
 L'expéditeur doit être autorisé chez le fournisseur choisi. Configurer ensuite
 SPF/DKIM/DMARC avec ce fournisseur pour la délivrabilité.
 
-Depuis la racine du dépôt, charger explicitement le fichier :
+FastAPI charge désormais backend/.env automatiquement au démarrage, sans écraser
+les variables déjà définies dans le service. L'option explicite reste possible :
 
 ```powershell
 backend/.venv/Scripts/python.exe -m uvicorn le_loup_api.main:app --env-file backend/.env --host 0.0.0.0 --port 8000

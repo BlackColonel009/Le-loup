@@ -6,6 +6,7 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from .administration import router as admin_router
@@ -18,6 +19,7 @@ from .shop import router as shop_router
 
 @asynccontextmanager
 async def lifespan(app):
+    load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
     app.state.rooms = Rooms()
     app.state.community = Store(
         os.getenv(
