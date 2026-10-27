@@ -24,6 +24,24 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "death_witch": {
+      "seconds": 3.76,
+      "sha256": "da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4",
+      "text": "Mes potions sont mortes avec moi… débrouillez-vous !",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

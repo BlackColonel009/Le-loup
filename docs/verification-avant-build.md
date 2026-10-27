@@ -108,3 +108,21 @@ de vingt téléphones Android, une mesure de performances sur chaque appareil,
 ni une validation du comportement d'un téléphone hôte mis en arrière-plan.
 Après le build, installer l'APK sur les téléphones pour confirmer le rendu,
 l'audio et les connexions dans les conditions réelles de la partie.
+
+## Ajout des cérémonies — 27 octobre 2026
+
+- Suite Flutter complète : **147 tests réussis**, dont les sept résultats de
+  victoire, les dernières paroles, leur ordre de lecture, le silence général,
+  l’annulation au départ du salon et les cartes secrètes.
+- Analyse Dart ciblée : aucune anomalie sur les fichiers des cérémonies.
+- Après harmonisation de la police des cartes Intense : 13 tests ciblés réussis.
+- Captures réelles du rendu Flutter : Village, Loups et malédiction de l’Ancien,
+  sous `apps/le_loup/build/previews/` (fichiers de travail non publiés).
+- Treize nouveaux WAV neuronaux, intégrité vérifiée et déclaration Flutter
+  générée, plus deux jingles originaux. Contrôle de contenu par transcription
+  locale consigné dans `audio-auditions/events-transcription-checks.json` ;
+  quelques confusions phonétiques du transcripteur sur les voix de personnages
+  restent à apprécier à l’écoute. Aucun usage de synthèse Windows.
+- Aucun changement du backend ou des règles ; aucun build APK exécuté.
+
+Détails fonctionnels : `ceremonies-fin-partie.md`.

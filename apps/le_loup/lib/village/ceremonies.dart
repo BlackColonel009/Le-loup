@@ -338,6 +338,7 @@ Future<void> showElimination(
   required String cause,
   CardAmbience ambience = CardAmbience.classic,
   bool feminine = false,
+  bool cursed = false,
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
@@ -349,6 +350,7 @@ Future<void> showElimination(
     cause: cause,
     ambience: ambience,
     feminine: feminine,
+    cursed: cursed,
   ),
 );
 
@@ -359,8 +361,10 @@ class _DeathCard extends StatefulWidget {
     required this.cause,
     required this.ambience,
     required this.feminine,
+    required this.cursed,
   });
   final bool feminine;
+  final bool cursed;
   final CardAmbience ambience;
   final String name;
   final String? role;
@@ -373,7 +377,7 @@ class _DeathCardState extends State<_DeathCard>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final _animation = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1800),
+    duration: Duration(milliseconds: widget.cursed ? 2800 : 1800),
   );
   bool _concealed = false;
   @override
@@ -414,7 +418,15 @@ class _DeathCardState extends State<_DeathCard>
           children: [
             Text(widget.name, style: Theme.of(context).textTheme.headlineSmall),
             Text(
-              widget.cause == 'night'
+              widget.cursed
+                  ? 'Les pouvoirs du camp Village sont désactivés.'
+                  : widget.cause == 'poison'
+                  ? 'Éliminé par une potion'
+                  : widget.cause == 'love'
+                  ? 'Le chagrin a emporté son destin'
+                  : widget.cause == 'white_wolf'
+                  ? 'Éliminé pendant la nuit'
+                  : widget.cause == 'night'
                   ? 'Éliminé pendant la nuit'
                   : widget.cause == 'hunter'
                   ? 'Dernier tir du Chasseur'
@@ -472,6 +484,17 @@ class _DeathCardState extends State<_DeathCard>
                                   fit: BoxFit.fill,
                                 ),
                               ),
+                            if (widget.cursed)
+                              Positioned.fill(
+                                child: IgnorePointer(
+                                  child: CustomPaint(
+                                    painter: _ElderLightning(
+                                      _animation.value,
+                                      MediaQuery.disableAnimationsOf(context),
+                                    ),
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       );
@@ -486,6 +509,8 @@ class _DeathCardState extends State<_DeathCard>
               builder: (context, child) => Text(
                 _concealed
                     ? 'Carte masquée'
+                    : widget.cursed && widget.role == null
+                    ? 'L’identité reste cachée, mais la malédiction frappe le Village.'
                     : widget.role == null
                     ? 'Son rôle reste secret selon les règles du salon.'
                     : _animation.value < .55
@@ -515,4 +540,51 @@ class _ScratchClipper extends CustomClipper<Rect> {
   @override
   bool shouldReclip(covariant _ScratchClipper oldClipper) =>
       oldClipper.progress != progress;
+}
+
+/// A single soft lightning reveal; no repeated flashing or strobe.
+class _ElderLightning extends CustomPainter {
+  _ElderLightning(this.progress, this.reduced);
+  final double progress;
+  final bool reduced;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strength = reduced
+        ? .35
+        : math.sin(((progress - .4) / .6).clamp(0, 1) * math.pi);
+    if (strength <= 0) return;
+    final glow = Paint()
+      ..color = Color.fromRGBO(172, 198, 255, strength * .7)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+    for (final mirrored in [false, true]) {
+      final path = Path();
+      const points = [
+        Offset(.18, .02),
+        Offset(.38, .22),
+        Offset(.24, .37),
+        Offset(.54, .53),
+        Offset(.43, .68),
+        Offset(.73, .98),
+      ];
+      for (var i = 0; i < points.length; i++) {
+        final p = points[i];
+        final x = (mirrored ? 1 - p.dx : p.dx) * size.width;
+        if (i == 0) {
+          path.moveTo(x, p.dy * size.height);
+        } else {
+          path.lineTo(x, p.dy * size.height);
+        }
+      }
+      canvas.drawPath(
+        path,
+        glow..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10),
+      );
+      canvas.drawPath(path, glow..maskFilter = null);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ElderLightning old) =>
+      old.progress != progress || old.reduced != reduced;
 }

@@ -25,6 +25,60 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "ended_wolves": {
+      "seconds": 4.48,
+      "sha256": "b60bddb79561ac581559cd06416d2f6cbd7b2a449cb9f663c229088b8499a0cc",
+      "text": "Cette nuit, la meute règne. Les loups ont gagné !",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_werewolf": {
+      "seconds": 4.0,
+      "sha256": "8f844f611066d6bc578be2b9987cbdc3b6a84fe385f73da000d7bf302d3fafff",
+      "text": "Vous m’avez trouvé… mais combien en reste-t-il ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "ended_white_wolf": {
+      "seconds": 5.12,
+      "sha256": "2b6d1c4d5e722490783885d43a87ea73d6a0da5ec6468f377d1e5df80e6ed003",
+      "text": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

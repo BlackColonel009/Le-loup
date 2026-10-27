@@ -7,6 +7,24 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "74fcaeb6a56ca4a7e031fec9967e7e5134ff5ea2d83de528cef7e302a20b812b"
+    },
+    "ended_angel": {
+      "seconds": 3.92,
+      "sha256": "c006bc5d53e0e737f7e62ac90f1f792f7d92e0f2b381008645cb722bb1b9229c",
+      "text": "L’Ange a mis fin au plaisir… La partie est terminée.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

@@ -12,6 +12,7 @@ import 'village/village_map.dart';
 import 'village/village_navigation.dart';
 import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
+import 'village/victory_scene.dart';
 import 'cards/classic_role.dart';
 import 'cards/card_gallery.dart';
 import 'cards/game_codex.dart';
@@ -201,6 +202,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   final _deathQueue = <Map<String, dynamic>>[];
   bool _deathFeedInitialized = false;
   bool _showingDeaths = false;
+  bool _elderCursed = false, _anonymousCurse = false;
+  String? _endingShown;
+  Map<String, dynamic>? _pendingEnding;
 
   void _refreshVillage() {
     ClassicAudio.instance.room(_room, isHost: _host != null || widget.online);
@@ -213,21 +217,73 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   }
 
   void _receiveDeaths(Map<String, dynamic> room) {
+    final game = room['game'] as Map?;
     final events = ((room['game'] as Map?)?['death_events'] as List? ?? [])
         .cast<Map<String, dynamic>>();
     if (!_deathFeedInitialized) {
       _seenDeaths.addAll(events.map((event) => event['id'] as String));
       _deathFeedInitialized = room['game'] != null;
+      _elderCursed = game?['village_powers_lost'] == true;
+      if (game?['phase'] == 'ended') {
+        _endingShown = '${room['code']}:${game?['night']}:${game?['winner']}';
+      }
       return;
     }
+    final curse = !_elderCursed && game?['village_powers_lost'] == true;
+    _elderCursed = game?['village_powers_lost'] == true;
+    var illustratedCurse = false;
     for (final event in events) {
-      if (_seenDeaths.add(event['id'] as String)) _deathQueue.add(event);
+      if (_seenDeaths.add(event['id'] as String)) {
+        final cursedCard = curse && event['role'] == 'elder';
+        if (cursedCard) illustratedCurse = true;
+        _deathQueue.add({...event, 'elder_curse': cursedCard});
+      }
     }
-    if (_deathQueue.isEmpty || _showingDeaths) return;
+    if (curse && !illustratedCurse) _anonymousCurse = true;
+    if (game?['phase'] == 'ended') {
+      final key = '${room['code']}:${game?['night']}:${game?['winner']}';
+      if (key != _endingShown) {
+        _endingShown = key;
+        _pendingEnding = Map<String, dynamic>.from(game!);
+      }
+    }
+    if ((_deathQueue.isEmpty && !_anonymousCurse && _pendingEnding == null) ||
+        _showingDeaths) {
+      return;
+    }
     _showingDeaths = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        while (mounted && _deathQueue.isNotEmpty) {
+        while (mounted &&
+            (_deathQueue.isNotEmpty ||
+                _anonymousCurse ||
+                _pendingEnding != null)) {
+          if (_deathQueue.isEmpty && _anonymousCurse) {
+            if (!mounted) break;
+            _anonymousCurse = false;
+            ClassicAudio.instance.deathSpeech(null, cursed: true);
+            await showElimination(
+              context,
+              name: 'La malédiction de l’Ancien',
+              cause: 'curse',
+              cursed: true,
+              ambience: _ambience,
+            );
+            continue;
+          }
+          if (_deathQueue.isEmpty && _pendingEnding != null) {
+            if (!mounted) break;
+            final ending = _pendingEnding!;
+            _pendingEnding = null;
+            ClassicAudio.instance.ending(ending['winner'] as String?);
+            await showVictory(
+              context,
+              game: ending,
+              players: _room?['players'] as List? ?? [],
+              ambience: _ambience,
+            );
+            continue;
+          }
           final event = _deathQueue.removeAt(0);
           final player = (_room?['players'] as List? ?? [])
               .where((p) => p['id'] == event['player'])
@@ -235,6 +291,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           final role =
               event['role'] as String? ??
               (event['player'] == _client?.id ? _role : null);
+          ClassicAudio.instance.deathSpeech(
+            event['role'] as String?,
+            cursed: event['elder_curse'] == true,
+          );
           await showElimination(
             context,
             name: player?['nickname'] as String? ?? 'Joueur',
@@ -242,6 +302,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             cause: event['cause'] as String,
             feminine: _femaleFor(event['player']),
             ambience: _ambience,
+            cursed: event['elder_curse'] == true,
           );
         }
       } finally {
@@ -454,6 +515,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       _seenDeaths.clear();
       _deathQueue.clear();
       _deathFeedInitialized = false;
+      _elderCursed = false;
+      _anonymousCurse = false;
+      _pendingEnding = null;
+      _endingShown = null;
       _refreshVillage();
     }
   }

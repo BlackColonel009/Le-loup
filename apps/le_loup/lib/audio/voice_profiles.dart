@@ -33,7 +33,7 @@ const voiceProfiles = <VoiceProfile>[
     "Narrateur français posé et clair.",
     "neural/classic_male/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {'ended_piper.wav', 'preview.wav', 'wolves.wav'},
   ),
   VoiceProfile(
     "classic_female",
@@ -42,7 +42,12 @@ const voiceProfiles = <VoiceProfile>[
     "Narratrice française claire et calme.",
     "neural/classic_female/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'death_seer.wav',
+      'ended_lovers.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "intense_male",
@@ -51,7 +56,7 @@ const voiceProfiles = <VoiceProfile>[
     "Grave, lente et chargée de suspense.",
     "neural/intense_male/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {'death_hunter.wav', 'preview.wav', 'wolves.wav'},
   ),
   VoiceProfile(
     "intense_female",
@@ -69,7 +74,12 @@ const voiceProfiles = <VoiceProfile>[
     "Ton solennel et annonces de cour.",
     "neural/duke/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'ended_draw.wav',
+      'ended_village.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "old_wizard",
@@ -78,7 +88,12 @@ const voiceProfiles = <VoiceProfile>[
     "Voix vieillie, tremblante et voilée.",
     "neural/old_wizard/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'death_elder.wav',
+      'elder_curse.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "old_witch",
@@ -87,7 +102,12 @@ const voiceProfiles = <VoiceProfile>[
     "Timbre voilé et tremblement discret.",
     "neural/old_witch/",
     isApproved: true,
-    availableCues: {'preview.wav', 'witch_potion.wav', 'wolves.wav'},
+    availableCues: {
+      'death_witch.wav',
+      'preview.wav',
+      'witch_potion.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "werewolf",
@@ -96,7 +116,14 @@ const voiceProfiles = <VoiceProfile>[
     "Grondement grave sous une parole intelligible.",
     "neural/werewolf/",
     isApproved: true,
-    availableCues: {'preview.wav', 'role_reveal.wav', 'wolves.wav'},
+    availableCues: {
+      'death_werewolf.wav',
+      'ended_white_wolf.wav',
+      'ended_wolves.wav',
+      'preview.wav',
+      'role_reveal.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "ghost",
@@ -105,7 +132,7 @@ const voiceProfiles = <VoiceProfile>[
     "Voix aérienne et échos lointains.",
     "neural/ghost/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {'ended_angel.wav', 'preview.wav', 'wolves.wav'},
   ),
   VoiceProfile(
     "cold_killer",

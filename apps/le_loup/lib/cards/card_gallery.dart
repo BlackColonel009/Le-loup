@@ -513,7 +513,7 @@ class RoleCardFront extends StatelessWidget {
                           'Camp : ${role.camp}\n${role.summary}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontFamily: 'SourceSans3',
+                            fontFamily: 'VillageSans',
                             fontSize: 28,
                             height: 1.13,
                             color: Color(0xFF2B1B12),

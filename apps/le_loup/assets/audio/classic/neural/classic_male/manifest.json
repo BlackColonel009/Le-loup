@@ -6,6 +6,24 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "dedd4496a2c325dfcf4410c98301a76c598d65e666389298165d717aac189af6"
+    },
+    "ended_piper": {
+      "seconds": 4.4,
+      "sha256": "8ee541fa087482fd283f048bfc9ddc872ea20a7efcfcf3e5482550f5e2b3947b",
+      "text": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

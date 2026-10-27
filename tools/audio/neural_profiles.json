@@ -63,7 +63,34 @@
   ],
   "extra_lines": {
     "old_witch": {
-      "witch_potion": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !"
+      "witch_potion": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
+      "death_witch": "Mes potions sont mortes avec moi… débrouillez-vous !"
+    },
+    "werewolf": {
+      "death_werewolf": "Vous m’avez trouvé… mais combien en reste-t-il ?",
+      "ended_wolves": "Cette nuit, la meute règne. Les loups ont gagné !",
+      "ended_white_wolf": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres."
+    },
+    "classic_female": {
+      "death_seer": "J’avais vu les ténèbres… personne ne m’a crue.",
+      "ended_lovers": "Leur amour a défié tous les camps. Honneur aux amoureux !"
+    },
+    "intense_male": {
+      "death_hunter": "Je tombe… mais mon fusil parle encore."
+    },
+    "old_wizard": {
+      "death_elder": "La mémoire du village… s’éteint avec moi.",
+      "elder_curse": "Que le ciel vous pardonne… et vous prive de vos pouvoirs."
+    },
+    "duke": {
+      "ended_village": "Le village est sauvé ! Honneur aux villageois !",
+      "ended_draw": "Le silence a gagné. Cette partie est terminée."
+    },
+    "classic_male": {
+      "ended_piper": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie."
+    },
+    "ghost": {
+      "ended_angel": "L’Ange a mis fin au plaisir… La partie est terminée."
     }
   }
 }

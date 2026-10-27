@@ -1,0 +1,90 @@
+{
+  "method": "faster-whisper base, CPU int8, French",
+  "note": "ASR can mishear character voices; this is not a listening approval.",
+  "files": [
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\death_seer.wav",
+      "expected": "J’avais vu les ténèbres… personne ne m’a crue.",
+      "transcribed": "J'avais vu les ténèbres. Personne ne m'a true.",
+      "word_error_rate": 0.1
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\ended_lovers.wav",
+      "expected": "Leur amour a défié tous les camps. Honneur aux amoureux !",
+      "transcribed": "Leur amour a défié tous les camps, honneur aux amoureux.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\ended_piper.wav",
+      "expected": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie.",
+      "transcribed": "Honneur aux joueurs de flûte, le village a succombé à sa mélodie.",
+      "word_error_rate": 0.167
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\ended_village.wav",
+      "expected": "Le village est sauvé ! Honneur aux villageois !",
+      "transcribed": "Le village est sauvé, honneur au villageois.",
+      "word_error_rate": 0.143
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\ended_draw.wav",
+      "expected": "Le silence a gagné. Cette partie est terminée.",
+      "transcribed": "Le silence a gagné, cette partie est terminée.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\ended_angel.wav",
+      "expected": "L’Ange a mis fin au plaisir… La partie est terminée.",
+      "transcribed": "L'enjamie fin au plaisir, la partie est terminée.",
+      "word_error_rate": 0.273
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\death_hunter.wav",
+      "expected": "Je tombe… mais mon fusil parle encore.",
+      "transcribed": "Je tombe, mais mon fusil parle encore.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\witch_potion.wav",
+      "expected": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
+      "transcribed": "Alors mon mignon, un petit remontant, ou on allait simple au cimetière.",
+      "word_error_rate": 0.231
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\death_witch.wav",
+      "expected": "Mes potions sont mortes avec moi… débrouillez-vous !",
+      "transcribed": "Mes potions sont mortes avec moi, débrouillez-vous.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\death_elder.wav",
+      "expected": "La mémoire du village… s’éteint avec moi.",
+      "transcribed": "La mémoire du village, c'est un avec moi.",
+      "word_error_rate": 0.375
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\elder_curse.wav",
+      "expected": "Que le ciel vous pardonne… et vous prive de vos pouvoirs.",
+      "transcribed": "Que le ciel vous pardonne, et vous prive de vos pouvoirs.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\ended_wolves.wav",
+      "expected": "Cette nuit, la meute règne. Les loups ont gagné !",
+      "transcribed": "Cette nuit, la meurtreigne, les loups ont gagné !",
+      "word_error_rate": 0.222
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\death_werewolf.wav",
+      "expected": "Vous m’avez trouvé… mais combien en reste-t-il ?",
+      "transcribed": "Vous m'avez trouvé, mais combien reste-t-il ?",
+      "word_error_rate": 0.1
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\ended_white_wolf.wav",
+      "expected": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres.",
+      "transcribed": "Honneur au Lou blanc, seul il a vaincu tous les autres.",
+      "word_error_rate": 0.091
+    }
+  ]
+}

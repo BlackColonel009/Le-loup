@@ -28,6 +28,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--fetch', action='store_true')
     parser.add_argument('--pack', action='store_true')
+    parser.add_argument('--events', action='store_true', help='Check only extra character/event lines')
     args = parser.parse_args()
     if args.fetch:
         repo = 'Systran/faster-whisper-base'
@@ -46,9 +47,11 @@ def main():
     model = WhisperModel(str(MODEL), device='cpu', compute_type='int8', cpu_threads=4, local_files_only=True)
     tasks = []
     if args.pack:
+        extra = json.loads((ROOT / 'tools/audio/neural_profiles.json').read_text(encoding='utf-8')).get('extra_lines', {})
         for manifest_path in (ROOT / 'apps/le_loup/assets/audio/classic/neural').glob('*/manifest.json'):
             manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
-            tasks.extend((manifest_path.parent / (cue + '.wav'), info['text']) for cue, info in manifest['cues'].items())
+            tasks.extend((manifest_path.parent / (cue + '.wav'), info['text']) for cue, info in manifest['cues'].items()
+                         if not args.events or cue in extra.get(manifest_path.parent.name, {}))
     else:
         for audio in (ROOT / 'docs/audio-auditions').glob('*.wav'):
             metadata = json.loads(audio.with_suffix('.json').read_text(encoding='utf-8'))
@@ -67,7 +70,7 @@ def main():
                  'transcribed': actual, 'word_error_rate': word_error(expected, actual)}
         report.append(entry)
         print(path.parent.name + '/' + path.name + ': ' + str(entry['word_error_rate']) + ' | ' + actual, flush=True)
-    output = ROOT / 'docs/audio-auditions' / ('pack-transcription-checks.json' if args.pack else 'transcription-checks.json')
+    output = ROOT / 'docs/audio-auditions' / ('events-transcription-checks.json' if args.events else 'pack-transcription-checks.json' if args.pack else 'transcription-checks.json')
     output.write_text(json.dumps({'method': 'faster-whisper base, CPU int8, French',
         'note': 'ASR can mishear character voices; this is not a listening approval.',
         'files': report}, ensure_ascii=False, indent=2), encoding='utf-8')

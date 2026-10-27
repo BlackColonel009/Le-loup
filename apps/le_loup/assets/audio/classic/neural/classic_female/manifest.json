@@ -6,6 +6,42 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "725888b47807ec2de7b510b8207a781f386d96bc07856d1453efa8a80cd1773c"
+    },
+    "death_seer": {
+      "seconds": 3.2,
+      "sha256": "cf92571845ce55a35e55f2e5b6fab9ae699bc1fe5bf2a8715f004147dc081ad7",
+      "text": "J’avais vu les ténèbres… personne ne m’a crue.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "ended_lovers": {
+      "seconds": 4.32,
+      "sha256": "b9162952cf870243006e91df62ea039593625ee49a88f5770a12921217cc6a50",
+      "text": "Leur amour a défié tous les camps. Honneur aux amoureux !",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

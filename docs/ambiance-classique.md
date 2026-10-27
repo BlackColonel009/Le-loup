@@ -27,6 +27,8 @@
   Les joueurs restent silencieux. Aucun nom ou rôle secret n’est ajouté aux voix.
 - Un rappel d’enceinte, facultatif et refermable, apparaît au MDJ dans le salon.
 - La musique baisse pendant une voix ou le hurlement puis remonte progressivement.
+- Éliminations et victoires : dernières paroles de cinq rôles, malédiction de
+  l’Ancien et deux signatures sonores de fin. Voir `ceremonies-fin-partie.md`.
 - Réglages séparés : musique, voix et effets, plus silence général. Les volumes
   sont conservés sur l’appareil. Le dernier appel peut être répété manuellement.
 - La lecture s’arrête en arrière-plan. Au retour, la musique reprend sans répéter

@@ -7,6 +7,42 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "0b704590bbfd2c791f3090bcafc3ce423b05705f0a3307e91824d03489c3e61c"
+    },
+    "death_elder": {
+      "seconds": 3.92,
+      "sha256": "28aabfeefbc594b3dccf3580b6964a7fa36fabb505d4fc9053eb100f3cc3b1b2",
+      "text": "La mémoire du village… s’éteint avec moi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "elder_curse": {
+      "seconds": 3.92,
+      "sha256": "377169921bc7ce1ee8b88dc5abb2868c81dad87897d7eda77df15041bf21aff1",
+      "text": "Que le ciel vous pardonne… et vous prive de vos pouvoirs.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

@@ -6,6 +6,42 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "193e68bff353ed247a471bf56e02b172ad1771e6691634d11e9d87333a93beba"
+    },
+    "ended_village": {
+      "seconds": 3.2,
+      "sha256": "eb668f9be03c2469d1ffe1ce7b0eeed02c33ea161bf7d06c6e8e4adc8689f091",
+      "text": "Le village est sauvé ! Honneur aux villageois !",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "ended_draw": {
+      "seconds": 3.92,
+      "sha256": "54341de9b76eaec4381aaaa21cd2e2539735d4da1e5ed111a8d3ef06f08720b4",
+      "text": "Le silence a gagné. Cette partie est terminée.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

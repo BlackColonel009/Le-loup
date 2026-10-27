@@ -46,6 +46,7 @@ def main():
     parser.add_argument('--profile')
     parser.add_argument('--limit', type=int)
     parser.add_argument('--cue', help='Render only this logical cue')
+    parser.add_argument('--events', action='store_true', help='Render only extra character/event lines')
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
     args = parser.parse_args()
     kind = 'design' if args.mode == 'auditions' else 'base'
@@ -118,6 +119,8 @@ def main():
             extra = json.loads((ROOT / 'tools/audio/neural_profiles.json').read_text(encoding='utf-8')).get('extra_lines', {}).get(profile, {})
             lines = {**lines, **extra}
             for cue, text in lines.items():
+                if args.events and cue not in extra:
+                    continue
                 if args.cue and cue != args.cue:
                     continue
                 if cue == 'preview' or cue in manifest['cues']:

@@ -6,6 +6,24 @@
     "wolves": {
       "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
       "sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2"
+    },
+    "death_hunter": {
+      "seconds": 4.32,
+      "sha256": "e504f6e3611b91f3821952a1351fc7bf2aadc4cc2775f827fb5ce62920fa34f2",
+      "text": "Je tombe… mais mon fusil parle encore.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

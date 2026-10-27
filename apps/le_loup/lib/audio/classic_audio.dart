@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_host/local_host.dart';
 import 'voice_profiles.dart';
+import '../village/ending_data.dart';
 
 enum AudioScene { welcome, host, silent }
 
@@ -145,6 +146,8 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   bool _opening = false;
   int _epoch = 0, _fade = 0, _cueTicket = 0;
   String? _lastCue, _currentVoice, _lastPotionCue;
+  int _stories = 0;
+  Completer<void>? _cancelCurrentStory;
   String? error;
   VoiceProfile _voiceProfile = voiceProfiles.first;
   VoiceProfile get voiceProfile => _voiceProfile;
@@ -218,6 +221,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
 
   void _setScene(AudioScene next) {
     if (scene == next) return;
+    _cancelStory();
     scene = next;
     if (next != AudioScene.host) {
       _storm?.cancel();
@@ -305,9 +309,13 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
         '${room['code']}:${game['night']}:${game['phase_revision']}:$phase';
     if (id == _lastCue) return;
     _lastCue = id;
-    final asset = phase == 'ended'
-        ? 'ended_${game['winner']}.wav'
-        : '$phase.wav';
+    // The final ceremony is scheduled after the death cards, never twice here.
+    if (phase == 'ended') {
+      _currentVoice = null;
+      notifyListeners();
+      return;
+    }
+    final asset = '$phase.wav';
     if (!voiceAssets.contains(asset)) {
       if (_currentVoice != null) {
         _currentVoice = null;
@@ -409,6 +417,88 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     });
   }
 
+  void _cancelStory() {
+    final current = _cancelCurrentStory;
+    if (current != null && !current.isCompleted) current.complete();
+  }
+
+  void deathSpeech(String? publicRole, {bool cursed = false}) {
+    if (cursed) {
+      _story([(asset: 'elder_curse.wav', profile: 'old_wizard')]);
+      return;
+    }
+    final speech = deathSpeeches[publicRole];
+    if (speech != null) _story([(asset: speech.cue, profile: speech.profile)]);
+  }
+
+  void ending(String? winner) {
+    final ending = gameEndings[winner];
+    _story([
+      (
+        asset: winner == 'wolves' ? 'ending_dark.wav' : 'ending_bright.wav',
+        profile: null,
+      ),
+      if (ending != null) (asset: ending.cue, profile: ending.profile),
+    ]);
+  }
+
+  void _story(List<({String asset, String? profile})> cues) {
+    if (_backend == null ||
+        _disposed ||
+        !_audible ||
+        scene != AudioScene.host) {
+      return;
+    }
+    final epoch = _epoch;
+    _stories++;
+    _cueTicket++; // Cancel ordinary phase announcements waiting in the queue.
+    _queue((backend) async {
+      final cancel = Completer<void>();
+      _cancelCurrentStory = cancel;
+      try {
+        for (final cue in cues) {
+          if (epoch != _epoch || !_audible || cancel.isCompleted) break;
+          final voice = cue.profile != null;
+          final profile = voice
+              ? _profiles.where((p) => p.id == cue.profile).firstOrNull
+              : null;
+          if (voice &&
+              (!narrationEnabled ||
+                  voiceLevel == 0 ||
+                  profile?.supports(cue.asset) != true)) {
+            continue;
+          }
+          if (!voice && effectLevel == 0) continue;
+          _ducked = true;
+          _cueIsVoice = voice;
+          _fade++;
+          await backend.musicVolume(_bedVolume);
+          await _applyWeather(backend);
+          final finished = Completer<void>();
+          final sub = backend.cueFinished.listen((_) {
+            if (!finished.isCompleted) finished.complete();
+          });
+          try {
+            await backend.cue(
+              voice ? profile!.assetFor(cue.asset) : cue.asset,
+              voice ? voiceLevel : effectLevel,
+            );
+            await Future.any([
+              finished.future,
+              cancel.future,
+            ]).timeout(const Duration(seconds: 20));
+          } finally {
+            await sub.cancel();
+          }
+        }
+      } finally {
+        if (identical(_cancelCurrentStory, cancel)) _cancelCurrentStory = null;
+        _stories--;
+        if (_stories == 0) _cueEnded();
+      }
+    });
+  }
+
   void replay() {
     if (scene == AudioScene.host && _currentVoice != null) {
       _play(_currentVoice!, voice: true);
@@ -428,6 +518,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     VoiceProfile? profile,
     bool preview = false,
   }) {
+    if (_stories > 0 && voice && !preview) return;
     if (voice && !(profile ?? _voiceProfile).supports(asset)) return;
     final epoch = _epoch;
     final ticket = ++_cueTicket;
@@ -457,6 +548,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void _cueEnded() {
+    if (_stories > 0) return;
     _ducked = false;
     _fadeIn(_epoch, from: musicLevel * .2);
     _queue(_applyWeather);
@@ -488,6 +580,9 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     bool? mute,
     bool? narration,
   }) {
+    if (mute == true || narration == false || voice == 0 || effects == 0) {
+      _cancelStory();
+    }
     narrationEnabled = narration ?? narrationEnabled;
     musicLevel = (music ?? musicLevel).clamp(0, 1);
     voiceLevel = (voice ?? voiceLevel).clamp(0, 1);
@@ -539,6 +634,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final foreground = state == AppLifecycleState.resumed;
     if (_foreground == foreground) return;
+    _cancelStory();
     _foreground = foreground;
     _epoch++;
     _fade++;
@@ -554,6 +650,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _cancelStory();
     _disposed = true;
     _fade++;
     _save?.cancel();
