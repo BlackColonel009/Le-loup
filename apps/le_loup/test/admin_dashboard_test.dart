@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:le_loup/community/admin_dashboard.dart';
 import 'package:le_loup/community/community_screen.dart';
 import 'package:le_loup/main.dart';
 import 'package:le_loup/services/maintenance.dart';
 
 void main() {
+  setUp(() => FlutterSecureStorage.setMockInitialValues({}));
   testWidgets('Dashboard absent avant authentification administrateur', (
     tester,
   ) async {

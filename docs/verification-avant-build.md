@@ -1,0 +1,110 @@
+# Vérification avant build — 27 octobre 2026
+
+## Résultat
+
+Vérification effectuée après la carte Intense v3 (base Git `923546e`).
+Les contrôles ci-dessous ont réussi. Aucun défaut bloquant du moteur des rôles
+ou des échanges n'a été reproduit dans ces scénarios. Une correction du banc
+de tests Flutter a été nécessaire : le test d'accès administrateur utilise
+maintenant un stockage sécurisé simulé, comme les tests de connexion.
+
+| Contrôle | Résultat |
+| --- | --- |
+| Suite Flutter complète | 131 tests réussis |
+| Suite FastAPI complète avec moteur Dart disponible | 15 tests réussis |
+| Scénarios Dart existants | 16 programmes réussis |
+| Partie de contrôle sur Contabo en HTTPS/WSS | 20 clients, 17 rôles, deux nuits et un jour complet |
+| Analyse statique du moteur et du nouveau scénario en ligne | Aucune anomalie |
+
+Aucun APK ni exécutable de l'application n'a été compilé. Les emails des tests
+backend sont simulés ; aucun email réel n'a été envoyé. La partie de contrôle
+en ligne a utilisé un salon dédié avec uniquement des joueurs de test, fermé
+dans le bloc de nettoyage du scénario.
+
+## Rôles vérifiés
+
+Les cinq rôles de base sont couverts par `night_smoke.dart`, `day_smoke.dart`
+et leurs équivalents réseau. Les douze rôles supplémentaires sont couverts par
+`expanded_roles_smoke.dart` et `expanded_network_smoke.dart`.
+
+| Rôle | Comportement vérifié |
+| --- | --- |
+| Villageois / Villageoise | Débat et vote, absence de pouvoir nocturne, apparence sans changement de règle |
+| Loup-Garou | Accord unanime, réponse manquante/désaccord, cibles autorisées, chat privé |
+| Voyante | Vision privée, rôle exact ou camp, une action par nuit, refus des autres joueurs |
+| Sorcière | Potions uniques, deux potions la même nuit, information liée à la potion de vie, sauvetage et poison |
+| Chasseur | Réaction après mort, cible vivante, contrôle de victoire après son tir |
+| Petite Fille | Murmure anonyme, un espionnage par nuit, détection privée à la meute |
+| Métamorphe | Échange initial unique, rôles et notifications privés mis à jour, nouveaux pouvoirs utilisables |
+| Cupidon | Choix initial, reconnaissance privée, mort de chagrin, réaction du Chasseur et victoire des amoureux |
+| Salvateur | Protection de la meute, auto-protection, interdiction de reprendre la cible précédente, secret de la protection |
+| Ancien | Première attaque absorbée, résistance consommée, perte des pouvoirs du Village après élimination concernée |
+| Bouc émissaire | Égalité au vote, réaction après élimination, restriction des électeurs pour un seul jour |
+| Alpha | Seconde cible distincte, désactivation après la mort d'un membre de la meute |
+| Loup Blanc | Présence dans la meute, attaque personnelle les nuits paires, victoire solitaire |
+| Père des Loups | Infection à usage unique, activation différée, annulation par la potion de vie, conservation du rôle |
+| Idiot | Grâce au vote et perte du droit de vote |
+| Joueur de Flûte | Cibles non charmées, information privée des charmés, victoire personnelle et changement d'objectif après infection |
+| Ange | Victoire au premier vote, transformation en Villageois s'il échoue en survivant |
+
+Les rôles spéciaux sont uniques dans une composition acceptée par le serveur.
+Les éditions Classique et Intense partagent le même moteur ; leur apparence
+ne modifie pas les pouvoirs. Le thème Horreur n'est pas encore sélectionnable
+comme pack de partie dans le moteur actuel.
+
+## Échanges et réseau
+
+- Arrivées simultanées, pseudos, état prêt et vingt emplacements de maison distincts.
+- Distribution privée, séparation des informations publiques et de la vue MDJ.
+- Autorisations des actions, rejet des actions d'un autre rôle et des anciennes phases.
+- Chat nocturne des loups limité au réveil de la meute, absent chez les autres joueurs.
+- Effacement des messages nocturnes après l'appel et avant la nuit suivante.
+- Chat de jour partagé, fermeture par le MDJ, refus d'écriture aux morts.
+- Bulletins privés avant clôture, changement de vote, blanc, égalité, abstention.
+- Chronomètre, pause, reprise, fin de délai et contrôle des appels nocturnes par le MDJ.
+- Maintien de l'identité et du rôle après reconnexion ; le joueur rejoint bien à nouveau le salon.
+- Sentence identique entre les clients et poursuite de la partie après la roue.
+
+La partie publique a exercé notamment l'échange Métamorphe/Voyante, les amoureux,
+la protection, une vision, le chat des loups et l'espionnage, l'Alpha, une infection
+annulée par la Sorcière, le charme, un décès nocturne, le vote du Chasseur, la mort
+de son amoureux, son tir, la roue, puis la nuit suivante avec la résistance de
+l'Ancien et l'attaque du Loup Blanc. Les pouvoirs non déclenchés dans cette seule
+partie restent couverts par les scénarios de moteur séparés.
+
+## Reproduire
+
+Depuis `apps/le_loup` :
+
+```powershell
+flutter test --no-pub
+```
+
+Depuis la racine du dépôt :
+
+```powershell
+$env:LE_LOUP_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
+backend/.venv/Scripts/python.exe -m pytest backend/tests -q
+```
+
+Depuis `packages/local_host`, exécuter les programmes `tool/*_smoke.dart`
+(sauf `online_client_smoke.dart`, qui demande un serveur), ainsi que `tool/smoke.dart`.
+Le fichier `classic_scenario_driver.dart` est un utilitaire, pas un programme autonome.
+
+Pour rejouer la grande partie de contrôle :
+
+```powershell
+dart run tool/full_online_audit.dart https://legendeofwolf.newtechnologiestg.com
+```
+
+Cette commande crée un salon et vingt clients simulés puis les ferme. Lancer
+avec une capacité disponible sur le serveur ; aucun salon existant n'est utilisé.
+
+## Limites pratiques
+
+Ces contrôles vérifient le code et les transports réellement utilisés, avec
+des clients simulés sur ordinateur. Ils ne constituent pas un essai matériel
+de vingt téléphones Android, une mesure de performances sur chaque appareil,
+ni une validation du comportement d'un téléphone hôte mis en arrière-plan.
+Après le build, installer l'APK sur les téléphones pour confirmer le rendu,
+l'audio et les connexions dans les conditions réelles de la partie.
