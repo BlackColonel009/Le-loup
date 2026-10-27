@@ -9,12 +9,16 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from .account_deletion import router as deletion_router
 from .administration import router as admin_router
 from .community import Store
 from .community import router as community_router
+from .gallery import initialize as initialize_gallery
+from .gallery import router as gallery_router
 from .online import Rooms, router
 from .profile import router as profile_router
 from .shop import router as shop_router
+from .website import install as install_website
 
 
 @asynccontextmanager
@@ -27,6 +31,7 @@ async def lifespan(app):
             str(Path(__file__).resolve().parents[2] / "data/community.sqlite3"),
         )
     )
+    initialize_gallery(app.state.community)
     reaper = asyncio.create_task(app.state.rooms.reap())
     try:
         yield
@@ -43,6 +48,9 @@ app.include_router(community_router)
 app.include_router(shop_router)
 app.include_router(admin_router)
 app.include_router(profile_router)
+app.include_router(deletion_router)
+app.include_router(gallery_router)
+install_website(app)
 
 
 @app.get("/health", tags=["system"])

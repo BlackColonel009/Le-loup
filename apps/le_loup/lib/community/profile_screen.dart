@@ -68,6 +68,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _deleteAccount() async {
+    final deleted = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => _AccountDeletionScreen(
+          request: widget.request,
+          email: _profile?['email'] as String? ?? '',
+        ),
+      ),
+    );
+    if (deleted == true && mounted) {
+      widget.onPasswordReset?.call();
+      Navigator.pop(context);
+    }
+  }
+
   String _date(num value) {
     final date = DateTime.fromMillisecondsSinceEpoch(
       (value * 1000).round(),
@@ -189,7 +204,154 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+          const SizedBox(height: 28),
+          const Divider(),
+          TextButton.icon(
+            onPressed: _deleteAccount,
+            icon: const Icon(Icons.person_remove_outlined),
+            label: const Text('Supprimer mon compte et mes données'),
+          ),
         ],
+      ],
+    ),
+  );
+}
+
+class _AccountDeletionScreen extends StatefulWidget {
+  const _AccountDeletionScreen({required this.request, required this.email});
+  final ProfileRequest request;
+  final String email;
+  @override
+  State<_AccountDeletionScreen> createState() => _AccountDeletionScreenState();
+}
+
+class _AccountDeletionScreenState extends State<_AccountDeletionScreen> {
+  final _code = TextEditingController();
+  String? _challenge, _message;
+  bool _busy = false, _confirmed = false;
+
+  Future<void> _submit() async {
+    setState(() {
+      _busy = true;
+      _message = null;
+    });
+    try {
+      if (_challenge == null) {
+        final result = await widget.request(
+          'account-deletion/request',
+          method: 'POST',
+          body: {'email': widget.email},
+        );
+        if (mounted) {
+          setState(() {
+            _challenge = result['challenge_id'] as String;
+            _message = result['message'] as String;
+          });
+        }
+      } else {
+        if (!_confirmed || !RegExp(r'^\d{6}$').hasMatch(_code.text.trim())) {
+          throw StateError(
+            'Saisis les six chiffres et confirme la suppression.',
+          );
+        }
+        await widget.request(
+          'account-deletion/confirm',
+          method: 'POST',
+          body: {
+            'challenge_id': _challenge,
+            'code': _code.text.trim(),
+            'confirm': true,
+          },
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ton compte et ses données ont été supprimés.'),
+            ),
+          );
+          Navigator.pop(context, true);
+        }
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(
+          () => _message = error.toString().replaceFirst('Bad state: ', ''),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _code.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Supprimer mon compte')),
+    body: ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        const Icon(Icons.person_remove_outlined, size: 64),
+        const SizedBox(height: 20),
+        const Text(
+          'Cette action est définitive : ton compte, tes messages de communauté, tes demandes de support et ton historique d’achats seront effacés de la base active. Toutes tes sessions seront fermées.',
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Les parties en cours ont une session distincte : quitte-les séparément. Les copies des autres joueurs, journaux techniques et sauvegardes éventuelles ne sont pas supprimés par ce formulaire.',
+        ),
+        const SizedBox(height: 16),
+        Text('Adresse du compte : ${widget.email}'),
+        if (_challenge != null) ...[
+          const SizedBox(height: 20),
+          TextField(
+            controller: _code,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            autofillHints: const [AutofillHints.oneTimeCode],
+            decoration: const InputDecoration(labelText: 'Code reçu par email'),
+          ),
+          CheckboxListTile(
+            value: _confirmed,
+            onChanged: _busy
+                ? null
+                : (value) => setState(() => _confirmed = value ?? false),
+            title: const Text(
+              'Je confirme la suppression définitive de mon compte et de ses données.',
+            ),
+          ),
+        ],
+        if (_message != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text(_message!),
+          ),
+        FilledButton(
+          onPressed: _busy ? null : _submit,
+          child: Text(
+            _busy
+                ? 'Veuillez patienter…'
+                : _challenge == null
+                ? 'Recevoir un code de suppression'
+                : 'Supprimer définitivement mon compte',
+          ),
+        ),
+        if (_challenge != null)
+          TextButton(
+            onPressed: _busy
+                ? null
+                : () => setState(() {
+                    _challenge = null;
+                    _code.clear();
+                    _confirmed = false;
+                    _message = null;
+                  }),
+            child: const Text('Demander un nouveau code'),
+          ),
       ],
     ),
   );

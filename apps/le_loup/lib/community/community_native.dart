@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:local_host/local_host.dart';
+import '../services/server_config.dart';
 import 'official_content.dart';
 import 'admin_dashboard.dart';
 import 'profile_screen.dart';
@@ -21,12 +22,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
       _subject = TextEditingController(),
       _description = TextEditingController();
   final _http = HttpClient()..connectionTimeout = const Duration(seconds: 10);
-  final _base = onlineServerUri(
-    const String.fromEnvironment(
-      'API_BASE_URL',
-      defaultValue: 'http://127.0.0.1:8000',
-    ),
-  );
+  final _base = onlineServerUri(apiBaseUrl);
   String? _token, _nickname, _error;
   bool _isAdmin = false;
   double _mutedUntil = 0;

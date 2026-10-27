@@ -1,16 +1,20 @@
 # Version en ligne — première étape
 
+La vitrine publique et son dashboard sont documentés dans [site-web.md](site-web.md).
+
 FastAPI gère les salons et les accès publics. Un processus Dart par salon utilise
 le moteur existant (17 rôles, packs, votes et réactions). Le moteur n'écoute que
 sur 127.0.0.1 ; son port et ses commandes privées ne sont pas fournis aux joueurs.
 Flutter conserve son mode local. L'entrée « Jouer en ligne » et le contrôleur
 MDJ distant sont maintenant branchés dans les applications natives Android,
-iOS et Windows ; aucun serveur Internet n'est déployé ici. Le Web n'est pas
+iOS et Windows. Le serveur public est accessible en HTTPS sur
+`legendeofwolf.newtechnologiestg.com`. Le Web n'est pas
 encore pris en charge par le transport Dart natif.
 
 ## Essayer depuis l'application
 
-1. Lancer FastAPI avec la commande ci-dessous.
+1. Utiliser le serveur public configuré par défaut, ou lancer FastAPI avec la
+   commande ci-dessous pour tester un backend de développement.
 2. Ouvrir **Jouer en ligne**, renseigner son pseudo et son apparence.
    Le MDJ choisit **Créer un salon**, puis copie l'invitation et le code.
    L'interface affiche LegendeOfWolf.com comme identité visuelle du service.
@@ -24,8 +28,12 @@ encore pris en charge par le transport Dart natif.
 L'adresse réelle se configure avec `--dart-define=API_BASE_URL=https://...`
 et n'est pas affichée dans le formulaire ni les invitations. LegendeOfWolf.com
 est un nom d'affichage ; il ne remplace pas la valeur de connexion réelle.
-Sans configuration, la valeur de
-développement est http://127.0.0.1:8000. Sur un téléphone, utiliser l'IP accessible
+Sans configuration, l'application utilise le serveur public
+https://legendeofwolf.newtechnologiestg.com pour les salons, la communauté et la
+boutique. La valeur commune est définie dans
+`apps/le_loup/lib/services/server_config.dart`.
+Pour tester un backend de développement sur un téléphone, remplacer
+`API_BASE_URL` par l'IP accessible
 du PC (par exemple http://192.168.1.10:8000), sur un émulateur Android
 http://10.0.2.2:8000. Cela permet les essais avant hébergement. Pour deux réseaux
 différents, il faut une adresse HTTPS publique du serveur.

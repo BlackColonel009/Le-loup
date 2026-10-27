@@ -45,13 +45,13 @@ def send_code(address, code, purpose):
     message["From"] = normalize_email(os.environ["LE_LOUP_SMTP_FROM"])
     message["To"] = address
     message["Subject"] = "Legende of Wolf · Vérification de sécurité"
-    label = (
-        "vérifier ton adresse email"
-        if purpose == "verify"
-        else "changer ton mot de passe"
-    )
+    label = {
+        "verify": "vérifier ton adresse email",
+        "reset": "changer ton mot de passe",
+        "delete": "supprimer définitivement ton compte et ses données",
+    }[purpose]
     message.set_content(
-        f"Bonjour,\n\nPour {label}, saisis ce code dans l’application :\n\n{code}\n\nCe code expire dans 10 minutes et ne peut servir qu’une fois.\nSi tu n’as rien demandé, ignore ce message.\nNe partage jamais ce code.\n\nLegende of Wolf · by Logan R.D"
+        f"Bonjour,\n\nPour {label}, saisis ce code sur le site ou dans l’application Legende of Wolf :\n\n{code}\n\nCe code expire dans 10 minutes et ne peut servir qu’une fois.\nSi tu n’as rien demandé, ignore ce message.\nNe partage jamais ce code.\n\nLegende of Wolf · by Logan R.D"
     )
     host = os.environ["LE_LOUP_SMTP_HOST"]
     port = int(os.getenv("LE_LOUP_SMTP_PORT", "587"))

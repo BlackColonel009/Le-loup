@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#101916">
+<title>Administration · Legende of Wolf</title>
+<meta name="description" content="Gestion des cartes de la vitrine Legende of Wolf. Accès administrateur.">
+<meta property="og:title" content="Administration · Legende of Wolf">
+<meta property="og:description" content="Gestion des cartes de la vitrine Legende of Wolf. Accès administrateur.">
+<link rel="icon" href="/site-assets/logo.png">
+<link rel="stylesheet" href="/site-assets/site.css">
+<script src="/site-assets/site.js" defer>
+</script>
+<script src="/site-assets/admin.js" defer>
+</script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+<a class="brand" href="/" aria-label="Legende of Wolf, accueil">
+<img src="/site-assets/logo.png" alt="" width="46" height="52">
+<span>LEGENDE <i>of</i> WOLF<small>BY LOGAN R.D</small>
+</span>
+</a>
+<nav aria-label="Navigation principale">
+<a href="/#experience">Le jeu</a>
+<a href="/#apercu">L’expérience</a>
+<a href="/support">Support</a>
+<a class="nav-cta" href="/#jouer">Rejoindre le village <span aria-hidden="true">↗</span>
+</a>
+</nav>
+</header>
+<main id="contenu">
+<section class="legal-hero">
+<p class="eyebrow">ESPACE ÉDITEUR</p>
+<h1>Les cartes<br>
+<em>du village.</em>
+</h1>
+<p>Publiez les visuels de la vitrine, sans modifier les règles du jeu.</p>
+</section>
+<section class="section admin-content">
+<div id="admin-login" class="form-panel">
+<form id="login-form">
+<h2>Connexion administrateur</h2>
+<label for="nickname">Pseudo</label>
+<input id="nickname" autocomplete="username" maxlength="24" required>
+<label for="password">Mot de passe</label>
+<input id="password" type="password" autocomplete="current-password" maxlength="128" required>
+<button class="button" type="submit">Se connecter</button>
+</form>
+<form id="verify-form" hidden>
+<h2>Vérifier mon email</h2>
+<label for="verify-code">Code reçu par email</label>
+<input id="verify-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+<button class="button" type="submit">Vérifier et continuer</button>
+</form>
+</div>
+<p id="admin-status" role="status" aria-live="polite">
+</p>
+<div id="admin-dashboard" hidden>
+<section class="form-panel download-settings">
+<form id="download-form">
+<p class="eyebrow">DISTRIBUTION ANDROID</p>
+<h2>Le lien de téléchargement</h2>
+<label for="download-url">Lien de partage MEGA complet</label>
+<input id="download-url" type="url" placeholder="https://mega.nz/file/…#…" maxlength="2048" autocomplete="off">
+<p class="admin-hint">Colle le lien avec sa clé de déchiffrement après le #. Les visiteurs pourront télécharger l’APK sans demander une autre clé. Le lien sera public une fois activé.</p>
+<label for="download-version">Version affichée (facultatif)</label>
+<input id="download-version" maxlength="40" placeholder="0.1.0">
+<label class="checkbox"><input id="download-enabled" type="checkbox"><span>Activer les boutons de téléchargement sur la vitrine</span></label>
+<button class="button" type="submit">Enregistrer le lien de téléchargement</button>
+<p id="download-status" role="status" aria-live="polite"></p>
+</form>
+</section>
+<div class="admin-actions">
+<a href="/#editions" target="_blank" rel="noopener">Voir la vitrine ↗</a>
+<button id="logout" class="text-button" type="button">Se déconnecter</button>
+</div>
+<div class="admin-layout">
+<div class="form-panel">
+<form id="card-form">
+<h2 id="editor-title">Ajouter une carte</h2>
+<label for="title">Titre de la carte</label>
+<input id="title" maxlength="100" required>
+<label for="role">Rôle</label>
+<input id="role" maxlength="100" required>
+<label for="edition">Édition</label>
+<select id="edition">
+<option value="classic">Classique</option>
+<option value="intense">Intense Premium</option>
+<option value="horror">Horreur</option>
+</select>
+<label for="description">Présentation</label>
+<textarea id="description" maxlength="1500" required>
+</textarea>
+<label for="image">Visuel PNG, JPEG ou WebP</label>
+<input id="image" type="file" accept="image/png,image/jpeg,image/webp">
+<p class="admin-hint">4 Mo maximum, 4096 pixels de côté maximum. Les métadonnées sont retirées. Pour modifier uniquement le texte, laissez l’image vide.</p>
+<label for="position">Ordre d’affichage</label>
+<input id="position" type="number" min="0" max="10000" value="0" required>
+<label class="checkbox">
+<input id="published" type="checkbox" checked>
+<span>Publier dans la vitrine</span>
+</label>
+<button class="button" type="submit">Enregistrer la carte</button>
+<button id="new-card" class="text-button" type="button">Nouvelle carte</button>
+</form>
+</div>
+<div>
+<h2>Catalogue</h2>
+<p class="small">Modifier le texte, changer le visuel ou masquer une carte. Ces changements concernent uniquement le site.</p>
+<div id="admin-cards">
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="footer">
+<div>
+<a class="wordmark" href="/">Legende of Wolf</a>
+<p>Une création de Roland DJAGBA Alias Logan.<br>by Logan R.D</p>
+</div>
+<nav aria-label="Informations">
+<a href="/confidentialite">Confidentialité</a>
+<a href="/suppression-compte">Supprimer mon compte</a>
+<a href="/support">Support & contact</a>
+</nav>
+<p class="footer-note">Entrez dans la légende.<br>Gardez vos secrets.</p>
+</footer>
+</body>
+</html>

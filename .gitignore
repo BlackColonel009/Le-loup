@@ -5,6 +5,8 @@ apps/le_loup/android/.kotlin/
 **/__pycache__/
 **/*.egg-info/
 **/.pytest_cache/
+**/.dart_tool/
+backend/build/
 .env
 backend/data/
 **/.env

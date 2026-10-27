@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:local_host/local_host.dart';
+import 'server_config.dart';
 
 Future<Map<String, dynamic>> loadPublicContent(String path) async {
-  final base = onlineServerUri(
-    const String.fromEnvironment(
-      'API_BASE_URL',
-      defaultValue: 'http://127.0.0.1:8000',
-    ),
-  );
+  final base = onlineServerUri(apiBaseUrl);
   final client = HttpClient()..connectionTimeout = const Duration(seconds: 8);
   try {
     final request = await client

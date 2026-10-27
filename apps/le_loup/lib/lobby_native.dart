@@ -5,6 +5,7 @@ import 'design/game_theme.dart';
 import 'joining/invite_qr_card.dart';
 import 'joining/scan_invitation_screen.dart';
 import 'room_compatibility.dart';
+import 'services/server_config.dart';
 import 'night_panel.dart';
 import 'village/village_map.dart';
 import 'village/village_navigation.dart';
@@ -139,10 +140,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   void initState() {
     super.initState();
     if (widget.online) {
-      _address.text = const String.fromEnvironment(
-        'API_BASE_URL',
-        defaultValue: 'http://127.0.0.1:8000',
-      );
+      _address.text = apiBaseUrl;
     }
   }
 
