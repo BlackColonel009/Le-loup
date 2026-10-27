@@ -8,6 +8,7 @@ import 'official_content.dart';
 import 'admin_dashboard.dart';
 import 'profile_screen.dart';
 import 'password_reset_screen.dart';
+import 'community_session.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -23,22 +24,86 @@ class _CommunityScreenState extends State<CommunityScreen> {
       _description = TextEditingController();
   final _http = HttpClient()..connectionTimeout = const Duration(seconds: 10);
   final _base = onlineServerUri(apiBaseUrl);
+  late final _sessions = CommunitySessionStore(_base.toString());
+  DateTime? _expiresAt;
+  Timer? _expiry;
+  bool _restoring = true;
   String? _token, _nickname, _error;
   bool _isAdmin = false;
   double _mutedUntil = 0;
   bool _register = true, _busy = false, _refreshing = false;
   List<Map<String, dynamic>> _messages = [], _tickets = [];
   Timer? _poll;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_restoreSession());
+  }
+
+  Future<void> _restoreSession() async {
+    final session = await _sessions.load();
+    if (!mounted) return;
+    if (session != null) {
+      setState(() {
+        _token = session.token;
+        _nickname = session.nickname;
+        _expiresAt = session.expiresAt;
+      });
+      _scheduleSession();
+      try {
+        await _refresh();
+      } catch (_) {
+        if (mounted && _token != null) {
+          setState(
+            () => _error =
+                'Connexion au service momentanément indisponible. Ta session est conservée ; tu peux actualiser.',
+          );
+        }
+      }
+      if (mounted && _token != null) _startPolling();
+    }
+    if (mounted) setState(() => _restoring = false);
+  }
+
+  void _scheduleSession() {
+    _expiry?.cancel();
+    final remaining = _expiresAt?.difference(DateTime.now());
+    if (remaining != null) {
+      _expiry = Timer(
+        remaining.isNegative ? Duration.zero : remaining,
+        _backToLogin,
+      );
+    }
+  }
+
+  void _startPolling() {
+    _poll?.cancel();
+    _poll = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) => _refresh(quiet: true),
+    );
+  }
+
   Future<Map<String, dynamic>> _request(
     String path, {
     String method = 'GET',
     Map<String, dynamic>? body,
   }) async {
+    if (_token != null &&
+        _expiresAt != null &&
+        !DateTime.now().isBefore(_expiresAt!)) {
+      _backToLogin();
+      throw StateError('Ta session de 24 heures est terminée. Reconnecte-toi.');
+    }
+    final sentToken = _token;
     final request = await _http
         .openUrl(method, _base.resolve('community/$path'))
         .timeout(const Duration(seconds: 10));
     request.headers.contentType = ContentType.json;
-    if (_token != null) request.headers.set('Authorization', 'Bearer $_token');
+    if (sentToken != null) {
+      request.headers.set('Authorization', 'Bearer $sentToken');
+    }
     if (body != null) request.write(jsonEncode(body));
     final response = await request.close().timeout(const Duration(seconds: 12));
     final text = await response
@@ -49,18 +114,11 @@ class _CommunityScreenState extends State<CommunityScreen> {
     if (response.statusCode >= 400) {
       if ((response.statusCode == 401 ||
               response.statusCode == 403 &&
-                  '${data['detail']}'.startsWith('Compte banni')) &&
-          _token != null) {
-        _poll?.cancel();
-        if (mounted) {
-          setState(() {
-            _token = null;
-            _nickname = null;
-            _isAdmin = false;
-            _messages = [];
-            _tickets = [];
-          });
-        }
+                  ('${data['detail']}'.startsWith('Compte banni') ||
+                      '${data['detail']}'.startsWith('Vérifie ton adresse'))) &&
+          sentToken != null &&
+          sentToken == _token) {
+        _backToLogin();
       }
       throw StateError(
         data['detail'] is String
@@ -109,9 +167,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
     );
     if (!mounted) return;
     _password.clear();
+    final maxExpiry = DateTime.now().add(const Duration(days: 1));
+    final serverExpiry = data['expires_at'] is num
+        ? DateTime.fromMillisecondsSinceEpoch(
+            ((data['expires_at'] as num) * 1000).round(),
+          )
+        : maxExpiry;
     setState(() {
       _token = data['token'] as String;
       _nickname = (data['user'] as Map)['nickname'] as String;
+      _expiresAt = serverExpiry.isBefore(maxExpiry) ? serverExpiry : maxExpiry;
       _isAdmin =
           (data['user'] as Map)['role'] == 'admin' &&
           (data['user'] as Map)['email_verified'] == true;
@@ -131,19 +196,28 @@ class _CommunityScreenState extends State<CommunityScreen> {
         return;
       }
     }
-    await _refresh();
-    _poll?.cancel();
-    _poll = Timer.periodic(
-      const Duration(seconds: 5),
-      (_) => _refresh(quiet: true),
+    if (_token == null) return;
+    await _sessions.save(
+      CommunitySession(
+        token: _token!,
+        nickname: _nickname!,
+        expiresAt: _expiresAt!,
+      ),
     );
+    if (!mounted) return;
+    _scheduleSession();
+    await _refresh();
+    if (_token != null) _startPolling();
   });
 
   void _backToLogin() {
     _poll?.cancel();
+    _expiry?.cancel();
+    unawaited(_sessions.clear());
     if (mounted) {
       setState(() {
         _token = null;
+        _expiresAt = null;
         _nickname = null;
         _isAdmin = false;
         _register = false;
@@ -168,14 +242,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   Future<void> _refresh({bool quiet = false}) async {
     if (_token == null || _refreshing) return;
+    final refreshingToken = _token;
     _refreshing = true;
     try {
       final profile = await _request('me');
       final chat = await _request('messages');
       final support = await _request('tickets');
-      if (mounted) {
+      if (mounted && _token == refreshingToken) {
         setState(() {
           final user = profile['user'] as Map;
+          _nickname = user['nickname'] as String;
           _isAdmin = user['role'] == 'admin';
           _mutedUntil = (user['muted_until'] as num? ?? 0).toDouble();
           _messages = (chat['messages'] as List)
@@ -240,6 +316,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
   void dispose() {
     _email.dispose();
     _poll?.cancel();
+    _expiry?.cancel();
     _http.close(force: true);
     for (final field in [_name, _password, _message, _subject, _description]) {
       field.dispose();
@@ -289,16 +366,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
               onPressed: _busy
                   ? null
                   : () => _run(() async {
-                      await _request('logout', method: 'POST');
-                      _poll?.cancel();
-                      if (mounted) {
-                        setState(() {
-                          _token = null;
-                          _nickname = null;
-                          _isAdmin = false;
-                          _messages = [];
-                          _tickets = [];
-                        });
+                      try {
+                        await _request('logout', method: 'POST');
+                      } finally {
+                        _backToLogin();
                       }
                     }),
               icon: const Icon(Icons.logout),
@@ -326,9 +397,11 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
-          if (_busy) const LinearProgressIndicator(),
+          if (_busy || _restoring) const LinearProgressIndicator(),
           Expanded(
-            child: _token == null
+            child: _restoring
+                ? const Center(child: Text('Restauration de ta connexion…'))
+                : _token == null
                 ? _authForm()
                 : TabBarView(
                     children: [

@@ -17,7 +17,7 @@ encore pris en charge par le transport Dart natif.
    commande ci-dessous pour tester un backend de développement.
 2. Ouvrir **Jouer en ligne**, renseigner son pseudo et son apparence.
    Le MDJ choisit **Créer un salon**, puis copie l'invitation et le code.
-   L'interface affiche LegendeOfWolf.com comme identité visuelle du service.
+   L'interface affiche le domaine public legendeofwolf.newtechnologiestg.com.
 3. Les autres utilisent le code à six chiffres, puis
    **Rejoindre le village**. Les rôles, thèmes et commandes restent identiques
    au mode local. Le QR de réseau local n'est pas utilisé pour ce mode.
@@ -25,9 +25,12 @@ encore pris en charge par le transport Dart natif.
    écran et sa session en mémoire sont conservés. Fermer l'application efface
    le jeton privé ; il n'y a pas encore de récupération par compte.
 
-L'adresse réelle se configure avec `--dart-define=API_BASE_URL=https://...`
-et n'est pas affichée dans le formulaire ni les invitations. LegendeOfWolf.com
-est un nom d'affichage ; il ne remplace pas la valeur de connexion réelle.
+L'adresse de l'API se configure avec `--dart-define=API_BASE_URL=https://...`.
+Le formulaire n'expose pas ce réglage technique. L'invitation copiée contient
+le vrai site public, le code du salon et les instructions pour rejoindre dans
+l'application. Elle ajoute le lien de téléchargement actif de `/site-config`,
+y compris la clé MEGA après `#`. Si les téléchargements sont désactivés ou le
+service temporairement inaccessible, le site et le code sont conservés.
 Sans configuration, l'application utilise le serveur public
 https://legendeofwolf.newtechnologiestg.com pour les salons, la communauté et la
 boutique. La valeur commune est définie dans

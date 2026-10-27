@@ -14,6 +14,21 @@ vérifié, l'état du compte et les restrictions éventuelles. L'historique prov
 uniquement des lignes d'achat du compte connecté ; il est vide tant qu'aucun achat
 n'a été effectué. Les paiements restent désactivés et aucun achat fictif n'est créé.
 
+## Connexion conservée pendant 24 heures
+
+Après une authentification et la vérification email, l'application conserve le
+jeton dans le stockage sécurisé de l'appareil. Quitter la communauté, revenir à
+l'accueil ou fermer puis rouvrir l'application ne demande pas une nouvelle
+connexion tant que cette session reste valide. Aucun mot de passe ni droit
+administrateur n'est enregistré dans ce cache ; les droits sont relus du serveur.
+
+Les nouveaux jetons expirent 24 heures après leur création. Ouvrir la communauté
+ne repousse pas cette échéance. L'API renvoie `expires_at` à la connexion ; l'app
+respecte cette date, avec une limite locale de 24 heures pour les anciens serveurs.
+À expiration, déconnexion volontaire, invalidation serveur, bannissement,
+changement de mot de passe ou suppression de compte, le jeton local est effacé.
+Une panne réseau temporaire conserve la session afin de permettre une reprise.
+
 ## Changer ou récupérer un mot de passe
 
 Dans Connexion → Mot de passe oublié, ou depuis le profil :

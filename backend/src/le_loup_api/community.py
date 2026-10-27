@@ -213,6 +213,7 @@ def administrator(
 
 def session(db, user):
     token = secrets.token_urlsafe(32)
+    expires_at = time.time() + 86400
     with db.db() as connection:
         profile = connection.execute(
             "SELECT id,nickname,role,banned,email,email_verified FROM users WHERE id=?",
@@ -226,11 +227,12 @@ def session(db, user):
             (
                 hashlib.sha256(token.encode()).hexdigest(),
                 user["id"],
-                time.time() + 30 * 86400,
+                expires_at,
             ),
         )
     return {
         "token": token,
+        "expires_at": expires_at,
         "user": {
             "id": profile["id"],
             "nickname": profile["nickname"],

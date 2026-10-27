@@ -4,6 +4,7 @@ import 'audio/audio_settings.dart';
 import 'design/game_theme.dart';
 import 'joining/invite_qr_card.dart';
 import 'joining/scan_invitation_screen.dart';
+import 'joining/online_invitation.dart';
 import 'room_compatibility.dart';
 import 'services/server_config.dart';
 import 'night_panel.dart';
@@ -126,6 +127,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   Map<String, dynamic>? _room;
   List<String> _addresses = [];
   bool _busy = false;
+  bool _copyingInvitation = false;
   bool _connected = false;
   String? _error;
   Timer? _joinTimeout;
@@ -704,6 +706,34 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     );
   }
 
+  Future<void> _copyOnlineInvitation() async {
+    final code = _room?['code'] as String?;
+    if (code == null || _copyingInvitation) return;
+    setState(() => _copyingInvitation = true);
+    try {
+      final invitation = await loadOnlineInvitation(code);
+      if (!mounted || _room?['code'] != code) return;
+      await Clipboard.setData(ClipboardData(text: invitation));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invitation copiée : partage-la avec tes amis.'),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Impossible de copier l’invitation. Réessaie.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _copyingInvitation = false);
+    }
+  }
+
   List<Widget> _entry() => [
     Text(
       'Rassemble ton village',
@@ -712,7 +742,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     const SizedBox(height: 12),
     Text(
       widget.online
-          ? 'Retrouve tes amis sur LegendeOfWolf.com et rejoins leur village avec le code du salon.'
+          ? 'Rejoins le village de tes amis avec leur code de salon. Retrouvez le jeu sur $publicSiteUrl.'
           : 'Connectez vos appareils au même Wi-Fi. Aucun compte ni accès Internet requis.',
     ),
     const SizedBox(height: 24),
@@ -747,8 +777,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            'LegendeOfWolf.com',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            'legendeofwolf.newtechnologiestg.com',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -1082,19 +1113,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               ),
             if (widget.online)
               OutlinedButton.icon(
-                onPressed: () => Clipboard.setData(
-                  ClipboardData(
-                    text:
-                        'LegendeOfWolf.com\nRejoins mon village dans Legende of Wolf !\nCode : ${_room!['code']}',
-                  ),
-                ),
+                onPressed: _copyingInvitation ? null : _copyOnlineInvitation,
                 icon: const Icon(Icons.copy),
-                label: const Text('Copier l’invitation en ligne'),
+                label: Text(
+                  _copyingInvitation
+                      ? 'Préparation de l’invitation…'
+                      : 'Copier l’invitation en ligne',
+                ),
               ),
             const SizedBox(height: 12),
             Text(
               widget.online
-                  ? 'Partage le code du salon avec tes amis sur LegendeOfWolf.com.'
+                  ? 'Copie l’invitation pour partager le site, le code du salon et le lien de téléchargement disponible.'
                   : 'Partage une adresse Wi-Fi et le code avec tes amis :',
             ),
             if (!widget.online)
