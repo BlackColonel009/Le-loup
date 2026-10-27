@@ -5,28 +5,33 @@ import 'weather_overlay.dart';
 import 'house_sprite_geometry.dart';
 import 'guardian_aura.dart';
 
-/// Centres des vingt fondations de la map Intense v2.
+/// The Intense terrain has more room than the classic canvas. House sprites
+/// keep their readable size while the distance between plots increases.
+const intenseVillageCanvasSize = Size(3072, 2048);
+const classicVillageCanvasSize = Size(1376, 768);
+
+/// Four columns and five rows, populated around the council square first.
 const intenseVillagePlots = <Offset>[
-  Offset(.414, .445),
-  Offset(.586, .445),
-  Offset(.296, .585),
-  Offset(.704, .585),
-  Offset(.305, .450),
-  Offset(.695, .450),
-  Offset(.416, .700),
-  Offset(.584, .700),
-  Offset(.355, .385),
-  Offset(.645, .385),
-  Offset(.438, .350),
-  Offset(.562, .350),
-  Offset(.200, .430),
-  Offset(.800, .430),
-  Offset(.180, .585),
-  Offset(.820, .585),
-  Offset(.220, .700),
-  Offset(.780, .700),
-  Offset(.320, .805),
-  Offset(.680, .805),
+  Offset(.36, .565),
+  Offset(.64, .565),
+  Offset(.18, .565),
+  Offset(.82, .565),
+  Offset(.36, .405),
+  Offset(.64, .405),
+  Offset(.36, .725),
+  Offset(.64, .725),
+  Offset(.18, .405),
+  Offset(.82, .405),
+  Offset(.18, .725),
+  Offset(.82, .725),
+  Offset(.36, .265),
+  Offset(.64, .265),
+  Offset(.18, .265),
+  Offset(.82, .265),
+  Offset(.36, .885),
+  Offset(.64, .885),
+  Offset(.18, .885),
+  Offset(.82, .885),
 ];
 
 /// Coordonnées des parcelles du décor fourni, en proportions de 1376 × 768.
@@ -66,6 +71,7 @@ class HouseSprite extends StatelessWidget {
         return Image.asset(
           'assets/village/intense/house_$state.png',
           fit: BoxFit.contain,
+          alignment: Alignment.bottomCenter,
           excludeFromSemantics: true,
         );
       }
@@ -129,18 +135,21 @@ class VillageMap extends StatefulWidget {
 
 class _VillageMapState extends State<VillageMap> {
   bool get intense => widget.room['visual_pack'] == 'intense';
+  Size get _world =>
+      intense ? intenseVillageCanvasSize : classicVillageCanvasSize;
   List<Offset> get plots => intense ? intenseVillagePlots : villagePlots;
   final _transform = TransformationController();
   double _fit = 1;
   Size? _size;
+  Size? _viewWorld;
   void _overview(Size size) {
-    _fit = (size.width / 1376).clamp(.05, 1);
-    final heightScale = size.height / 768;
+    _fit = (size.width / _world.width).clamp(.01, 1);
+    final heightScale = size.height / _world.height;
     if (heightScale < _fit) _fit = heightScale;
     _transform.value = Matrix4.identity()
       ..translateByDouble(
-        (size.width - 1376 * _fit) / 2,
-        (size.height - 768 * _fit) / 2,
+        (size.width - _world.width * _fit) / 2,
+        (size.height - _world.height * _fit) / 2,
         0,
         1,
       )
@@ -150,11 +159,18 @@ class _VillageMapState extends State<VillageMap> {
   void _initialView(Size size) {
     _overview(size);
     if (size.width / size.height < 1.3) {
-      final scale = (size.height / 768).clamp(_fit, 2.0);
+      final scale =
+          (intense
+                  ? math.min(
+                      size.height / 768,
+                      size.width / (_world.width * .28 + 280),
+                    )
+                  : size.height / 768)
+              .clamp(_fit, 2.0);
       _transform.value = Matrix4.identity()
         ..translateByDouble(
-          (size.width - 1376 * scale) / 2,
-          (size.height - 768 * scale) / 2,
+          (size.width - _world.width * scale) / 2,
+          (size.height - _world.height * scale) / 2,
           0,
           1,
         )
@@ -213,10 +229,10 @@ class _VillageMapState extends State<VillageMap> {
           children: [
             const Icon(Icons.cottage_outlined),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Village classique',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                intense ? 'Village Intense Premium' : 'Village classique',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             Text('${players.length} maisons'),
@@ -254,8 +270,9 @@ class _VillageMapState extends State<VillageMap> {
                     constraints.maxWidth,
                     constraints.maxHeight,
                   );
-                  if (_size != size) {
+                  if (_size != size || _viewWorld != _world) {
                     _size = size;
+                    _viewWorld = _world;
                     _initialView(size);
                   }
                   return Stack(
@@ -267,14 +284,14 @@ class _VillageMapState extends State<VillageMap> {
                         maxScale: 2,
                         boundaryMargin: const EdgeInsets.all(250),
                         child: SizedBox(
-                          width: 1376,
-                          height: 768,
+                          width: _world.width,
+                          height: _world.height,
                           child: Stack(
                             children: [
                               Positioned.fill(
                                 child: Image.asset(
                                   intense
-                                      ? 'assets/village/intense/map.png'
+                                      ? 'assets/village/intense/map_v3.png'
                                       : 'assets/village/map.jpg',
                                   fit: BoxFit.fill,
                                 ),
@@ -297,10 +314,14 @@ class _VillageMapState extends State<VillageMap> {
                                   key: ValueKey<String>(
                                     placement.player['id'] as String,
                                   ),
-                                  left: plots[placement.slot].dx * 1376 - 74,
-                                  top: plots[placement.slot].dy * 768 - 140,
-                                  width: 148,
-                                  height: 170,
+                                  left:
+                                      plots[placement.slot].dx * _world.width -
+                                      (intense ? 122 : 74),
+                                  top:
+                                      plots[placement.slot].dy * _world.height -
+                                      (intense ? 236 : 140),
+                                  width: intense ? 244 : 148,
+                                  height: intense ? 266 : 170,
                                   child: _House(
                                     protected:
                                         placement.player['id'] ==
@@ -328,10 +349,15 @@ class _VillageMapState extends State<VillageMap> {
                                 ),
                               for (final placement in placed)
                                 Positioned(
-                                  left: plots[placement.slot].dx * 1376 - 80,
-                                  top: plots[placement.slot].dy * 768 + 4,
-                                  width: 160,
+                                  left:
+                                      plots[placement.slot].dx * _world.width -
+                                      (intense ? 130 : 80),
+                                  top:
+                                      plots[placement.slot].dy * _world.height +
+                                      4,
+                                  width: intense ? 260 : 160,
                                   child: _HouseLabel(
+                                    intense: intense,
                                     player: placement.player,
                                     own:
                                         placement.player['id'] == widget.selfId,
@@ -347,10 +373,15 @@ class _VillageMapState extends State<VillageMap> {
                                   if (!alive.contains(placement.player['id']))
                                     Positioned(
                                       left:
-                                          plots[placement.slot].dx * 1376 - 28,
-                                      top: plots[placement.slot].dy * 768 - 110,
-                                      width: 56,
-                                      height: 70,
+                                          plots[placement.slot].dx *
+                                              _world.width -
+                                          28,
+                                      top:
+                                          plots[placement.slot].dy *
+                                              _world.height -
+                                          (intense ? 185 : 110),
+                                      width: intense ? 80 : 56,
+                                      height: intense ? 100 : 70,
                                       child: SpectatorGhost(
                                         key: ValueKey(
                                           'ghost-${placement.player['id']}',
@@ -525,8 +556,8 @@ class _House extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  width: 142,
-                  height: 142,
+                  width: intense ? 238 : 142,
+                  height: intense ? 238 : 142,
                   child: AnimatedSwitcher(
                     duration: MediaQuery.disableAnimationsOf(context)
                         ? Duration.zero
@@ -564,10 +595,12 @@ class _HouseLabel extends StatelessWidget {
     required this.own,
     required this.eliminated,
     required this.onTap,
+    this.intense = false,
   });
   final Map<String, dynamic> player;
   final bool own;
   final bool eliminated;
+  final bool intense;
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -593,7 +626,10 @@ class _HouseLabel extends StatelessWidget {
               '${player['nickname']}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(
+                fontSize: intense ? 20 : 16,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

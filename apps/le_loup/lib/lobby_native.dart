@@ -276,7 +276,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         ..._lobby(
           section,
           mapHeight: section == VillageDestination.village
-              ? (size.maxHeight * .68).clamp(290, 650)
+              ? (size.maxHeight *
+                        (_ambience == CardAmbience.intense ? .80 : .68))
+                    .clamp(290, _ambience == CardAmbience.intense ? 760 : 650)
               : null,
         ),
       ],
