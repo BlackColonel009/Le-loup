@@ -1,0 +1,10 @@
+{
+  "model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "source": "https://qwen-qwen3-tts.hf.space",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "direction": "Native French female ghost character. Airy fragile whisper with an eerie distant presence, breath between phrases, restrained haunting sadness, unsettling intimate delivery. Natural expressive acting, every French word remains intelligible. No singing.",
+  "approved": true,
+  "status": "integrated",
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

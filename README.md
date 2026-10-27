@@ -140,7 +140,118 @@ L'harmonisation des illustrations elles-mêmes (style du Villageois, compagnon
 du Chasseur, ornements des cadres) n'a pas été effectuée : les images restent
 intactes. Les mentions du camp et du moment d'action sont explicites au verso.
 
-## État du salon
+## Essayer la première nuit
+
+Après distribution, le MDJ choisit 60, 120 ou 180 secondes par appel, puis
+**Endormir le village**. Il déclenche ensuite les appels dans l'ordre :
+Voyante (si incluse), Loups-Garous, Sorcière (si incluse), réveil, puis Chasseur
+s'il figure parmi les victimes. Les rôles configurés continuent d'être appelés
+même s'ils sont morts : cela évite de révéler leur identité par un appel absent.
+
+Chaque joueur voit la même annonce. Seuls les rôles autorisés reçoivent leurs
+commandes privées. La meute dispose d'un chat textuel limité à son appel et
+visible également du MDJ. Un choix de victime peut être modifié jusqu'à la
+clôture ; sans unanimité de tous les loups vivants, aucune attaque n'a lieu.
+La Voyante et la Sorcière confirment une seule action par appel. La Sorcière
+peut confirmer sans utiliser de potion. Les potions consommées restent consommées.
+
+Le MDJ peut mettre le chronomètre en pause et reprendre, ou clore un appel
+avec confirmation. À l'échéance, les commandes se ferment ; le MDJ déclenche
+toujours le passage suivant. Les absences de réponse ne déclenchent aucun
+pouvoir automatique. Le Chasseur a 60 secondes pour sélectionner sa cible ;
+le MDJ peut suspendre cet appel ou poursuivre sans tir s'il ne répond pas.
+La victoire est vérifiée après toutes les réactions, jamais avant le dernier tir.
+
+La reconnexion rend le rôle, les ressources et la vision privée déjà obtenue.
+Les anciens messages d'action d'un autre appel sont refusés grâce à une révision
+de phase. Les échéances et les résultats font autorité sur le serveur.
+
+Le débat et le vote permettent maintenant d'enchaîner plusieurs journées et
+nuits jusqu'à la victoire. La carte interactive du village est disponible.
+Les appels vocaux et les sons d'ambiance restent à ajouter. Les annonces sont
+textuelles ; aucune voix n'est diffusée en local.
+Pour mettre à jour une installation Android, installer le nouvel APK sur chaque
+appareil. Redémarrer MDJ et joueurs puis recréer un salon après cette mise à jour.
+
+Tests : `dart packages/local_host/tool/night_smoke.dart` (règles et cas limites),
+`dart packages/local_host/tool/night_network_smoke.dart` (nuit complète et secrets sur WebSocket).
+
+## Débat et vote de jour
+
+Au réveil, après les éventuelles réactions du Chasseur, le MDJ ouvre la journée.
+Les survivants discutent dans le chat général ; le MDJ peut le fermer ou le rouvrir.
+Les joueurs éliminés suivent le débat mais ne peuvent ni écrire ni voter.
+Le MDJ choisit une durée parmi 30/60/120/180/300 secondes puis ouvre le scrutin.
+Il peut suspendre le chronomètre, le reprendre et clore le vote avant l'échéance
+avec confirmation. À l'échéance les bulletins sont verrouillés ; il révèle les
+résultats avec **Clore et révéler le scrutin**.
+
+Chaque survivant peut désigner un survivant (lui-même compris) ou voter blanc,
+puis modifier son bulletin jusqu'à la clôture. L'absence de bulletin est une
+abstention. Un vote blanc seul en tête, une égalité (y compris avec le blanc)
+ou l'absence de tout bulletin n'élimine personne. Le vote est à la pluralité :
+une cible seule en tête est éliminée, même sans majorité absolue des inscrits.
+
+Les totaux sont révélés ensemble à la clôture ; les bulletins individuels restent
+privés. Un bulletin reçu reste conservé après une coupure et est rendu à son
+auteur à la reconnexion. La mort du Chasseur déclenche son tir avant toute
+vérification de victoire. Si aucun camp ne gagne, **Commencer la nuit suivante**
+relance le cycle avec les mêmes rôles et ressources restantes.
+
+Tests : `dart packages/local_host/tool/day_smoke.dart` (règles de vote et boucle)
+et `dart packages/local_host/tool/day_network_smoke.dart` (chat, confidentialité,
+reconnexion, décompte, élimination et deuxième nuit avec quatre clients).
+
+## Village et cérémonies
+
+Le salon affiche la map fournie avec une maison par joueur (20 maximum).
+Le serveur attribue un `house_slot` stable : une déconnexion en partie conserve
+la maison, le rôle et l'état d'élimination. Avant distribution, quitter libère
+l'emplacement. Le décor possède 24 parcelles fixes ; les parcelles non utilisées
+restent visibles, sans maison. La vue téléphone est centrée et agrandie ; le
+bouton **Vue d'ensemble** montre le terrain complet. Pincer, déplacer et les
+boutons +/− permettent de naviguer. Le cadre du fond fourni suit actuellement le zoom.
+
+Les trois PNG de maison sont recadrés uniquement à l'affichage pour aligner
+leurs silhouettes. Les sources restent intactes. Le jeu déclenche la transition
+jour/nuit, les fenêtres éclairées et la maison de deuil. Toucher une maison ouvre
+sa fiche ; les rôles vivants restent secrets aux autres joueurs.
+
+Des bulles apparaissent au-dessus des auteurs dans la discussion autorisée :
+générale le jour, meute pendant son appel (loups vivants et MDJ seulement).
+Toucher une bulle ouvre un panneau coulissant, mis à jour en direct. Le clavier
+et les petits écrans disposent d'un affichage défilant.
+
+À la préparation, **Révéler les cartes à l'élimination** est activé par défaut.
+Le Codex affiche ce choix ; le changer annule les confirmations des joueurs.
+Une annonce d'élimination retourne la carte, puis applique des griffures pour
+une mort nocturne. Toutes les morts de nuit partagent cette présentation, sans
+révéler si la cause précise était une attaque ou une potion. En mode secret,
+les autres voient le dos de carte ; la victime garde accès à sa propre carte.
+Un événement est présenté une fois par appareil, avec reprise des annonces
+manquées lors d'une reconnexion sur le même écran. Les cartes privées se
+présentent aussi face cachée avant **Découvrir ma carte**.
+
+Après une élimination au vote, le MDJ peut lancer la roue classique à huit
+secteurs. Le serveur choisit une seule sentence et transmet le même résultat
+à tous, avec une durée d'animation de 4,5 secondes. Il n'existe pas de second
+tirage. La roue est cosmétique : elle ne change ni décès, ni ressources, ni
+victoire. Si elle tourne, le MDJ attend sa fin avant de poursuivre ; les choix
+du Chasseur restent possibles. Aucun tirage en cas d'égalité ou de vote blanc.
+Un bouton de reprise est affiché directement sous la sentence : **Commencer
+la nuit suivante**, **Reprendre le dernier tir du Chasseur** ou **Voir le résultat
+de la partie** selon la phase. Il s'active à la confirmation serveur de fin
+d'animation et conduit aux commandes correspondantes sans les chercher plus bas.
+Le passage à la nuit conserve la durée des appels choisie par le MDJ.
+Les peaux premium et scènes d'exécution ne sont pas implémentées.
+
+Les assets sont dans `apps/le_loup/assets/village/`, copiés depuis `le_loup/Map/`.
+Les animations respectent la réduction des animations du système. Les PNG de
+petite définition conviennent au prototype et pourront être remplacés à l'identique.
+Tests dédiés : `flutter test test/village_test.dart` et
+`dart packages/local_host/tool/ceremony_smoke.dart`.
+
+## État de l'implémentation
 
 Salon Flutter relié au serveur local Dart : arrivées/départs, statut prêt,
 fermeture des inscriptions et retrait par le MDJ. Tests WebSocket exécutés sur
@@ -150,5 +261,9 @@ physiques encore nécessaire. Exécutable local :
 dossier `data` à côté ; ne pas distribuer uniquement le fichier EXE).
 La composition, le Codex, la distribution privée et la reprise de rôle après
 coupure sont implémentés en LAN. L'API distante conserve uniquement son diagnostic.
-Pas encore d'actions nocturnes, de votes, de vocal ou de partie complète jouable.
+Les appels, actions nocturnes, discussions de jour, votes et transitions vers
+les nuits suivantes sont implémentés en LAN. Le moteur peut terminer une partie
+et dévoiler les rôles. Le village, les états des maisons et les cérémonies sont
+intégrés. Le vocal, les packs commerciaux et
+la sauvegarde persistante ne sont pas encore implémentés.
 Voir `docs/architecture.md`.

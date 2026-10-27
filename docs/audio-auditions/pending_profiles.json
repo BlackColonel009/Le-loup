@@ -1,0 +1,37 @@
+{
+  "old_witch": {
+    "direction": "Native French elderly female witch, eighty years old. Croaky raspy aged contralto, sly ominous smile audible in her voice, slightly irregular breath, deliberate chilling delivery. Natural character acting, precise clear French, no exaggerated screeching.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "classic_male": {
+    "direction": "Native French male storyteller, warm living baritone, inviting and mysterious. Calm adventure narration, subtle suspense, expressive phrasing and natural breath. Clear diction without announcer stiffness.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "classic_female": {
+    "direction": "Native French female storyteller, warm rich mid register, lively subtle expression. Calm mysterious adventure narration, natural breathing, clear intimate diction, never flat or robotic.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "intense_male": {
+    "direction": "Native French male dramatic narrator, rich deep bass baritone, tense contained power, cinematic suspense, deliberate pauses and natural emotional phrasing. Clear words, no shouting.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "intense_female": {
+    "direction": "Native French female dramatic narrator, dark resonant contralto, intense restrained suspense, confident velvety presence, varied natural phrasing and deliberate pauses.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "duke": {
+    "direction": "Native French older male medieval duke. Aristocratic rounded baritone, dignified royal authority, precise elegant diction, solemn measured cadence with expressive disdain and natural breathing. No parody accent.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  },
+  "cold_killer": {
+    "direction": "Native French adult male thriller antagonist. Quiet low intimate voice, unnervingly controlled, dry and emotionally cold, restrained menace, short deliberate pauses. Natural human phrasing, no growling or shouting.",
+    "status": "integrated_directly_as_requested",
+    "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?"
+  }
+}

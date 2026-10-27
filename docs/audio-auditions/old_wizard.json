@@ -1,0 +1,10 @@
+{
+  "model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "source": "https://qwen-qwen3-tts.hf.space",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "direction": "Native French elderly male sorcerer, eighty years old. Weathered cracked baritone, dry textured throat, slight age tremor, slow knowing delivery, dark mischievous authority. Expressive theatrical storytelling with natural pauses, never robotic or cartoonishly high pitched.",
+  "approved": true,
+  "status": "integrated",
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'classic_role.dart';
+import '../design/drifting_backdrop.dart';
 
 enum CardAmbience {
   classic('Classique', 'classic'),
@@ -14,8 +15,15 @@ enum CardAmbience {
 
 /// Décor adaptatif : chaque orientation possède son propre fichier source.
 class TavernBackground extends StatelessWidget {
-  const TavernBackground({super.key, required this.child});
+  const TavernBackground({
+    super.key,
+    required this.child,
+    this.dim = .71,
+    this.animate = false,
+  });
   final Widget child;
+  final double dim;
+  final bool animate;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -24,12 +32,25 @@ class TavernBackground extends StatelessWidget {
       return Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/backgrounds/${landscape ? 'landscape' : 'portrait'}.jpg',
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-          ),
-          const ColoredBox(color: Color(0xB5101015)),
+          if (animate)
+            Positioned.fill(
+              child: RepaintBoundary(
+                child: DriftingBackdrop(
+                  child: Image.asset(
+                    'assets/backgrounds/${landscape ? 'landscape' : 'portrait'}.jpg',
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+              ),
+            )
+          else
+            Image.asset(
+              'assets/backgrounds/${landscape ? 'landscape' : 'portrait'}.jpg',
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ColoredBox(color: const Color(0xFF101015).withValues(alpha: dim)),
           child,
         ],
       );
@@ -45,6 +66,7 @@ class CardGalleryScreen extends StatefulWidget {
 
 class _CardGalleryScreenState extends State<CardGalleryScreen> {
   CardAmbience _ambience = CardAmbience.classic;
+  bool _feminine = false;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -60,17 +82,23 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Le deck Classique',
+                    'Les cartes du village',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Explore les cinq rôles. Retourne une carte pour lire ses règles, '
+                  Text(
+                    'Explore les ${classicRoles.length} rôles. Retourne une carte pour lire ses règles, '
                     'puis masque-la en la faisant glisser vers le bas.',
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Les 17 rôles sont disponibles en partie. Consulte leurs pouvoirs et leurs conditions de victoire au verso.',
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    'Aperçu des bordures du verso — les rectos classiques sont conservés.',
+                    'Classique, Intense ou Horreur : mêmes rôles, mêmes pouvoirs. Seul le design change. '
+                    'Intense : 16 illustrations disponibles ; seul le Bouc émissaire reste illustré en Classique. '
+                    'Les illustrations Horreur seront ajoutées prochainement.',
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -87,6 +115,15 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                     ],
                   ),
                   const SizedBox(height: 24),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Voir la Villageoise'),
+                    subtitle: const Text(
+                      'Même rôle et mêmes pouvoirs que le Villageois.',
+                    ),
+                    value: _feminine,
+                    onChanged: (value) => setState(() => _feminine = value),
+                  ),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final columns = constraints.maxWidth >= 800
@@ -105,7 +142,10 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                           childAspectRatio: 0.63,
                         ),
                         itemBuilder: (context, index) {
-                          final role = classicRoles[index];
+                          final role = configuredRole(
+                            classicRoles[index].id,
+                            feminine: _feminine,
+                          );
                           return Semantics(
                             button: true,
                             label: 'Consulter ${role.name}',
@@ -121,10 +161,9 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                                   Expanded(
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
-                                      child: Image.asset(
-                                        role.asset,
-                                        fit: BoxFit.contain,
-                                        excludeFromSemantics: true,
+                                      child: RoleCardFront(
+                                        role: role,
+                                        ambience: _ambience,
                                       ),
                                     ),
                                   ),
@@ -136,6 +175,12 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                                       context,
                                     ).textTheme.titleSmall,
                                   ),
+                                  if (!role.implemented)
+                                    const Text(
+                                      'Pouvoir à intégrer',
+                                      style: TextStyle(fontSize: 11),
+                                      textAlign: TextAlign.center,
+                                    ),
                                 ],
                               ),
                             ),
@@ -158,6 +203,7 @@ Future<void> showRoleCard(
   BuildContext context,
   ClassicRole role, {
   CardAmbience ambience = CardAmbience.classic,
+  bool covered = false,
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
@@ -167,13 +213,19 @@ Future<void> showRoleCard(
       ? Duration.zero
       : const Duration(milliseconds: 200),
   pageBuilder: (context, animation, secondaryAnimation) =>
-      RoleCardViewer(role: role, ambience: ambience),
+      RoleCardViewer(role: role, ambience: ambience, covered: covered),
 );
 
 class RoleCardViewer extends StatefulWidget {
-  const RoleCardViewer({super.key, required this.role, required this.ambience});
+  const RoleCardViewer({
+    super.key,
+    required this.role,
+    required this.ambience,
+    this.covered = false,
+  });
   final ClassicRole role;
   final CardAmbience ambience;
+  final bool covered;
   @override
   State<RoleCardViewer> createState() => _RoleCardViewerState();
 }
@@ -190,10 +242,12 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   );
   bool _closing = false;
   bool _concealed = false;
+  late bool _covered;
 
   @override
   void initState() {
     super.initState();
+    _covered = widget.covered;
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -222,8 +276,18 @@ class _RoleCardViewerState extends State<RoleCardViewer>
     if (mounted) Navigator.of(context).pop();
   }
 
-  void _turn() {
+  Future<void> _turn() async {
     if (_closing || _flip.isAnimating) return;
+    if (_covered) {
+      if (!MediaQuery.disableAnimationsOf(context)) await _flip.forward();
+      if (mounted) {
+        setState(() {
+          _covered = false;
+          _flip.value = 0;
+        });
+      }
+      return;
+    }
     final back = _flip.value > 0.5;
     if (MediaQuery.disableAnimationsOf(context)) {
       _flip.value = back ? 0 : 1;
@@ -268,7 +332,15 @@ class _RoleCardViewerState extends State<RoleCardViewer>
                               child: Icon(Icons.visibility_off, size: 64),
                             ),
                           )
-                        : back
+                        : _covered && !back
+                        ? Image.asset(
+                            widget.ambience == CardAmbience.intense
+                                ? 'assets/village/intense/card_back.png'
+                                : 'assets/village/card_back.png',
+                            fit: BoxFit.contain,
+                            semanticLabel: 'Carte secrète face cachée',
+                          )
+                        : back && !_covered
                         ? _CardBack(
                             role: widget.role,
                             ambience: widget.ambience,
@@ -283,10 +355,9 @@ class _RoleCardViewerState extends State<RoleCardViewer>
                               label:
                                   'Recto illustré de ${widget.role.name}. Retournez pour lire les règles.',
                               image: true,
-                              child: Image.asset(
-                                widget.role.asset,
-                                fit: BoxFit.contain,
-                                excludeFromSemantics: true,
+                              child: RoleCardFront(
+                                role: widget.role,
+                                ambience: widget.ambience,
                               ),
                             ),
                           ),
@@ -308,7 +379,11 @@ class _RoleCardViewerState extends State<RoleCardViewer>
           onPressed: _closing || _flip.isAnimating ? null : _turn,
           icon: const Icon(Icons.flip),
           label: Text(
-            _flip.value > .5 ? 'Voir l’illustration' : 'Retourner la carte',
+            _covered
+                ? 'Découvrir ma carte'
+                : _flip.value > .5
+                ? 'Voir l’illustration'
+                : 'Retourner la carte',
           ),
         ),
       ),
@@ -333,7 +408,11 @@ class _RoleCardViewerState extends State<RoleCardViewer>
           child: LayoutBuilder(
             builder: (context, size) {
               final title = Text(
-                _concealed ? 'Carte masquée' : widget.role.name,
+                _concealed
+                    ? 'Carte masquée'
+                    : _covered
+                    ? 'Ma carte secrète'
+                    : widget.role.name,
                 style: Theme.of(context).textTheme.titleLarge,
               );
               if (size.maxWidth > size.maxHeight && size.maxWidth > 560) {
@@ -373,6 +452,84 @@ class _RoleCardViewerState extends State<RoleCardViewer>
       ),
     ),
   );
+}
+
+/// Text is rendered from the same role definition for every cosmetic edition.
+/// The imported JPGs are kept intact; their outdated rules are covered here.
+class RoleCardFront extends StatelessWidget {
+  const RoleCardFront({super.key, required this.role, required this.ambience});
+  final ClassicRole role;
+  final CardAmbience ambience;
+
+  static bool hasIntense(String id) =>
+      id != 'scapegoat' && classicRoles.any((role) => role.id == id);
+
+  @override
+  Widget build(BuildContext context) {
+    if (ambience != CardAmbience.intense || !hasIntense(role.id)) {
+      return Image.asset(
+        role.asset,
+        cacheWidth: 768,
+        fit: BoxFit.contain,
+        excludeFromSemantics: true,
+      );
+    }
+    return Center(
+      child: AspectRatio(
+        aspectRatio: 864 / 1238,
+        child: LayoutBuilder(
+          builder: (context, size) => Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                role.id == 'villager' && role.feminine
+                    ? 'assets/cards/intense/villager_female.png'
+                    : 'assets/cards/intense/${role.id}_intense.jpg',
+                cacheWidth: 864,
+                fit: BoxFit.fill,
+                excludeFromSemantics: true,
+              ),
+              Positioned(
+                left: size.maxWidth * .145,
+                right: size.maxWidth * .145,
+                top: size.maxHeight * (role.id == 'metamorph' ? .62 : .695),
+                height: size.maxHeight * (role.id == 'metamorph' ? .18 : .173),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFE1CAA0), Color(0xFFC6A36B)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(size.maxWidth * .012),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(size.maxWidth * .012),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        width: 580,
+                        child: Text(
+                          'Camp : ${role.camp}\n${role.summary}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'SourceSans3',
+                            fontSize: 28,
+                            height: 1.13,
+                            color: Color(0xFF2B1B12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _CardBack extends StatelessWidget {
@@ -424,11 +581,22 @@ class _CardBack extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    if (!role.implemented) ...[
+                      const Text(
+                        'Fiche de collection · Pouvoir à intégrer',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     Text(
                       'Camp : ${role.camp}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text('Action : ${role.phase}'),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Même rôle et mêmes pouvoirs dans toutes les éditions.',
+                    ),
                     const Divider(color: Color(0x88755036), height: 24),
                     Text(role.summary),
                     const SizedBox(height: 16),

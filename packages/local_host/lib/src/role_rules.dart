@@ -1,0 +1,20 @@
+const roleIds = {
+  'villager',
+  'werewolf',
+  'seer',
+  'witch',
+  'hunter',
+  'little_girl',
+  'metamorph',
+  'cupid',
+  'guardian',
+  'elder',
+  'scapegoat',
+  'alpha_wolf',
+  'white_wolf',
+  'wolf_father',
+  'idiot',
+  'piper',
+  'angel',
+};
+const wolfRoleIds = {'werewolf', 'alpha_wolf', 'white_wolf', 'wolf_father'};

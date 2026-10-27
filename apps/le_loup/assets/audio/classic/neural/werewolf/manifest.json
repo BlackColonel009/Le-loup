@@ -1,0 +1,31 @@
+{
+  "model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "source": "https://qwen-qwen3-tts.hf.space",
+  "reference_sha256": "1f3cedca0f4627c71153cc4e11b9a79c0b3b6bb6b5288837382d3241ae384ddc",
+  "reference_approved_by_user": true,
+  "cues": {
+    "wolves": {
+      "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "sha256": "1f3cedca0f4627c71153cc4e11b9a79c0b3b6bb6b5288837382d3241ae384ddc"
+    },
+    "role_reveal": {
+      "seconds": 5.2,
+      "sha256": "9fb1839a74fd293a73a8e4ff6917a8b9957298cc778c518485a8b5ed1c4e693c",
+      "text": "Gardez votre identité dans l'ombre. Découvrez votre rôle à l'abri des regards.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    }
+  },
+  "note": "wolves and preview use the exact approved original recording; remaining game cues pending"
+}

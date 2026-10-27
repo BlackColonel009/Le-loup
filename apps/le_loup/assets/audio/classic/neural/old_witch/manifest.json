@@ -1,0 +1,30 @@
+{
+  "source": "onnx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "reference_sha256": "c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5",
+  "reference_approved_by_user": true,
+  "cues": {
+    "wolves": {
+      "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "sha256": "c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5"
+    },
+    "witch_potion": {
+      "seconds": 7.68,
+      "sha256": "ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7",
+      "text": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    }
+  },
+  "note": "Original reference used for preview and wolves call; other cues generated from this reference."
+}

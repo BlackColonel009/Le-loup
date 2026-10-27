@@ -15,6 +15,7 @@ def test_health_exposes_protocol_version():
     response = asyncio.run(request_health())
     assert response.status_code == 200
     assert response.json() == {
-        "status": "ok", "service": "le-loup-api", "protocol": "1"
+        "status": "ok",
+        "service": "le-loup-api",
+        "protocol": "1",
     }
-

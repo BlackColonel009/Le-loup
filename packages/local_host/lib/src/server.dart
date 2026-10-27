@@ -3,8 +3,11 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'night_game.dart';
+import 'role_rules.dart';
+import 'game_host.dart';
 
-class LocalHost {
+class LocalHost implements GameHost {
   LocalHost({this.heartbeatInterval = const Duration(seconds: 30)});
   // Laisse davantage de marge aux émulateurs et aux appareils momentanément chargés.
   final Duration heartbeatInterval;
@@ -23,7 +26,76 @@ class LocalHost {
   final _players = <String, Map<String, dynamic>>{};
   final _tokens = <String, String>{};
   final _roles = <String, String>{};
+  NightGame? _game;
+  Timer? _phaseTimer;
+  Timer? _sentenceTimer;
+
+  void startNight({int seconds = 120}) {
+    if (_game == null) throw StateError('Distribuez les rôles d’abord.');
+    _game!.startNight(seconds: seconds);
+    _gameChanged();
+  }
+
+  void startVote({int seconds = 120}) {
+    _game!.startVote(seconds: seconds);
+    _gameChanged();
+  }
+
+  void setDayChat(bool value) {
+    _game!.setChatOpen(value);
+    _gameChanged();
+  }
+
+  void advanceNight() {
+    _game!.advance();
+    _gameChanged();
+  }
+
+  void callNight(String action) {
+    _game!.callNight(action);
+    _gameChanged();
+  }
+
+  void finishNight() {
+    _game!.finishNight();
+    _gameChanged();
+  }
+
+  void pauseNight() {
+    _game!.pause();
+    _gameChanged();
+  }
+
+  void resumeNight() {
+    _game!.resume();
+    _gameChanged();
+  }
+
+  void _gameChanged() {
+    _phaseTimer?.cancel();
+    final game = _game;
+    if (game != null && game.timed && !game.paused && !game.closed) {
+      _phaseTimer = Timer(
+        Duration(milliseconds: game.remainingMilliseconds),
+        () {
+          game.expire();
+          _publish();
+        },
+      );
+    }
+    _publish();
+  }
+
+  void _sendGameState(WebSocket socket, String id) {
+    if (_game != null && socket.readyState == WebSocket.open) {
+      socket.add(
+        jsonEncode({'type': 'game.private', ..._game!.privateState(id)}),
+      );
+    }
+  }
+
   Map<String, int> _deck = {
+    for (final id in roleIds) id: 0,
     'villager': 3,
     'werewolf': 1,
     'seer': 0,
@@ -32,25 +104,93 @@ class LocalHost {
   };
   bool started = false;
   bool seerCampOnly = false;
+  bool revealRolesOnDeath = true;
+
+  void spinSentence() {
+    if (_game == null) throw StateError('Aucune partie en cours.');
+    _game!.spinSentence(_random.nextInt(sentenceOptions.length));
+    _scheduleSentenceEnd();
+    _publish();
+  }
+
+  void _scheduleSentenceEnd() {
+    _sentenceTimer?.cancel();
+    if (_game == null) return;
+    _sentenceTimer = Timer(
+      Duration(milliseconds: _game!.sentenceRemaining + 1),
+      () {
+        if (_game == null) return;
+        if (_game!.sentenceRemaining > 0) {
+          _scheduleSentenceEnd();
+        } else {
+          _publish();
+        }
+      },
+    );
+  }
+
+  void continueAfterSentence() {
+    final game = _game;
+    if (game == null || game.publicState['sentence'] == null) {
+      throw StateError('Aucune sentence à poursuivre.');
+    }
+    if (game.phase != 'vote_result') {
+      throw StateError(
+        'Résolvez la réaction en cours ou consultez le résultat de la partie.',
+      );
+    }
+    startNight(seconds: game.durationSeconds);
+  }
 
   Map<String, int> get deck => Map.unmodifiable(_deck);
+  String _visualPack = 'classic';
+  String get visualPack => _visualPack;
+  List<String> _sentenceOptions = List.of(NightGame.sentences);
+  List<String> get sentenceOptions => List.unmodifiable(_sentenceOptions);
   String _secret() => List.generate(
     32,
     (_) => _random.nextInt(256).toRadixString(16).padLeft(2, '0'),
   ).join();
 
-  void configure(Map<String, int> deck, {required bool campOnly}) {
+  void configure(
+    Map<String, int> deck, {
+    required bool campOnly,
+    bool? revealOnDeath,
+    String? pack,
+    List<String>? sentences,
+  }) {
     if (started) throw StateError('La partie a déjà commencé.');
-    if (deck.length != _deck.length ||
-        !deck.keys.every(_deck.containsKey) ||
+    if (pack != null && !['classic', 'intense'].contains(pack)) {
+      throw ArgumentError('Pack inconnu ou indisponible.');
+    }
+    if (sentences != null &&
+        (sentences.length != 8 ||
+            sentences.any((s) => s.trim().isEmpty || s.trim().length > 32))) {
+      throw ArgumentError('Indiquez huit sentences de 1 à 32 caractères.');
+    }
+    if (![
+          'villager',
+          'werewolf',
+          'seer',
+          'witch',
+          'hunter',
+        ].every(deck.containsKey) ||
+        !deck.keys.every(roleIds.contains) ||
         deck.values.any((n) => n < 0 || n > 20) ||
-        ['seer', 'witch', 'hunter'].any((key) => deck[key]! > 1)) {
+        deck.entries.any(
+          (entry) =>
+              !['villager', 'werewolf'].contains(entry.key) && entry.value > 1,
+        )) {
       throw ArgumentError(
         'Composition invalide. Les rôles spéciaux sont uniques.',
       );
     }
-    _deck = Map.of(deck);
+    _deck = {for (final id in roleIds) id: deck[id] ?? 0};
     seerCampOnly = campOnly;
+    if (pack != null) _visualPack = pack;
+    if (sentences != null)
+      _sentenceOptions = sentences.map((s) => s.trim()).toList();
+    if (revealOnDeath != null) revealRolesOnDeath = revealOnDeath;
     // Une modification nécessite une nouvelle confirmation des joueurs.
     for (final player in _players.values) {
       player['ready'] = false;
@@ -63,7 +203,8 @@ class LocalHost {
     if (_players.length < 4) return 'Il faut au moins 4 joueurs, hors MDJ.';
     if (_deck.values.fold(0, (a, b) => a + b) != _players.length)
       return 'Il faut exactement une carte par joueur.';
-    if (_deck['werewolf']! < 1 || _deck['werewolf']! * 2 >= _players.length)
+    final predators = wolfRoleIds.fold(0, (sum, id) => sum + (_deck[id] ?? 0));
+    if (predators < 1 || predators * 2 >= _players.length)
       return 'Il faut au moins un loup et une majorité de villageois.';
     if (_players.values.any(
           (p) => p['connected'] != true || p['ready'] != true,
@@ -85,6 +226,12 @@ class LocalHost {
       _roles[id] = cards[index++];
     }
     started = true;
+    _game = NightGame(
+      _roles,
+      campOnly: seerCampOnly,
+      revealOnDeath: revealRolesOnDeath,
+      sentenceOptions: sentenceOptions,
+    );
     locked = true;
     _publish();
     for (final entry in _peers.entries) {
@@ -136,10 +283,23 @@ class LocalHost {
     'version': 1,
     'code': code,
     'host': nickname,
+    'visual_pack': visualPack,
+    'sentence_options': List.of(sentenceOptions),
     'locked': locked,
-    'phase': started ? 'role_reveal' : 'lobby',
+    'phase': _game?.phase ?? (started ? 'role_reveal' : 'lobby'),
+    if (_game != null)
+      'game': {
+        ..._game!.publicState,
+        if (visualPack == 'intense')
+          'weather': {
+            ...(_game!.publicState['weather'] as Map),
+            'kind': 'snow',
+            'rainbow': false,
+          },
+      },
     'deck': Map.of(_deck),
     'seer_camp_only': seerCampOnly,
+    'reveal_roles_on_death': revealRolesOnDeath,
     'players': [for (final p in _players.values) Map<String, dynamic>.of(p)],
   };
 
@@ -147,6 +307,7 @@ class LocalHost {
   Map<String, dynamic> get snapshot => {
     ...publicSnapshot,
     'assignments': Map.of(_roles),
+    if (_game != null) 'game_host': _game!.hostState,
     'launch_error': launchError,
     'connection_diagnostics': List<String>.of(_diagnostics),
   };
@@ -159,7 +320,11 @@ class LocalHost {
         if (!address.isLoopback) '${address.address}:$port',
   ];
 
-  Future<void> start({int port = 8080, String nickname = 'MDJ'}) async {
+  Future<void> start({
+    int port = 8080,
+    String nickname = 'MDJ',
+    String? bindAddress,
+  }) async {
     if (_server != null) throw StateError('Le serveur est déjà démarré.');
     if (nickname.trim().isEmpty || nickname.trim().length > 24) {
       throw ArgumentError('Le pseudo doit contenir entre 1 et 24 caractères.');
@@ -168,7 +333,12 @@ class LocalHost {
     code = '${100000 + _random.nextInt(900000)}';
     locked = false;
     started = false;
-    _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
+    _server = await HttpServer.bind(
+      bindAddress == null
+          ? InternetAddress.anyIPv4
+          : InternetAddress(bindAddress),
+      port,
+    );
     _server!.listen(_handle);
   }
 
@@ -257,8 +427,14 @@ class LocalHost {
         );
         _publish();
         _sendRole(socket, id);
+        _sendGameState(socket, id);
       } else if (data['type'] == 'room.join' && !_peers.containsKey(socket)) {
         final name = (data['nickname'] as String? ?? '').trim();
+        final appearance = data['appearance'] ?? 'male';
+        if (!['male', 'female'].contains(appearance)) {
+          error('Choisissez une apparence Villageois ou Villageoise.');
+          return;
+        }
         if (locked || started) {
           error('Les inscriptions sont fermées.');
           return;
@@ -291,8 +467,13 @@ class LocalHost {
         final player = {
           'id': id,
           'nickname': name,
+          'appearance': appearance,
           'ready': false,
           'connected': true,
+          'house_slot': List.generate(20, (index) => index).firstWhere(
+            (slot) =>
+                !_players.values.any((player) => player['house_slot'] == slot),
+          ),
         };
         _peers[socket] = player;
         _players[id] = player;
@@ -309,6 +490,17 @@ class LocalHost {
           data['ready'] is bool) {
         _peers[socket]!['ready'] = data['ready'];
         _publish();
+      } else if (data['type'] == 'game.action' &&
+          _peers.containsKey(socket) &&
+          _game != null) {
+        try {
+          _game!.act(_peers[socket]!['id'] as String, data);
+          _publish();
+        } on StateError catch (failure) {
+          error(failure.message.toString());
+        } on ArgumentError catch (failure) {
+          error(failure.message.toString());
+        }
       } else {
         error('Action non autorisée.');
       }
@@ -339,9 +531,17 @@ class LocalHost {
   }
 
   void _publish() {
+    if (_game != null) {
+      _roles
+        ..clear()
+        ..addAll(_game!.roles);
+    }
     final encoded = jsonEncode(publicSnapshot);
     for (final peer in _peers.keys.toList()) {
-      if (peer.readyState == WebSocket.open) peer.add(encoded);
+      if (peer.readyState == WebSocket.open) {
+        peer.add(encoded);
+        _sendGameState(peer, _peers[peer]!['id'] as String);
+      }
     }
     _updates.add(snapshot);
   }
@@ -355,6 +555,9 @@ class LocalHost {
     _players.clear();
     _tokens.clear();
     _roles.clear();
+    _phaseTimer?.cancel();
+    _sentenceTimer?.cancel();
+    _game = null;
     for (final socket in sockets) {
       await socket.close(1001, 'Le MDJ a fermé le salon.');
     }

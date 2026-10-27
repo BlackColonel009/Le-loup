@@ -1,0 +1,60 @@
+{
+  "method": "faster-whisper base, CPU int8, French",
+  "note": "ASR can mishear character voices; this is not a listening approval.",
+  "files": [
+    {
+      "file": "docs\\audio-auditions\\classic_female.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village sans d'or, L'ouca roue, réveillez-vous. Quelle sera votre victime ?",
+      "word_error_rate": 0.5
+    },
+    {
+      "file": "docs\\audio-auditions\\classic_male.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'endore, L'ougarou, réveillez-vous. Quelle sera votre victime ?",
+      "word_error_rate": 0.25
+    },
+    {
+      "file": "docs\\audio-auditions\\duke.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'en dort, l'eau garot créeveillez-vous, qu'elle sera votre victime ?",
+      "word_error_rate": 0.667
+    },
+    {
+      "file": "docs\\audio-auditions\\ghost.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Vylage s'endore, L'eau garou, réveillez-vous, qu'elle sera votre victime.",
+      "word_error_rate": 0.667
+    },
+    {
+      "file": "docs\\audio-auditions\\intense_female.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'endore, Lou-Garou, réveillez-vous, quelle sera votre victime ?",
+      "word_error_rate": 0.25
+    },
+    {
+      "file": "docs\\audio-auditions\\intense_male.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'endore. L'ouca roue, réveillez-vous. Que sera votre victime ?",
+      "word_error_rate": 0.417
+    },
+    {
+      "file": "docs\\audio-auditions\\old_witch.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "No village sans d'art, no carro, réveillez-vous qu'elle sera votre victime.",
+      "word_error_rate": 0.667
+    },
+    {
+      "file": "docs\\audio-auditions\\old_wizard.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'endore. Lou Garou, réveillez-vous. Quelle sera votre victime ?",
+      "word_error_rate": 0.25
+    },
+    {
+      "file": "docs\\audio-auditions\\werewolf.wav",
+      "expected": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "transcribed": "Le village s'endore. Lou, Garou, réveillez-vous qu'elle sera votre victime !",
+      "word_error_rate": 0.417
+    }
+  ]
+}

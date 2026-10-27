@@ -1,0 +1,13 @@
+{
+  "model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "source": "https://qwen-qwen3-tts.hf.space",
+  "reference_sha256": "0b704590bbfd2c791f3090bcafc3ce423b05705f0a3307e91824d03489c3e61c",
+  "reference_approved_by_user": true,
+  "cues": {
+    "wolves": {
+      "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "sha256": "0b704590bbfd2c791f3090bcafc3ce423b05705f0a3307e91824d03489c3e61c"
+    }
+  },
+  "note": "wolves and preview use the exact approved original recording; remaining game cues pending"
+}

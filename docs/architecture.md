@@ -1,5 +1,9 @@
 # Architecture initiale
 
+La première passerelle en ligne FastAPI + moteur Dart est maintenant implémentée.
+Voir [le contrat et les instructions de lancement](en-ligne.md) pour son état
+actuel ; les sections ci-dessous décrivent aussi les étapes historiques du LAN.
+
 ## Spécifications de jeu
 
 - [Deck Classique validé](regles-classiques.md)
@@ -40,7 +44,32 @@ Les attributions complètes restent dans `LocalHost.snapshot` pour l'interface M
 seul `publicSnapshot` est diffusé aux joueurs. La distribution est unique et
 verrouille configuration, inscriptions et retraits. Les rôles sont mélangés avec Random.secure.
 Les changements de configuration annulent les confirmations des joueurs.
-À définir : phase.changed, chat.message, vote.cast, sauvegarde persistante et
+`game` contient l'état public de la nuit : phase, annonce, échéance, pause,
+révision, vivants, décès annoncés et résultat final. `game.private` transmet
+uniquement au destinataire ses commandes, vision, potions et informations de meute.
+`game_host` dans la vue MDJ contient les arbitrages privés, jamais diffusés aux joueurs.
+`game.action` inclut `phase_revision` et un type d'action : seer.inspect,
+wolves.choose, wolves.chat, witch.potions ou hunter.shoot. Le serveur vérifie
+le rôle, les cibles, le délai, les ressources et l'unicité de l'action.
+`day.chat` et `vote.cast` utilisent aussi `game.action` et sa révision de phase.
+Les bulletins restent côté serveur et dans la vue privée de leur auteur. Le
+public reçoit le nombre de bulletins pendant le vote, puis les totaux à clôture.
+Le serveur conserve les votes lors d'une coupure, distingue blanc/abstention et
+rejette les votes tardifs, suspendus ou envoyés par un éliminé.
+Le chat général est public pendant la journée mais l'envoi nécessite de vivre
+encore et l'autorisation du MDJ. Les messages sont bornés et limités en fréquence.
+Les commandes de transition, de modération et de pause restent locales au MDJ.
+Le moteur pur `packages/local_host/lib/src/night_game.dart` est testé sans Flutter.
+`house_slot` est attribué par le serveur à l'inscription, conservé à la reprise
+et projeté sur les parcelles du fond par Flutter. Aucun rôle privé ne sert à
+déterminer les bulles visibles pour un destinataire non autorisé.
+`reveal_roles_on_death` est une option publique de composition. Les événements
+`death_events` portent une identité stable ; leur champ `role` et les rôles
+révélés sont filtrés côté serveur. Un rôle vivant n'est jamais publié avant la fin.
+Le MDJ peut appeler `spinSentence` localement : le serveur tire l'index une seule
+fois et publie l'heure, le résultat et le temps restant. Flutter anime ce résultat,
+sans produire de tirage local. Les variantes commerciales ne sont pas activées.
+À définir : sauvegarde persistante et
 identifiants de requête pour les actions de jeu.
 Les réponses privées et publiques doivent être distinctes. Une reconnexion devra
 restaurer une vue autorisée depuis le serveur, sans redistribuer les rôles.

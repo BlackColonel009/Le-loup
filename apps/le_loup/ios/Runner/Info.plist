@@ -2,14 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Legende of Wolf utilise la caméra pour scanner le QR code du salon du maître du jeu.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Le Loup utilise le réseau local pour héberger ou rejoindre le village du maître du jeu.</string>
+	<string>Legende of Wolf utilise le réseau local pour héberger ou rejoindre le village du maître du jeu.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Le Loup</string>
+	<string>Legende of Wolf</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,11 +19,13 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>le_loup</string>
+	<string>Legende of Wolf</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 Roland DJAGBA Alias Logan. by Logan R.D</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -70,3 +74,4 @@
 	</array>
 </dict>
 </plist>
+

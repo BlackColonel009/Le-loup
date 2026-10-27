@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class LocalLobbyScreen extends StatelessWidget {
-  const LocalLobbyScreen({super.key});
+  const LocalLobbyScreen({super.key, this.online = false});
+  final bool online;
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Salon local')),
     body: const Padding(
       padding: EdgeInsets.all(24),
       child: Text(
-        'Le salon local nécessite l’application Android, iOS ou Windows. '
-        'Le mode web sera disponible pour les parties à distance.',
+        'Les salons nécessitent actuellement l’application Android, iOS ou Windows. '
+        'Le client navigateur sera ajouté ultérieurement.',
       ),
     ),
   );

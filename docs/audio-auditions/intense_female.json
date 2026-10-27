@@ -1,0 +1,24 @@
+{
+  "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "revision": "f7d919ae545c1410acbc36d3c9d849c47f66ed76",
+  "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "tokenizer_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+  "local_changes": [
+    "disable remote code",
+    "limit CPU threads to four",
+    "omit unused design encoder"
+  ],
+  "direction": "Native French female dramatic narrator, dark resonant contralto, intense restrained suspense, confident velvety presence, varied natural phrasing and deliberate pauses.",
+  "status": "integrated",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "seconds": 5.84,
+  "sha256": "b6353769d15d8d139b97c85b4136399a85e9d94779bb5092cf467f4a6cbf9d69",
+  "approved": true,
+  "precision": "int4",
+  "generated_locally": true,
+  "seed": 1705,
+  "device": "cpu",
+  "tokenizer_fix_mistral_regex": true,
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

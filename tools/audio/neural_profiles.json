@@ -1,0 +1,69 @@
+{
+  "profiles": [
+    {
+      "id": "classic_male",
+      "label": "Masculine",
+      "edition": "Classique",
+      "description": "Narrateur français posé et clair."
+    },
+    {
+      "id": "classic_female",
+      "label": "Féminine",
+      "edition": "Classique",
+      "description": "Narratrice française claire et calme."
+    },
+    {
+      "id": "intense_male",
+      "label": "Masculine grave",
+      "edition": "Intense",
+      "description": "Grave, lente et chargée de suspense."
+    },
+    {
+      "id": "intense_female",
+      "label": "Féminine grave",
+      "edition": "Intense",
+      "description": "Voix sombre et résonante."
+    },
+    {
+      "id": "duke",
+      "label": "Le Duc",
+      "edition": "Intense",
+      "description": "Ton solennel et annonces de cour."
+    },
+    {
+      "id": "old_wizard",
+      "label": "Vieux sorcier",
+      "edition": "Horreur",
+      "description": "Voix vieillie, tremblante et voilée."
+    },
+    {
+      "id": "old_witch",
+      "label": "Vieille sorcière",
+      "edition": "Horreur",
+      "description": "Timbre voilé et tremblement discret."
+    },
+    {
+      "id": "werewolf",
+      "label": "Loup-garou",
+      "edition": "Horreur",
+      "description": "Grondement grave sous une parole intelligible."
+    },
+    {
+      "id": "ghost",
+      "label": "Fantôme",
+      "edition": "Horreur",
+      "description": "Voix aérienne et échos lointains."
+    },
+    {
+      "id": "cold_killer",
+      "label": "Tueur de sang-froid",
+      "edition": "Horreur",
+      "description": "Voix sèche, lente et retenue."
+    }
+  ],
+  "extra_lines": {
+    "old_witch": {
+      "witch_potion": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !"
+    }
+  }
+}

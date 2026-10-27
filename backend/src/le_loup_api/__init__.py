@@ -1,2 +1,1 @@
 """Backend distant Le Loup."""
-

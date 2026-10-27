@@ -11,6 +11,7 @@ class LobbyClient {
   String? _address;
   String? _code;
   String? _nickname;
+  String _appearance = 'male';
   bool _closed = false;
   bool _inGame = false;
 
@@ -21,24 +22,35 @@ class LobbyClient {
       _token = null;
       id = null;
     }
-    await connect(_address!, _code!, _nickname!);
+    await connect(_address!, _code!, _nickname!, appearance: _appearance);
   }
 
-  Future<void> connect(String address, String code, String nickname) async {
+  Future<void> connect(
+    String address,
+    String code,
+    String nickname, {
+    String appearance = 'male',
+  }) async {
+    _appearance = appearance;
     final previous = _socket;
     _socket = null;
     await previous?.close();
     _address = address;
     _code = code;
     _nickname = nickname;
-    final uri = Uri.tryParse('ws://${address.trim()}/ws');
+    final input = address.trim();
+    final remote = input.startsWith('ws://') || input.startsWith('wss://');
+    final uri = Uri.tryParse(remote ? input : 'ws://$input/ws');
     if (uri == null ||
         uri.host.isEmpty ||
         uri.userInfo.isNotEmpty ||
-        uri.path != '/ws' ||
+        !['ws', 'wss'].contains(uri.scheme) ||
+        !(uri.path == '/ws' || uri.path == '/rooms/${code.trim()}/ws') ||
         uri.hasQuery ||
         uri.hasFragment) {
-      throw const FormatException('Adresse attendue : 192.168.1.10:8080');
+      throw const FormatException(
+        'Adresse attendue : IP:port ou URL ws(s) du salon.',
+      );
     }
     var timedOut = false;
     final connection = WebSocket.connect(uri.toString());
@@ -88,8 +100,9 @@ class LobbyClient {
             id = data['id'] as String;
             _token = data['token'] as String?;
           }
-          if (data['type'] == 'room.snapshot')
-            _inGame = data['phase'] == 'role_reveal';
+          if (data['type'] == 'room.snapshot') {
+            _inGame = data['phase'] != 'lobby';
+          }
           _events.add(data);
         } catch (_) {
           _events.add({
@@ -112,12 +125,35 @@ class LobbyClient {
         if (_token != null) 'token': _token,
         'code': code.trim(),
         'nickname': nickname.trim(),
+        'appearance': _appearance,
       }),
     );
   }
 
   void setReady(bool ready) => _socket?.add(
     jsonEncode({'version': 1, 'type': 'player.ready', 'ready': ready}),
+  );
+
+  void gameAction(
+    String action,
+    int revision, {
+    String? target,
+    bool? save,
+    String? kill,
+    String? text,
+    List<String>? targets,
+  }) => _socket?.add(
+    jsonEncode({
+      'version': 1,
+      'type': 'game.action',
+      'action': action,
+      'phase_revision': revision,
+      if (target != null) 'target': target,
+      if (save != null) 'save': save,
+      'kill': kill,
+      if (text != null) 'text': text,
+      if (targets != null) 'targets': targets,
+    }),
   );
 
   /// Ferme le transport sans effacer la session, pour une reprise ultérieure.

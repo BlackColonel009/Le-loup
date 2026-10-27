@@ -1,0 +1,22 @@
+{
+  "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "revision": "f7d919ae545c1410acbc36d3c9d849c47f66ed76",
+  "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "tokenizer_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+  "local_changes": [
+    "disable remote code",
+    "limit CPU threads to four",
+    "omit unused design encoder"
+  ],
+  "direction": "Native French male dramatic narrator, rich deep bass baritone, tense contained power, cinematic suspense, deliberate pauses and natural emotional phrasing. Clear words, no shouting.",
+  "status": "integrated",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "seconds": 7.36,
+  "sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2",
+  "approved": true,
+  "precision": "int4",
+  "generated_locally": true,
+  "seed": 1704,
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

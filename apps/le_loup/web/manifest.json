@@ -1,11 +1,11 @@
 {
-    "name": "le_loup",
-    "short_name": "le_loup",
+    "name": "Legende of Wolf",
+    "short_name": "Legende of Wolf",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#151B24",
+    "theme_color": "#151B24",
+    "description": "Legende of Wolf - by Logan R.D",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
@@ -33,3 +33,4 @@
         }
     ]
 }
+

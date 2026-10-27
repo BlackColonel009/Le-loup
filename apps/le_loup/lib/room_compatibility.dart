@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:local_host/local_host.dart';
 
 /// Un ancien salon ne doit pas être complété avec des règles inventées côté client.
 bool hasRoomConfiguration(Map<String, dynamic> room) {
   final deck = room['deck'];
   const roles = ['villager', 'werewolf', 'seer', 'witch', 'hunter'];
   return deck is Map &&
-      deck.length == roles.length &&
+      deck.keys.every(roleIds.contains) &&
+      deck.values.every((n) => n is int && n >= 0 && n <= 20) &&
       roles.every((id) => deck[id] is int && deck[id] >= 0 && deck[id] <= 20) &&
       room['seer_camp_only'] is bool;
 }

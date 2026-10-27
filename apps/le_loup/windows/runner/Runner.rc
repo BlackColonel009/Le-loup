@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.leloup" "\0"
-            VALUE "FileDescription", "le_loup" "\0"
+            VALUE "CompanyName", "Roland DJAGBA Alias Logan" "\0"
+            VALUE "FileDescription", "Legende of Wolf - by Logan R.D" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "le_loup" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.leloup. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Roland DJAGBA Alias Logan. All rights reserved." "\0"
             VALUE "OriginalFilename", "le_loup.exe" "\0"
-            VALUE "ProductName", "le_loup" "\0"
+            VALUE "ProductName", "Legende of Wolf" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
@@ -119,3 +119,4 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+

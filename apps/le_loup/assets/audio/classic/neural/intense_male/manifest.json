@@ -1,0 +1,12 @@
+{
+  "source": "onnx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "reference_sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2",
+  "reference_approved_by_user": true,
+  "cues": {
+    "wolves": {
+      "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2"
+    }
+  },
+  "note": "Original reference used for preview and wolves call; other cues generated from this reference."
+}

@@ -1,0 +1,10 @@
+{
+  "model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "source": "https://qwen-qwen3-tts.hf.space",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "direction": "Native French male werewolf character. Very deep chest resonance, rough gravelly throat, controlled animal growl woven into clearly intelligible speech. Predatory, commanding, dangerous. Natural dramatic acting, measured pauses, no robotic cadence. Do not sing or howl over the words.",
+  "approved": true,
+  "status": "integrated",
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

@@ -37,6 +37,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   wakelock_plus: ^1.8.2
+  audioplayers: ^6.8.1
+  shared_preferences: ^2.5.5
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^7.4.2
 
 dev_dependencies:
   integration_test:
@@ -63,8 +67,48 @@ flutter:
   uses-material-design: true
   assets:
     - assets/cards/
+    - assets/cards/intense/
     - assets/frames/
     - assets/backgrounds/
+    - assets/village/
+    - assets/village/intense/
+    - assets/village/intense/sentences/
+    - assets/audio/classic/moonlit_village.wav
+    - assets/audio/classic/wolf_howl.mp3
+    - assets/audio/classic/claw_1.wav
+    - assets/audio/classic/claw_2.wav
+    - assets/audio/classic/rain_loop.wav
+    - assets/audio/classic/thunder.wav
+    - assets/audio/classic/neural/classic_male/preview.wav
+    - assets/audio/classic/neural/classic_male/wolves.wav
+    - assets/audio/classic/neural/classic_female/preview.wav
+    - assets/audio/classic/neural/classic_female/wolves.wav
+    - assets/audio/classic/neural/intense_male/preview.wav
+    - assets/audio/classic/neural/intense_male/wolves.wav
+    - assets/audio/classic/neural/intense_female/preview.wav
+    - assets/audio/classic/neural/intense_female/wolves.wav
+    - assets/audio/classic/neural/duke/preview.wav
+    - assets/audio/classic/neural/duke/wolves.wav
+    - assets/audio/classic/neural/old_wizard/preview.wav
+    - assets/audio/classic/neural/old_wizard/wolves.wav
+    - assets/audio/classic/neural/old_witch/preview.wav
+    - assets/audio/classic/neural/old_witch/witch_potion.wav
+    - assets/audio/classic/neural/old_witch/wolves.wav
+    - assets/audio/classic/neural/werewolf/preview.wav
+    - assets/audio/classic/neural/werewolf/role_reveal.wav
+    - assets/audio/classic/neural/werewolf/wolves.wav
+    - assets/audio/classic/neural/ghost/preview.wav
+    - assets/audio/classic/neural/ghost/wolves.wav
+    - assets/audio/classic/neural/cold_killer/preview.wav
+    - assets/audio/classic/neural/cold_killer/wolves.wav
+    - assets/branding/
+  fonts:
+    - family: VillageSans
+      fonts:
+        - asset: assets/fonts/SourceSans3[wght].ttf
+    - family: Cormorant
+      fonts:
+        - asset: assets/fonts/CormorantGaramond[wght].ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -96,3 +140,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
+

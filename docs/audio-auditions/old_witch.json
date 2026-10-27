@@ -1,0 +1,22 @@
+{
+  "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "revision": "f7d919ae545c1410acbc36d3c9d849c47f66ed76",
+  "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "tokenizer_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+  "local_changes": [
+    "disable remote code",
+    "limit CPU threads to four",
+    "omit unused design encoder"
+  ],
+  "direction": "Native French elderly female witch, eighty years old. Croaky raspy aged contralto, sly ominous smile audible in her voice, slightly irregular breath, deliberate chilling delivery. Natural character acting, precise clear French, no exaggerated screeching.",
+  "status": "integrated",
+  "text": "Le village s’endort… Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+  "seconds": 7.92,
+  "sha256": "c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5",
+  "approved": true,
+  "precision": "int4",
+  "generated_locally": true,
+  "seed": 1701,
+  "approval_date": "2026-10-26",
+  "approval_type": "direct_integration_authorized_by_user"
+}

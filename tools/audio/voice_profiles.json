@@ -1,0 +1,64 @@
+{
+  "profiles": [
+    {"id":"classic_male","label":"Masculine","edition":"Classique","description":"Narrateur français posé et clair.","voice":"Paul","rate":-2,"pitch":-3,"effect":"classic"},
+    {"id":"classic_female","label":"Féminine","edition":"Classique","description":"Narratrice française claire et calme.","voice":"Julie","rate":-1,"pitch":0,"effect":"classic"},
+    {"id":"intense_male","label":"Masculine grave","edition":"Intense","description":"Grave, lente et chargée de suspense.","voice":"Paul","rate":-3,"pitch":-5,"effect":"deep"},
+    {"id":"intense_female","label":"Féminine grave","edition":"Intense","description":"Voix sombre et résonante.","voice":"Hortense","rate":-2,"pitch":-3,"effect":"deep"},
+    {"id":"duke","label":"Le Duc","edition":"Intense","description":"Ton solennel et annonces de cour.","voice":"Paul","rate":-3,"pitch":-1,"effect":"duke"},
+    {"id":"old_wizard","label":"Vieux sorcier","edition":"Horreur","description":"Voix vieillie, tremblante et voilée.","voice":"Paul","rate":-3,"pitch":-2,"effect":"old"},
+    {"id":"old_witch","label":"Vieille sorcière","edition":"Horreur","description":"Timbre voilé et tremblement discret.","voice":"Hortense","rate":-3,"pitch":-1,"effect":"old"},
+    {"id":"werewolf","label":"Loup-garou","edition":"Horreur","description":"Grondement grave sous une parole intelligible.","voice":"Paul","rate":-2,"pitch":-6,"effect":"beast"},
+    {"id":"ghost","label":"Fantôme","edition":"Horreur","description":"Voix aérienne et échos lointains.","voice":"Julie","rate":-2,"pitch":0,"effect":"ghost"},
+    {"id":"cold_killer","label":"Tueur de sang-froid","edition":"Horreur","description":"Voix sèche, lente et retenue.","voice":"Paul","rate":-3,"pitch":-4,"effect":"dry"}
+  ],
+  "lines": {
+    "Classique": {
+      "preview":"Ceci est un aperçu de la voix. Le village s'endort. Écoutez la nuit.",
+      "role_reveal":"Découvrez votre rôle à l'abri des regards.",
+      "sleep":"Le village s'endort. Fermez les yeux.",
+      "seer":"Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
+      "wolves":"Loups-garous, réveillez-vous. Quelle sera votre victime ?",
+      "witch":"Les loups se rendorment. Sorcière, réveille-toi, et prépare tes potions.",
+      "dawn":"Le jour se lève. Le village découvre les événements de la nuit.",
+      "hunter":"Chasseur, ton dernier souffle te laisse un dernier tir.",
+      "day":"Le village est réveillé. Place au débat.",
+      "voting":"Le village vote. Désignez un joueur, ou choisissez le vote blanc.",
+      "vote_result":"Le scrutin est terminé. Le village découvre le résultat.",
+      "ended_village":"Le village remporte la partie.",
+      "ended_wolves":"Les loups-garous remportent la partie.",
+      "ended_draw":"Le village est désert. Partie nulle."
+    },
+    "Intense": {
+      "preview":"Ceci est un aperçu de la voix. Gens du village, la nuit approche. Gardez vos secrets.",
+      "role_reveal":"Gens du village, découvrez votre rôle et gardez votre secret.",
+      "sleep":"Le silence gagne le village. Fermez les yeux. La nuit commence.",
+      "seer":"Voyante, ouvre les yeux. Quelle identité veux-tu découvrir dans les ombres ?",
+      "wolves":"Loups-garous, réveillez-vous. La nuit vous appartient. Choisissez votre victime.",
+      "witch":"La meute se rendort. Sorcière, réveille-toi. Prépare tes potions.",
+      "dawn":"L'aube paraît. Le village découvre les événements de la nuit.",
+      "hunter":"Chasseur, le destin t'accorde un dernier tir. Choisis ta cible.",
+      "day":"Le conseil du village est ouvert. Que chacun fasse entendre sa voix.",
+      "voting":"L'heure du vote a sonné. Désignez un joueur, ou choisissez le vote blanc.",
+      "vote_result":"Le scrutin est clos. Le village va découvrir son verdict.",
+      "ended_village":"Le village a résisté. Les villageois remportent la partie.",
+      "ended_wolves":"La meute a triomphé. Les loups-garous remportent la partie.",
+      "ended_draw":"Le village est désert. Cette histoire s'achève sur une partie nulle."
+    },
+    "Horreur": {
+      "preview":"Ceci est un aperçu de la voix. Les ombres se rapprochent. Le village s'endort.",
+      "role_reveal":"Gardez votre identité dans l'ombre. Découvrez votre rôle à l'abri des regards.",
+      "sleep":"Les ombres encerclent les maisons. Le village s'endort. Fermez les yeux.",
+      "seer":"Voyante, ouvre les yeux. Quelle identité veux-tu arracher aux ténèbres ?",
+      "wolves":"Loups-garous, réveillez-vous. Les maisons sont silencieuses. Quelle sera votre victime ?",
+      "witch":"Les loups se rendorment. Sorcière, réveille-toi. Tes potions t'attendent.",
+      "dawn":"La lumière revient. Le village découvre ce que la nuit lui a laissé.",
+      "hunter":"Chasseur, dans ton dernier souffle, il te reste un tir. Choisis ta cible.",
+      "day":"Le village est réveillé. Parlez. Les ombres écoutent le débat.",
+      "voting":"L'heure du jugement approche. Votez contre un joueur, ou choisissez le vote blanc.",
+      "vote_result":"Les voix se sont tues. Le scrutin est terminé. Découvrez le résultat.",
+      "ended_village":"Les ombres reculent. Le village remporte la partie.",
+      "ended_wolves":"La nuit appartient à la meute. Les loups-garous remportent la partie.",
+      "ended_draw":"Plus personne ne répond dans le village. Partie nulle."
+    }
+  }
+}
