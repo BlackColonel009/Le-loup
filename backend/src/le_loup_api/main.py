@@ -13,6 +13,7 @@ from .account_deletion import router as deletion_router
 from .administration import router as admin_router
 from .community import Store
 from .community import router as community_router
+from . import community_mail
 from .gallery import initialize as initialize_gallery
 from .gallery import router as gallery_router
 from .online import Rooms, router
@@ -32,10 +33,15 @@ async def lifespan(app):
         )
     )
     initialize_gallery(app.state.community)
+    community_mail.initialize(app.state.community)
+    mailer = asyncio.create_task(community_mail.run(app.state.community))
     reaper = asyncio.create_task(app.state.rooms.reap())
     try:
         yield
     finally:
+        mailer.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await mailer
         reaper.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             await reaper
@@ -45,6 +51,7 @@ async def lifespan(app):
 app = FastAPI(title="Legende of Wolf API", version="0.2.0", lifespan=lifespan)
 app.include_router(router)
 app.include_router(community_router)
+app.include_router(community_mail.router)
 app.include_router(shop_router)
 app.include_router(admin_router)
 app.include_router(profile_router)

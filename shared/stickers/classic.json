@@ -1,0 +1,19 @@
+[
+  {"id":"classic_villager_joy","role":"Villageois","emotion":"Joie","source":"villager"},
+  {"id":"classic_witch_determined","role":"Sorcière","emotion":"Détermination","source":"witch"},
+  {"id":"classic_seer_serene","role":"Voyante","emotion":"Sérénité","source":"seer"},
+  {"id":"classic_cupid_love","role":"Cupidon","emotion":"Amour","source":"cupid"},
+  {"id":"classic_guardian_alert","role":"Salvateur","emotion":"Vigilance","source":"guardian"},
+  {"id":"classic_hunter_ready","role":"Chasseur","emotion":"Préparation","source":"hunter"},
+  {"id":"classic_elder_patient","role":"Ancien","emotion":"Patience","source":"elder"},
+  {"id":"classic_scapegoat_scared","role":"Bouc émissaire","emotion":"Peur","source":"scapegoat"},
+  {"id":"classic_mayor_confident","role":"Maire","emotion":"Assurance","source":"mayor"},
+  {"id":"classic_mason_secret","role":"Franc-maçon","emotion":"Complicité","source":"mason"},
+  {"id":"classic_sisters_teamwork","role":"Sœurs","emotion":"Coordination","source":"sisters"},
+  {"id":"classic_werewolf_angry","role":"Loup-Garou","emotion":"Colère","source":"werewolf"},
+  {"id":"classic_alpha_proud","role":"Loup Alpha","emotion":"Fierté","source":"alpha"},
+  {"id":"classic_metamorph_sneaky","role":"Voleur / Métamorphe","emotion":"Discrétion","source":"metamorph"},
+  {"id":"classic_idiot_confused","role":"Idiot du Village","emotion":"Confusion","source":"idiot"},
+  {"id":"classic_wild_child_curious","role":"Enfant sauvage","emotion":"Curiosité","source":"wild_child"},
+  {"id":"classic_wolf_father_command","role":"Maître des Loups","emotion":"Autorité","source":"wolf_father"}
+]

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:local_host/local_host.dart' show stickerMessage;
+import '../stickers/chat_stickers.dart';
 
 class VillageChat extends StatefulWidget {
   const VillageChat({
@@ -22,6 +24,30 @@ class VillageChat extends StatefulWidget {
 
 class _VillageChatState extends State<VillageChat> {
   final _text = TextEditingController();
+  bool get _day =>
+      ['day', 'voting', 'vote_result'].contains(widget.room['phase']);
+  bool get _pack =>
+      widget.room['phase'] == 'wolves' &&
+      (widget.isHost ||
+          (widget.privateState?['is_pack'] == true ||
+                  widget.privateState?['role'] == 'werewolf') &&
+              widget.privateState?['alive'] == true);
+  bool get _writable =>
+      widget.connected &&
+      !widget.isHost &&
+      widget.privateState?['alive'] == true &&
+      (_day && (widget.room['game'] as Map?)?['chat_open'] == true ||
+          _pack && widget.privateState?['can_act'] == true);
+  Future<void> _selectSticker() async {
+    final sticker = await showStickerPicker(context);
+    if (!mounted || sticker == null || !_writable) return;
+    widget.onSend(
+      _day ? 'day.chat' : 'wolves.chat',
+      (widget.room['game'] as Map)['phase_revision'] as int,
+      stickerMessage(sticker),
+    );
+  }
+
   @override
   void didUpdateWidget(covariant VillageChat oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -37,13 +63,7 @@ class _VillageChatState extends State<VillageChat> {
   @override
   Widget build(BuildContext context) {
     final game = widget.room['game'] as Map?;
-    final day = ['day', 'voting', 'vote_result'].contains(widget.room['phase']);
-    final pack =
-        widget.room['phase'] == 'wolves' &&
-        (widget.isHost ||
-            (widget.privateState?['is_pack'] == true ||
-                    widget.privateState?['role'] == 'werewolf') &&
-                widget.privateState?['alive'] == true);
+    final day = _day, pack = _pack;
     List messages = [];
     if (day) {
       messages = game?['day_messages'] as List? ?? [];
@@ -53,12 +73,7 @@ class _VillageChatState extends State<VillageChat> {
     } else if (pack) {
       messages = widget.privateState?['messages'] as List? ?? [];
     }
-    final writable =
-        widget.connected &&
-        !widget.isHost &&
-        widget.privateState?['alive'] == true &&
-        (day && game?['chat_open'] == true ||
-            pack && widget.privateState?['can_act'] == true);
+    final writable = _writable;
     String name(dynamic id) =>
         (widget.room['players'] as List)
             .where((p) => p['id'] == id)
@@ -84,7 +99,7 @@ class _VillageChatState extends State<VillageChat> {
             ),
           ),
           const SizedBox(height: 6),
-          Text(messages[i]['text'] as String),
+          ChatMessageBody(text: messages[i]['text'] as String),
         ],
       ),
     );
@@ -134,10 +149,15 @@ class _VillageChatState extends State<VillageChat> {
         TextField(
           controller: _text,
           maxLength: 300,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Ton message',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.chat_bubble_outline),
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.chat_bubble_outline),
+            suffixIcon: IconButton(
+              tooltip: 'Stickers',
+              onPressed: _selectSticker,
+              icon: const Icon(Icons.emoji_emotions_outlined),
+            ),
           ),
         ),
         FilledButton(

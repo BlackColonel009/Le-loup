@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'village_weather.dart';
 import 'role_rules.dart';
 import 'narration_lines.g.dart';
+import 'chat_stickers.g.dart';
 part 'night_roles.dart';
 
 /// Moteur autoritaire, indépendant du transport et de Flutter.
@@ -747,6 +748,7 @@ class NightGame {
   void _chat(String id, dynamic text, List<Map<String, String>> messages) {
     if (text is! String || text.trim().isEmpty || text.length > 300)
       throw ArgumentError('Message de 1 à 300 caractères.');
+    validateStickerMessage(text);
     if (_lastMessage[id] != null &&
         _clock().difference(_lastMessage[id]!).inMilliseconds < 1000) {
       throw StateError('Patientez une seconde entre deux messages.');

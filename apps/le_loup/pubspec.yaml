@@ -411,6 +411,7 @@ flutter:
     - assets/audio/classic/neural/cold_killer/preview.wav
     - assets/audio/classic/neural/cold_killer/wolves.wav
     - assets/branding/
+    - assets/stickers/classic/
   fonts:
     - family: VillageSans
       fonts:

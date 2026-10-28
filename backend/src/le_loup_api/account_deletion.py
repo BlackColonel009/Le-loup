@@ -76,6 +76,8 @@ def confirm_deletion(
                     "sessions",
                     "purchase_history",
                     "email_challenges",
+                    "community_mail_preferences",
+                    "community_mail_deliveries",
                 ):
                     connection.execute(
                         f"DELETE FROM {table} WHERE user_id=?", (user_id,)

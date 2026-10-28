@@ -44,8 +44,8 @@
 <div id="admin-login" class="form-panel">
 <form id="login-form">
 <h2>Connexion administrateur</h2>
-<label for="nickname">Pseudo</label>
-<input id="nickname" autocomplete="username" maxlength="24" required>
+<label for="nickname">Pseudo ou email</label>
+<input id="nickname" autocomplete="username" maxlength="254" required>
 <label for="password">Mot de passe</label>
 <input id="password" type="password" autocomplete="current-password" maxlength="128" required>
 <button class="button" type="submit">Se connecter</button>
@@ -60,6 +60,23 @@
 <p id="admin-status" role="status" aria-live="polite">
 </p>
 <div id="admin-dashboard" hidden>
+<section class="form-panel">
+<form id="mail-form">
+<p class="eyebrow">COMMUNAUTÉ</p>
+<h2>Les rappels par email</h2>
+<label class="checkbox"><input id="mail-enabled" type="checkbox"><span>Activer les rappels automatiques</span></label>
+<label for="mail-days">Fréquence en jours (7 = chaque semaine)</label>
+<input id="mail-days" type="number" min="1" max="90" required>
+<label for="mail-subject">Objet du mail</label>
+<input id="mail-subject" maxlength="150" required>
+<label for="mail-phrases">Messages en rotation · une phrase par ligne</label>
+<textarea id="mail-phrases" rows="10" required></textarea>
+<p class="admin-hint">Un message différent à chaque campagne. Destinataires : comptes vérifiés, non bannis et non désinscrits. Une modification de la fréquence programme le prochain envoi après ce nouveau délai.</p>
+<p id="mail-next"></p>
+<button class="button" type="submit">Enregistrer les rappels</button>
+<p id="mail-status" role="status" aria-live="polite"></p>
+</form>
+</section>
 <section class="form-panel download-settings">
 <form id="download-form">
 <p class="eyebrow">DISTRIBUTION ANDROID</p>

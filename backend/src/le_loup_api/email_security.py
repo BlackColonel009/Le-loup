@@ -53,6 +53,12 @@ def send_code(address, code, purpose):
     message.set_content(
         f"Bonjour,\n\nPour {label}, saisis ce code sur le site ou dans l’application Legende of Wolf :\n\n{code}\n\nCe code expire dans 10 minutes et ne peut servir qu’une fois.\nSi tu n’as rien demandé, ignore ce message.\nNe partage jamais ce code.\n\nLegende of Wolf · by Logan R.D"
     )
+    send_message(message)
+
+
+def send_message(message):
+    """Shared TLS transport for security and community emails."""
+    require_mailer()
     host = os.environ["LE_LOUP_SMTP_HOST"]
     port = int(os.getenv("LE_LOUP_SMTP_PORT", "587"))
     context = ssl.create_default_context()

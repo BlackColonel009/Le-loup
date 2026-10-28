@@ -17,11 +17,12 @@ router = APIRouter(prefix="/community", tags=["community"])
 
 
 class Credentials(BaseModel):
-    nickname: str = Field(min_length=2, max_length=24)
+    nickname: str = Field(min_length=2, max_length=254)
     password: str = Field(min_length=8, max_length=128)
 
 
 class Registration(Credentials):
+    nickname: str = Field(min_length=2, max_length=24)
     email: str = Field(min_length=3, max_length=254)
 
 
@@ -282,9 +283,12 @@ def register(
 @router.post("/login")
 def login(*, data: Credentials, request: Request, db: Annotated[Store, Depends(store)]):
     db.limit(("login", request.client.host), 20, 60)
+    identifier = data.nickname.strip().casefold()
     with db.db() as connection:
         user = connection.execute(
-            "SELECT * FROM users WHERE name_key=?", (data.nickname.strip().casefold(),)
+            "SELECT * FROM users WHERE name_key=? OR email=? "
+            "ORDER BY (name_key=?) DESC LIMIT 1",
+            (identifier, identifier, identifier),
         ).fetchone()
     # Do the same expensive derivation even for unknown accounts.
     salt = user["salt"] if user else "00" * 16
@@ -292,7 +296,7 @@ def login(*, data: Credentials, request: Request, db: Annotated[Store, Depends(s
         data.password.encode(), salt=bytes.fromhex(salt), n=16384, r=8, p=1
     ).hex()
     if user is None or not hmac.compare_digest(password, user["password"]):
-        raise HTTPException(401, "Pseudo ou mot de passe incorrect.")
+        raise HTTPException(401, "Pseudo, email ou mot de passe incorrect.")
     result = session(db, user)
     if not user["email_verified"]:
         result["verification_required"] = True
@@ -353,10 +357,16 @@ def post_message(
     text = data.text.strip()
     if not text:
         raise HTTPException(422, "Écris un message.")
+    from .stickers import validate_sticker
+
+    try:
+        sticker = validate_sticker(text)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
     with db.db() as connection:
         from .moderation import check_message
 
-        warning = check_message(connection, user["id"], text)
+        warning = check_message(connection, user["id"], "[sticker]" if sticker else text)
         if warning is None:
             db.limit(("post", user["id"]), 1, 2)
             result = connection.execute(

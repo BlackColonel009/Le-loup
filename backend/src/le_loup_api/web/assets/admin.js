@@ -3,6 +3,8 @@ let adminToken=null, verification=null, editing=null, adminCards=[];
 const adminStatus=(text,error=false)=>setMessage(text,error,'#admin-status');
 function logout(){adminToken=null;verification=null;editing=null;adminCards=[];$('#admin-cards').replaceChildren();$('#admin-dashboard').hidden=true;$('#admin-login').hidden=false;$('#login-form').hidden=false;$('#verify-form').hidden=true;$('#password').value='';$('#verify-code').value='';$('#card-form').reset();$('#download-form').reset();$('#download-status').textContent='';adminStatus('Session fermée.');}
 async function loadAdmin(){
+  const mail=await api('/community/admin/mail-schedule',undefined,adminToken,'GET');
+  fillMail(mail);
   const data=await api('/community/admin/site/cards',undefined,adminToken,'GET');adminCards=data.cards;
   const download=await api('/community/admin/site/download',undefined,adminToken,'GET');
   $('#download-url').value=download.download_url;$('#download-version').value=download.download_version;$('#download-enabled').checked=download.download_enabled;
@@ -16,6 +18,14 @@ async function loadAdmin(){
     details.append(h,p,edit,remove);row.append(details);list.append(row);
   }
 }
+function fillMail(mail){
+  $('#mail-enabled').checked=mail.enabled;$('#mail-days').value=mail.interval_days;
+  $('#mail-subject').value=mail.subject;$('#mail-phrases').value=mail.phrases.join('\n');
+  $('#mail-next').textContent=(mail.enabled?'Prochain envoi : '+new Date(mail.next_due*1000).toLocaleString('fr-FR'):'Envois suspendus')+' · Envoyés : '+(mail.deliveries.sent||0)+' · Échecs : '+(mail.deliveries.failed||0)+' · En attente : '+(mail.deliveries.pending||0);
+}
+$('#mail-form').addEventListener('submit',event=>{event.preventDefault();busy(event.target,async()=>{
+  const mail=await api('/community/admin/mail-schedule',{enabled:$('#mail-enabled').checked,interval_days:Number($('#mail-days').value),subject:$('#mail-subject').value.trim(),phrases:$('#mail-phrases').value.split('\n').map(p=>p.trim()).filter(Boolean)},adminToken,'PUT');fillMail(mail);setMessage('Planning enregistré.',false,'#mail-status');
+},'#mail-status');});
 $('#login-form').addEventListener('submit',event=>{event.preventDefault();busy(event.target,async()=>{
   const data=await api('/community/login',{nickname:$('#nickname').value.trim(),password:$('#password').value});$('#password').value='';
   if(data.user.role!=='admin')throw Error('Cet espace est réservé aux administrateurs.');

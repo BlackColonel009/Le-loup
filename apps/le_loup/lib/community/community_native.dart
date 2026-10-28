@@ -9,6 +9,7 @@ import 'admin_dashboard.dart';
 import 'profile_screen.dart';
 import 'password_reset_screen.dart';
 import 'community_session.dart';
+import '../stickers/chat_stickers.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -153,7 +154,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
   Future<void> _authenticate() => _run(() async {
     if (_name.text.trim().length < 2 || _password.text.length < 8) {
       throw StateError(
-        'Choisis un pseudo et un mot de passe de 8 caractères minimum.',
+        _register
+            ? 'Choisis un pseudo et un mot de passe de 8 caractères minimum.'
+            : 'Saisis ton pseudo ou ton email et ton mot de passe.',
       );
     }
     final data = await _request(
@@ -279,6 +282,24 @@ class _CommunityScreenState extends State<CommunityScreen> {
     _message.clear();
     await _refresh();
   });
+  Future<void> _sendSticker() async {
+    final sticker = await showStickerPicker(context);
+    if (!mounted ||
+        sticker == null ||
+        _busy ||
+        _token == null ||
+        _mutedUntil > DateTime.now().millisecondsSinceEpoch / 1000) {
+      return;
+    }
+    await _run(() async {
+      await _request(
+        'messages',
+        method: 'POST',
+        body: {'text': stickerMessage(sticker)},
+      );
+      await _refresh();
+    });
+  }
 
   Future<void> _createTicket() => _run(() async {
     if (_subject.text.trim().isEmpty || _description.text.trim().isEmpty) {
@@ -437,9 +458,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
           const SizedBox(height: 20),
           TextField(
             controller: _name,
-            maxLength: 24,
-            decoration: const InputDecoration(
-              labelText: 'Pseudo de la communauté',
+            maxLength: _register ? 24 : 254,
+            autocorrect: false,
+            decoration: InputDecoration(
+              labelText: _register ? 'Pseudo de la communauté' : 'Pseudo ou email',
             ),
           ),
           TextField(
@@ -555,7 +577,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             ),
                         ],
                       ),
-                      subtitle: SelectableText(m['text'] as String),
+                      subtitle: ChatMessageBody(
+                        text: m['text'] as String,
+                        selectable: true,
+                      ),
                       trailing: IconButton(
                         tooltip: 'Signaler ce message',
                         icon: const Icon(Icons.flag_outlined, size: 18),
@@ -587,6 +612,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              IconButton(
+                tooltip: 'Stickers',
+                onPressed:
+                    _busy ||
+                        _mutedUntil >
+                            DateTime.now().millisecondsSinceEpoch / 1000
+                    ? null
+                    : _sendSticker,
+                icon: const Icon(Icons.emoji_emotions_outlined),
+              ),
               Expanded(
                 child: TextField(
                   controller: _message,

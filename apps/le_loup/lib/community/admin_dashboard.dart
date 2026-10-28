@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../stickers/chat_stickers.dart';
+import 'community_mail_settings.dart';
 
 typedef AdminRequest =
     Future<Map<String, dynamic>> Function(
@@ -380,6 +382,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             const Text(
                               'Décoche un mode pour sa maintenance. Les parties déjà lancées ne sont pas interrompues. Hors connexion, le mode local utilise le dernier état reçu.',
                             ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.mark_email_unread_outlined,
+                              ),
+                              title: const Text('Rappels par email'),
+                              subtitle: const Text(
+                                'Fréquence, messages et activation',
+                              ),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => CommunityMailSettings(
+                                    request: widget.request,
+                                  ),
+                                ),
+                              ),
+                            ),
                             TextField(
                               controller: _maintenance,
                               maxLength: 240,
@@ -562,7 +581,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             for (final r in _reports)
                               Card(
                                 child: ListTile(
-                                  title: Text(r['text'] as String),
+                                  title: ChatMessageBody(
+                                    text: r['text'] as String,
+                                  ),
                                   subtitle: Text(
                                     '${r['reports']} signalement(s)',
                                   ),
