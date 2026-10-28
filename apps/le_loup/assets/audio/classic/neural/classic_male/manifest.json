@@ -24,6 +24,60 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "death_villager": {
+      "seconds": 3.36,
+      "sha256": "31b97d7f5178041e62673c681629321fe76451d5537c0a12cd2bfc48a7ac942f",
+      "text": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_idiot": {
+      "seconds": 3.28,
+      "sha256": "c44985229c591e93ca5c03407a1065a7178506c43e2601ea8a035483e6b30b8f",
+      "text": "Vous riez de moi… rirez-vous encore demain ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_piper": {
+      "seconds": 4.64,
+      "sha256": "8777f81a81660c2251dc8cb6c7b5d61934edd96e2d75cdbc6247929fa8a95b18",
+      "text": "Ma dernière note s’envole… écoutez le silence.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

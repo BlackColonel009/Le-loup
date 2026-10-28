@@ -126,3 +126,20 @@ l'audio et les connexions dans les conditions réelles de la partie.
 - Aucun changement du backend ou des règles ; aucun build APK exécuté.
 
 Détails fonctionnels : `ceremonies-fin-partie.md`.
+
+## Historique, sélections et 17 dernières paroles — 28 octobre 2026
+
+- **155 tests Flutter réussis**, dont une partie complète sur deux manches avec
+  potions, visions, votes modifiés, confidentialité avant la fin et copies du
+  journal sans accès aux objets du moteur.
+- **16 programmes de contrôle Dart réussis** : rôles, transports locaux,
+  reprise, concurrence, votes, nuit, QR, météo et cérémonies.
+- Les tests de sélection distinguent brouillon et confirmation serveur, avec
+  auteur et cible, et les deux potions du MDJ.
+- Deux éliminations successives vérifiées : affichage de la réplique, une voix
+  par révélation, arrêt au glissement et passage à la suivante.
+- Tous les rôles ont un WAV déclaré, plus la Villageoise et la malédiction de
+  l’Ancien. Contrôle ASR mis à jour ; les confusions phonétiques sur les voix
+  stylisées ne constituent pas une validation d’écoute.
+- Mise à jour du moteur serveur nécessaire pour le nouvel historique en ligne.
+  Pas de migration ni nouvelle dépendance. Aucun APK compilé.

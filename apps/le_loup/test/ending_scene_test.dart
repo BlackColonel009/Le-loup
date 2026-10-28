@@ -14,6 +14,50 @@ import 'package:le_loup/village/victory_scene.dart';
 const capture = bool.fromEnvironment('CAPTURE_ENDINGS');
 
 void main() {
+  testWidgets('Deux morts : une réplique par carte, glissement puis suivante', (
+    tester,
+  ) async {
+    final events = <String>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: FilledButton(
+              onPressed: () async {
+                for (final role in ['seer', 'guardian']) {
+                  await showElimination(
+                    context,
+                    name: role,
+                    role: role,
+                    cause: 'vote',
+                    hasNext: role == 'seer',
+                    lastWords: deathSpeeches[role]!.text,
+                    onRevealed: () => events.add('parole:$role'),
+                    onDismissed: () => events.add('stop:$role'),
+                  );
+                  if (!context.mounted) return;
+                }
+              },
+              child: const Text('Ouvrir'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Ouvrir'));
+    await tester.pumpAndSettle();
+    expect(events, ['parole:seer']);
+    expect(find.text('« ${deathSpeeches['seer']!.text} »'), findsOneWidget);
+    expect(find.text('Carte suivante'), findsOneWidget);
+    await tester.drag(find.byType(RoleCardFront), const Offset(0, 170));
+    await tester.pumpAndSettle();
+    expect(events, ['parole:seer', 'stop:seer', 'parole:guardian']);
+    expect(find.text('« ${deathSpeeches['guardian']!.text} »'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Retourner au village'));
+    await tester.pumpAndSettle();
+    expect(events.last, 'stop:guardian');
+  });
   setUpAll(() async {
     if (capture) {
       for (final entry in {
@@ -150,7 +194,10 @@ void main() {
         if (capture && !secret) {
           await tester.runAsync(() async {
             await precacheImage(
-              ResizeImage(AssetImage(configuredRole('elder').asset), width: 768),
+              ResizeImage(
+                AssetImage(configuredRole('elder').asset),
+                width: 768,
+              ),
               tester.element(find.text('Ouvrir')),
             );
           });

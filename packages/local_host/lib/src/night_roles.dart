@@ -214,6 +214,7 @@ extension _AdditionalRoles on NightGame {
       if (_extra.infections[id]! <= night) {
         if (alive.contains(id)) {
           _extra.infected.add(id);
+          _log('effect', {'effect': 'infection', 'target': id});
           _notice(
             id,
             'Vous rejoignez la meute. Vous conservez votre rôle et ses pouvoirs ; votre camp est désormais Loups-Garous.',
@@ -250,6 +251,7 @@ extension _AdditionalRoles on NightGame {
           ['vote', 'poison', 'hunter'].contains(e.value),
     )) {
       _extra.villagePowersLost = true;
+      _log('effect', {'effect': 'elder_curse'});
     }
     for (final entry in victims.entries) {
       final id = entry.key;
@@ -291,11 +293,16 @@ extension _AdditionalRoles on NightGame {
   void _resolveExtraDeaths() {
     final victims = <String, String>{};
     void packAttack(String? id) {
-      if (id == null || id == _extra.protected || !alive.contains(id)) return;
+      if (id == null || !alive.contains(id)) return;
+      if (id == _extra.protected) {
+        _log('effect', {'effect': 'protected', 'target': id});
+        return;
+      }
       if (roles[id] == 'elder' &&
           _powerEnabled(id) &&
           !_extra.elderHit.contains(id)) {
         _extra.elderHit.add(id);
+        _log('effect', {'effect': 'elder_resists', 'target': id});
       } else {
         victims[id] = 'night';
       }
@@ -306,10 +313,13 @@ extension _AdditionalRoles on NightGame {
           _extra.infectTarget == _attack &&
           _attack != _extra.protected) {
         _extra.infections[_attack!] = night + 1;
+        _log('effect', {'effect': 'infection_pending', 'target': _attack});
       } else {
         packAttack(_attack);
       }
     }
+    if (_saved) _log('effect', {'effect': 'saved', 'target': _attack});
+    if (_attack == null) _log('effect', {'effect': 'no_pack_victim'});
     packAttack(_extra.extraAttack);
     if (_extra.whiteAttack != null) victims[_extra.whiteAttack!] = 'white_wolf';
     if (_poison != null) victims[_poison!] = 'poison';

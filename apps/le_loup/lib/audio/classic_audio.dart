@@ -147,6 +147,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   int _epoch = 0, _fade = 0, _cueTicket = 0;
   String? _lastCue, _currentVoice, _lastPotionCue;
   int _stories = 0;
+  int _deathTicket = 0;
   Completer<void>? _cancelCurrentStory;
   String? error;
   VoiceProfile _voiceProfile = voiceProfiles.first;
@@ -422,13 +423,28 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     if (current != null && !current.isCompleted) current.complete();
   }
 
-  void deathSpeech(String? publicRole, {bool cursed = false}) {
-    if (cursed) {
-      _story([(asset: 'elder_curse.wav', profile: 'old_wizard')]);
-      return;
-    }
-    final speech = deathSpeeches[publicRole];
-    if (speech != null) _story([(asset: speech.cue, profile: speech.profile)]);
+  void stopDeathSpeech() {
+    _deathTicket++;
+    _cancelStory();
+    _queue((backend) => backend.stopCue());
+  }
+
+  void deathSpeech(
+    String? publicRole, {
+    bool cursed = false,
+    bool feminine = false,
+  }) {
+    final speech = deathSpeechFor(
+      publicRole,
+      cursed: cursed,
+      feminine: feminine,
+    );
+    if (speech == null || !_audible || scene != AudioScene.host) return;
+    stopDeathSpeech();
+    final ticket = _deathTicket;
+    _story([
+      (asset: speech.cue, profile: speech.profile),
+    ], isCurrent: () => ticket == _deathTicket);
   }
 
   void ending(String? winner) {
@@ -442,7 +458,10 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     ]);
   }
 
-  void _story(List<({String asset, String? profile})> cues) {
+  void _story(
+    List<({String asset, String? profile})> cues, {
+    bool Function()? isCurrent,
+  }) {
     if (_backend == null ||
         _disposed ||
         !_audible ||
@@ -457,7 +476,12 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       _cancelCurrentStory = cancel;
       try {
         for (final cue in cues) {
-          if (epoch != _epoch || !_audible || cancel.isCompleted) break;
+          if (epoch != _epoch ||
+              !_audible ||
+              cancel.isCompleted ||
+              isCurrent?.call() == false) {
+            break;
+          }
           final voice = cue.profile != null;
           final profile = voice
               ? _profiles.where((p) => p.id == cue.profile).firstOrNull

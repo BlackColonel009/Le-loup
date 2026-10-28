@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../cards/card_gallery.dart';
 import '../cards/classic_role.dart';
 import 'ending_data.dart';
+import 'game_history.dart';
 
 Future<void> showVictory(
   BuildContext context, {
@@ -149,6 +150,12 @@ class _VictorySceneState extends State<VictoryScene>
                         ),
                       ),
                     const SizedBox(height: 18),
+                    OutlinedButton.icon(
+                      onPressed: () =>
+                          showGameHistory(context, widget.game, widget.players),
+                      icon: const Icon(Icons.history_edu),
+                      label: const Text('Revivre toutes les manches'),
+                    ),
                     FilledButton.icon(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.cottage_outlined),

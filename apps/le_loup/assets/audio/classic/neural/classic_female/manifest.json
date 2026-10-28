@@ -42,6 +42,60 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "death_villager_female": {
+      "seconds": 3.6,
+      "sha256": "92c7bcfe94c365ece52817218baff1abf9faf7b1ebab57983d86db6215e9adfa",
+      "text": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_little_girl": {
+      "seconds": 3.28,
+      "sha256": "903e6186170bd96c29c74418155c670851112b5cabc8f1364a6c5104dcd1c670",
+      "text": "J’ai vu des ombres… elles sont encore parmi vous.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_cupid": {
+      "seconds": 3.76,
+      "sha256": "8aadb3ba642c8e0dd2a7fbe7a5356fea5dd3e127c2300985362f5e9c1623e299",
+      "text": "Mes flèches se taisent… que l’amour vous survive.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

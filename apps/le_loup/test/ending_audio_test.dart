@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:le_loup/audio/classic_audio.dart';
 import 'package:le_loup/audio/voice_profiles.dart';
 import 'package:le_loup/village/ending_data.dart';
+import 'package:le_loup/cards/classic_role.dart';
 import 'classic_audio_test.dart' show FakeAudio, recordedTestProfiles, state;
 
 Future<void> flush() async {
@@ -13,6 +14,38 @@ Future<void> flush() async {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('Tous les rôles et la Villageoise disposent de dernières paroles', () {
+    expect(deathSpeeches.keys.toSet(), classicRoles.map((r) => r.id).toSet());
+    expect(deathSpeechFor('villager', feminine: true), villagerFemaleSpeech);
+    expect(deathSpeechFor(null), isNull);
+    for (final speech in deathSpeeches.values) {
+      expect(speech.text, isNotEmpty);
+    }
+  });
+  test(
+    'Passer une carte coupe sa voix puis démarre celle de la suivante',
+    () async {
+      final backend = FakeAudio();
+      final audio = ClassicAudio(
+        backend: backend,
+        profiles: recordedTestProfiles,
+        fadeDuration: Duration.zero,
+      );
+      addTearDown(audio.dispose);
+      audio.room(state('ended', 10), isHost: true);
+      await audio.settled;
+      audio.deathSpeech('seer');
+      await flush();
+      expect(backend.calls.last, 'neural/classic_female/death_seer.wav');
+      audio.stopDeathSpeech();
+      audio.deathSpeech('guardian');
+      await flush();
+      expect(backend.calls.last, 'neural/intense_male/death_guardian.wav');
+      backend.completed.add(null);
+      await audio.settled;
+      expect(audio.error, isNull);
+    },
+  );
   test(
     'Dernières paroles puis jingle puis victoire, sans chevauchement',
     () async {
@@ -29,7 +62,7 @@ void main() {
       audio.deathSpeech('hunter');
       audio.ending('village');
       await flush();
-      expect(backend.calls, ['neural/intense_male/death_hunter.wav']);
+      expect(backend.calls.last, 'neural/intense_male/death_hunter.wav');
       backend.completed.add(null);
       await flush();
       expect(backend.calls.last, 'ending_bright.wav');
@@ -60,10 +93,14 @@ void main() {
       audio.deathSpeech('seer');
       audio.ending('wolves');
       await flush();
-      expect(backend.calls, ['ending_dark.wav']);
+      expect(backend.calls.where((s) => s.endsWith('.wav')), [
+        'ending_dark.wav',
+      ]);
       backend.completed.add(null);
       await audio.settled;
-      expect(backend.calls, ['ending_dark.wav']);
+      expect(backend.calls.where((s) => s.endsWith('.wav')), [
+        'ending_dark.wav',
+      ]);
     },
   );
 
@@ -142,7 +179,8 @@ void main() {
     }
     for (final speech in [
       ...deathSpeeches.values,
-      (profile: 'old_wizard', cue: 'elder_curse.wav'),
+      elderCurseSpeech,
+      villagerFemaleSpeech,
     ]) {
       final profile = voiceProfileById(speech.profile);
       expect(profile.supports(speech.cue), isTrue);

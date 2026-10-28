@@ -15,10 +15,52 @@
       "word_error_rate": 0.0
     },
     {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\death_villager_female.wav",
+      "expected": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "transcribed": "Je pars, ouvrez les yeux avant la prochaine nuit.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\death_little_girl.wav",
+      "expected": "J’ai vu des ombres… elles sont encore parmi vous.",
+      "transcribed": "J'ai vu des ombres. Elles sont encore parmi vous.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\death_cupid.wav",
+      "expected": "Mes flèches se taisent… que l’amour vous survive.",
+      "transcribed": "Mes flèches se thèsent que l'amour vous survivent.",
+      "word_error_rate": 0.222
+    },
+    {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\ended_piper.wav",
       "expected": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie.",
       "transcribed": "Honneur aux joueurs de flûte, le village a succombé à sa mélodie.",
       "word_error_rate": 0.167
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\death_villager.wav",
+      "expected": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "transcribed": "Je pars, ouvrez les yeux avant la prochaine nuit.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\death_idiot.wav",
+      "expected": "Vous riez de moi… rirez-vous encore demain ?",
+      "transcribed": "Vourriez de moi. Rirez-vous encore demain.",
+      "word_error_rate": 0.25
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\death_piper.wav",
+      "expected": "Ma dernière note s’envole… écoutez le silence.",
+      "transcribed": "Ma dernière note s'envole. Écoutez le silence.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\death_metamorph.wav",
+      "expected": "Vous emportez mon visage… jamais mes secrets.",
+      "transcribed": "Vous emportez mon visage, jamais m'ésecré.",
+      "word_error_rate": 0.286
     },
     {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\ended_village.wav",
@@ -29,8 +71,14 @@
     {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\ended_draw.wav",
       "expected": "Le silence a gagné. Cette partie est terminée.",
-      "transcribed": "Le silence a gagné, cette partie est terminée.",
+      "transcribed": "Le silence a gagné, cette partie est terminée !",
       "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\death_scapegoat.wav",
+      "expected": "Vous vouliez un coupable… vous perdez un innocent.",
+      "transcribed": "Vous vous liez à coupable, vous perdez un innocent.",
+      "word_error_rate": 0.375
     },
     {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\ended_angel.wav",
@@ -39,15 +87,27 @@
       "word_error_rate": 0.273
     },
     {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\death_angel.wav",
+      "expected": "Mes ailes se referment… votre jugement demeure.",
+      "transcribed": "Mais elle se referme. Votre jugement de meurre.",
+      "word_error_rate": 0.714
+    },
+    {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\death_hunter.wav",
       "expected": "Je tombe… mais mon fusil parle encore.",
       "transcribed": "Je tombe, mais mon fusil parle encore.",
       "word_error_rate": 0.0
     },
     {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\death_guardian.wav",
+      "expected": "Ma garde s’achève… veillez les uns sur les autres.",
+      "transcribed": "ma garde s'achève, veiller les uns sur les autres.",
+      "word_error_rate": 0.1
+    },
+    {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\witch_potion.wav",
       "expected": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
-      "transcribed": "Alors mon mignon, un petit remontant, ou on allait simple au cimetière.",
+      "transcribed": "Alors mon mignon, un petit remontant ou en allait simple au cimetière.",
       "word_error_rate": 0.231
     },
     {
@@ -69,6 +129,12 @@
       "word_error_rate": 0.0
     },
     {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\death_wolf_father.wav",
+      "expected": "Vous tuez le père… mais son héritage demeure.",
+      "transcribed": "Vous tuez le père, mais son héritage demeure ?",
+      "word_error_rate": 0.0
+    },
+    {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\ended_wolves.wav",
       "expected": "Cette nuit, la meute règne. Les loups ont gagné !",
       "transcribed": "Cette nuit, la meurtreigne, les loups ont gagné !",
@@ -77,14 +143,26 @@
     {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\death_werewolf.wav",
       "expected": "Vous m’avez trouvé… mais combien en reste-t-il ?",
-      "transcribed": "Vous m'avez trouvé, mais combien reste-t-il ?",
-      "word_error_rate": 0.1
+      "transcribed": "Vous m'avez trouvé, mais combien en reste-t-il ?",
+      "word_error_rate": 0.0
     },
     {
       "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\ended_white_wolf.wav",
       "expected": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres.",
       "transcribed": "Honneur au Lou blanc, seul il a vaincu tous les autres.",
       "word_error_rate": 0.091
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\death_alpha_wolf.wav",
+      "expected": "Vous abattez l’Alpha… la meute n’oubliera pas.",
+      "transcribed": "Vous abattez l'alpha, la meute n'oubliera pas.",
+      "word_error_rate": 0.0
+    },
+    {
+      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\death_white_wolf.wav",
+      "expected": "Ma chasse s’arrête… mon ombre restera.",
+      "transcribed": "Ma chasse s'arrête. Mon nombre restera.",
+      "word_error_rate": 0.143
     }
   ]
 }

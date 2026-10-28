@@ -79,6 +79,42 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "death_alpha_wolf": {
+      "seconds": 4.48,
+      "sha256": "dc55a06c9cdc6e919eb8991801386727c39fbc761918ea12efda38734df29427",
+      "text": "Vous abattez l’Alpha… la meute n’oubliera pas.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "death_white_wolf": {
+      "seconds": 4.48,
+      "sha256": "281c3df1ea816fe9d0d07f2b9b686e36ea38501bd8484f6abf7283fdfb9ed881",
+      "text": "Ma chasse s’arrête… mon ombre restera.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

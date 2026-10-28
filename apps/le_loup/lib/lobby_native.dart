@@ -13,6 +13,7 @@ import 'village/village_navigation.dart';
 import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
 import 'village/victory_scene.dart';
+import 'village/ending_data.dart';
 import 'cards/classic_role.dart';
 import 'cards/card_gallery.dart';
 import 'cards/game_codex.dart';
@@ -261,13 +262,17 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           if (_deathQueue.isEmpty && _anonymousCurse) {
             if (!mounted) break;
             _anonymousCurse = false;
-            ClassicAudio.instance.deathSpeech(null, cursed: true);
             await showElimination(
               context,
               name: 'La malédiction de l’Ancien',
               cause: 'curse',
               cursed: true,
               ambience: _ambience,
+              lastWords: elderCurseSpeech.text,
+              onRevealed: () =>
+                  ClassicAudio.instance.deathSpeech(null, cursed: true),
+              onDismissed: ClassicAudio.instance.stopDeathSpeech,
+              hasNext: _pendingEnding != null,
             );
             continue;
           }
@@ -291,10 +296,6 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           final role =
               event['role'] as String? ??
               (event['player'] == _client?.id ? _role : null);
-          ClassicAudio.instance.deathSpeech(
-            event['role'] as String?,
-            cursed: event['elder_curse'] == true,
-          );
           await showElimination(
             context,
             name: player?['nickname'] as String? ?? 'Joueur',
@@ -303,6 +304,21 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             feminine: _femaleFor(event['player']),
             ambience: _ambience,
             cursed: event['elder_curse'] == true,
+            lastWords: deathSpeechFor(
+              event['role'] as String?,
+              feminine: _femaleFor(event['player']),
+              cursed: event['elder_curse'] == true,
+            )?.text,
+            onRevealed: () => ClassicAudio.instance.deathSpeech(
+              event['role'] as String?,
+              feminine: _femaleFor(event['player']),
+              cursed: event['elder_curse'] == true,
+            ),
+            onDismissed: ClassicAudio.instance.stopDeathSpeech,
+            hasNext:
+                _deathQueue.isNotEmpty ||
+                _anonymousCurse ||
+                _pendingEnding != null,
           );
         }
       } finally {

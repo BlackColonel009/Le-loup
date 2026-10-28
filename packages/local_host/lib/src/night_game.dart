@@ -30,6 +30,17 @@ class NightGame {
   final bool campOnly;
   final bool revealOnDeath;
   final List<Map<String, dynamic>> _deathEvents = [];
+  final List<Map<String, dynamic>> _history = [];
+  void _log(String kind, Map<String, dynamic> details) {
+    _history.add({
+      'kind': kind,
+      'night': night,
+      'phase': phase,
+      'at': _clock().toIso8601String(),
+      ...details,
+    });
+  }
+
   Map<String, dynamic>? _sentence;
   static const sentences = [
     'Guillotine',
@@ -68,9 +79,14 @@ class NightGame {
       'started_at': _clock().toIso8601String(),
       'duration_ms': 4500,
     };
+    _log('sentence', {
+      'target': _sentence!['target'],
+      'label': sentenceOptions[index],
+    });
   }
 
   void _recordDeath(String id, String cause) {
+    _log('death', {'target': id, 'cause': cause, 'role': roles[id]});
     _deathEvents.add({
       'id': 'death-${_deathEvents.length + 1}',
       'player': id,
@@ -205,6 +221,8 @@ class NightGame {
   };
 
   Map<String, dynamic> get publicState => {
+    if (phase == 'ended')
+      'history': [for (final event in _history) _copyHistory(event)],
     'phase': phase,
     'phase_revision': revision,
     'night': night,
@@ -254,6 +272,8 @@ class NightGame {
     final canAct =
         alive.contains(id) && !closed && !paused && remainingMilliseconds > 0;
     return {
+      if (_latestSelection(id) != null)
+        'confirmed_selection': _latestSelection(id),
       'id': id,
       'role': role,
       'phase_revision': revision,
@@ -301,6 +321,10 @@ class NightGame {
   }
 
   Map<String, dynamic> get hostState => {
+    'confirmed_selections': [
+      for (final id in roles.keys)
+        if (_latestSelection(id) != null) _latestSelection(id),
+    ],
     ..._additionalHost,
     if (_atNight) 'night_actions': nightActions,
     'wolf_messages': [for (final message in _wolfMessages) Map.of(message)],
@@ -358,6 +382,7 @@ class NightGame {
 
   void _enter(String value) {
     phase = value;
+    _log('phase', {'label': announcement});
     revision++;
     closed = false;
     _pausedMilliseconds = null;
@@ -509,6 +534,13 @@ class NightGame {
       'reason': reason,
       if (graced != null) 'graced': graced,
     };
+    _log('vote_result', {
+      ..._voteSummary!,
+      'ballots': Map.of(_votes),
+      'abstained': _eligibleVoters
+          .where((id) => !_votes.containsKey(id))
+          .toList(),
+    });
     if (!_extra.firstVoteResolved) {
       if (eliminated != null &&
           roles[eliminated] == 'angel' &&
@@ -520,6 +552,7 @@ class NightGame {
               .where((id) => roles[id] == 'angel' && id != eliminated)
               .toList()) {
         _roles[id] = 'villager';
+        _log('effect', {'effect': 'angel_becomes_villager', 'target': id});
         _notice(
           id,
           'Le premier vote est passé : vous devenez Simple Villageois.',
@@ -535,6 +568,58 @@ class NightGame {
   }
 
   void act(String id, Map<String, dynamic> action) {
+    final event = <String, dynamic>{
+      'kind': 'action',
+      'night': night,
+      'phase': phase,
+      'phase_revision': revision,
+      'at': _clock().toIso8601String(),
+      'actor': id,
+      'role': roles[id],
+      for (final key in ['action', 'target', 'targets', 'save', 'kill'])
+        if (action.containsKey(key))
+          key: action[key] is List ? List.of(action[key]) : action[key],
+      if (action['action'] == 'witch.potions') 'victim': _attack,
+    };
+    final position = _history.length;
+    _act(id, action);
+    // Record only accepted commands, never chat contents or failed attempts.
+    if (!(action['action'] as String).endsWith('.chat')) {
+      if (action['action'] == 'seer.inspect')
+        event['vision'] = Map.of(_visions[id]!);
+      if (action['action'] == 'metamorph.swap') {
+        event['new_roles'] = {
+          for (final target in action['targets'] as List) target: roles[target],
+        };
+      }
+      if (action['action'] == 'little_girl.peek') {
+        event['spotted'] = _extra.spotted.contains(id);
+      }
+      _history.insert(position, event);
+    }
+  }
+
+  dynamic _copyHistory(dynamic value) => value is Map
+      ? {for (final e in value.entries) e.key: _copyHistory(e.value)}
+      : value is List
+      ? value.map(_copyHistory).toList()
+      : value;
+
+  Map<String, dynamic>? _latestSelection(String id) {
+    final event = _history.reversed
+        .where(
+          (e) =>
+              e['kind'] == 'action' &&
+              e['actor'] == id &&
+              e['phase_revision'] == revision,
+        )
+        .firstOrNull;
+    return event == null
+        ? null
+        : Map<String, dynamic>.from(_copyHistory(event) as Map);
+  }
+
+  void _act(String id, Map<String, dynamic> action) {
     expire();
     if (action['action'] == 'day.chat') {
       if (action['phase_revision'] != revision ||

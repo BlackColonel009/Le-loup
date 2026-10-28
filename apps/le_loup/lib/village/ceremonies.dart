@@ -339,6 +339,10 @@ Future<void> showElimination(
   CardAmbience ambience = CardAmbience.classic,
   bool feminine = false,
   bool cursed = false,
+  String? lastWords,
+  VoidCallback? onRevealed,
+  VoidCallback? onDismissed,
+  bool hasNext = false,
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
@@ -351,6 +355,10 @@ Future<void> showElimination(
     ambience: ambience,
     feminine: feminine,
     cursed: cursed,
+    lastWords: lastWords,
+    onRevealed: onRevealed,
+    onDismissed: onDismissed,
+    hasNext: hasNext,
   ),
 );
 
@@ -362,7 +370,14 @@ class _DeathCard extends StatefulWidget {
     required this.ambience,
     required this.feminine,
     required this.cursed,
+    this.lastWords,
+    this.onRevealed,
+    this.onDismissed,
+    this.hasNext = false,
   });
+  final String? lastWords;
+  final VoidCallback? onRevealed, onDismissed;
+  final bool hasNext;
   final bool feminine;
   final bool cursed;
   final CardAmbience ambience;
@@ -380,10 +395,30 @@ class _DeathCardState extends State<_DeathCard>
     duration: Duration(milliseconds: widget.cursed ? 2800 : 1800),
   );
   bool _concealed = false;
+  bool _spoken = false, _leaving = false;
+  double _dragDistance = 0;
+  void _revealSpeech() {
+    if (_animation.value >= .55 && !_spoken && !_concealed && !_leaving) {
+      _spoken = true;
+      widget.onRevealed?.call();
+    }
+  }
+
+  Future<void> _dismiss() async {
+    if (_leaving) return;
+    setState(() => _leaving = true);
+    widget.onDismissed?.call();
+    if (!MediaQuery.disableAnimationsOf(context)) {
+      await Future<void>.delayed(const Duration(milliseconds: 260));
+    }
+    if (mounted) Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _animation.addListener(_revealSpeech);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (MediaQuery.disableAnimationsOf(context)) {
@@ -409,122 +444,180 @@ class _DeathCardState extends State<_DeathCard>
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Colors.transparent,
-    body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text(widget.name, style: Theme.of(context).textTheme.headlineSmall),
-            Text(
-              widget.cursed
-                  ? 'Les pouvoirs du camp Village sont désactivés.'
-                  : widget.cause == 'poison'
-                  ? 'Éliminé par une potion'
-                  : widget.cause == 'love'
-                  ? 'Le chagrin a emporté son destin'
-                  : widget.cause == 'white_wolf'
-                  ? 'Éliminé pendant la nuit'
-                  : widget.cause == 'night'
-                  ? 'Éliminé pendant la nuit'
-                  : widget.cause == 'hunter'
-                  ? 'Dernier tir du Chasseur'
-                  : 'Éliminé par le vote',
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: .7,
-                  child: AnimatedBuilder(
+  Widget build(BuildContext context) => PopScope(
+    canPop: false,
+    child: AnimatedSlide(
+      offset: _leaving ? const Offset(0, 1) : Offset.zero,
+      duration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 260),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onVerticalDragStart: (_) => _dragDistance = 0,
+            onVerticalDragUpdate: (details) =>
+                _dragDistance += details.primaryDelta ?? 0,
+            onVerticalDragEnd: (details) {
+              if (_dragDistance > 56 || (details.primaryVelocity ?? 0) > 180) {
+                _dismiss();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Text(
+                    widget.name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  Text(
+                    widget.cursed
+                        ? 'Les pouvoirs du camp Village sont désactivés.'
+                        : widget.cause == 'poison'
+                        ? 'Éliminé par une potion'
+                        : widget.cause == 'love'
+                        ? 'Le chagrin a emporté son destin'
+                        : widget.cause == 'white_wolf'
+                        ? 'Éliminé pendant la nuit'
+                        : widget.cause == 'night'
+                        ? 'Éliminé pendant la nuit'
+                        : widget.cause == 'hunter'
+                        ? 'Dernier tir du Chasseur'
+                        : 'Éliminé par le vote',
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: .7,
+                        child: AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            final flip = ((_animation.value - .1) / .45).clamp(
+                              0.0,
+                              1.0,
+                            );
+                            final front =
+                                flip > .5 && !_concealed && widget.role != null;
+                            return Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.identity()
+                                ..setEntry(3, 2, .001)
+                                ..rotateY(
+                                  (flip > .5 ? flip - 1 : flip) * math.pi,
+                                ),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  if (front)
+                                    RoleCardFront(
+                                      role: configuredRole(
+                                        widget.role!,
+                                        feminine: widget.feminine,
+                                      ),
+                                      ambience: widget.ambience,
+                                    )
+                                  else
+                                    Image.asset(
+                                      widget.ambience == CardAmbience.intense
+                                          ? (widget.cause == 'night'
+                                                ? 'assets/village/intense/card_clawed.png'
+                                                : 'assets/village/intense/card_back.png')
+                                          : 'assets/village/card_back.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  if (widget.cause != 'curse')
+                                    ClipRect(
+                                      clipper: _ScratchClipper(
+                                        ((_animation.value - .55) / .35).clamp(
+                                          0.0,
+                                          1.0,
+                                        ),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/village/claws.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  if (widget.cursed)
+                                    Positioned.fill(
+                                      child: IgnorePointer(
+                                        child: CustomPaint(
+                                          painter: _ElderLightning(
+                                            _animation.value,
+                                            MediaQuery.disableAnimationsOf(
+                                              context,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  AnimatedBuilder(
                     animation: _animation,
-                    builder: (context, child) {
-                      final flip = ((_animation.value - .1) / .45).clamp(
-                        0.0,
-                        1.0,
-                      );
-                      final front =
-                          flip > .5 && !_concealed && widget.role != null;
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2, .001)
-                          ..rotateY((flip > .5 ? flip - 1 : flip) * math.pi),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            if (front)
-                              RoleCardFront(
-                                role: configuredRole(
-                                  widget.role!,
-                                  feminine: widget.feminine,
-                                ),
-                                ambience: widget.ambience,
-                              )
-                            else
-                              Image.asset(
-                                widget.ambience == CardAmbience.intense
-                                    ? (widget.cause == 'night'
-                                          ? 'assets/village/intense/card_clawed.png'
-                                          : 'assets/village/intense/card_back.png')
-                                    : 'assets/village/card_back.png',
-                                fit: BoxFit.contain,
-                              ),
-                            if (widget.cause == 'night')
-                              ClipRect(
-                                clipper: _ScratchClipper(
-                                  ((_animation.value - .55) / .35).clamp(
-                                    0.0,
-                                    1.0,
+                    builder: (context, child) => Text(
+                      _concealed
+                          ? 'Carte masquée'
+                          : widget.cursed && widget.role == null
+                          ? 'L’identité reste cachée, mais la malédiction frappe le Village.'
+                          : widget.role == null
+                          ? 'Son rôle reste secret selon les règles du salon.'
+                          : _animation.value < .55
+                          ? 'La carte se révèle…'
+                          : 'Rôle : ${configuredRole(widget.role!).name}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (widget.lastWords != null)
+                    AnimatedBuilder(
+                      animation: _animation,
+                      builder: (_, _) => !_concealed && _animation.value >= .55
+                          ? ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 80),
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
                                   ),
-                                ),
-                                child: Image.asset(
-                                  'assets/village/claws.png',
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            if (widget.cursed)
-                              Positioned.fill(
-                                child: IgnorePointer(
-                                  child: CustomPaint(
-                                    painter: _ElderLightning(
-                                      _animation.value,
-                                      MediaQuery.disableAnimationsOf(context),
+                                  child: Text(
+                                    '« ${widget.lastWords} »',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        ),
-                      );
-                    },
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  const Text(
+                    'Glisser vers le bas pour continuer',
+                    style: TextStyle(fontSize: 12),
                   ),
-                ),
+                  FilledButton(
+                    onPressed: _leaving ? null : _dismiss,
+                    child: Text(
+                      widget.hasNext
+                          ? 'Carte suivante'
+                          : 'Retourner au village',
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 12),
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) => Text(
-                _concealed
-                    ? 'Carte masquée'
-                    : widget.cursed && widget.role == null
-                    ? 'L’identité reste cachée, mais la malédiction frappe le Village.'
-                    : widget.role == null
-                    ? 'Son rôle reste secret selon les règles du salon.'
-                    : _animation.value < .55
-                    ? 'La carte se révèle…'
-                    : 'Rôle : ${configuredRole(widget.role!).name}',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 12),
-            FilledButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Retourner au village'),
-            ),
-          ],
+          ),
         ),
       ),
     ),

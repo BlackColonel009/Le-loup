@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'cards/classic_role.dart';
+import 'village/game_history.dart';
 
 typedef SendNightAction =
     void Function(
@@ -101,6 +102,53 @@ class _NightPanelState extends State<NightPanel> {
           .firstOrNull ??
       'Personne';
 
+  Widget selection(
+    String actor,
+    String target, {
+    bool confirmed = false,
+  }) => Container(
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.primary.withValues(alpha: .10),
+      border: Border.all(
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: .45),
+      ),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        Icon(confirmed ? Icons.check_circle_outline : Icons.touch_app_outlined),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            '$actor → $target\n${confirmed ? 'Choix confirmé' : 'Sélection à confirmer'}',
+          ),
+        ),
+      ],
+    ),
+  );
+
+  String get actorLabel =>
+      '${name(widget.privateState?['id'])} · ${configuredRole(widget.privateState?['role'] as String? ?? 'villager').name}';
+
+  String confirmedTarget(Map action) {
+    if (action['action'] == 'night.pass') return 'Action passée';
+    if (action['action'] == 'little_girl.peek') return 'Espionnage de la meute';
+    if (action['action'] == 'witch.potions') {
+      return [
+        if (action['save'] == true) 'Vie : ${name(action['victim'])}',
+        if (action['kill'] != null) 'Mort : ${name(action['kill'])}',
+        if (action['save'] != true && action['kill'] == null) 'Aucune potion',
+      ].join(' · ');
+    }
+    if (action['targets'] is List) {
+      final ids = action['targets'] as List;
+      return ids.isEmpty ? 'Aucun joueur' : ids.map(name).join(', ');
+    }
+    return action['target'] == null ? 'Vote blanc' : name(action['target']);
+  }
+
   void send(
     String action, {
     String? target,
@@ -162,6 +210,8 @@ class _NightPanelState extends State<NightPanel> {
             ],
           ),
           Text('${selected.length} / $maximum sélectionné(s)'),
+          if (selected.isNotEmpty)
+            selection(actorLabel, selected.map(name).join(', ')),
         ],
         FilledButton(
           onPressed: selected.length >= minimum && selected.length <= maximum
@@ -184,20 +234,30 @@ class _NightPanelState extends State<NightPanel> {
     String? value,
     ValueChanged<String?> changed, {
     bool optional = false,
-  }) => DropdownButtonFormField<String>(
-    key: ValueKey('$label-${game!['phase_revision']}'),
-    initialValue: ids.contains(value) ? value : null,
-    isExpanded: true,
-    decoration: InputDecoration(
-      labelText: label,
-      border: const OutlineInputBorder(),
-    ),
-    items: [
-      if (optional)
-        const DropdownMenuItem(value: '', child: Text('Ne pas utiliser')),
-      for (final id in ids) DropdownMenuItem(value: id, child: Text(name(id))),
+  }) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      DropdownButtonFormField<String>(
+        key: ValueKey('$label-${game!['phase_revision']}'),
+        initialValue: ids.contains(value) ? value : null,
+        isExpanded: true,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+          prefixIcon: const Icon(Icons.person_search_outlined),
+          helperText: 'Sélection de ${name(widget.privateState?['id'])}',
+        ),
+        items: [
+          if (optional)
+            const DropdownMenuItem(value: '', child: Text('Ne pas utiliser')),
+          for (final id in ids)
+            DropdownMenuItem(value: id, child: Text(name(id))),
+        ],
+        onChanged: (value) => changed(value == '' ? null : value),
+      ),
+      if (value != null && ids.contains(value))
+        selection(actorLabel, name(value)),
     ],
-    onChanged: (value) => changed(value == '' ? null : value),
   );
 
   Future<void> advance() async {
@@ -352,6 +412,15 @@ class _NightPanelState extends State<NightPanel> {
             ),
           if (phase == 'ended') ...[
             const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: () => showGameHistory(
+                context,
+                state,
+                widget.room['players'] as List,
+              ),
+              icon: const Icon(Icons.history_edu),
+              label: const Text('Voir l’histoire complète de la partie'),
+            ),
             for (final entry in (state['revealed_roles'] as Map).entries)
               Text(
                 '${name(entry.key)} : ${configuredRole(entry.value as String).name}',
@@ -462,6 +531,14 @@ class _NightPanelState extends State<NightPanel> {
               ),
             ),
           if (widget.isHost) ...[
+            if (!['seer', 'wolves'].contains(phase))
+              for (final action
+                  in (host['confirmed_selections'] as List? ?? []))
+                selection(
+                  '${name(action['actor'])} · ${configuredRole(action['role'] as String).name}',
+                  confirmedTarget(action as Map),
+                  confirmed: true,
+                ),
             if (phase == 'role_reveal' || phase == 'vote_result') ...[
               const SizedBox(height: 16),
               DropdownButtonFormField<int>(
@@ -523,14 +600,28 @@ class _NightPanelState extends State<NightPanel> {
                 ),
               ),
               if (phase == 'seer')
-                Text(
-                  'Consultations reçues : ${(host['visions'] as Map? ?? {}).length}',
+                Column(
+                  children: [
+                    Text(
+                      'Consultations reçues : ${(host['visions'] as Map? ?? {}).length}',
+                    ),
+                    for (final entry in (host['visions'] as Map? ?? {}).entries)
+                      selection(
+                        name(entry.key),
+                        name(entry.value['target']),
+                        confirmed: true,
+                      ),
+                  ],
                 ),
               if (phase == 'wolves') ...[
                 const Text('Choix privés de la meute :'),
                 for (final entry
                     in (host['wolf_choices'] as Map? ?? {}).entries)
-                  Text('${name(entry.key)} → ${name(entry.value)}'),
+                  selection(
+                    name(entry.key),
+                    name(entry.value),
+                    confirmed: true,
+                  ),
                 for (final message in (host['wolf_messages'] as List? ?? []))
                   Text('${name(message['author'])} : ${message['text']}'),
               ],
@@ -658,6 +749,12 @@ class _NightPanelState extends State<NightPanel> {
                 ),
               if (private?['ability_submitted'] == true)
                 const Text('Action confirmée pour cet appel.'),
+              if (private?['confirmed_selection'] is Map)
+                selection(
+                  actorLabel,
+                  confirmedTarget(private!['confirmed_selection'] as Map),
+                  confirmed: true,
+                ),
               if (private?['vote_right'] == false &&
                   daytime &&
                   private?['alive'] == true)
@@ -694,6 +791,11 @@ class _NightPanelState extends State<NightPanel> {
                   ],
                   onChanged: (value) => setState(() => _voteChoice = value),
                 ),
+                if (_voteChoice != null)
+                  selection(
+                    name(private?['id']),
+                    _voteChoice == '_blank' ? 'Vote blanc' : name(_voteChoice),
+                  ),
                 FilledButton(
                   onPressed: _voteChoice == null
                       ? null
@@ -751,7 +853,10 @@ class _NightPanelState extends State<NightPanel> {
                 'Meute : ${(private!['pack'] as List).map(name).join(', ')}',
               ),
               for (final entry in (private['choices'] as Map).entries)
-                Text('${name(entry.key)} choisit ${name(entry.value)}'),
+                selection(name(entry.key), name(entry.value), confirmed: true),
+              for (final id in (private['pack'] as List))
+                if (!(private['choices'] as Map).containsKey(id))
+                  Text('${name(id)} → en attente de confirmation'),
               if (canAct) ...[
                 choose(
                   'Victime proposée',

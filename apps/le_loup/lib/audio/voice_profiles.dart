@@ -33,7 +33,14 @@ const voiceProfiles = <VoiceProfile>[
     "Narrateur français posé et clair.",
     "neural/classic_male/",
     isApproved: true,
-    availableCues: {'ended_piper.wav', 'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'death_idiot.wav',
+      'death_piper.wav',
+      'death_villager.wav',
+      'ended_piper.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "classic_female",
@@ -43,7 +50,10 @@ const voiceProfiles = <VoiceProfile>[
     "neural/classic_female/",
     isApproved: true,
     availableCues: {
+      'death_cupid.wav',
+      'death_little_girl.wav',
       'death_seer.wav',
+      'death_villager_female.wav',
       'ended_lovers.wav',
       'preview.wav',
       'wolves.wav',
@@ -56,7 +66,12 @@ const voiceProfiles = <VoiceProfile>[
     "Grave, lente et chargée de suspense.",
     "neural/intense_male/",
     isApproved: true,
-    availableCues: {'death_hunter.wav', 'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'death_guardian.wav',
+      'death_hunter.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "intense_female",
@@ -75,6 +90,7 @@ const voiceProfiles = <VoiceProfile>[
     "neural/duke/",
     isApproved: true,
     availableCues: {
+      'death_scapegoat.wav',
       'ended_draw.wav',
       'ended_village.wav',
       'preview.wav',
@@ -90,6 +106,7 @@ const voiceProfiles = <VoiceProfile>[
     isApproved: true,
     availableCues: {
       'death_elder.wav',
+      'death_wolf_father.wav',
       'elder_curse.wav',
       'preview.wav',
       'wolves.wav',
@@ -117,7 +134,9 @@ const voiceProfiles = <VoiceProfile>[
     "neural/werewolf/",
     isApproved: true,
     availableCues: {
+      'death_alpha_wolf.wav',
       'death_werewolf.wav',
+      'death_white_wolf.wav',
       'ended_white_wolf.wav',
       'ended_wolves.wav',
       'preview.wav',
@@ -132,7 +151,12 @@ const voiceProfiles = <VoiceProfile>[
     "Voix aérienne et échos lointains.",
     "neural/ghost/",
     isApproved: true,
-    availableCues: {'ended_angel.wav', 'preview.wav', 'wolves.wav'},
+    availableCues: {
+      'death_angel.wav',
+      'ended_angel.wav',
+      'preview.wav',
+      'wolves.wav',
+    },
   ),
   VoiceProfile(
     "cold_killer",
@@ -141,7 +165,7 @@ const voiceProfiles = <VoiceProfile>[
     "Voix sèche, lente et retenue.",
     "neural/cold_killer/",
     isApproved: true,
-    availableCues: {'preview.wav', 'wolves.wav'},
+    availableCues: {'death_metamorph.wav', 'preview.wav', 'wolves.wav'},
   ),
 ];
 VoiceProfile voiceProfileById(String? id) => voiceProfiles.firstWhere(

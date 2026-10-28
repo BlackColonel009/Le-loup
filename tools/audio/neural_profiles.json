@@ -69,28 +69,43 @@
     "werewolf": {
       "death_werewolf": "Vous m’avez trouvé… mais combien en reste-t-il ?",
       "ended_wolves": "Cette nuit, la meute règne. Les loups ont gagné !",
-      "ended_white_wolf": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres."
+      "ended_white_wolf": "Honneur au Loup Blanc ! Seul, il a vaincu tous les autres.",
+      "death_alpha_wolf": "Vous abattez l’Alpha… la meute n’oubliera pas.",
+      "death_white_wolf": "Ma chasse s’arrête… mon ombre restera."
     },
     "classic_female": {
       "death_seer": "J’avais vu les ténèbres… personne ne m’a crue.",
-      "ended_lovers": "Leur amour a défié tous les camps. Honneur aux amoureux !"
+      "ended_lovers": "Leur amour a défié tous les camps. Honneur aux amoureux !",
+      "death_villager_female": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "death_little_girl": "J’ai vu des ombres… elles sont encore parmi vous.",
+      "death_cupid": "Mes flèches se taisent… que l’amour vous survive."
     },
     "intense_male": {
-      "death_hunter": "Je tombe… mais mon fusil parle encore."
+      "death_hunter": "Je tombe… mais mon fusil parle encore.",
+      "death_guardian": "Ma garde s’achève… veillez les uns sur les autres."
     },
     "old_wizard": {
       "death_elder": "La mémoire du village… s’éteint avec moi.",
-      "elder_curse": "Que le ciel vous pardonne… et vous prive de vos pouvoirs."
+      "elder_curse": "Que le ciel vous pardonne… et vous prive de vos pouvoirs.",
+      "death_wolf_father": "Vous tuez le père… mais son héritage demeure."
     },
     "duke": {
       "ended_village": "Le village est sauvé ! Honneur aux villageois !",
-      "ended_draw": "Le silence a gagné. Cette partie est terminée."
+      "ended_draw": "Le silence a gagné. Cette partie est terminée.",
+      "death_scapegoat": "Vous vouliez un coupable… vous perdez un innocent."
     },
     "classic_male": {
-      "ended_piper": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie."
+      "ended_piper": "Honneur au Joueur de Flûte ! Le village a succombé à sa mélodie.",
+      "death_villager": "Je pars… ouvrez les yeux avant la prochaine nuit.",
+      "death_idiot": "Vous riez de moi… rirez-vous encore demain ?",
+      "death_piper": "Ma dernière note s’envole… écoutez le silence."
     },
     "ghost": {
-      "ended_angel": "L’Ange a mis fin au plaisir… La partie est terminée."
+      "ended_angel": "L’Ange a mis fin au plaisir… La partie est terminée.",
+      "death_angel": "Mes ailes se referment… votre jugement demeure."
+    },
+    "cold_killer": {
+      "death_metamorph": "Vous emportez mon visage… jamais mes secrets."
     }
   }
 }

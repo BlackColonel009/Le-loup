@@ -24,6 +24,24 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "death_guardian": {
+      "seconds": 3.92,
+      "sha256": "fa8e1726b4a3bc6fb7a4741c715ddd9eb4074eeccb5e068ca438f8f0306e368a",
+      "text": "Ma garde s’achève… veillez les uns sur les autres.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

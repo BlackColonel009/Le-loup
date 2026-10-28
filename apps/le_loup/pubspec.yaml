@@ -82,23 +82,32 @@ flutter:
     - assets/audio/classic/claw_2.wav
     - assets/audio/classic/rain_loop.wav
     - assets/audio/classic/thunder.wav
+    - assets/audio/classic/neural/classic_male/death_idiot.wav
+    - assets/audio/classic/neural/classic_male/death_piper.wav
+    - assets/audio/classic/neural/classic_male/death_villager.wav
     - assets/audio/classic/neural/classic_male/ended_piper.wav
     - assets/audio/classic/neural/classic_male/preview.wav
     - assets/audio/classic/neural/classic_male/wolves.wav
+    - assets/audio/classic/neural/classic_female/death_cupid.wav
+    - assets/audio/classic/neural/classic_female/death_little_girl.wav
     - assets/audio/classic/neural/classic_female/death_seer.wav
+    - assets/audio/classic/neural/classic_female/death_villager_female.wav
     - assets/audio/classic/neural/classic_female/ended_lovers.wav
     - assets/audio/classic/neural/classic_female/preview.wav
     - assets/audio/classic/neural/classic_female/wolves.wav
+    - assets/audio/classic/neural/intense_male/death_guardian.wav
     - assets/audio/classic/neural/intense_male/death_hunter.wav
     - assets/audio/classic/neural/intense_male/preview.wav
     - assets/audio/classic/neural/intense_male/wolves.wav
     - assets/audio/classic/neural/intense_female/preview.wav
     - assets/audio/classic/neural/intense_female/wolves.wav
+    - assets/audio/classic/neural/duke/death_scapegoat.wav
     - assets/audio/classic/neural/duke/ended_draw.wav
     - assets/audio/classic/neural/duke/ended_village.wav
     - assets/audio/classic/neural/duke/preview.wav
     - assets/audio/classic/neural/duke/wolves.wav
     - assets/audio/classic/neural/old_wizard/death_elder.wav
+    - assets/audio/classic/neural/old_wizard/death_wolf_father.wav
     - assets/audio/classic/neural/old_wizard/elder_curse.wav
     - assets/audio/classic/neural/old_wizard/preview.wav
     - assets/audio/classic/neural/old_wizard/wolves.wav
@@ -106,15 +115,19 @@ flutter:
     - assets/audio/classic/neural/old_witch/preview.wav
     - assets/audio/classic/neural/old_witch/witch_potion.wav
     - assets/audio/classic/neural/old_witch/wolves.wav
+    - assets/audio/classic/neural/werewolf/death_alpha_wolf.wav
     - assets/audio/classic/neural/werewolf/death_werewolf.wav
+    - assets/audio/classic/neural/werewolf/death_white_wolf.wav
     - assets/audio/classic/neural/werewolf/ended_white_wolf.wav
     - assets/audio/classic/neural/werewolf/ended_wolves.wav
     - assets/audio/classic/neural/werewolf/preview.wav
     - assets/audio/classic/neural/werewolf/role_reveal.wav
     - assets/audio/classic/neural/werewolf/wolves.wav
+    - assets/audio/classic/neural/ghost/death_angel.wav
     - assets/audio/classic/neural/ghost/ended_angel.wav
     - assets/audio/classic/neural/ghost/preview.wav
     - assets/audio/classic/neural/ghost/wolves.wav
+    - assets/audio/classic/neural/cold_killer/death_metamorph.wav
     - assets/audio/classic/neural/cold_killer/preview.wav
     - assets/audio/classic/neural/cold_killer/wolves.wav
     - assets/branding/

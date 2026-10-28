@@ -59,6 +59,23 @@ Les fichiers embarqués sont vérifiés par empreinte et format. Le contrôle AS
 local (`check_neural_speech.py --pack --events`) aide à repérer les erreurs de
 contenu ; il ne remplace pas l’écoute sur téléphone pour juger l’interprétation.
 
+## Toutes les dernières paroles — 28 octobre 2026
+
+Les 17 rôles disposent maintenant d’une réplique, avec une interprétation
+féminine dédiée à la Villageoise. La phrase apparaît sous la carte après son
+retournement et sa voix démarre à cette révélation. Les textes et associations
+de profils sont définis dans `lib/village/ending_data.dart`.
+
+Une griffure marque les cartes éliminées, y compris au vote et par potion.
+Glisser vers le bas ou toucher le bouton fait descendre la carte. La réplique
+en cours est coupée ; la carte suivante lance uniquement sa propre voix. Le
+bouton devient « Carte suivante » lorsque d’autres morts attendent. La victoire
+vient après la dernière carte. Les animations réduites sont respectées.
+
+Le texte utilise uniquement le rôle public, même si le joueur peut voir sa
+propre carte secrète. Il disparaît avec celle-ci à la mise en arrière-plan.
+La malédiction anonyme conserve sa réplique publique sans identifier un joueur.
+
 ## Ancien et confidentialité
 
 La malédiction se déclenche sur le passage de `village_powers_lost` à vrai,
