@@ -12,6 +12,7 @@ import 'content/downloads_screen.dart';
 import 'village/horror_ambience.dart';
 import 'social/online_hub.dart';
 import 'social/social_screens.dart';
+import 'social/admin_bot_launcher.dart';
 import 'store/collector_welcome.dart';
 
 Future<void> main() async {
@@ -83,6 +84,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  int _accountRevision = 0;
   bool _checkingGame = false;
   @override
   void initState() {
@@ -100,7 +102,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (mounted) await showDailyCollector(context);
   }
 
-  Future<void> _play(BuildContext context, {bool online = false}) async {
+  Future<void> _play(
+    BuildContext context, {
+    bool online = false,
+    String? testNickname,
+  }) async {
     if (_checkingGame) return;
     _checkingGame = true;
     final availability =
@@ -131,11 +137,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     ClassicAudio.instance.silence();
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) =>
-            online ? const OnlineHubScreen() : const LocalLobbyScreen(),
+        builder: (_) => online
+            ? const OnlineHubScreen()
+            : LocalLobbyScreen(
+                initialNickname: testNickname,
+                autoStart: testNickname != null,
+              ),
       ),
     );
-    if (mounted) ClassicAudio.instance.welcome();
+    if (mounted) {
+      ClassicAudio.instance.welcome();
+      setState(() => _accountRevision++);
+    }
     _checkingGame = false;
   }
 
@@ -149,9 +162,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           IconButton(
             tooltip: 'Communauté',
             icon: const Icon(Icons.groups_outlined),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const CommunityScreen()),
-            ),
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const CommunityScreen(),
+                ),
+              );
+              if (mounted) setState(() => _accountRevision++);
+            },
           ),
           IconButton(
             tooltip: 'Boutique',
@@ -264,6 +282,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         onPressed: () => _play(context, online: true),
                         icon: const Icon(Icons.public),
                         label: const Text('Jouer en ligne'),
+                      ),
+                      AdminBotLauncher(
+                        revision: _accountRevision,
+                        onStart: (nickname) =>
+                            _play(context, testNickname: nickname),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton.icon(

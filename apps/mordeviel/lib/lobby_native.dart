@@ -318,6 +318,28 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       !widget.online &&
       _botAdmin &&
       (_botAdminUntil?.isAfter(DateTime.now()) ?? false);
+  bool get _canAddBots =>
+      _host is OnlineHost || (_host is LocalHost && _canManageBots);
+  bool get _botsPaused => _testBots?.paused ?? _room?['bots_paused'] == true;
+  int get _botDelay => _room?['bot_delay_ms'] as int? ?? 900;
+
+  Future<void> _configureBots({bool? paused, int? delay}) async {
+    try {
+      final host = _host;
+      if (host is OnlineHost) {
+        await host.configureBots(
+          paused: paused ?? _botsPaused,
+          delayMilliseconds: delay ?? _botDelay,
+        );
+      } else if (_testBots != null && _canManageBots) {
+        if (paused != null) _testBots!.paused = paused;
+        if (delay != null) _testBots!.delay = Duration(milliseconds: delay);
+        if (mounted) setState(() {});
+      }
+    } catch (failure) {
+      if (mounted) setState(() => _error = gameFailureMessage(failure));
+    }
+  }
 
   Future<bool> _checkBotAdmin() async {
     if (widget.online) return false;
@@ -327,8 +349,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       final session = await SocialApi.instance.session();
       if (session != null) {
         final profile = await SocialApi.instance.request('/community/me');
+        final current = await SocialApi.instance.session();
         allowed =
             (profile['user'] as Map?)?['role'] == 'admin' &&
+            current?.token == session.token &&
             session.expiresAt.isAfter(DateTime.now());
         until = session.expiresAt;
       }
@@ -344,18 +368,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   }
 
   Future<void> _addTestBots() async {
-    if (_addingBots || _host is! LocalHost || _room?['phase'] != 'lobby') {
+    if (_addingBots || !_canAddBots || _room?['phase'] != 'lobby') {
       return;
     }
     setState(() => _addingBots = true);
     try {
-      if (!await _checkBotAdmin()) {
+      if (_host is LocalHost && !await _checkBotAdmin()) {
         throw StateError(
           'Connecte-toi avec ton compte administrateur pour utiliser les bots.',
         );
       }
       if (!mounted) return;
-      final host = _host as LocalHost;
+      final host = _host!;
       final players = (_room?['players'] as List? ?? []).length;
       final missing =
           host.deck.values.fold<int>(0, (sum, count) => sum + count) - players;
@@ -364,12 +388,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         context: context,
         builder: (dialog) => StatefulBuilder(
           builder: (context, update) => AlertDialog(
-            title: const Text('Joueurs virtuels · Admin'),
+            title: Text(
+              host is OnlineHost
+                  ? 'Compléter le salon avec des bots'
+                  : 'Joueurs virtuels · Admin',
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Partie locale de test, sans statistiques publiques. Tu gardes les commandes du MDJ. Prévois une carte par joueur.',
+                Text(
+                  host is OnlineHost
+                      ? 'Les bots comblent les places manquantes, jouent leurs rôles et restent prêts. Prévois une carte par joueur. Les statistiques publiques sont désactivées pour cette partie.'
+                      : 'Partie locale de test, sans statistiques publiques. Tu gardes les commandes du MDJ. Prévois une carte par joueur.',
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -407,11 +437,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       );
       if (chosen == null || !mounted || !identical(_host, host)) return;
       // Revalidate after the dialog: the account may have expired meanwhile.
-      if (!await _checkBotAdmin() || !identical(_host, host)) return;
-      _testBots ??= TestBotTable(host);
-      await _testBots!.add(chosen);
+      if (host is OnlineHost) {
+        await host.addBots(chosen);
+      } else if (host is LocalHost) {
+        if (!await _checkBotAdmin() || !identical(_host, host)) return;
+        _testBots ??= TestBotTable(host);
+        await _testBots!.add(chosen);
+      }
     } catch (error) {
-      if (mounted) setState(() => _error = error.toString());
+      if (mounted) {
+        setState(
+          () => _error = gameFailureMessage(error, online: widget.online),
+        );
+      }
     } finally {
       if (mounted) setState(() => _addingBots = false);
     }
@@ -704,7 +742,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     phase: _room!['phase'] as String,
     isHost: _host != null,
     code: _room!['code'] as String,
-    onSelect: (value) => setState(() => _destination = value),
+    onSelect: (value) {
+      setState(() => _destination = value);
+      if (_host is LocalHost) unawaited(_checkBotAdmin());
+    },
     onCodex: () => showGameCodex(context, _room!),
     village: _section(VillageDestination.village),
     actions: _section(VillageDestination.actions),
@@ -903,6 +944,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           profile: selectedNarrator,
           automatic: ClassicAudio.instance.automaticNarrationPreferred,
         );
+        if (!mounted) {
+          await host.dispose();
+          return;
+        }
+        if (!await prepareRoomContent(
+              context,
+              host.snapshot,
+              playsAudio: true,
+            ) ||
+            !mounted) {
+          await _reset();
+          return;
+        }
         final addresses = await host.addresses();
         await _keepAwake(true);
         if (!mounted) {
@@ -1001,13 +1055,11 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           });
         }
       }
-    } catch (_) {
+    } catch (failure) {
       await _reset();
       if (mounted) {
         setState(
-          () => _error = widget.online
-              ? 'Connexion au jeu impossible. Vérifie le code et ta connexion Internet.'
-              : 'Connexion impossible. Vérifie l’adresse, le Wi-Fi et les autorisations réseau.',
+          () => _error = gameFailureMessage(failure, online: widget.online),
         );
       }
     }
@@ -1038,7 +1090,25 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         ],
       ),
     );
-    return confirmed ?? false;
+    if (confirmed != true) return false;
+    final host = _host;
+    if (host is OnlineHost) {
+      try {
+        await host.closeRoom();
+      } catch (_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Fermeture non confirmée par le serveur. Vérifie ta connexion et réessaie.',
+              ),
+            ),
+          );
+        }
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
@@ -1335,7 +1405,32 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       command();
       if (mounted && _error != null) setState(() => _error = null);
     } catch (error) {
-      setState(() => _error = error.toString());
+      setState(() => _error = gameFailureMessage(error, online: widget.online));
+    }
+  }
+
+  bool _checkingActionPacks = false;
+  Future<void> _narratedCommand(VoidCallback command) async {
+    final room = _room, host = _host;
+    if (_checkingActionPacks || room == null || host == null) return;
+    _checkingActionPacks = true;
+    final revision = (room['game'] as Map?)?['phase_revision'];
+    try {
+      if (!await prepareRoomContent(context, room, playsAudio: true) ||
+          !mounted ||
+          !identical(_host, host)) {
+        return;
+      }
+      if ((_room?['game'] as Map?)?['phase_revision'] != revision) {
+        setState(
+          () => _error =
+              'Le jeu a avancé pendant le téléchargement. Consulte la phase actuelle avant de relancer ton action.',
+        );
+        return;
+      }
+      _nightCommand(command);
+    } finally {
+      _checkingActionPacks = false;
     }
   }
 
@@ -1475,10 +1570,14 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             icon: const Icon(Icons.qr_code_2),
             label: const Text('Inviter par QR code'),
           ),
-        if (_host is LocalHost && _canManageBots) ...[
+      ],
+      if (section == VillageDestination.village ||
+          section == VillageDestination.preparation ||
+          section == VillageDestination.actions) ...[
+        if (_canAddBots) ...[
           if (!started)
             OutlinedButton.icon(
-              onPressed: _addingBots ? null : _addTestBots,
+              onPressed: _addingBots || !_connected ? null : _addTestBots,
               icon: const Icon(Icons.smart_toy_outlined),
               label: Text(
                 _addingBots
@@ -1486,16 +1585,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                     : 'Ajouter des joueurs virtuels',
               ),
             ),
-          if (_testBots != null)
+          if (_testBots != null || (_room?['bot_count'] as int? ?? 0) > 0)
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text(
-                      'Simulation · Administrateur',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      widget.online
+                          ? 'Joueurs virtuels · MDJ'
+                          : 'Simulation · Administrateur',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     const Text(
@@ -1504,12 +1605,14 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('Pause des bots'),
-                      value: _testBots!.paused,
-                      onChanged: (value) =>
-                          setState(() => _testBots!.paused = value),
+                      value: _botsPaused,
+                      onChanged: !_connected
+                          ? null
+                          : (value) => _configureBots(paused: value),
                     ),
                     DropdownButtonFormField<int>(
-                      initialValue: 900,
+                      key: ValueKey('bot-speed-$_botDelay'),
+                      initialValue: _botDelay,
                       decoration: const InputDecoration(
                         labelText: 'Vitesse de décision',
                       ),
@@ -1529,7 +1632,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                       ],
                       onChanged: (value) {
                         if (value != null) {
-                          _testBots?.delay = Duration(milliseconds: value);
+                          _configureBots(delay: value);
                         }
                       },
                     ),
@@ -1538,17 +1641,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               ),
             ),
         ],
-        if (_room?['test_mode'] == true)
+        if (_room?['test_mode'] == true || _room?['has_bots'] == true)
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              'PARTIE DE TEST · Statistiques publiques désactivées',
+              'PARTIE AVEC BOTS · Statistiques publiques désactivées',
               style: TextStyle(
                 color: GameTheme.gold,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
+      ],
+      if (section == VillageDestination.village) ...[
         if (started && _role != null)
           OutlinedButton.icon(
             onPressed: () => _showRole(
@@ -1576,7 +1681,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             game: game.cast<String, dynamic>(),
             isHost: _host != null,
             onSpin: () => _nightCommand(() => _host!.spinSentence()),
-            onContinue: _host == null ? null : _continueSentence,
+            onContinue: _host == null
+                ? null
+                : () => _narratedCommand(_continueSentence),
             name: (id) =>
                 players
                     .where((player) => player['id'] == id)
@@ -1593,15 +1700,15 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             isHost: _host != null,
             connected: _connected,
             onStart: (seconds) =>
-                _nightCommand(() => _host!.startNight(seconds: seconds)),
-            onAdvance: () => _nightCommand(() => _host!.advanceNight()),
+                _narratedCommand(() => _host!.startNight(seconds: seconds)),
+            onAdvance: () => _narratedCommand(() => _host!.advanceNight()),
             onCallNight: (action) =>
-                _nightCommand(() => _host!.callNight(action)),
-            onFinishNight: () => _nightCommand(() => _host!.finishNight()),
+                _narratedCommand(() => _host!.callNight(action)),
+            onFinishNight: () => _narratedCommand(() => _host!.finishNight()),
             onPause: () => _nightCommand(() => _host!.pauseNight()),
             onResume: () => _nightCommand(() => _host!.resumeNight()),
             onVote: (seconds) =>
-                _nightCommand(() => _host!.startVote(seconds: seconds)),
+                _narratedCommand(() => _host!.startVote(seconds: seconds)),
             onChat: (value) => _nightCommand(() => _host!.setDayChat(value)),
             onAction: (action, revision, {target, save, kill, text, targets}) =>
                 _client!.gameAction(

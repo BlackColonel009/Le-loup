@@ -244,7 +244,7 @@ class LocalHost implements GameHost {
     if (revealOnDeath != null) revealRolesOnDeath = revealOnDeath;
     // Une modification nécessite une nouvelle confirmation des joueurs.
     for (final player in _players.values) {
-      player['ready'] = false;
+      player['ready'] = player['is_bot'] == true;
     }
     _publish();
   }
@@ -267,12 +267,22 @@ class LocalHost implements GameHost {
 
   /// Host-only metadata: never accepted as a command from a joining player.
   bool _testMode = false;
-  void markTestPlayer(String id) {
+  void markTestPlayer(String id) => markBotPlayer(id);
+  void markBotPlayer(String id, {bool practice = true}) {
     if (started || !_players.containsKey(id)) {
       throw StateError('Joueur de test indisponible.');
     }
-    _testMode = true;
+    if (practice) _testMode = true;
     _players[id]!['is_bot'] = true;
+    _players[id]!['ready'] = true;
+    _publish();
+  }
+
+  bool _botsPaused = false;
+  int _botDelay = 900;
+  void setBotControls({required bool paused, required int delayMilliseconds}) {
+    _botsPaused = paused;
+    _botDelay = delayMilliseconds;
     _publish();
   }
 
@@ -348,6 +358,8 @@ class LocalHost implements GameHost {
 
   Map<String, dynamic> get publicSnapshot => {
     'test_mode': _testMode,
+    'has_bots': _players.values.any((p) => p['is_bot'] == true),
+    'bot_count': _players.values.where((p) => p['is_bot'] == true).length,
     'type': 'room.snapshot',
     'version': 1,
     'code': code,
@@ -380,6 +392,8 @@ class LocalHost implements GameHost {
 
   // Réservé au MDJ, jamais diffusé sur les sockets des joueurs.
   Map<String, dynamic> get snapshot => {
+    'bots_paused': _botsPaused,
+    'bot_delay_ms': _botDelay,
     ...publicSnapshot,
     'assignments': Map.of(_roles),
     if (_game != null) 'game_host': _game!.hostState,
@@ -564,7 +578,8 @@ class LocalHost implements GameHost {
           _peers.containsKey(socket) &&
           !started &&
           data['ready'] is bool) {
-        _peers[socket]!['ready'] = data['ready'];
+        final player = _peers[socket]!;
+        player['ready'] = player['is_bot'] == true || data['ready'] == true;
         _publish();
       } else if (data['type'] == 'game.action' &&
           _peers.containsKey(socket) &&

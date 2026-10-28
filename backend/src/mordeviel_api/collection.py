@@ -550,5 +550,8 @@ def require_room_access(db, uid, pack, card_styles=None, deck=None, voice=None):
         if any(pid not in allowed for pid in required):
             raise HTTPException(
                 403,
-                "Cet habillage n’est pas acquis et ne bénéficie pas d’un essai actif.",
+                "Ce thème, cette carte ou cette voix n’est pas accessible dans ta collection. "
+                "L’accès gratuit est désactivé ou terminé et aucun essai actif ne couvre ce contenu. "
+                "Choisis un contenu disponible dans ta collection ou consulte la boutique. "
+                "Télécharger les fichiers ne déverrouille pas ce contenu.",
             )

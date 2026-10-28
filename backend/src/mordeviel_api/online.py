@@ -14,7 +14,14 @@ from collections import deque
 from pathlib import Path
 from typing import Literal
 
-from fastapi import APIRouter, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi import (
+    APIRouter,
+    HTTPException,
+    Request,
+    Response,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from pydantic import BaseModel, Field
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
@@ -31,6 +38,8 @@ HOST_ACTIONS = {
     "narration.configure",
     "lock",
     "kick",
+    "bots.add",
+    "bots.configure",
     "start",
     "night.start",
     "night.call",
@@ -188,6 +197,17 @@ class Rooms:
             return None
         return engine
 
+    async def remove(self, code, engine):
+        # Withdraw discovery and invitations before waiting for Dart shutdown.
+        # Identity check prevents a delayed close from removing a reused code.
+        async with self.lock:
+            if self.engines.get(code) is engine:
+                self.engines.pop(code)
+        if engine.db:
+            from .social import close_room
+            close_room(engine.db, engine)
+        await engine.close()
+
     async def reap(self):
         while True:
             await asyncio.sleep(30)
@@ -271,6 +291,22 @@ async def create_room(data: CreateRoom, request: Request):
         "player_path": f"/rooms/{code}/ws",
         "host_path": f"/rooms/{code}/host",
     }
+
+
+@router.delete("/rooms/{code}", status_code=204)
+async def close_room_http(code: str, request: Request):
+    rooms = request.app.state.rooms
+    engine = rooms.get(code)
+    if engine is None:
+        raise HTTPException(404, "Ce salon est déjà fermé ou introuvable.")
+    authorization = request.headers.get("authorization", "")
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise HTTPException(401, "Authentification du MDJ requise.")
+    if not hmac.compare_digest(hashlib.sha256(token.encode()).digest(), engine.token_hash):
+        raise HTTPException(403, "Seul le MDJ peut fermer ce salon.")
+    await rooms.remove(code, engine)
+    return Response(status_code=204)
 
 
 async def incoming(socket):
@@ -424,8 +460,7 @@ async def host_socket(socket: WebSocket, code: str):
                 raise ValueError("Commande invalide.")
             action = command.get("action")
             if action == "room.close":
-                await engine.close()
-                rooms.engines.pop(code, None)
+                await rooms.remove(code, engine)
                 return
             if action not in HOST_ACTIONS:
                 await socket.send_json(

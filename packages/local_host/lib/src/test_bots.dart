@@ -11,6 +11,8 @@ class BotDecisions {
   final Map<String, String> _knownCamps = {};
   String? _lastRole;
   int? _roleVersion;
+  int? _wolfRevision;
+  String? _wolfProposal;
 
   Map<String, dynamic>? next(
     String id,
@@ -74,8 +76,8 @@ class BotDecisions {
     if (phase == 'hunter')
       return action('hunter.shoot', target: choose(others));
     final variants = (own['variant_abilities'] as List? ?? []).cast<Map>();
-    if (variants.isNotEmpty) {
-      final ability = variants.first;
+    if (variants.isNotEmpty && _random.nextBool()) {
+      final ability = variants[_random.nextInt(variants.length)];
       final choices = List<String>.from(ability['targets'] as List)
         ..shuffle(_random);
       final count = ability['min'] as int;
@@ -88,9 +90,15 @@ class BotDecisions {
     }
     final ability = own['ability'];
     if (ability is Map) {
+      if (ability['can_pass'] == true && _random.nextInt(5) == 0)
+        return action('night.pass');
       final choices = List<String>.from(ability['targets'] as List)
         ..shuffle(_random);
-      final count = ability['min'] as int;
+      final minimum = ability['min'] as int;
+      final maximum = min(ability['max'] as int, choices.length);
+      final count = maximum >= minimum
+          ? minimum + _random.nextInt(maximum - minimum + 1)
+          : minimum;
       if (choices.length >= count) {
         return action(
           ability['action'] as String,
@@ -110,14 +118,28 @@ class BotDecisions {
     }
     if (phase == 'wolves') {
       final targets = others.where((p) => !pack.contains(p)).toList()..sort();
-      // Visible pack ballots allow consensus without reading any hidden roles.
+      // Follow real pack members first; otherwise converge on the first bot's
+      // visible ballot. No secret MDJ assignments are consulted.
       final votes = own['choices'] as Map? ?? {};
-      final proposed = votes.values
-          .whereType<String>()
-          .where(targets.contains)
-          .toList();
-      proposed.sort();
-      final target = proposed.isNotEmpty ? proposed.first : targets.firstOrNull;
+      final botIds = (game['players'] as List? ?? [])
+          .whereType<Map>()
+          .where((p) => p['is_bot'] == true)
+          .map((p) => p['id'])
+          .toSet();
+      final entries =
+          votes.entries.where((e) => targets.contains(e.value)).toList()
+            ..sort((a, b) => '${a.key}'.compareTo('${b.key}'));
+      final human = entries.where((e) => !botIds.contains(e.key)).toList();
+      if (_wolfRevision != game['phase_revision'] ||
+          !targets.contains(_wolfProposal)) {
+        _wolfRevision = game['phase_revision'] as int;
+        _wolfProposal = choose(targets);
+      }
+      final target = human.isNotEmpty
+          ? human.first.value as String
+          : entries.isNotEmpty
+          ? entries.first.value as String
+          : _wolfProposal;
       return target == null ? null : action('wolves.choose', target: target);
     }
     if (phase == 'witch') {
@@ -130,7 +152,10 @@ class BotDecisions {
           : null;
       return {
         ...action('witch.potions'),
-        'save': own['life_available'] == true && own['victim'] != null,
+        'save':
+            own['life_available'] == true &&
+            own['victim'] != null &&
+            (own['victim'] == id || _random.nextInt(4) != 0),
         'kill': kill,
       };
     }
@@ -138,11 +163,12 @@ class BotDecisions {
   }
 }
 
-/// Device-local simulation. No community accounts, invitations or statistics.
-/// The application must validate the administrator session before creating it.
+/// Runs next to the Dart host, on the device or inside the remote worker.
+/// Local practice is admin-only; remote commands require the room host token.
 class TestBotTable {
-  TestBotTable(this.host);
+  TestBotTable(this.host, {this.practice = true});
   final LocalHost host;
+  final bool practice;
   final _bots = <_TestBot>[];
   bool _disposed = false;
   int _sequence = 0;
@@ -152,15 +178,30 @@ class TestBotTable {
   bool get paused => _paused;
   set paused(bool value) {
     _paused = value;
+    host.setBotControls(
+      paused: _paused,
+      delayMilliseconds: _delay.inMilliseconds,
+    );
   }
 
   set delay(Duration value) {
     _delay = value;
+    host.setBotControls(
+      paused: _paused,
+      delayMilliseconds: _delay.inMilliseconds,
+    );
   }
 
   Future<void> add(int count) async {
     if (_disposed || host.started)
       throw StateError('Ajout impossible pendant la partie.');
+    if (count < 1 ||
+        count > 20 ||
+        (host.snapshot['players'] as List).length + count > 20) {
+      throw ArgumentError(
+        'Choisis un nombre de bots compatible avec les 20 places du salon.',
+      );
+    }
     for (var n = 0; n < count; n++) {
       if ((host.snapshot['players'] as List).length >= 20) break;
       final bot = _TestBot(this, 'Bot ${++_sequence}');
@@ -171,7 +212,7 @@ class TestBotTable {
           await bot.dispose();
           return;
         }
-        host.markTestPlayer(bot.client.id!);
+        host.markBotPlayer(bot.client.id!, practice: practice);
       } catch (_) {
         _bots.remove(bot);
         await bot.dispose();
@@ -201,6 +242,7 @@ class _TestBot {
   bool connected = false;
   bool _lobby = true, _ready = false;
   bool _disposed = false;
+  DateTime? _lastChat;
 
   Future<void> connect() async {
     _subscription = client.events.listen((event) {
@@ -210,7 +252,10 @@ class _TestBot {
           client.setReady(true);
           if (!_joined.isCompleted) _joined.complete();
         case 'room.snapshot':
-          _game = Map<String, dynamic>.from(event['game'] as Map? ?? {});
+          _game = {
+            ...Map<String, dynamic>.from(event['game'] as Map? ?? {}),
+            'players': event['players'] ?? [],
+          };
           _lobby = event['phase'] == 'lobby';
           final self = (event['players'] as List? ?? [])
               .whereType<Map>()
@@ -247,26 +292,29 @@ class _TestBot {
 
   DateTime _next = DateTime.now();
   void _tick() {
-    if (_disposed ||
-        !connected ||
-        table.paused ||
-        DateTime.now().isBefore(_next))
-      return;
-    _next = DateTime.now().add(table._delay);
+    if (_disposed || !connected) return;
     if (_lobby) {
       if (!_ready) client.setReady(true);
       return;
     }
+    if (table.paused || DateTime.now().isBefore(_next)) return;
+    _next = DateTime.now().add(table._delay);
     if (_game['phase'] == 'ended') {
       _timer?.cancel();
       return;
     }
     final id = client.id;
     if (id == null) return;
+    _announceWolfTarget(id);
     final move = policy.next(id, _game, _own);
     if (move == null) return;
-    final key = '${move['phase_revision']}:${move['action']}';
-    if (!_sent.add(key)) return;
+    final key =
+        '${move['phase_revision']}:${move['action']}${move['action'] == 'wolves.choose' ? ':${move['target']}' : ''}';
+    if (move['action'] == 'wolves.choose') {
+      if ((_own['choices'] as Map?)?[id] == move['target']) return;
+    } else if (!_sent.add(key)) {
+      return;
+    }
     if (_sent.length > 100) _sent.remove(_sent.first);
     client.gameAction(
       move['action'] as String,
@@ -277,13 +325,64 @@ class _TestBot {
       kill: move['kill'] as String?,
     );
     // Scripted messages are deliberately neutral: no hidden role disclosure.
-    if (move['action'] == 'vote.cast' && _game['chat_open'] == true) {
+    if (move['action'] == 'vote.cast' &&
+        _game['chat_open'] == true &&
+        _chatReady) {
+      _lastChat = DateTime.now();
       client.gameAction(
         'day.chat',
         move['phase_revision'] as int,
         text: 'Je garde un œil sur les votes. Mon choix est fait.',
       );
     }
+  }
+
+  bool get _chatReady =>
+      _lastChat == null ||
+      DateTime.now().difference(_lastChat!).inMilliseconds >= 1100;
+  void _announceWolfTarget(String id) {
+    if (_game['phase'] != 'wolves' ||
+        _game['paused'] == true ||
+        _game['closed'] == true ||
+        _own['phase_revision'] != _game['phase_revision'] ||
+        _own['is_pack'] != true ||
+        _own['alive'] != true ||
+        !_chatReady)
+      return;
+    final key = '${_game['phase_revision']}:wolves.chat';
+    if (_sent.contains(key)) return;
+    final target = (_own['choices'] as Map?)?[id];
+    if (target is! String) return;
+    final players = (_game['players'] as List? ?? []).whereType<Map>().toList();
+    final pack = (_own['pack'] as List? ?? []);
+    final speakers =
+        players
+            .where(
+              (p) =>
+                  p['is_bot'] == true &&
+                  p['connected'] == true &&
+                  pack.contains(p['id']),
+            )
+            .map((p) => p['id'] as String)
+            .toList()
+          ..sort();
+    final index = speakers.indexOf(id);
+    if (index < 0) return;
+    final messages = (_own['messages'] as List? ?? []).whereType<Map>();
+    if (index > 0 && !messages.any((m) => m['author'] == speakers[index - 1]))
+      return;
+    final name = players
+        .where((p) => p['id'] == target)
+        .firstOrNull?['nickname'];
+    if (name is! String) return;
+    _sent.add(key);
+    _lastChat = DateTime.now();
+    final text = 'Je propose de dévorer $name.';
+    client.gameAction(
+      'wolves.chat',
+      _game['phase_revision'] as int,
+      text: text.length <= 300 ? text : 'Mon choix est fait.',
+    );
   }
 
   Future<void> dispose() async {

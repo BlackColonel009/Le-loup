@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'game_host.dart';
+import 'online_errors.dart';
 
 /// Credentials stay in memory and never appear in room snapshots or URLs.
 class OnlineHost implements GameHost {
@@ -23,6 +24,8 @@ class OnlineHost implements GameHost {
   String? _token;
   String? _code;
   bool _disposed = false;
+  bool _roomClosed = false;
+  Future<void>? _closing;
   bool get connected => _socket?.readyState == WebSocket.open;
   int _sequence = 0;
   final _pending = <int, Completer<void>>{};
@@ -74,7 +77,7 @@ class OnlineHost implements GameHost {
           .join()
           .timeout(const Duration(seconds: 10));
       if (response.statusCode != 201) {
-        throw StateError('Création du salon refusée (${response.statusCode}).');
+        throw OnlineGameException.response(response.statusCode, text);
       }
       final room = jsonDecode(text) as Map<String, dynamic>;
       _code = room['code'] as String;
@@ -212,6 +215,14 @@ class OnlineHost implements GameHost {
       });
   @override
   Future<void> kick(String id) => command('kick', {'player_id': id});
+  Future<void> addBots(int count) => command('bots.add', {'count': count});
+  Future<void> configureBots({
+    required bool paused,
+    required int delayMilliseconds,
+  }) => command('bots.configure', {
+    'paused': paused,
+    'delay_ms': delayMilliseconds,
+  });
   @override
   void startGame() => _send('start');
   @override
@@ -236,16 +247,54 @@ class OnlineHost implements GameHost {
   void spinSentence() => _send('sentence.spin');
   @override
   void continueAfterSentence() => _send('sentence.continue');
+
+  /// Explicit server acknowledgement, independent of the WebSocket state.
+  /// Retains the host credential on failure so the user can retry.
+  Future<void> closeRoom() async {
+    if (_roomClosed || _token == null || _code == null) return;
+    final pending = _closing;
+    if (pending != null) return pending;
+    final operation = _closeRoomHttp();
+    _closing = operation;
+    try {
+      await operation;
+      _roomClosed = true;
+    } finally {
+      _closing = null;
+    }
+  }
+
+  Future<void> _closeRoomHttp() async {
+    final http = HttpClient()..connectionTimeout = const Duration(seconds: 8);
+    try {
+      final request = await http
+          .deleteUrl(base.resolve('rooms/$_code'))
+          .timeout(const Duration(seconds: 8));
+      request.followRedirects = false;
+      request.headers.set('Authorization', 'Bearer $_token');
+      final response = await request.close().timeout(
+        const Duration(seconds: 12),
+      );
+      await response.drain<void>().timeout(const Duration(seconds: 5));
+      if (response.statusCode != 204 && response.statusCode != 404) {
+        throw StateError(
+          'Fermeture du salon refusée (${response.statusCode}). Réessaie.',
+        );
+      }
+    } finally {
+      http.close(force: true);
+    }
+  }
+
   @override
   Future<void> dispose() async {
     if (_disposed) return;
-    if (connected) {
-      _socket!.add(jsonEncode({'action': 'room.close'}));
-      try {
-        await _socket!.done.timeout(const Duration(seconds: 3));
-      } catch (_) {
-        /* A dropped connection leaves the remote room until expiry. */
-      }
+    try {
+      await closeRoom();
+    } catch (_) {
+      // Best effort during widget destruction; explicit exits await closeRoom
+      // before leaving and display a retry message on failure.
+      if (connected) _socket!.add(jsonEncode({'action': 'room.close'}));
     }
     _disposed = true;
     await _subscription?.cancel();

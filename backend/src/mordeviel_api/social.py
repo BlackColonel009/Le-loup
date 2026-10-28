@@ -792,6 +792,9 @@ def sync_match(db, engine):
                         (uid, other, time.time()),
                     )
             engine.recent_saved = True
+        if engine.snapshot.get("has_bots") or engine.snapshot.get("test_mode"):
+            # Keep human recent players, but prevent statistics farming on bots.
+            return
         if game.get("phase") != "ended" or not game.get("history"):
             return
         c.execute("BEGIN IMMEDIATE" if not c.in_transaction else "SELECT 1")

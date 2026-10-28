@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../content/content_image.dart';
-import '../content/pack_store.dart';
-import '../content/downloads_screen.dart';
+import '../content/require_packs.dart';
 import 'package:local_host/local_host.dart'
     show ChatSticker, chatStickers, stickerFromMessage;
 
@@ -49,40 +48,14 @@ class ChatMessageBody extends StatelessWidget {
 }
 
 Future<ChatSticker?> showStickerPicker(BuildContext context) async {
-  try {
-    await PackStore.instance.initialize();
-  } catch (_) {
-    /* Download screen explains an unavailable store. */
-  }
-  if (!context.mounted) return null;
-  if (!PackStore.instance.installed('stickers-classic')) {
-    final open = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Les émotions du village'),
-        content: const Text(
-          'Télécharge le pack de stickers pour choisir tes personnages et les utiliser hors connexion.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Plus tard'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Télécharger le pack'),
-          ),
-        ],
-      ),
-    );
-    if (open == true && context.mounted) {
-      await Navigator.of(
+  if (!await ensurePacksAvailable(
         context,
-      ).push(MaterialPageRoute<void>(builder: (_) => const DownloadsScreen()));
-    }
-    if (!context.mounted || !PackStore.instance.installed('stickers-classic')) {
-      return null;
-    }
+        ['stickers-classic'],
+        reason:
+            'Pour choisir et envoyer un sticker, installe le pack des émotions du village.',
+      ) ||
+      !context.mounted) {
+    return null;
   }
   return showModalBottomSheet<ChatSticker>(
     context: context,

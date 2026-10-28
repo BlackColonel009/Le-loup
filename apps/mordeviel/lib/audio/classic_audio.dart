@@ -6,6 +6,7 @@ import 'package:local_host/local_host.dart';
 import 'voice_profiles.dart';
 import '../village/ending_data.dart';
 import '../content/pack_store.dart';
+import '../content/pack_messages.dart';
 
 enum AudioScene { welcome, host, silent }
 
@@ -53,9 +54,7 @@ class AssetAudioBackend implements AudioBackend {
     await _cue.stop();
     final path = PackStore.instance.pathFor('assets/audio/classic/$asset');
     if (!available(asset)) {
-      throw StateError(
-        'Télécharge le pack de cette voix dans Mes téléchargements.',
-      );
+      throw MissingPackException(downloadablePackForAsset(asset)!);
     }
     await _cue.play(
       path == null
@@ -175,6 +174,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   int _deathTicket = 0;
   Completer<void>? _cancelCurrentStory;
   String? error;
+  List<String> missingPackIds = const [];
   VoiceProfile _voiceProfile = voiceProfiles.first;
   VoiceProfile? _roomVoice;
   bool roomAutomatic = true;
@@ -249,9 +249,13 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       if (_disposed) return;
       try {
         await action(backend);
-      } catch (_) {
-        error =
-            'Lecture audio indisponible. Vérifie la sortie sonore puis réessaie.';
+      } catch (failure) {
+        missingPackIds = failure is MissingPackException
+            ? [failure.packId]
+            : const [];
+        error = failure is MissingPackException
+            ? failure.message
+            : 'Lecture audio indisponible. Vérifie la sortie sonore puis réessaie.';
         _ducked = false;
         try {
           await backend.musicVolume(_bedVolume);
@@ -603,6 +607,14 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
               !AssetAudioBackend.available(
                 voice ? profile!.assetFor(cue.asset) : cue.asset,
               )) {
+            final id = downloadablePackForAsset(
+              voice ? profile!.assetFor(cue.asset) : cue.asset,
+            );
+            if (id != null) {
+              missingPackIds = [id];
+              error = MissingPackException(id).message;
+              notifyListeners();
+            }
             continue;
           }
           _ducked = true;
@@ -681,6 +693,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       );
       if (error != null) {
         error = null;
+        missingPackIds = const [];
         notifyListeners();
       }
     });

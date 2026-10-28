@@ -5,6 +5,7 @@ import '../lib/local_host.dart';
 /// Private JSON-lines control channel. Only FastAPI owns stdin/stdout.
 Future<void> main() async {
   final host = LocalHost();
+  final bots = TestBotTable(host, practice: false);
   void emit(Map<String, dynamic> event) => stdout.writeln(jsonEncode(event));
   final subscription = host.updates.listen(
     (snapshot) => emit({'type': 'host.snapshot', 'room': snapshot}),
@@ -42,6 +43,20 @@ Future<void> main() async {
             host.setLocked(command['locked'] as bool);
           case 'kick':
             await host.kick(command['player_id'] as String);
+          case 'bots.add':
+            final count = command['count'];
+            if (count is! int) throw ArgumentError('Nombre de bots invalide.');
+            await bots.add(count);
+          case 'bots.configure':
+            final paused = command['paused'];
+            final delay = command['delay_ms'];
+            if (paused is! bool ||
+                delay is! int ||
+                ![250, 900, 2500].contains(delay)) {
+              throw ArgumentError('Réglage des bots invalide.');
+            }
+            bots.paused = paused;
+            bots.delay = Duration(milliseconds: delay);
           case 'start':
             host.startGame();
           case 'night.start':
@@ -76,11 +91,20 @@ Future<void> main() async {
           'room': host.snapshot,
         });
       } catch (error) {
-        emit({'type': 'command.error', 'id': id, 'message': error.toString()});
+        emit({
+          'type': 'command.error',
+          'id': id,
+          'message': error is StateError
+              ? error.message
+              : error is ArgumentError
+              ? (error.message ?? 'Paramètres invalides.').toString()
+              : 'Cette commande n’a pas pu être exécutée. Réessaie.',
+        });
       }
     }
   } finally {
     await subscription.cancel();
+    await bots.dispose();
     await host.dispose();
   }
 }

@@ -5,6 +5,43 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import '../services/server_config.dart';
+import 'pack_messages.dart';
+
+String packFailureMessage(Object failure, {bool catalogue = false}) {
+  if (failure is MissingPackException) return failure.message;
+  if (failure is FileSystemException) {
+    if ([28, 112].contains(failure.osError?.errorCode)) {
+      return 'Il n’y a plus assez d’espace sur cet appareil. Libère de l’espace puis reprends le téléchargement.';
+    }
+    return 'Impossible d’enregistrer le pack sur cet appareil. Vérifie l’espace libre et les autorisations de stockage, puis réessaie.';
+  }
+  if (failure is HandshakeException) {
+    return 'La connexion sécurisée au service de téléchargement a échoué. Vérifie la date et l’heure de ton appareil ; si cela persiste, contacte le support.';
+  }
+  if (failure is SocketException || failure is TimeoutException) {
+    return 'Le téléchargement ne répond plus. Vérifie ta connexion Internet puis appuie sur Télécharger / reprendre. Les fichiers déjà reçus sont conservés.';
+  }
+  if (failure is PackRequestException) {
+    if (failure.status == 404) {
+      return 'Ce pack n’est plus disponible à cette adresse. Actualise le catalogue puis réessaie ; si cela persiste, contacte le support.';
+    }
+    if (failure.status == 403 || failure.status == 401) {
+      return 'Le service refuse le téléchargement de ce pack. Reconnecte-toi ; si cela persiste, contacte le support.';
+    }
+    return 'Le service de téléchargement est momentanément indisponible. Réessaie dans quelques minutes. Les packs installés restent utilisables.';
+  }
+  if (failure is FormatException) {
+    return catalogue
+        ? 'Le catalogue des packs ne peut pas être lu. Actualise-le ; si cela persiste, mets l’application à jour ou contacte le support.'
+        : 'Le fichier téléchargé est incomplet ou endommagé. Appuie sur Télécharger / reprendre pour le récupérer à nouveau.';
+  }
+  if (failure is StateError && failure.message.contains('suspendu')) {
+    return 'Téléchargement mis en pause. Appuie sur Télécharger / reprendre quand tu le souhaites.';
+  }
+  return catalogue
+      ? 'Le catalogue est inaccessible. Vérifie Internet et réessaie. Les packs déjà installés restent disponibles.'
+      : 'Le téléchargement a été interrompu. Réessaie avec Télécharger / reprendre ; si cela persiste, contacte le support.';
+}
 
 class PackStore extends ChangeNotifier {
   PackStore({Directory? directory, Uri? base})
@@ -31,7 +68,12 @@ class PackStore extends ChangeNotifier {
         ),
   );
   Uri get _base => _customBase ?? Uri.parse(apiBaseUrl);
-  Future<void> initialize() => _init ??= _initialize();
+  Future<void> initialize() =>
+      _init ??= _initialize().catchError((Object failure) {
+        _init = null;
+        error = packFailureMessage(failure);
+        throw failure;
+      });
   Future<void> _initialize() async {
     _root ??= Directory(
       '${(await getApplicationSupportDirectory()).path}/content-packs',
@@ -65,6 +107,7 @@ class PackStore extends ChangeNotifier {
         packs.clear();
       }
     }
+    notifyListeners();
   }
 
   void _accept(dynamic data) {
@@ -151,7 +194,7 @@ class PackStore extends ChangeNotifier {
         const Duration(seconds: 15),
       );
       if (response.statusCode != 200) {
-        throw const HttpException('Catalogue indisponible.');
+        throw PackRequestException(response.statusCode);
       }
       final bytes = <int>[];
       await for (final chunk in response.timeout(const Duration(seconds: 20))) {
@@ -169,9 +212,8 @@ class PackStore extends ChangeNotifier {
       await temp.rename(target.path);
       await _index();
       error = null;
-    } catch (_) {
-      error =
-          'Catalogue inaccessible. Les packs déjà téléchargés restent disponibles.';
+    } catch (failure) {
+      error = packFailureMessage(failure, catalogue: true);
       rethrow;
     } finally {
       client.close(force: true);
@@ -192,7 +234,13 @@ class PackStore extends ChangeNotifier {
 
   Future<void> install(String id) async {
     await initialize();
-    final p = packs.firstWhere((p) => p['id'] == id);
+    final p = packs.where((p) => p['id'] == id).firstOrNull;
+    if (p == null) {
+      error =
+          'Ce pack n’est pas dans le catalogue. Actualise la liste et réessaie.';
+      notifyListeners();
+      throw const PackRequestException(404);
+    }
     await _download(p);
   }
 
@@ -259,7 +307,7 @@ class PackStore extends ChangeNotifier {
             const Duration(seconds: 15),
           );
           if (response.statusCode != 200 && response.statusCode != 206) {
-            throw const HttpException('Téléchargement indisponible.');
+            throw PackRequestException(response.statusCode);
           }
           if (response.statusCode == 206 &&
               !response.headers
@@ -307,8 +355,8 @@ class PackStore extends ChangeNotifier {
         notifyListeners();
       }
       error = null;
-    } catch (_) {
-      error = 'Téléchargement interrompu. Tu peux le reprendre.';
+    } catch (failure) {
+      error = packFailureMessage(failure);
       rethrow;
     } finally {
       client.close(force: true);

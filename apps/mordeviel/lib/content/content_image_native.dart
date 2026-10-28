@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'pack_store.dart';
+import 'pack_messages.dart';
+import 'require_packs.dart';
 
 class ContentImage extends StatefulWidget {
   const ContentImage(
@@ -67,10 +69,21 @@ class _ContentImageState extends State<ContentImage> {
               width: widget.width,
               height: widget.height,
             )
-          : const Center(
-              child: Icon(
-                Icons.download_for_offline_outlined,
-                color: Color(0xFFD5B47A),
+          : Center(
+              child: IconButton(
+                tooltip: 'Image indisponible · Ouvrir les téléchargements',
+                icon: const Icon(
+                  Icons.download_for_offline_outlined,
+                  color: Color(0xFFD5B47A),
+                ),
+                onPressed: downloadablePackForAsset(widget.asset) == null
+                    ? null
+                    : () => ensurePacksAvailable(
+                        context,
+                        [downloadablePackForAsset(widget.asset)!],
+                        reason:
+                            'Cette image nécessite un pack qui n’est pas installé sur cet appareil.',
+                      ),
               ),
             );
       if (path != null) {

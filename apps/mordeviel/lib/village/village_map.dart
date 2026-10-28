@@ -5,33 +5,36 @@ import 'weather_overlay.dart';
 import 'house_sprite_geometry.dart';
 import 'guardian_aura.dart';
 import '../content/content_image.dart';
+import '../content/pack_store.dart';
 import 'horror_ambience.dart';
 
 /// The Intense terrain has more room than the classic canvas. House sprites
 /// keep their readable size while the distance between plots increases.
 const intenseVillageCanvasSize = Size(3072, 2048);
 const classicVillageCanvasSize = Size(1376, 768);
+// Ground anchors measured on the 1536 × 1024 artwork, not a regular grid.
+// Four wide western plots each accommodate a second home for players 17–20.
 const horrorVillagePlots = <Offset>[
-  Offset(.40, .56),
-  Offset(.60, .56),
-  Offset(.21, .56),
-  Offset(.79, .56),
-  Offset(.40, .43),
-  Offset(.60, .43),
-  Offset(.40, .69),
-  Offset(.60, .69),
-  Offset(.21, .43),
-  Offset(.79, .43),
-  Offset(.21, .69),
-  Offset(.79, .69),
-  Offset(.40, .30),
-  Offset(.60, .30),
-  Offset(.21, .30),
-  Offset(.79, .30),
-  Offset(.40, .82),
-  Offset(.60, .82),
-  Offset(.21, .82),
-  Offset(.79, .82),
+  Offset(.345, .553),
+  Offset(.610, .553),
+  Offset(.175, .553),
+  Offset(.805, .553),
+  Offset(.345, .390),
+  Offset(.605, .390),
+  Offset(.345, .694),
+  Offset(.625, .694),
+  Offset(.200, .390),
+  Offset(.795, .390),
+  Offset(.160, .694),
+  Offset(.830, .694),
+  Offset(.345, .273),
+  Offset(.610, .273),
+  Offset(.210, .273),
+  Offset(.785, .273),
+  Offset(.415, .553),
+  Offset(.415, .390),
+  Offset(.415, .694),
+  Offset(.415, .273),
 ];
 
 /// Four columns and five rows, populated around the council square first.
@@ -98,52 +101,71 @@ class HouseSprite extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, size) {
       if (horror) {
-        return ContentImage(
-          'assets/village/horror/house_$state.png',
-          fit: BoxFit.contain,
-          fallbackAsset: 'assets/village/house_$state.png',
+        return ListenableBuilder(
+          listenable: PackStore.instance,
+          builder: (context, _) {
+            final asset = 'assets/village/horror/house_$state.png';
+            final downloaded = PackStore.instance.pathFor(asset) != null;
+            return _framed(
+              size,
+              downloaded
+                  ? horrorHouseSpriteGeometry[state]!
+                  : houseSpriteGeometry[state]!,
+              downloaded
+                  ? ContentImage(asset, fit: BoxFit.fill)
+                  : Image.asset(
+                      'assets/village/house_$state.png',
+                      fit: BoxFit.fill,
+                    ),
+            );
+          },
         );
       }
-      if (intense) {
-        return Image.asset(
-          'assets/village/intense/house_$state.png',
-          fit: BoxFit.contain,
-          alignment: Alignment.bottomCenter,
+      return _framed(
+        size,
+        intense
+            ? intenseHouseSpriteGeometry[state]!
+            : houseSpriteGeometry[state]!,
+        Image.asset(
+          'assets/village/${intense ? 'intense/' : ''}house_$state.png',
+          fit: BoxFit.fill,
+          filterQuality: FilterQuality.medium,
           excludeFromSemantics: true,
-        );
-      }
-      final geometry = houseSpriteGeometry[state]!;
-      final scale = (size.maxWidth / geometry.visibleWidth).clamp(
-        0.0,
-        size.hasBoundedHeight
-            ? size.maxHeight / geometry.visibleHeight
-            : double.infinity,
-      );
-      final verticalSpace = size.hasBoundedHeight
-          ? size.maxHeight - geometry.visibleHeight * scale
-          : 0.0;
-      return ClipRect(
-        child: Stack(
-          children: [
-            Positioned(
-              left:
-                  (size.maxWidth - geometry.visibleWidth * scale) / 2 -
-                  geometry.left * scale,
-              top: verticalSpace - geometry.top * scale,
-              width: geometry.width * scale,
-              height: geometry.height * scale,
-              child: Image.asset(
-                'assets/village/house_$state.png',
-                fit: BoxFit.fill,
-                filterQuality: FilterQuality.medium,
-                excludeFromSemantics: true,
-              ),
-            ),
-          ],
         ),
       );
     },
   );
+
+  Widget _framed(
+    BoxConstraints size,
+    HouseSpriteGeometry geometry,
+    Widget image,
+  ) {
+    final scale = (size.maxWidth / geometry.visibleWidth).clamp(
+      0.0,
+      size.hasBoundedHeight
+          ? size.maxHeight / geometry.visibleHeight
+          : double.infinity,
+    );
+    final verticalSpace = size.hasBoundedHeight
+        ? size.maxHeight - geometry.visibleHeight * scale
+        : 0.0;
+    return ClipRect(
+      child: Stack(
+        children: [
+          Positioned(
+            left:
+                (size.maxWidth - geometry.visibleWidth * scale) / 2 -
+                geometry.left * scale,
+            top: verticalSpace - geometry.top * scale,
+            width: geometry.width * scale,
+            height: geometry.height * scale,
+            child: image,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class VillageMap extends StatefulWidget {
@@ -171,6 +193,17 @@ class VillageMap extends StatefulWidget {
 }
 
 class _VillageMapState extends State<VillageMap> {
+  double get _spriteExtent => horror
+      ? 190
+      : intense
+      ? 238
+      : 112;
+  double get _houseWidth => _spriteExtent + 6;
+  double get _labelWidth => horror
+      ? 196
+      : intense
+      ? 260
+      : 136;
   bool get horror => widget.room['visual_pack'] == 'horror';
   bool get intense =>
       ['intense', 'horror'].contains(widget.room['visual_pack']);
@@ -370,13 +403,14 @@ class _VillageMapState extends State<VillageMap> {
                                   ),
                                   left:
                                       plots[placement.slot].dx * _world.width -
-                                      (intense ? 122 : 74),
+                                      _houseWidth / 2,
                                   top:
                                       plots[placement.slot].dy * _world.height -
-                                      (intense ? 236 : 140),
-                                  width: intense ? 244 : 148,
-                                  height: intense ? 266 : 170,
+                                      _spriteExtent,
+                                  width: _houseWidth,
+                                  height: _spriteExtent + 28,
                                   child: _House(
+                                    spriteExtent: _spriteExtent,
                                     ready:
                                         game == null &&
                                         widget.room['phase'] == 'lobby' &&
@@ -410,11 +444,11 @@ class _VillageMapState extends State<VillageMap> {
                                 Positioned(
                                   left:
                                       plots[placement.slot].dx * _world.width -
-                                      (intense ? 130 : 80),
+                                      _labelWidth / 2,
                                   top:
                                       plots[placement.slot].dy * _world.height +
                                       4,
-                                  width: intense ? 260 : 160,
+                                  width: _labelWidth,
                                   child: _HouseLabel(
                                     intense: intense,
                                     player: placement.player,
@@ -434,11 +468,11 @@ class _VillageMapState extends State<VillageMap> {
                                       left:
                                           plots[placement.slot].dx *
                                               _world.width -
-                                          28,
+                                          (intense ? 40 : 28),
                                       top:
                                           plots[placement.slot].dy *
                                               _world.height -
-                                          (intense ? 185 : 110),
+                                          _spriteExtent * .78,
                                       width: intense ? 80 : 56,
                                       height: intense ? 100 : 70,
                                       child: SpectatorGhost(
@@ -588,6 +622,7 @@ class _SpectatorGhostState extends State<SpectatorGhost>
 
 class _House extends StatelessWidget {
   const _House({
+    required this.spriteExtent,
     required this.player,
     required this.state,
     required this.own,
@@ -600,6 +635,7 @@ class _House extends StatelessWidget {
     this.ready = false,
   });
   final bool ready;
+  final double spriteExtent;
   final bool protected;
   final bool intense;
   final bool horror;
@@ -617,7 +653,7 @@ class _House extends StatelessWidget {
         Positioned(
           left: intense ? -44 : -28,
           right: intense ? -44 : -28,
-          top: intense ? 214 : 126,
+          top: spriteExtent - (intense ? 32 : 24),
           height: intense ? 64 : 48,
           child: IgnorePointer(
             child: CustomPaint(
@@ -644,14 +680,20 @@ class _House extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  width: intense ? 238 : 142,
-                  height: intense ? 238 : 142,
+                  width: spriteExtent,
+                  height: spriteExtent,
                   child: AnimatedSwitcher(
                     duration: MediaQuery.disableAnimationsOf(context)
                         ? Duration.zero
                         : const Duration(milliseconds: 800),
                     child: HouseSprite(
-                      key: ValueKey('$intense-$state'),
+                      key: ValueKey(
+                        '${horror
+                            ? 'horror'
+                            : intense
+                            ? 'intense'
+                            : 'classic'}-$state',
+                      ),
                       state: state,
                       intense: intense,
                       horror: horror,

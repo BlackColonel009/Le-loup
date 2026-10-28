@@ -22,12 +22,21 @@ Future<void> main() async {
       throw StateError('Bots absents.');
     if ((host.snapshot['players'] as List).any((p) => p['is_bot'] != true))
       throw StateError('Badge manquant.');
+    table.paused = true;
+    table.delay = const Duration(milliseconds: 2500);
     host.configure({
       ...host.deck,
       'werewolf': 1,
       'seer': 1,
       'villager': 2,
     }, campOnly: false);
+    if ((host.snapshot['players'] as List).any((p) => p['ready'] != true)) {
+      throw StateError(
+        'Les bots doivent rester prêts, même en pause et en mode lent.',
+      );
+    }
+    table.paused = false;
+    table.delay = const Duration(milliseconds: 120);
     await until(
       () => (host.snapshot['players'] as List).every((p) => p['ready'] == true),
     );

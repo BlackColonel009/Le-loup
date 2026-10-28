@@ -3,6 +3,58 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:local_host/local_host.dart';
 
 void main() {
+  test(
+    'Le bot loup suit le bulletin humain, y compris après un retour au choix initial',
+    () {
+      final bot = BotDecisions(random: Random(3));
+      final game = <String, dynamic>{
+        'phase': 'wolves',
+        'phase_revision': 1,
+        'alive_ids': ['bot', 'human', 'a', 'b'],
+        'players': [
+          {'id': 'bot', 'is_bot': true},
+          {'id': 'human', 'is_bot': false},
+          {'id': 'a', 'is_bot': false},
+          {'id': 'b', 'is_bot': false},
+        ],
+      };
+      for (final target in ['a', 'b', 'a']) {
+        final move = bot.next('bot', game, {
+          'phase_revision': 1,
+          'role': 'werewolf',
+          'can_act': true,
+          'pack': ['bot', 'human'],
+          'choices': {'bot': 'a', 'human': target},
+        });
+        expect(move?['target'], target);
+      }
+    },
+  );
+  test(
+    'Les bots varient leur pouvoir, leur cible et la possibilité de passer',
+    () {
+      final commands = <String>{}, targets = <String>{};
+      for (var seed = 0; seed < 60; seed++) {
+        final game = NightGame(
+          {'g': 'guardian', 'w': 'werewolf', 'a': 'villager', 'b': 'villager'},
+          editions: {'g': 'intense'},
+        );
+        game.startNight();
+        game.callNight('guardian');
+        final move = BotDecisions(
+          random: Random(seed),
+        ).next('g', game.publicState, game.privateState('g'))!;
+        commands.add(move['action'] as String);
+        targets.addAll((move['targets'] as List? ?? []).cast<String>());
+        game.act('g', move);
+      }
+      expect(
+        commands,
+        containsAll(['guardian.protect', 'guardian.ward', 'night.pass']),
+      );
+      expect(targets.length, greaterThan(1));
+    },
+  );
   test('Les loups trouvent une cible commune hors de leur meute', () {
     final game = NightGame({
       'w': 'werewolf',

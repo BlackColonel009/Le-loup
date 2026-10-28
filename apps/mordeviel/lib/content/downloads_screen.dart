@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'pack_store.dart';
+import 'pack_messages.dart';
 
 class DownloadsScreen extends StatefulWidget {
-  const DownloadsScreen({super.key});
+  const DownloadsScreen({
+    super.key,
+    this.requiredPackIds = const {},
+    this.store,
+  });
+  final Set<String> requiredPackIds;
+  final PackStore? store;
   @override
   State<DownloadsScreen> createState() => _DownloadsScreenState();
 }
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
   bool _loading = true;
+  String? _localError;
+  PackStore get _store => widget.store ?? PackStore.instance;
   @override
   void initState() {
     super.initState();
@@ -16,27 +25,44 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   }
 
   Future<void> _refresh() async {
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _localError = null;
+      });
+    }
     try {
-      await PackStore.instance.refresh();
+      await _store.refresh();
     } catch (_) {
-      /* Offline catalogue remains visible. */
+      _localError =
+          _store.error ??
+          'Impossible d’ouvrir les téléchargements. Vérifie l’espace libre et réessaie.';
     }
     if (mounted) setState(() => _loading = false);
   }
 
-  Future<void> _install(String id) async {
+  Future<bool> _install(String id) async {
     try {
-      await PackStore.instance.install(id);
+      await _store.install(id);
+      return true;
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              PackStore.instance.error ?? 'Téléchargement impossible.',
+              _store.error ??
+                  'Impossible de télécharger ce pack. Actualise la liste puis réessaie.',
             ),
           ),
         );
       }
+      return false;
+    }
+  }
+
+  Future<void> _installRequired() async {
+    for (final id in widget.requiredPackIds) {
+      if (!_store.installed(id) && !await _install(id)) break;
     }
   }
 
@@ -53,9 +79,14 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       ],
     ),
     body: ListenableBuilder(
-      listenable: PackStore.instance,
+      listenable: _store,
       builder: (context, _) {
-        final store = PackStore.instance;
+        final store = _store;
+        final ordered = List<Map<String, dynamic>>.of(store.packs)
+          ..sort(
+            (a, b) => (widget.requiredPackIds.contains(b['id']) ? 1 : 0)
+                .compareTo(widget.requiredPackIds.contains(a['id']) ? 1 : 0),
+          );
         return ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -64,7 +95,63 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
             ),
             const SizedBox(height: 16),
             if (_loading) const LinearProgressIndicator(),
-            if (store.error != null) Text(store.error!),
+            if (store.error != null || _localError != null) ...[
+              Text(store.error ?? _localError!),
+              TextButton.icon(
+                onPressed: _loading ? null : _refresh,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Réessayer'),
+              ),
+            ],
+            if (widget.requiredPackIds.isNotEmpty)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Packs nécessaires pour continuer',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      for (final id in widget.requiredPackIds)
+                        Text(
+                          '${store.installed(id) ? '✓' : '•'} ${packLabel(id)}',
+                        ),
+                      const SizedBox(height: 12),
+                      if (widget.requiredPackIds.every(store.installed))
+                        FilledButton.icon(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.check),
+                          label: const Text('Revenir au jeu'),
+                        )
+                      else
+                        FilledButton.icon(
+                          onPressed:
+                              _loading ||
+                                  store.progress.isNotEmpty ||
+                                  widget.requiredPackIds.any(
+                                    (id) =>
+                                        !store.packs.any((p) => p['id'] == id),
+                                  )
+                              ? null
+                              : _installRequired,
+                          icon: const Icon(Icons.download),
+                          label: const Text(
+                            'Télécharger les packs nécessaires',
+                          ),
+                        ),
+                      if (!_loading &&
+                          widget.requiredPackIds.any(
+                            (id) => !store.packs.any((p) => p['id'] == id),
+                          ))
+                        const Text(
+                          'Un pack demandé n’est pas disponible dans le catalogue. Actualise la liste ; si cela persiste, contacte le support.',
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             if (store.packs.any((p) => p['theme'] == 'horror'))
               Card(
                 child: Padding(
@@ -89,11 +176,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                   'horror-ambience',
                                 ]) {
                                   if (!store.installed(id)) {
-                                    try {
-                                      await store.install(id);
-                                    } catch (_) {
-                                      break;
-                                    }
+                                    if (!await _install(id)) break;
                                   }
                                 }
                               },
@@ -104,8 +187,9 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                   ),
                 ),
               ),
-            for (final pack in store.packs)
+            for (final pack in ordered)
               Card(
+                key: ValueKey('download-${pack['id']}'),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -115,6 +199,11 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                         pack['title'] as String,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
+                      if (widget.requiredPackIds.contains(pack['id']))
+                        const Text(
+                          'Nécessaire pour ton action',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       Text(
                         '${((pack['size'] as num) / 1048576).toStringAsFixed(1)} Mo · ${store.installed(pack['id'] as String) ? 'Installé' : 'À télécharger / mettre à jour'}',
                       ),

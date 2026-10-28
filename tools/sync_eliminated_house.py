@@ -24,18 +24,24 @@ lines = [
     '  const HouseSpriteGeometry(this.width, this.height, this.left, this.top, this.visibleWidth, this.visibleHeight);',
     '  final double width, height, left, top, visibleWidth, visibleHeight;',
     '}',
-    'const houseSpriteGeometry = <String, HouseSpriteGeometry>{',
 ]
-for state in ['day', 'night', 'eliminated']:
-    path = target.parent / f'house_{state}.png'
-    with Image.open(path) as image:
-        width, height = image.size
-        bbox = image.getchannel('A').getbbox() if image.mode == 'RGBA' else (0, 0, width, height)
-        if not bbox:
-            raise ValueError(f'Image entièrement transparente : {path}')
-        left, top, right, bottom = bbox
-    numbers = ', '.join(str(n) for n in [width, height, left, top, right-left, bottom-top])
-    lines.append(f"  '{state}': HouseSpriteGeometry({numbers}),")
-lines.append('};\n')
+for theme, name in [('classic', 'houseSpriteGeometry'), ('intense', 'intenseHouseSpriteGeometry'), ('horror', 'horrorHouseSpriteGeometry')]:
+    lines.append(f'const {name} = <String, HouseSpriteGeometry>{{')
+    for state in ['day', 'night', 'eliminated']:
+        folder = target.parent if theme == 'classic' else target.parent / theme
+        path = folder / f'house_{state}.png'
+        with Image.open(path) as image:
+            width, height = image.size
+            alpha = image.getchannel('A') if image.mode == 'RGBA' else None
+            # Ignore nearly invisible export remnants on the premium sprites.
+            if alpha is not None and theme != 'classic':
+                alpha = alpha.point(lambda value: 255 if value > 8 else 0)
+            bbox = alpha.getbbox() if alpha is not None else (0, 0, width, height)
+            if not bbox:
+                raise ValueError(f'Image entièrement transparente : {path}')
+            left, top, right, bottom = bbox
+        numbers = ', '.join(str(n) for n in [width, height, left, top, right-left, bottom-top])
+        lines.append(f"  '{state}': HouseSpriteGeometry({numbers}),")
+    lines.append('};\n')
 geometry.write_text('\n'.join(lines), encoding='utf-8')
-print('Cadrage des trois maisons mis à jour, sans retoucher les images.')
+print('Cadrage des trois états de maison et des trois thèmes mis à jour, sans retoucher les images.')

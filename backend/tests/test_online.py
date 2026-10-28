@@ -23,7 +23,9 @@ def receive(socket, kind):
     not os.getenv("MORDEVIEL_DART"),
     reason="Set MORDEVIEL_DART for real engine integration",
 )
-def test_real_online_game_private_roles_host_permissions_and_reconnect():
+@pytest.mark.parametrize("close_via_http", [False, True])
+def test_real_online_game_private_roles_host_permissions_and_reconnect(close_via_http, tmp_path, monkeypatch):
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(tmp_path / "online.sqlite3"))
     with TestClient(app) as api, ExitStack() as stack:
         response = post_verified(api, "/rooms", json={"nickname": "Logan"})
         assert response.status_code == 201, response.text
@@ -146,7 +148,15 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
         )
         receive(resumed, "room.joined")
         assert receive(resumed, "game.private")["role"] in {"villager", "werewolf"}
-        mdj.send_json({"action": "room.close"})
+        if close_via_http:
+            response = api.delete(
+                f"/rooms/{code}",
+                headers={"Authorization": "Bearer " + room["host_token"]},
+            )
+            assert response.status_code == 204, response.text
+            assert api.app.state.rooms.get(code) is None
+        else:
+            mdj.send_json({"action": "room.close"})
         # Wait for the server shutdown handshake before cancelling TestClient tasks.
         for player in [*players[1:], resumed]:
             with pytest.raises(WebSocketDisconnect):

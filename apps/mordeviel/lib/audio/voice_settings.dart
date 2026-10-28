@@ -3,14 +3,33 @@ import 'classic_audio.dart';
 import 'package:local_host/local_host.dart' show mdjNarrationLines;
 import '../content/pack_store.dart';
 import '../content/downloads_screen.dart';
+import '../content/require_packs.dart';
 
 class VoiceSettings extends StatelessWidget {
   const VoiceSettings({super.key, required this.audio, this.onNarrationChange});
   final ClassicAudio audio;
   final void Function(String profile, bool automatic)? onNarrationChange;
-  void select(String id) => onNarrationChange == null
-      ? audio.selectVoice(id)
-      : onNarrationChange!(id, audio.roomAutomatic);
+  Future<void> select(BuildContext context, String id) async {
+    if (onNarrationChange != null &&
+        audio.roomAutomatic &&
+        !id.startsWith('classic_')) {
+      if (!await ensurePacksAvailable(
+            context,
+            ['voice-${id.replaceAll('_', '-')}'],
+            reason:
+                'Pour lire les annonces du MDJ avec cette voix, installe son pack audio. Les extraits de test sont déjà inclus.',
+          ) ||
+          !context.mounted) {
+        return;
+      }
+    }
+    if (onNarrationChange == null) {
+      audio.selectVoice(id);
+    } else {
+      onNarrationChange!(id, audio.roomAutomatic);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: audio,
@@ -47,7 +66,20 @@ class VoiceSettings extends StatelessWidget {
                 'Appels et rendormissements pour tout le salon. Désactive pour les annoncer toi-même.',
               ),
               value: audio.roomAutomatic,
-              onChanged: (value) => onNarrationChange!(selected.id, value),
+              onChanged: (value) async {
+                if (value && !selected.id.startsWith('classic_')) {
+                  if (!await ensurePacksAvailable(
+                        context,
+                        ['voice-${selected.id.replaceAll('_', '-')}'],
+                        reason:
+                            'Les annonces automatiques nécessitent le pack de la voix choisie.',
+                      ) ||
+                      !context.mounted) {
+                    return;
+                  }
+                }
+                onNarrationChange!(selected.id, value);
+              },
             ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
@@ -72,6 +104,7 @@ class VoiceSettings extends StatelessWidget {
             onChanged: (edition) {
               if (edition != null) {
                 select(
+                  context,
                   available
                       .firstWhere((profile) => profile.edition == edition)
                       .id,
@@ -92,7 +125,7 @@ class VoiceSettings extends StatelessWidget {
                 DropdownMenuItem(value: profile.id, child: Text(profile.label)),
             ],
             onChanged: (id) {
-              if (id != null) select(id);
+              if (id != null) select(context, id);
             },
           ),
           const SizedBox(height: 10),
@@ -119,7 +152,11 @@ class VoiceSettings extends StatelessWidget {
                 trailing: TextButton(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => const DownloadsScreen(),
+                      builder: (_) => DownloadsScreen(
+                        requiredPackIds: {
+                          'voice-${selected.id.replaceAll('_', '-')}',
+                        },
+                      ),
                     ),
                   ),
                   child: const Text('Ouvrir'),

@@ -9,4 +9,5 @@ export 'src/chat_stickers.g.dart';
 export 'src/narration_lines.g.dart';
 export 'src/game_host.dart';
 export 'src/online_host.dart';
+export 'src/online_errors.dart';
 export 'src/test_bots.dart';

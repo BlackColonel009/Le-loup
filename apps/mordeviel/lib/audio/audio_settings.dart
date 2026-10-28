@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'classic_audio.dart';
 import 'voice_settings.dart';
 import '../content/downloads_screen.dart';
+import '../content/require_packs.dart';
 import '../village/horror_ambience.dart';
 
 void showAudioSettings(
@@ -103,6 +104,17 @@ void showAudioSettings(
                 Text(
                   audio.error!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              if (audio.missingPackIds.isNotEmpty)
+                FilledButton.icon(
+                  onPressed: () => ensurePacksAvailable(
+                    context,
+                    audio.missingPackIds,
+                    reason:
+                        'Le son demandé nécessite un pack audio qui n’est pas installé sur cet appareil.',
+                  ),
+                  icon: const Icon(Icons.download),
+                  label: const Text('Télécharger le pack audio'),
                 ),
               const SizedBox(height: 12),
               const Text(

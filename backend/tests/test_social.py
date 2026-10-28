@@ -1,3 +1,4 @@
+import hashlib
 import os
 import secrets
 from contextlib import ExitStack
@@ -192,6 +193,31 @@ def test_invitations_close_history_and_are_not_duplicated(api):
     )
 
 
+def test_only_host_can_close_room_over_http_and_discovery_and_invites_disappear(api):
+    a, b = account(api, "Alice"), account(api, "Bob")
+    befriend(api, a, b)
+    r = room(api, a[0])
+    token = secrets.token_urlsafe(32)
+    r.token_hash = hashlib.sha256(token.encode()).digest()
+    social.invite_friends(api.app.state.community, r)
+    assert len(api.get("/social/rooms", headers=b[1]).json()["rooms"]) == 1
+    # Neither a guest, another account, nor even the owner's community token
+    # substitutes for the private credential issued to this room's MDJ.
+    assert api.delete("/rooms/606060").status_code == 401
+    assert api.delete("/rooms/606060", headers=b[1]).status_code == 403
+    assert api.delete("/rooms/606060", headers=a[1]).status_code == 403
+    assert api.app.state.rooms.get("606060") is r
+    headers = {"Authorization": "Bearer " + token}
+    assert api.delete("/rooms/606060", headers=headers).status_code == 204
+    assert r.closed
+    assert "606060" not in api.app.state.rooms.engines
+    assert api.get("/social/rooms", headers=b[1]).json()["rooms"] == []
+    assert api.get("/social/summary", headers=b[1]).json()["invitations"] == 0
+    history = api.get("/social/invitations", headers=b[1]).json()["invitations"]
+    assert len(history) == 1 and history[0]["status"] == "closed"
+    assert api.delete("/rooms/606060", headers=headers).status_code == 404
+
+
 def test_block_prevents_requests_and_invitations_both_directions(api):
     a, b = account(api, "Alice"), account(api, "Bob")
     befriend(api, a, b)
@@ -269,6 +295,21 @@ def test_stats_are_authoritative_idempotent_and_recent_includes_mdj(api):
     assert (
         api.post("/social/stats", headers=a[1], json={"wins": 999}).status_code == 404
     )
+
+
+def test_matches_with_bots_keep_recents_but_never_award_public_stats(api):
+    a, b, host = account(api, "Alice"), account(api, "Bob"), account(api, "Maitre")
+    r = room(api, host[0])
+    db = api.app.state.community
+    social.claim_player(db, r, "one", a[0])
+    social.claim_player(db, r, "two", b[0])
+    r.snapshot.update({"phase":"ended", "has_bots":True, "game":{
+        "phase":"ended", "winner_ids":["one"], "history":[
+            {"kind":"death", "target":"bot", "cause":"night", "night":1}
+        ]}})
+    social.sync_match(db, r)
+    assert api.get("/social/me", headers=a[1]).json()["stats"]["games"] == 0
+    assert len(api.get("/social/recent", headers=host[1]).json()["players"]) == 2
 
 
 def test_device_credential_is_scoped_and_survives_main_session_expiry(api):
