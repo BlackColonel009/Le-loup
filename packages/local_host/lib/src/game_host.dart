@@ -17,6 +17,7 @@ abstract interface class GameHost {
     List<String>? sentences,
   });
   void setLocked(bool value);
+  void setNarration({required String profile, required bool automatic});
   Future<void> kick(String id);
   void startGame();
   void startNight({int seconds = 120});

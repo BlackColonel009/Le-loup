@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:collection';
 import 'village_weather.dart';
 import 'role_rules.dart';
+import 'narration_lines.g.dart';
 part 'night_roles.dart';
 
 /// Moteur autoritaire, indépendant du transport et de Flutter.
@@ -19,7 +20,9 @@ class NightGame {
        alive = roles.keys.toSet(),
        _clock = clock ?? (() => DateTime.now().toUtc()),
        _weatherDraw = weatherDraw ?? Random.secure().nextInt,
-       _chanceDraw = chanceDraw ?? Random.secure().nextInt;
+       _chanceDraw = chanceDraw ?? Random.secure().nextInt {
+    _recordNarration('role_reveal');
+  }
 
   final Map<String, String> _roles;
   final List<String> sentenceOptions;
@@ -97,6 +100,18 @@ class NightGame {
 
   final DateTime Function() _clock;
   String phase = 'role_reveal';
+  String? _sleepNarration;
+  final List<Map<String, dynamic>> _narrationEvents = [];
+  void _recordNarration(String cue) {
+    if (!mdjNarrationLines.containsKey(cue)) return;
+    _narrationEvents.add({
+      'revision': revision,
+      'cue': 'mdj_$cue.wav',
+      'text': mdjNarrationLines[cue],
+    });
+    if (_narrationEvents.length > 32) _narrationEvents.removeAt(0);
+  }
+
   int revision = 0;
   int night = 0;
   final int Function(int) _weatherDraw;
@@ -202,25 +217,31 @@ class NightGame {
       ? 0
       : deadline!.difference(_clock()).inMilliseconds.clamp(0, 3600000);
 
-  String get announcement => switch (phase) {
-    'role_reveal' => 'Découvrez votre rôle à l’abri des regards.',
-    'sleep' => 'Le village s’endort. Fermez les yeux…',
-    'seer' =>
-      'Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?',
-    'wolves' => 'Loups-Garous, réveillez-vous. Quelle sera votre victime ?',
-    'witch' =>
-      'Les loups se rendorment. Sorcière, réveille-toi et prépare tes potions.',
-    'dawn' => 'Le jour se lève. Le village découvre les événements de la nuit.',
-    'hunter' => 'Chasseur, ton dernier souffle te laisse un dernier tir.',
-    'day' => 'Le village est réveillé. Place au débat.',
-    'voting' =>
-      'Le village vote. Désignez un joueur ou choisissez le vote blanc.',
-    'vote_result' => 'Le scrutin est terminé. Le village découvre le résultat.',
-    'ended' => _victoryAnnouncement(),
-    _ => _extraAnnouncement(),
-  };
+  String get announcement =>
+      _sleepNarration ??
+      mdjNarrationLines[phase] ??
+      switch (phase) {
+        'role_reveal' => 'Découvrez votre rôle à l’abri des regards.',
+        'sleep' => 'Le village s’endort. Fermez les yeux…',
+        'seer' =>
+          'Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?',
+        'wolves' => 'Loups-Garous, réveillez-vous. Quelle sera votre victime ?',
+        'witch' =>
+          'Les loups se rendorment. Sorcière, réveille-toi et prépare tes potions.',
+        'dawn' =>
+          'Le jour se lève. Le village découvre les événements de la nuit.',
+        'hunter' => 'Chasseur, ton dernier souffle te laisse un dernier tir.',
+        'day' => 'Le village est réveillé. Place au débat.',
+        'voting' =>
+          'Le village vote. Désignez un joueur ou choisissez le vote blanc.',
+        'vote_result' =>
+          'Le scrutin est terminé. Le village découvre le résultat.',
+        'ended' => _victoryAnnouncement(),
+        _ => _extraAnnouncement(),
+      };
 
   Map<String, dynamic> get publicState => {
+    'narration_events': [for (final e in _narrationEvents) Map.of(e)],
     if (phase == 'ended')
       'history': [for (final event in _history) _copyHistory(event)],
     'phase': phase,
@@ -381,9 +402,15 @@ class NightGame {
   }
 
   void _enter(String value) {
+    final closing =
+        value == 'sleep' && mdjNarrationLines.containsKey('close_$phase')
+        ? 'close_$phase'
+        : null;
+    _sleepNarration = closing == null ? null : mdjNarrationLines[closing];
     phase = value;
     _log('phase', {'label': announcement});
     revision++;
+    _recordNarration(closing ?? value);
     closed = false;
     _pausedMilliseconds = null;
     deadline = timed

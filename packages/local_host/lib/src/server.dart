@@ -105,6 +105,28 @@ class LocalHost implements GameHost {
   bool started = false;
   bool seerCampOnly = false;
   bool revealRolesOnDeath = true;
+  String narrationProfile = 'classic_male';
+  bool automaticNarration = true;
+  @override
+  void setNarration({required String profile, required bool automatic}) {
+    if (![
+      'classic_male',
+      'classic_female',
+      'intense_male',
+      'intense_female',
+      'duke',
+      'old_wizard',
+      'old_witch',
+      'werewolf',
+      'ghost',
+      'cold_killer',
+    ].contains(profile)) {
+      throw ArgumentError('Profil de voix inconnu.');
+    }
+    narrationProfile = profile;
+    automaticNarration = automatic;
+    _publish();
+  }
 
   void spinSentence() {
     if (_game == null) throw StateError('Aucune partie en cours.');
@@ -284,6 +306,8 @@ class LocalHost implements GameHost {
     'code': code,
     'host': nickname,
     'visual_pack': visualPack,
+    'narration_profile': narrationProfile,
+    'automatic_narration': automaticNarration,
     'sentence_options': List.of(sentenceOptions),
     'locked': locked,
     'phase': _game?.phase ?? (started ? 'role_reveal' : 'lobby'),

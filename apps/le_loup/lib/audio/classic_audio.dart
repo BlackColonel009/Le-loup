@@ -151,7 +151,13 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   Completer<void>? _cancelCurrentStory;
   String? error;
   VoiceProfile _voiceProfile = voiceProfiles.first;
-  VoiceProfile get voiceProfile => _voiceProfile;
+  VoiceProfile? _roomVoice;
+  bool roomAutomatic = true;
+  bool automaticNarrationPreferred = true;
+  VoiceProfile get voiceProfile => _roomVoice ?? _voiceProfile;
+  String? _narrationRoom;
+  int _narrationRevision = -1;
+  int _narrationGeneration = 0;
   Future<void> get settled => _pending;
 
   Future<void> initialize() async {
@@ -172,6 +178,8 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     effectLevel = (_preferences!.getDouble('audio.effect') ?? .65).clamp(0, 1);
     muted = _preferences!.getBool('audio.muted') ?? false;
     narrationEnabled = _preferences!.getBool('audio.narration') ?? true;
+    automaticNarrationPreferred =
+        _preferences!.getBool('audio.automaticMDJ') ?? true;
     _voiceProfile = _findVoice(_preferences!.getString('audio.voiceProfile'));
     notifyListeners();
   }
@@ -184,9 +192,14 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
+  void preferAutomaticNarration(bool value) {
+    automaticNarrationPreferred = value;
+    _saveSettings();
+  }
+
   bool get canPreviewVoice =>
       _backend != null &&
-      _voiceProfile.supports('preview.wav') &&
+      voiceProfile.supports('preview.wav') &&
       !muted &&
       _foreground &&
       narrationEnabled &&
@@ -274,7 +287,21 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
 
   void room(Map<String, dynamic>? room, {required bool isHost}) {
     _opening = false;
+    final voice = room?['narration_profile'] as String?;
+    final next = voice == null ? null : _findVoice(voice);
+    final automatic = room?['automatic_narration'] != false;
+    if (_roomVoice?.id != next?.id || roomAutomatic != automatic) {
+      _narrationGeneration++;
+      _roomVoice = next;
+      roomAutomatic = automatic;
+      _cancelStory();
+      _cueTicket++;
+      _queue((backend) => backend.stopCue());
+      notifyListeners();
+    }
     if (room == null || !isHost) {
+      _narrationRoom = null;
+      _narrationRevision = -1;
       silence();
       return;
     }
@@ -282,12 +309,54 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     final game = room['game'] as Map?;
     _updateWeather(game);
     if (game == null) {
+      _narrationRoom = room['code'] as String?;
+      _narrationRevision = -1;
       _lastCue = null;
       _currentVoice = null;
       return;
     }
     final phase = game['phase'] as String? ?? room['phase'] as String?;
     final potionId = '${room['code']}:${game['night']}';
+    if (phase == 'witch' &&
+        game['narration_events'] is List &&
+        (room['game_host'] as Map?)?['potion_used'] == true &&
+        _lastPotionCue != potionId) {
+      _lastPotionCue = potionId;
+      _story([(asset: 'witch_potion.wav', profile: 'old_witch')]);
+    }
+    if (game['narration_events'] is List) {
+      final previousVoice = _currentVoice;
+      final events = (game['narration_events'] as List).cast<Map>();
+      if (_narrationRoom != room['code']) {
+        _narrationRoom = room['code'] as String?;
+        _narrationRevision = events.isEmpty
+            ? -1
+            : (events.last['revision'] as int) - 1;
+      }
+      if (phase == 'ended') {
+        if (events.isNotEmpty)
+          _narrationRevision = events.last['revision'] as int;
+        _currentVoice = null;
+        if (previousVoice != null) notifyListeners();
+        return;
+      }
+      for (final event in events) {
+        if ((event['revision'] as int) <= _narrationRevision) continue;
+        _narrationRevision = event['revision'] as int;
+        _currentVoice = event['cue'] as String;
+        if (roomAutomatic) {
+          final generation = _narrationGeneration;
+          _story(
+            [(asset: _currentVoice!, profile: voiceProfile.id)],
+            automatic: true,
+            isCurrent: () => generation == _narrationGeneration,
+          );
+        }
+      }
+      if (previousVoice != _currentVoice) notifyListeners();
+      return;
+    }
+    if (!roomAutomatic) return;
     if (phase == 'witch' &&
         (room['game_host'] as Map?)?['potion_used'] == true &&
         _lastPotionCue != potionId) {
@@ -461,6 +530,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   void _story(
     List<({String asset, String? profile})> cues, {
     bool Function()? isCurrent,
+    bool automatic = false,
   }) {
     if (_backend == null ||
         _disposed ||
@@ -479,6 +549,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
           if (epoch != _epoch ||
               !_audible ||
               cancel.isCompleted ||
+              (automatic && !roomAutomatic) ||
               isCurrent?.call() == false) {
             break;
           }
@@ -534,7 +605,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       scene == AudioScene.welcome ||
       scene == AudioScene.host &&
           _currentVoice != null &&
-          _voiceProfile.supports(_currentVoice!);
+          voiceProfile.supports(_currentVoice!);
 
   void _play(
     String asset, {
@@ -543,7 +614,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     bool preview = false,
   }) {
     if (_stories > 0 && voice && !preview) return;
-    if (voice && !(profile ?? _voiceProfile).supports(asset)) return;
+    if (voice && !(profile ?? voiceProfile).supports(asset)) return;
     final epoch = _epoch;
     final ticket = ++_cueTicket;
     _queue((backend) async {
@@ -552,7 +623,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
           (!_audible && !(preview && !muted && _foreground && !_opening)) ||
           (voice && !narrationEnabled) ||
           (voice ? voiceLevel : effectLevel) == 0 ||
-          (voice && !(profile ?? _voiceProfile).supports(asset))) {
+          (voice && !(profile ?? voiceProfile).supports(asset))) {
         return;
       }
       _ducked = true;
@@ -561,7 +632,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       await backend.musicVolume(_bedVolume);
       if (scene == AudioScene.host) await _applyWeather(backend);
       await backend.cue(
-        voice ? (profile ?? _voiceProfile).assetFor(asset) : asset,
+        voice ? (profile ?? voiceProfile).assetFor(asset) : asset,
         voice ? voiceLevel : effectLevel,
       );
       if (error != null) {
@@ -650,6 +721,10 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       await _preferences?.setDouble('audio.effect', effectLevel);
       await _preferences?.setBool('audio.muted', muted);
       await _preferences?.setBool('audio.narration', narrationEnabled);
+      await _preferences?.setBool(
+        'audio.automaticMDJ',
+        automaticNarrationPreferred,
+      );
       await _preferences?.setString('audio.voiceProfile', _voiceProfile.id);
     });
   }

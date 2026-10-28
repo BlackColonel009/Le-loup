@@ -143,3 +143,31 @@ Détails fonctionnels : `ceremonies-fin-partie.md`.
   stylisées ne constituent pas une validation d’écoute.
 - Mise à jour du moteur serveur nécessaire pour le nouvel historique en ligne.
   Pas de migration ni nouvelle dépendance. Aucun APK compilé.
+
+## Ombres et narration commune — 28 octobre 2026
+
+- **164 tests Flutter réussis**, y compris l’existence et le texte exact des 280
+  annonces. **15 tests backend** et **17 contrôles moteur/réseau Dart réussis**.
+- Ombres vertes au sol dans le salon pour les joueurs prêts ; disparition à la
+  distribution. Ombres rouges sous les maisons des éliminés, dans les deux thèmes.
+  Captures du rendu réel vérifiées, avec un dégradé elliptique diffus.
+- 280 annonces du MDJ : 28 textes identiques dans chacun des dix profils validés.
+  Empreintes et formats vérifiés ; 328 fichiers neuronaux déclarés au total.
+  Les 280 annonces ont un contrôle de transcription locale, avec empreinte,
+  dans `audio-auditions/narration-transcription-checks.json`. Les confusions
+  phonétiques du transcripteur sur les voix stylisées restent distinctes d’une
+  appréciation artistique à l’écoute.
+- Profil et mode automatique partagés par le moteur. Contrôle sur quatre
+  clients WebSocket, puis derrière FastAPI : paramètres reçus par tous, sans
+  accès aux données privées et sans perte des rôles.
+- Réactivation sans relire le passé ; reconnexion sur le dernier appel seulement ;
+  aucune vieille annonce au retour sur une partie déjà terminée.
+- Les répliques de personnages gardent leur voix dédiée et les volumes restent
+  personnels. Les sons locaux restent exclusivement chez le MDJ.
+- Les tests backend attendent désormais la fermeture des WebSockets avant de
+  démonter leur contexte, pour éviter une course de fermeture du test.
+- Aucune compilation APK. La mise à jour en ligne nécessite un pull puis le
+  redémarrage du service `legendeofwolf`, sans migration ni nouvelle dépendance
+  Python/Dart sur le serveur.
+
+Voir `statuts-maisons.md`, `voix-parametrables.md` et `textes-voix-off.md`.

@@ -323,6 +323,10 @@ class _VillageMapState extends State<VillageMap> {
                                   width: intense ? 244 : 148,
                                   height: intense ? 266 : 170,
                                   child: _House(
+                                    ready:
+                                        game == null &&
+                                        widget.room['phase'] == 'lobby' &&
+                                        placement.player['ready'] == true,
                                     protected:
                                         placement.player['id'] ==
                                         widget.protectedPlayerId,
@@ -529,7 +533,9 @@ class _House extends StatelessWidget {
     required this.onChat,
     this.intense = false,
     this.protected = false,
+    this.ready = false,
   });
+  final bool ready;
   final bool protected;
   final bool intense;
   final Map<String, dynamic> player;
@@ -542,11 +548,28 @@ class _House extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
     clipBehavior: Clip.none,
     children: [
+      if (ready || state == 'eliminated')
+        Positioned(
+          left: intense ? -44 : -28,
+          right: intense ? -44 : -28,
+          top: intense ? 214 : 126,
+          height: intense ? 64 : 48,
+          child: IgnorePointer(
+            child: CustomPaint(
+              key: ValueKey(
+                'house-glow-${player['id']}-${ready ? 'ready' : 'eliminated'}',
+              ),
+              painter: _HouseGroundGlow(
+                ready ? const Color(0xFF45D879) : const Color(0xFFEF4545),
+              ),
+            ),
+          ),
+        ),
       Positioned.fill(
         child: Semantics(
           button: true,
           label:
-              'Maison de ${player['nickname']}${own ? ', ta maison' : ''}, ${state == 'eliminated'
+              'Maison de ${player['nickname']}${own ? ', ta maison' : ''}${ready ? ', prêt' : ''}, ${state == 'eliminated'
                   ? 'éliminé'
                   : player['connected'] == true
                   ? 'connecté'
@@ -587,6 +610,31 @@ class _House extends StatelessWidget {
         ),
     ],
   );
+}
+
+class _HouseGroundGlow extends CustomPainter {
+  const _HouseGroundGlow(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.translate(size.width / 2, size.height / 2);
+    canvas.scale(size.width / 2, size.height / 2);
+    final paint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+        color.withValues(alpha: .8),
+        color.withValues(alpha: .55),
+          color.withValues(alpha: 0),
+        ],
+      stops: const [0, .65, 1],
+      ).createShader(const Rect.fromLTRB(-1, -1, 1, 1));
+    canvas.drawCircle(Offset.zero, 1, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _HouseGroundGlow old) => old.color != color;
 }
 
 class _HouseLabel extends StatelessWidget {

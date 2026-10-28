@@ -51,6 +51,8 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
             }
         )
         receive(mdj, "command.ok")
+        mdj.send_json({"action": "narration.configure", "profile": "duke", "automatic": True})
+        receive(mdj, "command.ok")
         players = []
         tokens = []
         for index in range(4):
@@ -68,6 +70,8 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
             tokens.append(joined["token"])
             snapshot = receive(player, "room.snapshot")
             assert snapshot["visual_pack"] == "intense"
+            assert snapshot["narration_profile"] == "duke"
+            assert snapshot["automatic_narration"] is True
             assert "assignments" not in snapshot and "game_host" not in snapshot
             assert snapshot["players"][-1]["appearance"] == "female"
             player.send_json({"version": 1, "type": "player.ready", "ready": True})
@@ -82,6 +86,16 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
         receive(mdj, "command.ok")
         mdj.send_json({"action": "night.call", "call": "wolves"})
         receive(mdj, "command.ok")
+        mdj.send_json({"action": "narration.configure", "profile": "duke", "automatic": False})
+        receive(mdj, "command.ok")
+        for player in players:
+            for _ in range(100):
+                event = receive(player, "room.snapshot")
+                if event.get("automatic_narration") is False:
+                    assert event["narration_profile"] == "duke"
+                    break
+            else:
+                raise AssertionError("Shared narration mode was not received")
         # Host commands sent through the player channel never grant MDJ access.
         players[0].send_json({"type": "host.command", "action": "night.finish"})
         # A disconnected player can reclaim only their own private session.
@@ -93,6 +107,11 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
         receive(resumed, "room.joined")
         assert receive(resumed, "game.private")["role"] in {"villager", "werewolf"}
         mdj.send_json({"action": "room.close"})
+        # Wait for the server shutdown handshake before cancelling TestClient tasks.
+        for player in [*players[1:], resumed]:
+            with pytest.raises(WebSocketDisconnect):
+                for _ in range(100):
+                    player.receive_json()
 
 
 def test_room_validation_and_unknown_rooms():

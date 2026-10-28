@@ -86,6 +86,34 @@ flutter:
     - assets/audio/classic/neural/classic_male/death_piper.wav
     - assets/audio/classic/neural/classic_male/death_villager.wav
     - assets/audio/classic/neural/classic_male/ended_piper.wav
+    - assets/audio/classic/neural/classic_male/mdj_alpha.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_alpha.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_cupid.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_guardian.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_infection.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_piper.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_seer.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_witch.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_wolves.wav
+    - assets/audio/classic/neural/classic_male/mdj_cupid.wav
+    - assets/audio/classic/neural/classic_male/mdj_dawn.wav
+    - assets/audio/classic/neural/classic_male/mdj_day.wav
+    - assets/audio/classic/neural/classic_male/mdj_guardian.wav
+    - assets/audio/classic/neural/classic_male/mdj_hunter.wav
+    - assets/audio/classic/neural/classic_male/mdj_infection.wav
+    - assets/audio/classic/neural/classic_male/mdj_metamorph.wav
+    - assets/audio/classic/neural/classic_male/mdj_piper.wav
+    - assets/audio/classic/neural/classic_male/mdj_role_reveal.wav
+    - assets/audio/classic/neural/classic_male/mdj_scapegoat.wav
+    - assets/audio/classic/neural/classic_male/mdj_seer.wav
+    - assets/audio/classic/neural/classic_male/mdj_sleep.wav
+    - assets/audio/classic/neural/classic_male/mdj_vote_result.wav
+    - assets/audio/classic/neural/classic_male/mdj_voting.wav
+    - assets/audio/classic/neural/classic_male/mdj_white_wolf.wav
+    - assets/audio/classic/neural/classic_male/mdj_witch.wav
+    - assets/audio/classic/neural/classic_male/mdj_wolves.wav
     - assets/audio/classic/neural/classic_male/preview.wav
     - assets/audio/classic/neural/classic_male/wolves.wav
     - assets/audio/classic/neural/classic_female/death_cupid.wav
@@ -93,25 +121,193 @@ flutter:
     - assets/audio/classic/neural/classic_female/death_seer.wav
     - assets/audio/classic/neural/classic_female/death_villager_female.wav
     - assets/audio/classic/neural/classic_female/ended_lovers.wav
+    - assets/audio/classic/neural/classic_female/mdj_alpha.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_alpha.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_cupid.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_guardian.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_infection.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_piper.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_seer.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_witch.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_wolves.wav
+    - assets/audio/classic/neural/classic_female/mdj_cupid.wav
+    - assets/audio/classic/neural/classic_female/mdj_dawn.wav
+    - assets/audio/classic/neural/classic_female/mdj_day.wav
+    - assets/audio/classic/neural/classic_female/mdj_guardian.wav
+    - assets/audio/classic/neural/classic_female/mdj_hunter.wav
+    - assets/audio/classic/neural/classic_female/mdj_infection.wav
+    - assets/audio/classic/neural/classic_female/mdj_metamorph.wav
+    - assets/audio/classic/neural/classic_female/mdj_piper.wav
+    - assets/audio/classic/neural/classic_female/mdj_role_reveal.wav
+    - assets/audio/classic/neural/classic_female/mdj_scapegoat.wav
+    - assets/audio/classic/neural/classic_female/mdj_seer.wav
+    - assets/audio/classic/neural/classic_female/mdj_sleep.wav
+    - assets/audio/classic/neural/classic_female/mdj_vote_result.wav
+    - assets/audio/classic/neural/classic_female/mdj_voting.wav
+    - assets/audio/classic/neural/classic_female/mdj_white_wolf.wav
+    - assets/audio/classic/neural/classic_female/mdj_witch.wav
+    - assets/audio/classic/neural/classic_female/mdj_wolves.wav
     - assets/audio/classic/neural/classic_female/preview.wav
     - assets/audio/classic/neural/classic_female/wolves.wav
     - assets/audio/classic/neural/intense_male/death_guardian.wav
     - assets/audio/classic/neural/intense_male/death_hunter.wav
+    - assets/audio/classic/neural/intense_male/mdj_alpha.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_alpha.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_cupid.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_guardian.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_infection.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_piper.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_seer.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_witch.wav
+    - assets/audio/classic/neural/intense_male/mdj_close_wolves.wav
+    - assets/audio/classic/neural/intense_male/mdj_cupid.wav
+    - assets/audio/classic/neural/intense_male/mdj_dawn.wav
+    - assets/audio/classic/neural/intense_male/mdj_day.wav
+    - assets/audio/classic/neural/intense_male/mdj_guardian.wav
+    - assets/audio/classic/neural/intense_male/mdj_hunter.wav
+    - assets/audio/classic/neural/intense_male/mdj_infection.wav
+    - assets/audio/classic/neural/intense_male/mdj_metamorph.wav
+    - assets/audio/classic/neural/intense_male/mdj_piper.wav
+    - assets/audio/classic/neural/intense_male/mdj_role_reveal.wav
+    - assets/audio/classic/neural/intense_male/mdj_scapegoat.wav
+    - assets/audio/classic/neural/intense_male/mdj_seer.wav
+    - assets/audio/classic/neural/intense_male/mdj_sleep.wav
+    - assets/audio/classic/neural/intense_male/mdj_vote_result.wav
+    - assets/audio/classic/neural/intense_male/mdj_voting.wav
+    - assets/audio/classic/neural/intense_male/mdj_white_wolf.wav
+    - assets/audio/classic/neural/intense_male/mdj_witch.wav
+    - assets/audio/classic/neural/intense_male/mdj_wolves.wav
     - assets/audio/classic/neural/intense_male/preview.wav
     - assets/audio/classic/neural/intense_male/wolves.wav
+    - assets/audio/classic/neural/intense_female/mdj_alpha.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_alpha.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_cupid.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_guardian.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_infection.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_piper.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_seer.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_witch.wav
+    - assets/audio/classic/neural/intense_female/mdj_close_wolves.wav
+    - assets/audio/classic/neural/intense_female/mdj_cupid.wav
+    - assets/audio/classic/neural/intense_female/mdj_dawn.wav
+    - assets/audio/classic/neural/intense_female/mdj_day.wav
+    - assets/audio/classic/neural/intense_female/mdj_guardian.wav
+    - assets/audio/classic/neural/intense_female/mdj_hunter.wav
+    - assets/audio/classic/neural/intense_female/mdj_infection.wav
+    - assets/audio/classic/neural/intense_female/mdj_metamorph.wav
+    - assets/audio/classic/neural/intense_female/mdj_piper.wav
+    - assets/audio/classic/neural/intense_female/mdj_role_reveal.wav
+    - assets/audio/classic/neural/intense_female/mdj_scapegoat.wav
+    - assets/audio/classic/neural/intense_female/mdj_seer.wav
+    - assets/audio/classic/neural/intense_female/mdj_sleep.wav
+    - assets/audio/classic/neural/intense_female/mdj_vote_result.wav
+    - assets/audio/classic/neural/intense_female/mdj_voting.wav
+    - assets/audio/classic/neural/intense_female/mdj_white_wolf.wav
+    - assets/audio/classic/neural/intense_female/mdj_witch.wav
+    - assets/audio/classic/neural/intense_female/mdj_wolves.wav
     - assets/audio/classic/neural/intense_female/preview.wav
     - assets/audio/classic/neural/intense_female/wolves.wav
     - assets/audio/classic/neural/duke/death_scapegoat.wav
     - assets/audio/classic/neural/duke/ended_draw.wav
     - assets/audio/classic/neural/duke/ended_village.wav
+    - assets/audio/classic/neural/duke/mdj_alpha.wav
+    - assets/audio/classic/neural/duke/mdj_close_alpha.wav
+    - assets/audio/classic/neural/duke/mdj_close_cupid.wav
+    - assets/audio/classic/neural/duke/mdj_close_guardian.wav
+    - assets/audio/classic/neural/duke/mdj_close_infection.wav
+    - assets/audio/classic/neural/duke/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/duke/mdj_close_piper.wav
+    - assets/audio/classic/neural/duke/mdj_close_seer.wav
+    - assets/audio/classic/neural/duke/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/duke/mdj_close_witch.wav
+    - assets/audio/classic/neural/duke/mdj_close_wolves.wav
+    - assets/audio/classic/neural/duke/mdj_cupid.wav
+    - assets/audio/classic/neural/duke/mdj_dawn.wav
+    - assets/audio/classic/neural/duke/mdj_day.wav
+    - assets/audio/classic/neural/duke/mdj_guardian.wav
+    - assets/audio/classic/neural/duke/mdj_hunter.wav
+    - assets/audio/classic/neural/duke/mdj_infection.wav
+    - assets/audio/classic/neural/duke/mdj_metamorph.wav
+    - assets/audio/classic/neural/duke/mdj_piper.wav
+    - assets/audio/classic/neural/duke/mdj_role_reveal.wav
+    - assets/audio/classic/neural/duke/mdj_scapegoat.wav
+    - assets/audio/classic/neural/duke/mdj_seer.wav
+    - assets/audio/classic/neural/duke/mdj_sleep.wav
+    - assets/audio/classic/neural/duke/mdj_vote_result.wav
+    - assets/audio/classic/neural/duke/mdj_voting.wav
+    - assets/audio/classic/neural/duke/mdj_white_wolf.wav
+    - assets/audio/classic/neural/duke/mdj_witch.wav
+    - assets/audio/classic/neural/duke/mdj_wolves.wav
     - assets/audio/classic/neural/duke/preview.wav
     - assets/audio/classic/neural/duke/wolves.wav
     - assets/audio/classic/neural/old_wizard/death_elder.wav
     - assets/audio/classic/neural/old_wizard/death_wolf_father.wav
     - assets/audio/classic/neural/old_wizard/elder_curse.wav
+    - assets/audio/classic/neural/old_wizard/mdj_alpha.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_alpha.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_cupid.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_guardian.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_infection.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_piper.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_seer.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_witch.wav
+    - assets/audio/classic/neural/old_wizard/mdj_close_wolves.wav
+    - assets/audio/classic/neural/old_wizard/mdj_cupid.wav
+    - assets/audio/classic/neural/old_wizard/mdj_dawn.wav
+    - assets/audio/classic/neural/old_wizard/mdj_day.wav
+    - assets/audio/classic/neural/old_wizard/mdj_guardian.wav
+    - assets/audio/classic/neural/old_wizard/mdj_hunter.wav
+    - assets/audio/classic/neural/old_wizard/mdj_infection.wav
+    - assets/audio/classic/neural/old_wizard/mdj_metamorph.wav
+    - assets/audio/classic/neural/old_wizard/mdj_piper.wav
+    - assets/audio/classic/neural/old_wizard/mdj_role_reveal.wav
+    - assets/audio/classic/neural/old_wizard/mdj_scapegoat.wav
+    - assets/audio/classic/neural/old_wizard/mdj_seer.wav
+    - assets/audio/classic/neural/old_wizard/mdj_sleep.wav
+    - assets/audio/classic/neural/old_wizard/mdj_vote_result.wav
+    - assets/audio/classic/neural/old_wizard/mdj_voting.wav
+    - assets/audio/classic/neural/old_wizard/mdj_white_wolf.wav
+    - assets/audio/classic/neural/old_wizard/mdj_witch.wav
+    - assets/audio/classic/neural/old_wizard/mdj_wolves.wav
     - assets/audio/classic/neural/old_wizard/preview.wav
     - assets/audio/classic/neural/old_wizard/wolves.wav
     - assets/audio/classic/neural/old_witch/death_witch.wav
+    - assets/audio/classic/neural/old_witch/mdj_alpha.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_alpha.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_cupid.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_guardian.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_infection.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_piper.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_seer.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_witch.wav
+    - assets/audio/classic/neural/old_witch/mdj_close_wolves.wav
+    - assets/audio/classic/neural/old_witch/mdj_cupid.wav
+    - assets/audio/classic/neural/old_witch/mdj_dawn.wav
+    - assets/audio/classic/neural/old_witch/mdj_day.wav
+    - assets/audio/classic/neural/old_witch/mdj_guardian.wav
+    - assets/audio/classic/neural/old_witch/mdj_hunter.wav
+    - assets/audio/classic/neural/old_witch/mdj_infection.wav
+    - assets/audio/classic/neural/old_witch/mdj_metamorph.wav
+    - assets/audio/classic/neural/old_witch/mdj_piper.wav
+    - assets/audio/classic/neural/old_witch/mdj_role_reveal.wav
+    - assets/audio/classic/neural/old_witch/mdj_scapegoat.wav
+    - assets/audio/classic/neural/old_witch/mdj_seer.wav
+    - assets/audio/classic/neural/old_witch/mdj_sleep.wav
+    - assets/audio/classic/neural/old_witch/mdj_vote_result.wav
+    - assets/audio/classic/neural/old_witch/mdj_voting.wav
+    - assets/audio/classic/neural/old_witch/mdj_white_wolf.wav
+    - assets/audio/classic/neural/old_witch/mdj_witch.wav
+    - assets/audio/classic/neural/old_witch/mdj_wolves.wav
     - assets/audio/classic/neural/old_witch/preview.wav
     - assets/audio/classic/neural/old_witch/witch_potion.wav
     - assets/audio/classic/neural/old_witch/wolves.wav
@@ -120,14 +316,98 @@ flutter:
     - assets/audio/classic/neural/werewolf/death_white_wolf.wav
     - assets/audio/classic/neural/werewolf/ended_white_wolf.wav
     - assets/audio/classic/neural/werewolf/ended_wolves.wav
+    - assets/audio/classic/neural/werewolf/mdj_alpha.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_alpha.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_cupid.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_guardian.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_infection.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_piper.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_seer.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_witch.wav
+    - assets/audio/classic/neural/werewolf/mdj_close_wolves.wav
+    - assets/audio/classic/neural/werewolf/mdj_cupid.wav
+    - assets/audio/classic/neural/werewolf/mdj_dawn.wav
+    - assets/audio/classic/neural/werewolf/mdj_day.wav
+    - assets/audio/classic/neural/werewolf/mdj_guardian.wav
+    - assets/audio/classic/neural/werewolf/mdj_hunter.wav
+    - assets/audio/classic/neural/werewolf/mdj_infection.wav
+    - assets/audio/classic/neural/werewolf/mdj_metamorph.wav
+    - assets/audio/classic/neural/werewolf/mdj_piper.wav
+    - assets/audio/classic/neural/werewolf/mdj_role_reveal.wav
+    - assets/audio/classic/neural/werewolf/mdj_scapegoat.wav
+    - assets/audio/classic/neural/werewolf/mdj_seer.wav
+    - assets/audio/classic/neural/werewolf/mdj_sleep.wav
+    - assets/audio/classic/neural/werewolf/mdj_vote_result.wav
+    - assets/audio/classic/neural/werewolf/mdj_voting.wav
+    - assets/audio/classic/neural/werewolf/mdj_white_wolf.wav
+    - assets/audio/classic/neural/werewolf/mdj_witch.wav
+    - assets/audio/classic/neural/werewolf/mdj_wolves.wav
     - assets/audio/classic/neural/werewolf/preview.wav
     - assets/audio/classic/neural/werewolf/role_reveal.wav
     - assets/audio/classic/neural/werewolf/wolves.wav
     - assets/audio/classic/neural/ghost/death_angel.wav
     - assets/audio/classic/neural/ghost/ended_angel.wav
+    - assets/audio/classic/neural/ghost/mdj_alpha.wav
+    - assets/audio/classic/neural/ghost/mdj_close_alpha.wav
+    - assets/audio/classic/neural/ghost/mdj_close_cupid.wav
+    - assets/audio/classic/neural/ghost/mdj_close_guardian.wav
+    - assets/audio/classic/neural/ghost/mdj_close_infection.wav
+    - assets/audio/classic/neural/ghost/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/ghost/mdj_close_piper.wav
+    - assets/audio/classic/neural/ghost/mdj_close_seer.wav
+    - assets/audio/classic/neural/ghost/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/ghost/mdj_close_witch.wav
+    - assets/audio/classic/neural/ghost/mdj_close_wolves.wav
+    - assets/audio/classic/neural/ghost/mdj_cupid.wav
+    - assets/audio/classic/neural/ghost/mdj_dawn.wav
+    - assets/audio/classic/neural/ghost/mdj_day.wav
+    - assets/audio/classic/neural/ghost/mdj_guardian.wav
+    - assets/audio/classic/neural/ghost/mdj_hunter.wav
+    - assets/audio/classic/neural/ghost/mdj_infection.wav
+    - assets/audio/classic/neural/ghost/mdj_metamorph.wav
+    - assets/audio/classic/neural/ghost/mdj_piper.wav
+    - assets/audio/classic/neural/ghost/mdj_role_reveal.wav
+    - assets/audio/classic/neural/ghost/mdj_scapegoat.wav
+    - assets/audio/classic/neural/ghost/mdj_seer.wav
+    - assets/audio/classic/neural/ghost/mdj_sleep.wav
+    - assets/audio/classic/neural/ghost/mdj_vote_result.wav
+    - assets/audio/classic/neural/ghost/mdj_voting.wav
+    - assets/audio/classic/neural/ghost/mdj_white_wolf.wav
+    - assets/audio/classic/neural/ghost/mdj_witch.wav
+    - assets/audio/classic/neural/ghost/mdj_wolves.wav
     - assets/audio/classic/neural/ghost/preview.wav
     - assets/audio/classic/neural/ghost/wolves.wav
     - assets/audio/classic/neural/cold_killer/death_metamorph.wav
+    - assets/audio/classic/neural/cold_killer/mdj_alpha.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_alpha.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_cupid.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_guardian.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_infection.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_metamorph.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_piper.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_seer.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_white_wolf.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_witch.wav
+    - assets/audio/classic/neural/cold_killer/mdj_close_wolves.wav
+    - assets/audio/classic/neural/cold_killer/mdj_cupid.wav
+    - assets/audio/classic/neural/cold_killer/mdj_dawn.wav
+    - assets/audio/classic/neural/cold_killer/mdj_day.wav
+    - assets/audio/classic/neural/cold_killer/mdj_guardian.wav
+    - assets/audio/classic/neural/cold_killer/mdj_hunter.wav
+    - assets/audio/classic/neural/cold_killer/mdj_infection.wav
+    - assets/audio/classic/neural/cold_killer/mdj_metamorph.wav
+    - assets/audio/classic/neural/cold_killer/mdj_piper.wav
+    - assets/audio/classic/neural/cold_killer/mdj_role_reveal.wav
+    - assets/audio/classic/neural/cold_killer/mdj_scapegoat.wav
+    - assets/audio/classic/neural/cold_killer/mdj_seer.wav
+    - assets/audio/classic/neural/cold_killer/mdj_sleep.wav
+    - assets/audio/classic/neural/cold_killer/mdj_vote_result.wav
+    - assets/audio/classic/neural/cold_killer/mdj_voting.wav
+    - assets/audio/classic/neural/cold_killer/mdj_white_wolf.wav
+    - assets/audio/classic/neural/cold_killer/mdj_witch.wav
+    - assets/audio/classic/neural/cold_killer/mdj_wolves.wav
     - assets/audio/classic/neural/cold_killer/preview.wav
     - assets/audio/classic/neural/cold_killer/wolves.wav
     - assets/branding/

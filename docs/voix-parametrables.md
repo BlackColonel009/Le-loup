@@ -1,16 +1,16 @@
 # Refonte des voix OFF
 
-État actuel : dix timbres neuronaux intégrés directement à la demande de l’utilisateur.
-Les dix appels des loups et dix aperçus sont embarqués, ainsi que l’annonce de
-découverte du rôle avec la voix du loup-garou : 21 fichiers au total. Les autres
-annonces restent à produire ; leur disponibilité est affichée par profil dans
-les réglages et le MDJ les lit en attendant. Aucun repli vers les voix Windows.
-Les traitements longs ont été arrêtés à la demande de l’utilisateur, qui fait
-lui-même le build. La génération locale reste reprenable. Aucune compilation
-installable n’a été lancée.
+Les dix timbres neuronaux approuvés disposent chacun des 28 annonces du MDJ :
+découverte du rôle, endormissement, appels, rendormissements, journée et vote.
+Les 280 WAV sont embarqués, en plus des aperçus et des répliques de personnages.
+La source des textes est `tools/audio/narration_lines.json`, synchronisée avec
+le moteur par `tools/audio/sync_narration.py`. Liste complète : `textes-voix-off.md`.
+Le build installable reste à la charge de l’utilisateur.
 
 
-Les anciennes voix Microsoft Windows sont désactivées (`isApproved: false`) et exclues du pubspec. Une préférence mémorisée ne permet pas de les réactiver. Musique, griffures, hurlement et météo restent disponibles. Le MDJ lit les appels en attendant une narration validée.
+Les voix Microsoft Windows sont exclues du catalogue et du pubspec. Une ancienne
+préférence ne les réactive pas. Musique, griffures, hurlement et météo gardent
+leurs réglages indépendants.
 
 Une voix neuronale naturelle est acceptée par l’utilisateur. `isApproved` désigne la validation artistique, pas une origine humaine.
 
@@ -92,9 +92,37 @@ Avec le Python de cet environnement :
 - `tools/audio/sync_neural_assets.py` vérifie les références et les empreintes, puis
   déclare uniquement les WAV disponibles dans Flutter et son catalogue.
 
-Les trois références validées ne doivent pas être remplacées. Les auditions
-supplémentaires attendent la validation de l’utilisateur. Le moteur de génération
+Les dix références validées ne doivent pas être remplacées. Le moteur de génération
 reste sur le PC de développement ; les téléphones ne chargent que les fichiers audio.
+
+## Narrateur commun du salon
+
+Le MDJ choisit le profil avant la distribution, dans la préparation ou les
+paramètres sonores. `narration.configure` transmet uniquement l’identifiant du
+profil et le mode automatique, validés par le moteur. Les joueurs ne peuvent
+pas modifier ces réglages de salon. Les choix personnels de narrateur sont
+temporairement remplacés par celui du MDJ, puis retrouvés après le départ.
+Le choix du MDJ et sa préférence automatique sont mémorisés sur son appareil.
+
+En local, l’appareil du MDJ diffuse les annonces, idéalement sur une enceinte.
+En ligne, chaque appareil diffuse le même profil, selon ses volumes et son
+silence personnel. « Voix automatique du MDJ » peut être désactivé pour lire
+soi-même les consignes. Ce réglage partagé ne coupe pas la musique, les effets
+ni les répliques des personnages.
+
+Chaque changement de phase produit un événement public avec une révision,
+un nom de fichier et son texte, jamais une identité ou une cible. La fermeture
+d’un appel nocturne annonce le rendormissement du rôle appelé. Les annonces
+sont ordonnées et non répétées aux ticks du chronomètre. Réactiver l’automatique
+ne rejoue pas les appels passés. Une reconnexion reprend seulement le dernier
+appel disponible. L’espionnage de la Petite Fille garde sa discrétion, sans
+appel public spécifique.
+
+La génération optionnelle utilise `local_neural.py cues --narration --device cuda
+--batch-size 8` sur le poste de développement. Les prédictions résiduelles sont
+regroupées ; chaque réplique conserve sa propre référence, son cache, son
+échantillonnage et sa fin de séquence. Aucun collage de syllabes ou effet de
+transformation de voix n’est utilisé. Les générations existantes sont préservées.
 
 
 ## Réplique de potion

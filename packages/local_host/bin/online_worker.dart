@@ -31,6 +31,11 @@ Future<void> main() async {
               pack: command['pack'] as String?,
               sentences: (command['sentences'] as List?)?.cast<String>(),
             );
+          case 'narration.configure':
+            host.setNarration(
+              profile: command['profile'] as String,
+              automatic: command['automatic'] as bool,
+            );
           case 'lock':
             host.setLocked(command['locked'] as bool);
           case 'kick':

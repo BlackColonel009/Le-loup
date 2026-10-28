@@ -5,8 +5,48 @@ import 'package:le_loup/audio/voice_settings.dart';
 import 'package:le_loup/audio/voice_profiles.dart';
 import 'package:le_loup/design/game_theme.dart';
 import 'classic_audio_test.dart' show FakeAudio, recordedTestProfiles;
+import 'package:local_host/local_host.dart' show mdjNarrationLines;
 
 void main() {
+  testWidgets(
+    'Le mode automatique du MDJ est partagé et distinct du silence personnel',
+    (tester) async {
+      final audio = ClassicAudio(
+        backend: FakeAudio(),
+        profiles: recordedTestProfiles,
+        fadeDuration: Duration.zero,
+      );
+      addTearDown(audio.dispose);
+      audio.room({
+        'code': 'SALON1',
+        'narration_profile': 'duke',
+        'automatic_narration': true,
+      }, isHost: true);
+      await audio.settled;
+      String? profile;
+      bool? automatic;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: VoiceSettings(
+                audio: audio,
+                onNarrationChange: (id, enabled) {
+                  profile = id;
+                  automatic = enabled;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Voix automatique du MDJ'));
+      expect(profile, 'duke');
+      expect(automatic, isFalse);
+      expect(audio.narrationEnabled, isTrue);
+      expect(find.text('Écouter les voix sur cet appareil'), findsOneWidget);
+    },
+  );
   testWidgets(
     'Le catalogue réel affiche les dix voix autorisées et leur couverture',
     (tester) async {
@@ -25,7 +65,11 @@ void main() {
       expect(audio.availableVoices.length, 10);
       expect(
         find.textContaining('autres annonces restent à lire'),
-        findsOneWidget,
+        mdjNarrationLines.keys.every(
+              (c) => audio.voiceProfile.supports('mdj_$c.wav'),
+            )
+            ? findsNothing
+            : findsOneWidget,
       );
       expect(find.text('Masculine'), findsOneWidget);
       expect(find.text('Voix OFF'), findsOneWidget);

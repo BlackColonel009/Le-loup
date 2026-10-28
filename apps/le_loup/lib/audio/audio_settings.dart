@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'classic_audio.dart';
 import 'voice_settings.dart';
 
-void showAudioSettings(BuildContext context) => showModalBottomSheet<void>(
+void showAudioSettings(
+  BuildContext context, {
+  void Function(String, bool)? onNarrationChange,
+}) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   builder: (context) => SafeArea(
@@ -45,7 +48,7 @@ void showAudioSettings(BuildContext context) => showModalBottomSheet<void>(
                 value: audio.muted,
                 onChanged: (value) => audio.levels(mute: value),
               ),
-              VoiceSettings(audio: audio),
+              VoiceSettings(audio: audio, onNarrationChange: onNarrationChange),
               volume(
                 'Musique',
                 audio.musicLevel,
@@ -91,7 +94,7 @@ void showAudioSettings(BuildContext context) => showModalBottomSheet<void>(
                       'Musique : composition originale pour Le Loup.\n'
                       'Griffures d’ouverture : effets originaux synthétisés pour Le Loup.\n'
                       'Pluie et grondement : créations originales pour Le Loup.\n'
-                      'Narration neuronale : trois voix validées. Le maître du jeu lit les annonces encore en préparation.',
+                      'Narration neuronale : profils expressifs validés, annonces communes choisies par le maître du jeu.',
                     ),
                   ),
                 ],
@@ -105,11 +108,13 @@ void showAudioSettings(BuildContext context) => showModalBottomSheet<void>(
 );
 
 class AudioSettingsButton extends StatelessWidget {
-  const AudioSettingsButton({super.key});
+  const AudioSettingsButton({super.key, this.onNarrationChange});
+  final void Function(String, bool)? onNarrationChange;
   @override
   Widget build(BuildContext context) => IconButton(
     tooltip: 'Ambiance sonore',
-    onPressed: () => showAudioSettings(context),
+    onPressed: () =>
+        showAudioSettings(context, onNarrationChange: onNarrationChange),
     icon: const Icon(Icons.volume_up_outlined),
   );
 }

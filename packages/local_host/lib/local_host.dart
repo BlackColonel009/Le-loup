@@ -4,5 +4,6 @@ export 'src/village_weather.dart';
 export 'src/local_invitation.dart';
 export 'src/role_rules.dart';
 export 'src/night_game.dart';
+export 'src/narration_lines.g.dart';
 export 'src/game_host.dart';
 export 'src/online_host.dart';

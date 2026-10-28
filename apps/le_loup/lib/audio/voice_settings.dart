@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'classic_audio.dart';
+import 'package:local_host/local_host.dart' show mdjNarrationLines;
 
 class VoiceSettings extends StatelessWidget {
-  const VoiceSettings({super.key, required this.audio});
+  const VoiceSettings({super.key, required this.audio, this.onNarrationChange});
   final ClassicAudio audio;
+  final void Function(String profile, bool automatic)? onNarrationChange;
+  void select(String id) => onNarrationChange == null
+      ? audio.selectVoice(id)
+      : onNarrationChange!(id, audio.roomAutomatic);
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: audio,
@@ -32,9 +37,23 @@ class VoiceSettings extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('Voix OFF', style: Theme.of(context).textTheme.titleLarge),
+          if (onNarrationChange != null)
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Voix automatique du MDJ'),
+              subtitle: const Text(
+                'Appels et rendormissements pour tout le salon. Désactive pour les annoncer toi-même.',
+              ),
+              value: audio.roomAutomatic,
+              onChanged: (value) => onNarrationChange!(selected.id, value),
+            ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: const Text('Activer les voix OFF'),
+            title: Text(
+              onNarrationChange == null
+                  ? 'Activer les voix OFF'
+                  : 'Écouter les voix sur cet appareil',
+            ),
             value: audio.narrationEnabled,
             onChanged: (value) => audio.levels(narration: value),
           ),
@@ -50,7 +69,7 @@ class VoiceSettings extends StatelessWidget {
             ],
             onChanged: (edition) {
               if (edition != null) {
-                audio.selectVoice(
+                select(
                   available
                       .firstWhere((profile) => profile.edition == edition)
                       .id,
@@ -71,15 +90,17 @@ class VoiceSettings extends StatelessWidget {
                 DropdownMenuItem(value: profile.id, child: Text(profile.label)),
             ],
             onChanged: (id) {
-              if (id != null) audio.selectVoice(id);
+              if (id != null) select(id);
             },
           ),
           const SizedBox(height: 10),
           Text(selected.description),
-          if (!ClassicAudio.voiceAssets.every(selected.supports)) ...[
+          if (!mdjNarrationLines.keys.every(
+            (cue) => selected.supports('mdj_$cue.wav'),
+          )) ...[
             const SizedBox(height: 8),
             Text(
-              '${ClassicAudio.voiceAssets.where(selected.supports).length}/${ClassicAudio.voiceAssets.length} annonces disponibles. Les autres annonces restent à lire par le maître du jeu pendant leur préparation.',
+              '${mdjNarrationLines.keys.where((cue) => selected.supports('mdj_$cue.wav')).length}/${mdjNarrationLines.length} annonces disponibles. Les autres annonces restent à lire par le maître du jeu pendant leur préparation.',
             ),
           ],
           const SizedBox(height: 10),
@@ -89,7 +110,9 @@ class VoiceSettings extends StatelessWidget {
             label: const Text('Écouter cette voix'),
           ),
           Text(
-            'Voix validée. Le choix est conservé et s’applique au prochain appel.',
+            onNarrationChange != null
+                ? 'Le profil choisi par le MDJ s’applique à tous les joueurs du salon.'
+                : 'Voix validée. Le choix est conservé et s’applique au prochain appel.',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),

@@ -185,6 +185,12 @@ class OnlineHost implements GameHost {
   @override
   void setLocked(bool value) => _send('lock', {'locked': value});
   @override
+  void setNarration({required String profile, required bool automatic}) =>
+      _send('narration.configure', {
+        'profile': profile,
+        'automatic': automatic,
+      });
+  @override
   Future<void> kick(String id) => command('kick', {'player_id': id});
   @override
   void startGame() => _send('start');

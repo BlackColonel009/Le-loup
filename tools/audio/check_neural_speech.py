@@ -1,5 +1,6 @@
 """Local transcription checks; reports content differences, not acting quality."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -29,6 +30,9 @@ def main():
     parser.add_argument('--fetch', action='store_true')
     parser.add_argument('--pack', action='store_true')
     parser.add_argument('--events', action='store_true', help='Check only extra character/event lines')
+    parser.add_argument('--narration', action='store_true', help='Check only shared MDJ announcements')
+    parser.add_argument('--profile', help='Limit transcription to one voice profile')
+    parser.add_argument('--resume', action='store_true', help='Keep unchanged files already transcribed')
     args = parser.parse_args()
     if args.fetch:
         repo = 'Systran/faster-whisper-base'
@@ -49,15 +53,27 @@ def main():
     if args.pack:
         extra = json.loads((ROOT / 'tools/audio/neural_profiles.json').read_text(encoding='utf-8')).get('extra_lines', {})
         for manifest_path in (ROOT / 'apps/le_loup/assets/audio/classic/neural').glob('*/manifest.json'):
+            if args.profile and manifest_path.parent.name != args.profile: continue
             manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
             tasks.extend((manifest_path.parent / (cue + '.wav'), info['text']) for cue, info in manifest['cues'].items()
-                         if not args.events or cue in extra.get(manifest_path.parent.name, {}))
+                         if (not args.events or cue in extra.get(manifest_path.parent.name, {}))
+                         and (not args.narration or cue.startswith('mdj_')))
     else:
         for audio in (ROOT / 'docs/audio-auditions').glob('*.wav'):
             metadata = json.loads(audio.with_suffix('.json').read_text(encoding='utf-8'))
             tasks.append((audio, metadata['text']))
+    output = ROOT / 'docs/audio-auditions' / ('narration-transcription-checks.json' if args.narration else 'events-transcription-checks.json' if args.events else 'pack-transcription-checks.json' if args.pack else 'transcription-checks.json')
+    cached = {}
+    if args.resume and output.exists():
+        cached = {entry['file']: entry for entry in json.loads(output.read_text(encoding='utf-8'))['files']}
     report = []
     for path, expected in tasks:
+        identity = str(path.relative_to(ROOT))
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        previous = cached.get(identity)
+        if previous and previous.get('sha256') == digest and previous['expected'] == expected:
+            report.append(previous)
+            continue
         audio, sample_rate = sf.read(str(path), dtype='float32')
         if audio.ndim > 1:
             audio = audio.mean(axis=1)
@@ -67,10 +83,9 @@ def main():
             condition_on_previous_text=False, vad_filter=False)
         actual = ' '.join(s.text.strip() for s in segments)
         entry = {'file': str(path.relative_to(ROOT)), 'expected': expected,
-                 'transcribed': actual, 'word_error_rate': word_error(expected, actual)}
+                 'transcribed': actual, 'word_error_rate': word_error(expected, actual), 'sha256': digest}
         report.append(entry)
         print(path.parent.name + '/' + path.name + ': ' + str(entry['word_error_rate']) + ' | ' + actual, flush=True)
-    output = ROOT / 'docs/audio-auditions' / ('events-transcription-checks.json' if args.events else 'pack-transcription-checks.json' if args.pack else 'transcription-checks.json')
     output.write_text(json.dumps({'method': 'faster-whisper base, CPU int8, French',
         'note': 'ASR can mishear character voices; this is not a listening approval.',
         'files': report}, ensure_ascii=False, indent=2), encoding='utf-8')

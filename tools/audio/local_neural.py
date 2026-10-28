@@ -47,6 +47,8 @@ def main():
     parser.add_argument('--limit', type=int)
     parser.add_argument('--cue', help='Render only this logical cue')
     parser.add_argument('--events', action='store_true', help='Render only extra character/event lines')
+    parser.add_argument('--narration', action='store_true', help='Render the complete shared MDJ announcements')
+    parser.add_argument('--batch-size', type=int, default=1)
     parser.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
     args = parser.parse_args()
     kind = 'design' if args.mode == 'auditions' else 'base'
@@ -55,6 +57,7 @@ def main():
     if args.device == 'cuda':
         import onnxruntime as ort
         ort.preload_dlls(directory='')
+        ort.set_default_logger_severity(3)
         if 'CUDAExecutionProvider' not in ort.get_available_providers():
             raise RuntimeError('CUDA runtime unavailable; use CPU environment')
         components = model / 'cuda_local'
@@ -81,7 +84,7 @@ def main():
     profiles = candidates if args.mode == 'auditions' else by_id
     count = 0
     for index, profile in enumerate(profiles):
-        if args.profile and profile != args.profile:
+        if args.profile and profile not in args.profile.split(','):
             continue
         folder = ROOT / 'docs/audio-auditions'
         metadata_path = folder / (profile + '.json')
@@ -118,6 +121,34 @@ def main():
             lines = json.loads((ROOT / 'tools/audio/voice_profiles.json').read_text(encoding='utf-8'))['lines'][by_id[profile]['edition']]
             extra = json.loads((ROOT / 'tools/audio/neural_profiles.json').read_text(encoding='utf-8')).get('extra_lines', {}).get(profile, {})
             lines = {**lines, **extra}
+            if args.narration:
+                lines = {'mdj_' + cue: text for cue, text in json.loads(
+                    (ROOT / 'tools/audio/narration_lines.json').read_text(encoding='utf-8')).items()}
+            if args.batch_size > 1:
+                from batch_neural import generate_batch
+                pending = [(cue, text) for cue, text in lines.items()
+                    if cue != 'preview' and cue not in manifest['cues']
+                    and (not args.cue or cue == args.cue)
+                    and (not args.events or cue in extra)]
+                if args.limit: pending = pending[:args.limit - count]
+                for offset in range(0, len(pending), args.batch_size):
+                    chunk = pending[offset:offset + args.batch_size]
+                    started = time.monotonic()
+                    print('Rendering batch ' + profile + ': ' + ', '.join(c for c, _ in chunk), flush=True)
+                    generated = generate_batch(pipe, [t for _, t in chunk], reference,
+                        metadata['text'], [1701 + count + i for i in range(len(chunk))])
+                    for (cue, text), codes in zip(chunk, generated):
+                        if not 0 < len(codes) < 350:
+                            raise ValueError('Batch generation did not complete normally: ' + cue)
+                        details = save(pipe.decode_chunked(codes[None]), target / (cue + '.wav'))
+                        manifest['cues'][cue] = {**details, 'text': text, 'generation': source,
+                            'generated_locally': True, 'precision': 'int4', 'batch_size': len(chunk)}
+                        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+                        count += 1
+                        print(profile + '/' + cue + ': ready', flush=True)
+                    print('Batch ready in ' + str(round(time.monotonic()-started, 1)) + 's', flush=True)
+                if args.limit and count >= args.limit: return
+                continue
             for cue, text in lines.items():
                 if args.events and cue not in extra:
                     continue

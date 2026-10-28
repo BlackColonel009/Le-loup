@@ -61,6 +61,538 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "mdj_role_reveal": {
+      "seconds": 3.04,
+      "sha256": "c4fac884e591b1e803d9029d7eb42b2590ed889fa2237de65c71e39c609496dc",
+      "text": "Découvrez votre rôle à l’abri des regards.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_sleep": {
+      "seconds": 3.44,
+      "sha256": "3ef5dff95f063180a2202e010ae648cb1076a133852c15705a78304c5102a236",
+      "text": "Le village s’endort. Fermez les yeux.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_seer": {
+      "seconds": 4.24,
+      "sha256": "0ff6d506ce9f7c707a276aebcc3d9ae69cacbb2959ea8f0dc073b952ee33ad9d",
+      "text": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_wolves": {
+      "seconds": 4.32,
+      "sha256": "d7ea9ad99335bb526f3706488100e2b5fa85111b378499f4f30a4d199c0da20c",
+      "text": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_witch": {
+      "seconds": 3.52,
+      "sha256": "782a5fd875eb72e8ff69f16697bd4679d5b8d29e5d32bdec5c4d1acd10678f75",
+      "text": "Sorcière, réveille-toi et prépare tes potions.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_metamorph": {
+      "seconds": 4.0,
+      "sha256": "d2becfa9c48c1e309cf65d487277934ebe7d6aa8ff3a6ad8ca19cbf74d87475b",
+      "text": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_cupid": {
+      "seconds": 3.52,
+      "sha256": "ada3ea61e882cd808da567620965e48b02d1006f1a4d0a5606908a7213f77c2c",
+      "text": "Cupidon, réveille-toi. Désigne les deux amoureux.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_guardian": {
+      "seconds": 5.6,
+      "sha256": "60b8dacf65ad7f57b181839963f91922a69b49985d0a648b39efe40410d48a35",
+      "text": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_alpha": {
+      "seconds": 4.64,
+      "sha256": "da7eca34f23d27d87191daa726d30db268c33554710a1c0e59d6abd0c314491b",
+      "text": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_infection": {
+      "seconds": 4.24,
+      "sha256": "473a29c2571c5f48c00d39d44e2e53752c9f582dd7b8fe995903581d4faab3e8",
+      "text": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_white_wolf": {
+      "seconds": 4.08,
+      "sha256": "ef5a6003f3229803c1707bd38ba1ce88ab1266f8cdd9d0e050fbc3816a069276",
+      "text": "Loup Blanc, réveille-toi. Choisis ta cible.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_piper": {
+      "seconds": 4.24,
+      "sha256": "44e74b53cc8e19621ac977c827b26d5c04cc97a15f5add06255e029194ac1be7",
+      "text": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_scapegoat": {
+      "seconds": 3.6,
+      "sha256": "2598614a0c12e748ecc0f4bfd7f1c3a446d6cccc60463c1fd70128c2f8938e09",
+      "text": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_dawn": {
+      "seconds": 4.48,
+      "sha256": "70348333278e2923325638f59980a31741c977c8e325ea2e047852e386fb0e50",
+      "text": "Le jour se lève. Le village découvre les événements de la nuit.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_hunter": {
+      "seconds": 4.08,
+      "sha256": "96188349c9a57f035d8218f596ed4ef8629b92c70a5e72492c08cdc1f5dbeee7",
+      "text": "Chasseur, ton dernier souffle te laisse un dernier tir.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_day": {
+      "seconds": 3.52,
+      "sha256": "cf2eacd8443ef5e482930568c3f009446f0b636028d97517b62f2e6502baf8be",
+      "text": "Le village est réveillé. Place au débat.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_voting": {
+      "seconds": 4.16,
+      "sha256": "6605565a9053cb6c32a782a2ae303ad58fa9cdd5722644a6da597b7971649cd5",
+      "text": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_vote_result": {
+      "seconds": 4.56,
+      "sha256": "c362d431174d0a6cce02c2cfdc73893bd5c8c6f5cd58d87d9472201ed9274cd3",
+      "text": "Le scrutin est terminé. Le village découvre le résultat.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_seer": {
+      "seconds": 3.36,
+      "sha256": "91794909f93e344b82f79b929dad9713293976ba110da23746b5c01f47a7b1e6",
+      "text": "Voyante, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_wolves": {
+      "seconds": 3.28,
+      "sha256": "309faaa95265adfd329e7b47592d0428bb167c74b7ea011ea9227b56900c8885",
+      "text": "Loups-Garous, refermez les yeux et rendormez-vous.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_witch": {
+      "seconds": 3.28,
+      "sha256": "65107ea50312355c09ab7bc59caa63f554e5ab34a6859f78cfeddb5e37331235",
+      "text": "Sorcière, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_metamorph": {
+      "seconds": 3.52,
+      "sha256": "7f69dba7418625fdadba5fd79c8ead5fc03d23c6866a0f7c700fdc9dc49e514b",
+      "text": "Métamorphe, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_cupid": {
+      "seconds": 3.04,
+      "sha256": "10cf5940d7f43d85c887d71830d0a624fb076c7767a92b5df53997183c5e132b",
+      "text": "Cupidon, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_guardian": {
+      "seconds": 3.76,
+      "sha256": "6ba195e63d51351a7033a44ce1164401fe37a0dce6fc4208a4e034e53f6cb4aa",
+      "text": "Salvateur, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 8
+    },
+    "mdj_close_alpha": {
+      "seconds": 4.48,
+      "sha256": "b111dffd1e0e2c1a122a937ee87bac1dec9e8d652119e0d485ccef4cfbb55953",
+      "text": "Grand Méchant Loup, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 4
+    },
+    "mdj_close_infection": {
+      "seconds": 3.52,
+      "sha256": "c9bce95e7338a813bc869616d07209d25d4e737183ade123b0f4ab3616974174",
+      "text": "Père des Loups, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 4
+    },
+    "mdj_close_white_wolf": {
+      "seconds": 3.68,
+      "sha256": "a9a574cc9feb02126e98cdf835382efba52ce3bc77273b6efef17924a0e6ed0e",
+      "text": "Loup Blanc, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 4
+    },
+    "mdj_close_piper": {
+      "seconds": 4.32,
+      "sha256": "3af610464e2a4bd5ee47cb64ca0f97ce7c609056622596b014a6c52b7a0f2f94",
+      "text": "Joueur de Flûte, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4",
+      "batch_size": 4
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

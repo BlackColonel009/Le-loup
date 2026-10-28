@@ -26,6 +26,7 @@ ROOM_LIFETIME = int(os.getenv("LE_LOUP_ROOM_LIFETIME", "21600"))
 MAX_MESSAGE = 16384
 HOST_ACTIONS = {
     "configure",
+    "narration.configure",
     "lock",
     "kick",
     "start",

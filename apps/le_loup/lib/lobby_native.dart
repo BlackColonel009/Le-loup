@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'audio/classic_audio.dart';
 import 'audio/audio_settings.dart';
+import 'audio/voice_settings.dart';
 import 'design/game_theme.dart';
 import 'joining/invite_qr_card.dart';
 import 'joining/scan_invitation_screen.dart';
@@ -208,13 +209,22 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   Map<String, dynamic>? _pendingEnding;
 
   void _refreshVillage() {
-    ClassicAudio.instance.room(_room, isHost: _host != null || widget.online);
+    ClassicAudio.instance.room(
+      _room,
+      isHost: (_host != null || widget.online) && _connected,
+    );
     _villageFeed.value = {
       'room': _room,
       'private': _nightPrivate,
       'connected': _connected,
       'is_host': _host != null,
     };
+  }
+
+  void _configureNarration(String profile, bool automatic) {
+    ClassicAudio.instance.selectVoice(profile);
+    ClassicAudio.instance.preferAutomaticNarration(automatic);
+    _host?.setNarration(profile: profile, automatic: automatic);
   }
 
   void _receiveDeaths(Map<String, dynamic> room) {
@@ -387,7 +397,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             ),
           )
         : null,
-    audioControl: _host != null ? const AudioSettingsButton() : null,
+    audioControl: _host != null
+        ? AudioSettingsButton(onNarrationChange: _configureNarration)
+        : null,
     destination: _destination,
     phase: _room!['phase'] as String,
     isHost: _host != null,
@@ -494,7 +506,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
 
   @override
   void dispose() {
-    ClassicAudio.instance.silence();
+    ClassicAudio.instance.room(null, isHost: false);
     _joinTimeout?.cancel();
     _subscription?.cancel();
     _client?.dispose();
@@ -552,11 +564,16 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     });
     try {
       if (hosting) {
+        final selectedNarrator = ClassicAudio.instance.voiceProfile.id;
         final GameHost host = widget.online
             ? OnlineHost(_address.text)
             : LocalHost();
         _host = host;
         await host.start(nickname: _name.text, port: 0);
+        host.setNarration(
+          profile: selectedNarrator,
+          automatic: ClassicAudio.instance.automaticNarrationPreferred,
+        );
         final addresses = await host.addresses();
         await _keepAwake(true);
         if (!mounted) {
@@ -1233,6 +1250,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               onChanged: (value) => _host!.setLocked(!value),
             ),
             const Divider(),
+            VoiceSettings(
+              audio: ClassicAudio.instance,
+              onNarrationChange: _configureNarration,
+            ),
             DropdownButtonFormField<String>(
               isExpanded: true,
               initialValue: _room?['visual_pack'] as String? ?? 'classic',
