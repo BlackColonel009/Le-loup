@@ -3,1960 +3,1960 @@
   "note": "ASR can mishear character voices; this is not a listening approval.",
   "files": [
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "021f6cb9a357698e3bc35aeaf2ea94865915b7a82c5a50677393bb89f6f0db6f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endorde, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "29c5f88a91b03203236836665edbebf7229724aee7ede43aaa595f6664cac767"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quelle identité souhaite tu découvrir ?",
       "word_error_rate": 0.111,
       "sha256": "e63b5ae73dcaea72ef27fc59668ff5ecdeb21e852e982c73075409fd9a9bc1ce"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Lou Karou, réveillez-vous. Quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "d08c54e03d4073b19961f49daa9da9da6c5c3ca2ea1d24e9a061599144ed8c09"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.0,
       "sha256": "9f033cdcc24c6a0126036ea3a5e992d06e675211fff85d051faec093b3612fd5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Mes t'amorphes, réveille-toi. Choisis les cartes à échanger.",
       "word_error_rate": 0.375,
       "sha256": "fdd46ce1541fd35470763a01fc4737d39a8cc4a95faad7dbb5b3724af80cded5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidant, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.143,
       "sha256": "a903e2eda8b9f5a6fc96ac20b51cda7d0d4e78c0201fdff5d7c9d66f2e28400e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvateur, réveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.0,
       "sha256": "e067aacc9be379cfdcafbaf79b3395b0f07e0a690e57cf33ae456ac462b7b39d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant l'eau, réveille-toi des innes à secondes victimes.",
       "word_error_rate": 0.778,
       "sha256": "2ff08c622b04f756e78df137eec0f8e9656f19e453d6f71a8aa9834f4de2a949"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi. Veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "d0edb3d8a301b7fd93cb27d0aa20e066624a0844da991ffbb16a895df7cdfeb8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "Le blanc, réveille-toi, choisit à cible.",
       "word_error_rate": 0.429,
       "sha256": "5c60b8b49c71218abdb64e2ce1ced8157416803d8bd2af1ed4ba87d4c7b9639c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueur de flûte réveille-toi, qui veux-tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "82c41a82c26cb525c54166c4cdd527a0f236c34cee936aca44aa7ed6ec602f57"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Book et Miss air désignent les joueurs qui pourront voter demain.",
       "word_error_rate": 0.556,
       "sha256": "49e4cbb7cdd05da61a2d7e87736e468a38f6b3cb308ad4922d9c53921c2b6954"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "le jour soleil. Le village découvre les événements de la nuit.",
       "word_error_rate": 0.167,
       "sha256": "52cd837570fb20083f9839b72dfdbfd9a33eebbb4fe80d964777ef6c2ca42068"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle, te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "881c58332089ca44b74f72c7c59590fb906498517982b139dfdb11131b70d73b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé. Place au débat.",
       "word_error_rate": 0.0,
       "sha256": "7312088613b991aebaf1326f9c648746a9fd45d355615cf57f24d38f63ff3c42"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigner un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "9224f0abb401b98a88f7a7a2d7f391124eafeef06f1e91acdb2ea2cb97a580db"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "79459aa5be1ec4fb0f60d407cd23e563a89c82959a250cb9c3e6ee718018a7fb"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyant, referme les yeux et rend ortois.",
       "word_error_rate": 0.429,
       "sha256": "5fc3795b50dcc11dadb035c074b582d13a1815436b564d7cd60d6e3912e44850"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Lou Caro, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "0f8c746d82cbb4510df87116a897531d636ccd25c5024ed6f5223e349b4020b8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, ferme les yeux et rendort-toi.",
       "word_error_rate": 0.286,
       "sha256": "b50c78f55be329db92d09bdbb015ecfc127bad6c3664babf475f9a696f42b1be"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mette amorphe, referme les yeux et rende ortois.",
       "word_error_rate": 0.571,
       "sha256": "453126cda76dfffee90519ea596d43bbc332b53075c374d35dc7bc27f50b39c0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "f9e9b85dc948803393bbff4ac72586917814fb34793601831dedad6424101546"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvateur, referme les yeux et rende ortois.",
       "word_error_rate": 0.286,
       "sha256": "1c5a2270cfd6d3388611fc633a77120e4306005850c0a71a6f8c6a5c37ba244e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'eau, referme les yeux et rendes ortois.",
       "word_error_rate": 0.444,
       "sha256": "c78edc9734232316579a5de716cae6299948733d8cc0f73fd2d1260259a04e71"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rendes ortois.",
       "word_error_rate": 0.222,
       "sha256": "ea967c9baa4d0a54cb7c67cdd289219d09f6e0d3783de91aef2a0ad80a1cc407"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "Lou blanc, referme les yeux et rendort-toi.",
       "word_error_rate": 0.25,
       "sha256": "69a7cc252c98dd26d18eb66abd6f2fdc8f84a88de9b81d972d81d5f52a9611f8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_female\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joyeure de flûte, referme les yeux et rende ortois.",
       "word_error_rate": 0.333,
       "sha256": "6a23e6a8afecf9918e0668fffeee5c74d2f6061a316a9d9b49a7a84c449413cd"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "3d17c4de9a92f8d8ba9a89c0105ea80a06251e8b726900847e23f6e3ce0829de"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore. Fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "60281ddb65d51f2d1f681aee3c41a17dc4810803ee20661d2d84c6d9c7dcfcf9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quelle identité souhaite-tu découvrir?",
       "word_error_rate": 0.111,
       "sha256": "f704c67d014da4fa5a9618d7243683bd5761078d1f893501b436b4b0abb219ba"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Le garou réveillez-vous. Quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "51483c924fa52c4ca90e0dd3274437846167d6a615fe7fbb2f76417fdcbf0721"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorscière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.143,
       "sha256": "ae8d105ae912144ed096da508a852baaf840766916ffc391c705e1fa9b7bf4f9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Mais ta mortfe, réveille-toi. Choisis-y, les cartes a échangé.",
       "word_error_rate": 0.625,
       "sha256": "97fbc7c6b00aa39ec2664f27182ea838ca988c43da46587d4b1da72b68525de8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidant, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.143,
       "sha256": "70c62e9b275e1a974ae593ea4d429faee9276bdea87608680d330107742207b6"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvateur, réveille-toi, qui veut tu protéger ?",
       "word_error_rate": 0.143,
       "sha256": "0eb24da2121526457b875fe0008e4693be14cc51d82cacf385c6fd4df19e9dbb"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant lourd, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.111,
       "sha256": "eae3e15881a2833ada8987c66acad7fcdabfa0b5263135427df53ad4d8e5a45b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "faire des lourds réveille-toi. Veux-tu infecter la victime ?",
       "word_error_rate": 0.2,
       "sha256": "b30363759a48de6c7fbffeae0807e0c9bb4e344f76c1609183b25d21ca7cafb5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "L'ou blanc, réveille-toi. Choisez-t-à-cible.",
       "word_error_rate": 0.714,
       "sha256": "eec377e4ad4d918bebd105265a3cc9541ede7a91160d0e0cbc8ca48782b96664"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueurs de flûte, réveille-toi. Qui veux-tu charmer ?",
       "word_error_rate": 0.111,
       "sha256": "61e2223d38f0b5789755fb6ed1f35cec3174c12b06d2b7d90197c22f98a32c64"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Boukémissaire, désigne les joueurs qui pourront voter demain.",
       "word_error_rate": 0.222,
       "sha256": "526b0064ca7e16d9152d703bbfefa9a0d90a84b43effd0afed465f61f81c2107"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève. Le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "eb68d46bf11fa2dd1c5e586b00a260a6781fecd1c6093658798db8acacb90ebe"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle de l'essent dernier tir.",
       "word_error_rate": 0.333,
       "sha256": "19b7901a0322fb8bd2461d65200b6e917eae1cb51a281c00db579a75357f54d2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé. Place au débat.",
       "word_error_rate": 0.0,
       "sha256": "eac16f83e8a05aae30257abdcf6485c830935e19291be504e98b5c523b4c819f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigné un joueur ou choisissait le vote blanc.",
       "word_error_rate": 0.182,
       "sha256": "54f3a9faf51fedda1a5df6f3df607cbba0682f7d00cef94a952a344456a6d8b0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "415841a1f8768db831f1c43b02e1fc1b3aea15c22867f640ea2e7a480d0fc850"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et randorte-toi.",
       "word_error_rate": 0.143,
       "sha256": "267df8dd8cfcb689809d6219b975dcd295cfc32cb3fef943433e2baf67d7d810"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Lougarou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "d0749a5186d42783949eeb662844bc4b9e6b4a103276d413178f8f588877ab51"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et randorte-toi.",
       "word_error_rate": 0.143,
       "sha256": "7378f0540aacc984fd35ec05b5ee3d16bda9653d760d396dd992c5713aff3d4b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mes tamorphes referment les yeux et rendort-toi.",
       "word_error_rate": 0.571,
       "sha256": "548f9292a38f76bd94f50bdbb1c0b20f67e3b8f53d3957b796b0a2d41bed0557"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "6025ec326033cc020add74f5feb3c42b9846e26973f4a6f6bcdf8cf284546d33"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvatheur, referme les yeux et rendors-toi.",
       "word_error_rate": 0.143,
       "sha256": "b458557eda3701f21b86276e987d499329445771ed2f65f8c63ce774351a4931"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant Lou, referme les yeux et rondeur toi.",
       "word_error_rate": 0.222,
       "sha256": "662cd48efe6a05fe1f2be78da2a05c1c58a73a63b3452379aab89aa9c2cf5236"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rendort-toi.",
       "word_error_rate": 0.111,
       "sha256": "cc43fbad3fcfd7f91ad1f6554bc26e18ece6596630385c9b1df2e357166e01bf"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'eau blanc, referme les yeux et randorte-toi.",
       "word_error_rate": 0.375,
       "sha256": "e23d743fe20e76f2e0f06d7dee977fb881d7f1d3af255820a90d92692908c55f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\classic_male\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueurs de flûte, referment les yeux et rendort-toi.",
       "word_error_rate": 0.333,
       "sha256": "b7ac3f9ad79fc0037547df903e18ef04976243ea65edd3a6ace9d53d2669680a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards",
       "word_error_rate": 0.0,
       "sha256": "b8593562141955066b4c930297a6de2401d0c29074001b6f305db81d4607efa2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore, ferme les yeux.",
       "word_error_rate": 0.286,
       "sha256": "6c2d79091f08f496118d13218f03c673544d200abc458cb474f0819bd7b41f6e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quel identité souhaite-tu découvrir?",
       "word_error_rate": 0.222,
       "sha256": "821b2f600255a4b8a48a25fb828183e64a4e0bfa00a028b8449b96daff650a19"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "L'uscau, réveillez-vous, quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "be1e9a65c384a93565b4662b869e946f3f0c3e595058be262f1921c9641c576c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorscière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.143,
       "sha256": "8dfddb15fc0e1da237cefb70c2abd584f5dbd2a97898655f90cd5dfcbe01b5c8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Mes tamorphes, réveille-toi, choisis les cartes à échanger.",
       "word_error_rate": 0.25,
       "sha256": "5c7cefcd5328020f046961afda08246db0be78f49bdf18de9e9eb0289222cf8d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidon, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.0,
       "sha256": "8099a75016d9c334d495ab817dfed851421fd3fd5eb970a43d69a76a860c0e19"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, réveillez-toi, qui veux tu protéger.",
       "word_error_rate": 0.286,
       "sha256": "01c7618549253dc89561c4999ebdb74b8744bfba9d601ebf58f9ed5dda329971"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant lourd, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.111,
       "sha256": "6f1a4a7c862b0f197386a85b919517fc03267df408da090cf31f5d86b1c9f95c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des lourds, réveillez-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.2,
       "sha256": "75bfb1b51ad79e68ee9abc06adabc7a759c6a069126da3fea760874a81c577d3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "Le blanc, réveille-toi, choisit à cible.",
       "word_error_rate": 0.429,
       "sha256": "25303a80bf7e759115c1632f06395d9cc70e9cf5b4b0b8c86532615a2281a04e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueur de flûte, réveille-toi, qui veux-tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "8c82d0b2d3a69cdf6883712edb3d02ac969bb77d3db0d50e679e2ca96ff0e912"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouk émissaire, désigne les joueurs qui pourront voter demain.",
       "word_error_rate": 0.111,
       "sha256": "88880abdd955cc47a017657a0568d4452206749e5fce559116eb407b07c62d7f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève, le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "3d8685b3f240ccbf4fbf9c3e8e09638a3058aa2b2a69e5277b6515b7eda7589f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "94746d3c4d515773650d5200a1dc0e35708dbbf280fe324fb09f29309aec28aa"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "30be4c6930ebd4395c23006818190fe2f2991d472b3a21770a7336a659e5a3e3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désignez un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.0,
       "sha256": "e9daba2e32c4ee378bf5c518ba9e6fa98348c6b7c5604c0a89d45d528148f90f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé. Le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "42058af2ca08ca9ed7f5398cbe8c48907e0633eefe59d291ec1c3be93920ac1b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et randorte-toi.",
       "word_error_rate": 0.143,
       "sha256": "ce90816a52824704a32dce793492ee6145a7de4c2f42a8a7ae625a1d18d619f5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "L'uscahaut, refermez les yeux et randonnez-vous !",
       "word_error_rate": 0.375,
       "sha256": "e5d14eac8cc4822ca0a4e1b7bc0afd25a4a4d3313cbd69cf896bc0a0dd451590"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, ferme les yeux et rende ortois.",
       "word_error_rate": 0.429,
       "sha256": "14ee8092d5db17e05dd58928361a3284ccb3faf6d1ec02f3dcaf12aac8f47a85"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mette amorfe, referme les yeux et rend ortois.",
       "word_error_rate": 0.571,
       "sha256": "0c1429a5d18f8800fcc91beb5da61a3e8e68907894af85d6e965b2438f0e98ac"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "5fd829cb94258edc16ac49177e16965bc9248d9519fe4f565de5eac83aeb2991"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvatheur, referme les yeux et rendeur toi.",
       "word_error_rate": 0.286,
       "sha256": "bb0e23b995d9500c3a92bc79a61a21719662594cfe35123d14c7c7347b9f8e68"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'eau, referme les yeux et rend ortois.",
       "word_error_rate": 0.444,
       "sha256": "92fe2886959ef8c4d019e946f93d1ec84b8f5b513e4061b84836cb1085bca806"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rendors-toi.",
       "word_error_rate": 0.0,
       "sha256": "36cb7b005a6a1b4ef17c3a0a42229343e111abcf71376c10f7099a3ad1bdd81d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'oublant referme les yeux et rendort-toi.",
       "word_error_rate": 0.375,
       "sha256": "5d8979bf78609454739b195c986e24d99cdb1ee5900c32e019b3fac3f5cc4737"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\cold_killer\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueur de flûtre ferme les yeux et rend or toi.",
       "word_error_rate": 0.444,
       "sha256": "667dee5f6181f46aeb7c8793780a81baf6b9a08dfdfd85dcd002464e73b560a8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "9d0d4d66dbc34aab010123920b17e8e584ab1cd2acae1ec79ab58876de47336c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'en dort, fermez les yeux.",
       "word_error_rate": 0.286,
       "sha256": "9c23f0de163170ee5f66aec2df6e8f69a5ecf51b95d2c23072e1e0dbdbb29ff2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyant ou ouvre les yeux, quel identité souhaite-tu découvrir ?",
       "word_error_rate": 0.444,
       "sha256": "225496dd017d83bed182c995930ceddd66bb0baec413a439f4c38c0ed477ce9b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Luke Garot, réveillez-vous. Quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "34dfeac5a01319eec7ddffff9266baefc060647f3278faa2d9573ae35439066f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, rêvez-toi et prépare tes potions.",
       "word_error_rate": 0.143,
       "sha256": "aa60a85e8061f056aec28092d3f7d34a41c39dc597413091d4a1940e9fa14711"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Metta Morph, réveille-toi, choisis les cartes à échanger.",
       "word_error_rate": 0.25,
       "sha256": "cb6886710d8b38c0945813cd4bf3cd739d90d6d1f77ad17cc3a87030657c9138"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupid dans Réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.286,
       "sha256": "df23c415c16747ae0e3736ca77a03f62aa03b1a30575567bb05803877f59d244"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, réveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.143,
       "sha256": "4752f2cd4b5ae3f9595ee21230023f06779363944028d67ae142b0ad9a9d26ea"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant Lou, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.111,
       "sha256": "022dbe17daabeb27477ddc4311e93830bfc62e594e32b324e4da283dd8d796b2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "70b4bee7dcebc2ee446f019a77ea5e111d4ad9f8936358d1bd3459a3bde27040"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "L'ou blanc, réveille-toi, choisit à cible.",
       "word_error_rate": 0.571,
       "sha256": "af2119dd555caddcb9b5bee38059a3672af80044f46d83d4b33cf0fde7245be1"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueur de flûte, réveille-toi, qui veux tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "88ca95ef7aac75e5107683ecd179cc1ff1a2b35adf8e2d114fd70e5d49b07aa6"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouc et missaire désignent les joueurs qui pourront voter demain.",
       "word_error_rate": 0.333,
       "sha256": "af6aafa3f05d39105fc9dcd75f892a3a4627f9bd8aaaed6e47fbdd40aeca4060"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève, le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "b10697994f17052a47be7ab9969b3961d9e113e54d544b6c311bf399ba19e498"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle tolaisse un dernier tir.",
       "word_error_rate": 0.222,
       "sha256": "972cdc65fbfcd93ad5db48b813061600dcad734fe0bcd793aad2ba39521c11c2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "f02530f42050a5cfa1bfeaa771b2cf5aef07381c73c8479b05fd4c5e8e1f13d8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigne un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "16d1f2dc438100ef7f24fbdba351ce73e6c3be06a83a5b12d81b585fb5114869"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "1f035708854e21211ae88dbe280f9d7d0955b21eb6bc4f5e5382ad84a8da3529"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyant, referme les yeux et randorte-toi.",
       "word_error_rate": 0.286,
       "sha256": "ead78ec467f71c4f4cedd7958314950acac3a7d92e263e239abe2ec093071385"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Luke Garou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "103f07edb419621e41dfaa77ecc7373da905ad3947b60c8f6686d7d66d905366"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "7ca105bcd934cd4b29da16aab808fb232bca580c38fcb1c7156ab9b38f018187"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "metta morphe, referme les yeux et rende ortois.",
       "word_error_rate": 0.571,
       "sha256": "fa820b45e61ee413e9e6012435e8be22999d8c9bee964752dff5f198bd763934"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidant, referme les yeux et rend ortois.",
       "word_error_rate": 0.429,
       "sha256": "fc1d495512dc36c6a4155af67ad83a29249e1c5defe99bedc6559ea13d5242dd"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvateur, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "be30546b48b8950a7b157ba4228456568def6335c8b4ee18864f51137789fb5c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'eau, referme les yeux et rendort-toi.",
       "word_error_rate": 0.333,
       "sha256": "6633bc216ff891594adca016790ed9ade3fda0fe78c45d02aa6941c65cf3a8a7"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rend ortois.",
       "word_error_rate": 0.222,
       "sha256": "c45a9d3c3ee0e3954eadcfcfde56d88b1c99a7b369a3de371dde3f30c4b58ea0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'oublant referme les yeux et rend ortois.",
       "word_error_rate": 0.5,
       "sha256": "a8ba6fe6cc1d735026544e38ac9363f596836f6e22c5bd29162eebaade3fd685"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\duke\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\duke\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joyeurs de flûte, referment les yeux et rendort-toi.",
       "word_error_rate": 0.333,
       "sha256": "516934db835048f5a0194011f93d1fe1b6b52b8e45846605796183310da01c6f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "bcc559e89ecd1a3be8fd34f3113a34299e9162a4cd7ba95c74cdd421475aea89"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "14129390d5649ce31fd6b589a30dd24070c3e928234e5e280b9f584059b5c660"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante ou ouvre les yeux. Quelle identité souhaite-tu découvrir?",
       "word_error_rate": 0.222,
       "sha256": "fef12f57e371dbe6d33cc7b7d2ef32b889213d114ac88a1f8ca5a1142fcce856"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "L'ougarou, réveillez-vous, qu'elle sera votre victime.",
       "word_error_rate": 0.5,
       "sha256": "44232f26e54b401752f1329fdc036da691fa254b66762da34bbedafdf951be18"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.0,
       "sha256": "496b7c0cb7be29781d0ef4cd2136ce110caf15a5c5f4de8cd8d9ab90b745a353"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Mais ta morphe, rêvez-toi. Choisz les cartes à échanger.",
       "word_error_rate": 0.625,
       "sha256": "1123fc8e5ede7925158df2942f6380e8f82916e021b99f2ca2da2a4b25a1e1a3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidon, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.0,
       "sha256": "ce0db51222d8b9dc352fae16bd1b508b50764aaaab012c1003c37e0b8ca449f4"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, réveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.143,
       "sha256": "317dbe46999d2859fda3d3daffe327bddbd29201a50e134b8f00e519da7fad03"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant Lou, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.111,
       "sha256": "0347fdb6a6012a2cdc84e800c3d48d1fb5f788a53d6fa22b76c8c2ca203800a1"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "964f2b6cff73924faaeebc4205e5011a40a3fba221174f55d590146622bd32ac"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "L'oublant, réveille-toi. Choisit à cible.",
       "word_error_rate": 0.571,
       "sha256": "a8834a71393abdd3f89f9c2de8d107d7805e6a4f0c918dde0030d8a31a6f5a9a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "Joueur de flûte, réveille-toi, qui veux tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "062087f28df5e6e845d493b0d6652bbaaf21b7642f5691811acf94ee4dd99d3b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouquet-missaire, désigne les joueurs qui pourront voter demain.",
       "word_error_rate": 0.222,
       "sha256": "054af8370b3721f6a8ac2e46e4ef09122e9b6803938c43c2686257e74a8dacf5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève. Le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "ef37fc5343e2bdb78c9674eddd0c4da52067c614d1305d0ad28f35fce1e72de2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "J'asseur ton dernier souffle de laissante dernier tir.",
       "word_error_rate": 0.556,
       "sha256": "a6723133e682c4b0d2551aec8043d0d8a0a6554ed649a5e4163a0191b311c65e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé. Place au débat.",
       "word_error_rate": 0.0,
       "sha256": "6f4658bcea8bc0e5c501a6c45f285e92029fd049e871c8b2200c0a3de4599a86"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désignez un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.0,
       "sha256": "4bd14c558558112b6ebba9676e5f02aed3de3ea7013377a4011ba357a475de86"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "9285cd3c4aa5917b46a538d42d6f7efc2b6519d75d5b174c6385bbd5e1b54a19"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyant, referme les yeux et rendort-toi.",
       "word_error_rate": 0.286,
       "sha256": "b6d726d5a49ec53ae50ca69a0461eb5a2c7851bf78cbc0c4d982a0a66b3bfeb2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Lou Garou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "6aa10c4ac44edb2b41e49266cc70af03ff51d47a9ada5e33a43a8b45b0682fa4"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rende ortois.",
       "word_error_rate": 0.286,
       "sha256": "99972886f2a7f1133204bc9aaa3ea4952926f55652b3c69f6ce25ea2f01ed3b8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mais ta morphe, referme les yeux et rende ortois.",
       "word_error_rate": 0.714,
       "sha256": "a45c4d21c891675586cdcb3bb7b2c51f598d2def9a9a34c6acef2b0beb0d9860"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendes ortois.",
       "word_error_rate": 0.286,
       "sha256": "24c8335075dce738f6332950f05cda1a270bb9326364ee51d1764e45bac5fcb3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvateur, ferme les yeux et rende ortois.",
       "word_error_rate": 0.429,
       "sha256": "93a87b31e63dc4a02887d3fa1379ffea723dce537326115f46a9f32768c25b03"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grands méchants loues, refermes les yeux et rendes ortois.",
       "word_error_rate": 0.667,
       "sha256": "0a8e44c195f6332161f4f9ee384c87aaa86638564391b041cd2d9f442de8af84"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rendort-toi.",
       "word_error_rate": 0.111,
       "sha256": "db917f216029d9533e0c2eb5d1021fde84f641742ffe68b6da52884397f5674a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'eau blanc, referme les yeux et rende ortois.",
       "word_error_rate": 0.5,
       "sha256": "f6bf52ebe247a3ae7da3c5411bfed525d04c88babcab8124fefb52c249e59e6b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\ghost\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\ghost\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueurs de flûte, referment les yeux et rendort-toi.",
       "word_error_rate": 0.333,
       "sha256": "6cb3069dc5db278b2e01a179cb2cd3ae8a9a1eebe225df67405389b9d479620a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à la bride et regard.",
       "word_error_rate": 0.5,
       "sha256": "b94dc3b77e1ac5eed4d8010cf4f4a693a9b6988f7ca8756599095251e69ea43f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "8b008f41761e174dafb8df45a9ca6285f3268818a22db55c9275e8006f35748c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quelle identité souhaite-tu découvrir ?",
       "word_error_rate": 0.111,
       "sha256": "62c769f12268375b8e50680da124671c95f1af75ef43f8a3c07a2316dc6bccd8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Lou Garou, réveillez-vous, qu'elle sera votre victime.",
       "word_error_rate": 0.5,
       "sha256": "ea5004ba34dfa96299ef846e53bc6c6aa6ad20b57eecc20b9ab984fe46533eb9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, éveille-toi et prépare d'épaussion.",
       "word_error_rate": 0.429,
       "sha256": "39d8bb31478358109ea2f7e0ddc076aa12fe0882f4ad8068d7671e72600c911e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "M'étamorphes, réveille-toi. Choisis les cartes à échanger.",
       "word_error_rate": 0.25,
       "sha256": "d2aafa2b4eb00cfaa72213f783c26a39a73a5a14262fa536340d01595d51e422"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidon, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.0,
       "sha256": "04897bfd95d885daeb630201d633a233a9892d463bc6e04ad9edefed040612a8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvateur, réveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.0,
       "sha256": "ac05b97a58b02135eb5d4ef590b7a07c2b1aca0d61322fa4fd6d60c19c2f9a14"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant l'eau, réveille-toi. Désignit à seconde victime.",
       "word_error_rate": 0.444,
       "sha256": "6b25272585969a900aeed7698bb59cbb7a37c66e9d4dcb28bf1878625ed72f33"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "903272fe5d3f30e917920368366bce3e6afbea3b68d6460fdec8545f8523853e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "L'ou blanc, réveille-toi. Choisit à cible.",
       "word_error_rate": 0.571,
       "sha256": "a460c2074d3a4d5953c2272043e7ec9a7b6c30320798969652b86671217c5da9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "Joueurs de flûte, réveille-toi, qui veux tu charmer ?",
       "word_error_rate": 0.111,
       "sha256": "1c2aec08315c74f482134c0384a35b72f15365aadc57f2894f0587a93a1ea0ab"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouquet-missaire, désignez les joueurs qui pourront voter demain.",
       "word_error_rate": 0.333,
       "sha256": "07d6f32f2b0c6bceda939d47c22b3c0d4d32aada223d877179daa3a225d4faa1"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève. Le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "1070c099f9b2aaf715c67017cd383e346baeda606c8461f97ee2e2fab15b0692"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "0576ee155202ebb5a3fb9aad8964c4439f435960055edbc33feabd304b6347b1"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "008f1500dab6dd5cfb414af00bdf6c8bed522925c51fde0cc90d26da33551e51"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigner un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "0408e222e0644ffd7fe7fb95e09bc533b093456c5c67e696120139535834a8fa"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé. Le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "703f44d4416aeb6d9e7d77c62195cd91c1687d591a6dfd035ba5138439b91892"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et rende ortois.",
       "word_error_rate": 0.286,
       "sha256": "9def2c2aba9c7f8a9564ac2099408539c1daff67c434f32d1c14dcef3455accb"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Lou Garou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "00e4563ca92a487801c1f8f43a3ace1aeb0a9e1332ca63b09a47b857615fcc1b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "321b57bd3887a78164c3df542ed0c65729bb745f03472a1284eb1b7d85fca888"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mais ta morphe, referme les yeux et rende ortois.",
       "word_error_rate": 0.714,
       "sha256": "6d4212f9eba94012d4dd78711cf829062ff6a7fc75c098943c5ad20431d08657"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rend ortois.",
       "word_error_rate": 0.286,
       "sha256": "43e505f908f3775baefc44680d40795f45fcb98d7a64735008ba955ebb5bee36"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvatheur, referme les yeux et rend or toi.",
       "word_error_rate": 0.429,
       "sha256": "c1f86e4b1a3860bc2436b046b7db343b195f544cc23b9b1d73f22e8e3006e0fe"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant de l'eau, referme les yeux et rendort-toi.",
       "word_error_rate": 0.444,
       "sha256": "3b57a0702b777ad37d6edd771de645a2ff069042df192465ce7c8eff978167da"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rend or toi.",
       "word_error_rate": 0.222,
       "sha256": "59ade650ef6bdd03b2d19fa6e75fa77f9bde614a5d70e1d2d54568732d4b0503"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'eau blanc, referme les yeux et rende ortois.",
       "word_error_rate": 0.5,
       "sha256": "8b7a7c101c45b5b0bf2f6430636051d8dbee1756400cbd379839252cbb7af869"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_female\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joyeur de flûte, referme les yeux et rende ortois.",
       "word_error_rate": 0.333,
       "sha256": "0ca19a615f78865339ceb28fb39888272ec892c970f8121a95f2a8b9b424b5aa"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "66c97acd3ffe7fd3426e26fb35eb198631115e0a3602395242e39251109770c0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'en dort, fermez les yeux.",
       "word_error_rate": 0.286,
       "sha256": "34437cfa9021c75aadce66e731d1989e1806bdfb6c1b4d710218512887324c5e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quel identité souhaite-tu découvrir ?",
       "word_error_rate": 0.222,
       "sha256": "4b35eddeab5cb08295708b25c163d78478bf70ddb02bc66cdf0f4051ab702db6"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Luke, Garou, réveillez-vous. Quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "7df264a75661fb19c3ec84e8c08530a29ff0cec45a9e3d1c1f23162a81a2e28e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorscières, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.143,
       "sha256": "ee039bb7e66fcb96abc71fea350996053fde479a98d45acaf20827118f3f81e6"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "M'étamorphes, réveille-toi. Choisis les cartes à échanger.",
       "word_error_rate": 0.25,
       "sha256": "4a51ac47bb86f46229e5a809a38a832e34667716e5686414400fbd32cc19131f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.143,
       "sha256": "84447c5515648db7db324c0509261736405bc28275402131b6b289787f0bf831"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvateur, réveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.0,
       "sha256": "1d2683481204517878e31351661d9b9c10dd68414bc46d28f1022994974be028"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant loup, rêvez-toi, désigne ta seconde victime.",
       "word_error_rate": 0.111,
       "sha256": "96454158775adf552c58e25271ca50758a01325899539786bc22175036532506"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "12b5a2bc49c6ababf0bec839cdf1d30b6b7a963e37526bca16a828606378cdfc"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "Le plan, réveille-toi, choisi t'assibles.",
       "word_error_rate": 0.714,
       "sha256": "b7fdb87d5f7715b141492b651eeb1b06244911bf662dc07a6fab449549973e26"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "Joueur de flûte, réveille-toi, qui veux-tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "b81e5d1daac06ad81197fdd24873d72848c1328c62e498a14d350c87d5bcd921"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouc et mystère désignent les joueurs qui pourront voter demain.",
       "word_error_rate": 0.333,
       "sha256": "0875efdf5b8e9ee3729d84fb59edc41308e5d18cf1c9b3392db7eb5d5d7d1a0b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève, le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "ab10c7d62657224022cb7863e24d33f08a7a1c691ebc54d5752d6ade214938e3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "e504771bcdc719e6494b52ebe6274fcc9b44f553c6ea537b85df5fb0c9168a2e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "1dc399d4cc5b25fa5fcfef04ede9522e33465b033cc586c8524507c054dec47e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigner un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "ae8ee9f32ee81c8cad584ed6940ac3b8619526e344c913bc762518644ea7aa9c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "d35ffa0d4bacf910fd3bc186d8c17a22fb40230aebe1a4a5e9f57ef49e7d577f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et rend ortois.",
       "word_error_rate": 0.286,
       "sha256": "43cd4869fdaa2d11d1f517d375a61d54517239525748a62167911858f507885a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Luke Garou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "27602b1974d705d493473c1dc0f52f77a7093bf2d66704b6eb752bbc515849cb"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorscière, referme les yeux et rende ortois.",
       "word_error_rate": 0.429,
       "sha256": "db0ba6647fbd45fe34610e99854930285a2cb2f055c8811d7982956314875d8b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mes tamorphes, referment les yeux et rendes ortois.",
       "word_error_rate": 0.714,
       "sha256": "1a7a309cfccb1740cbf00f6ec7e7daba5a47a4e074670371dbe9d12bafcaa6a1"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "490d4c11f9a00df5b8e7f736b1fd6986f80c916586f9e27fad403be6c7992961"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvateur, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "a400d3f248f4b559502051093d680e7d4e9992d1a0cae469bca7bf39c41abd52"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grands méchants loues, refermes les yeux et rendors toi.",
       "word_error_rate": 0.444,
       "sha256": "10b8472cd13ce9dfcb88e5c0b34d9ba5919a105603b62edc7d9421b4947eb63c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des lourds, ferme les yeux et rende ortois.",
       "word_error_rate": 0.444,
       "sha256": "be594039b5548941ee25156cf4bb1e00dce397e4376d62067f0722a0970a10b2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'oublant, referme les yeux et rendort-toi.",
       "word_error_rate": 0.375,
       "sha256": "1653b1f47b81576b179418d6b8ecc8e628490ca40d2fbba7bb08471fafc6e8e0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\intense_male\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueurs de flûte, referment les yeux et rendes ortois.",
       "word_error_rate": 0.444,
       "sha256": "0743c8e563943e86ec5a4a35ad8b5bba3d5be8b783249858a9d49c70e02994c7"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyant ouvre les yeux, quelle identité souhaite-tu découvrir ?",
       "word_error_rate": 0.222,
       "sha256": "b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "L'eau garou, réveillez-vous, qu'elle sera votre victime.",
       "word_error_rate": 0.625,
       "sha256": "b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.0,
       "sha256": "2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "Metta Morph, réveille-toi, choisis les cartes à échanger.",
       "word_error_rate": 0.25,
       "sha256": "0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Coupitons, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.143,
       "sha256": "d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, réveille-toi, qui veux tu protéger?",
       "word_error_rate": 0.143,
       "sha256": "c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grande et sans l'eau, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.556,
       "sha256": "a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des lourds, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.1,
       "sha256": "3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "Loup blanc, réveille-toi, choisit à cible.",
       "word_error_rate": 0.286,
       "sha256": "141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueur de flûte, réveille-toi, qui veux-tu charmer ?",
       "word_error_rate": 0.0,
       "sha256": "5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Book Emissaire, désigne les joueurs qui pourront voter demain.",
       "word_error_rate": 0.111,
       "sha256": "6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève, le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle laisse en dernier tir.",
       "word_error_rate": 0.222,
       "sha256": "fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote. Des iniens joueurs ou choisissez le vote blanc.",
       "word_error_rate": 0.273,
       "sha256": "bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Lucas, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rende ortois.",
       "word_error_rate": 0.286,
       "sha256": "972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mais ta morphe, referme les yeux et rende ortois.",
       "word_error_rate": 0.714,
       "sha256": "cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvatheu, referme les yeux et rende ortois.",
       "word_error_rate": 0.429,
       "sha256": "f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'eau, referme les yeux et rendeur toi.",
       "word_error_rate": 0.333,
       "sha256": "8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rend ortois.",
       "word_error_rate": 0.222,
       "sha256": "bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'eau blanc, referme les yeux et rende ortois.",
       "word_error_rate": 0.5,
       "sha256": "5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_witch\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueur de flûte, referme les yeux et rende ortois.",
       "word_error_rate": 0.222,
       "sha256": "bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "c4fac884e591b1e803d9029d7eb42b2590ed889fa2237de65c71e39c609496dc"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endorde, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "3ef5dff95f063180a2202e010ae648cb1076a133852c15705a78304c5102a236"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyant, ouvre les yeux, quel identité souhaite tu découvrir.",
       "word_error_rate": 0.333,
       "sha256": "0ff6d506ce9f7c707a276aebcc3d9ae69cacbb2959ea8f0dc073b952ee33ad9d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Lou Garou, réveillez-vous. Quelle sera votre victime ?",
       "word_error_rate": 0.25,
       "sha256": "d7ea9ad99335bb526f3706488100e2b5fa85111b378499f4f30a4d199c0da20c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorscière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.143,
       "sha256": "782a5fd875eb72e8ff69f16697bd4679d5b8d29e5d32bdec5c4d1acd10678f75"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "M'est à mort, réveille-toi. Choisis les cartes à échanger.",
       "word_error_rate": 0.5,
       "sha256": "d2becfa9c48c1e309cf65d487277934ebe7d6aa8ff3a6ad8ca19cbf74d87475b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidon, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.0,
       "sha256": "ada3ea61e882cd808da567620965e48b02d1006f1a4d0a5606908a7213f77c2c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, réveille-toi, qui veut-tu protéger?",
       "word_error_rate": 0.286,
       "sha256": "60b8dacf65ad7f57b181839963f91922a69b49985d0a648b39efe40410d48a35"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grand méchant l'eau, réveille-toi, désigne ta seconde victime.",
       "word_error_rate": 0.222,
       "sha256": "da7eca34f23d27d87191daa726d30db268c33554710a1c0e59d6abd0c314491b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "473a29c2571c5f48c00d39d44e2e53752c9f582dd7b8fe995903581d4faab3e8"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "Le blanc, réveille-toi, choisit à cible.",
       "word_error_rate": 0.429,
       "sha256": "ef5a6003f3229803c1707bd38ba1ce88ab1266f8cdd9d0e050fbc3816a069276"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "Joyeur de flûte, réveille-toi, qui veux-tu charmer ?",
       "word_error_rate": 0.111,
       "sha256": "44e74b53cc8e19621ac977c827b26d5c04cc97a15f5add06255e029194ac1be7"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Book et Miss air, désignent les joueurs qui pourront voter demain.",
       "word_error_rate": 0.556,
       "sha256": "2598614a0c12e748ecc0f4bfd7f1c3a446d6cccc60463c1fd70128c2f8938e09"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève, le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "70348333278e2923325638f59980a31741c977c8e325ea2e047852e386fb0e50"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "96188349c9a57f035d8218f596ed4ef8629b92c70a5e72492c08cdc1f5dbeee7"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "cf2eacd8443ef5e482930568c3f009446f0b636028d97517b62f2e6502baf8be"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigne un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "6605565a9053cb6c32a782a2ae303ad58fa9cdd5722644a6da597b7971649cd5"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé, le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "c362d431174d0a6cce02c2cfdc73893bd5c8c6f5cd58d87d9472201ed9274cd3"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyant, referme les yeux et rendort-toi.",
       "word_error_rate": 0.286,
       "sha256": "91794909f93e344b82f79b929dad9713293976ba110da23746b5c01f47a7b1e6"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "L'ougarou, refermez les yeux et rendormez-vous.",
       "word_error_rate": 0.25,
       "sha256": "309faaa95265adfd329e7b47592d0428bb167c74b7ea011ea9227b56900c8885"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "65107ea50312355c09ab7bc59caa63f554e5ab34a6859f78cfeddb5e37331235"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Métamorf, referme les yeux et rende ortois.",
       "word_error_rate": 0.429,
       "sha256": "7f69dba7418625fdadba5fd79c8ead5fc03d23c6866a0f7c700fdc9dc49e514b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Cupidon, referme les yeux et rendarts-toi.",
       "word_error_rate": 0.143,
       "sha256": "10cf5940d7f43d85c887d71830d0a624fb076c7767a92b5df53997183c5e132b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvatheur, referme les yeux et rend ortois.",
       "word_error_rate": 0.429,
       "sha256": "6ba195e63d51351a7033a44ce1164401fe37a0dce6fc4208a4e034e53f6cb4aa"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'ou, referme les yeux et rend ortois.",
       "word_error_rate": 0.444,
       "sha256": "b111dffd1e0e2c1a122a937ee87bac1dec9e8d652119e0d485ccef4cfbb55953"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des loups, referme les yeux et rend ortois.",
       "word_error_rate": 0.222,
       "sha256": "c9bce95e7338a813bc869616d07209d25d4e737183ade123b0f4ab3616974174"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "L'ou blanc, referme les yeux et randorte-toi.",
       "word_error_rate": 0.375,
       "sha256": "a9a574cc9feb02126e98cdf835382efba52ce3bc77273b6efef17924a0e6ed0e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\old_wizard\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueurs de flûte, referment les yeux et rendort-toi.",
       "word_error_rate": 0.333,
       "sha256": "3af610464e2a4bd5ee47cb64ca0f97ce7c609056622596b014a6c52b7a0f2f94"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_role_reveal.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_role_reveal.wav",
       "expected": "Découvrez votre rôle à l’abri des regards.",
       "transcribed": "Découvrez votre rôle à l'abri des regards.",
       "word_error_rate": 0.0,
       "sha256": "519780647b0e3cd635bebd3276dbfbfbae2d7d127b0b232ad56cfffe3d0b688d"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_sleep.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_sleep.wav",
       "expected": "Le village s’endort. Fermez les yeux.",
       "transcribed": "Le village s'endore, fermez les yeux.",
       "word_error_rate": 0.143,
       "sha256": "7acba010aa858becf7da5ec0ea067cc3ed4eb28cf02ac556f066343625b91398"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_seer.wav",
       "expected": "Voyante, ouvre les yeux. Quelle identité souhaites-tu découvrir ?",
       "transcribed": "Voyante, ouvre les yeux. Quel identité souhaite-tu découvrir ?",
       "word_error_rate": 0.222,
       "sha256": "549691a0aedfc0cf9459957fb4825cc3a61644ab5b97a32a68c03ea555ebd580"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_wolves.wav",
       "expected": "Loups-Garous, réveillez-vous. Quelle sera votre victime ?",
       "transcribed": "Le garou, réveillez-vous, qu'elle sera votre victime.",
       "word_error_rate": 0.5,
       "sha256": "93d24b9ca765a1562bd84654b868c0c47045efd527daf1dbd1e3527e4928f41e"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_witch.wav",
       "expected": "Sorcière, réveille-toi et prépare tes potions.",
       "transcribed": "Sorcière, réveille-toi et prépare tes potions.",
       "word_error_rate": 0.0,
       "sha256": "c310aecf3de04cf396a547d8d16cb160cc0dbfa41040b6f4aefd03a3f6367931"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_metamorph.wav",
       "expected": "Métamorphe, réveille-toi. Choisis les cartes à échanger.",
       "transcribed": "metta mort, réveille-toi, choisez les cartes à échanger.",
       "word_error_rate": 0.375,
       "sha256": "274754af7c14312f48e3a306dac057a234edb4df4dab4109ecd9e86142225e86"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_cupid.wav",
       "expected": "Cupidon, réveille-toi. Désigne les deux amoureux.",
       "transcribed": "Cupidan, réveille-toi, désigne les deux amoureux.",
       "word_error_rate": 0.143,
       "sha256": "c3e43393dd831813cc0dbf156e0314b89f0a45098e8764905b4ce45da0f86b74"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_guardian.wav",
       "expected": "Salvateur, réveille-toi. Qui veux-tu protéger ?",
       "transcribed": "Salvatheur, éveille-toi, qui veux tu protéger ?",
       "word_error_rate": 0.286,
       "sha256": "7e49be3f78c7c85818dc7d2e5fa68a42a8cc98153ded1ccb129365dc8a419f09"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_alpha.wav",
       "expected": "Grand Méchant Loup, réveille-toi. Désigne ta seconde victime.",
       "transcribed": "Grands méchants loues, réveille-toi, désignota seconde victime.",
       "word_error_rate": 0.556,
       "sha256": "652c37f0445b6acdd5ab918a888a34331c3bd85e1f8389eadcb6e8631b029a42"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_infection.wav",
       "expected": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
       "transcribed": "Père des loups, réveille-toi, veux-tu infecter la victime ?",
       "word_error_rate": 0.0,
       "sha256": "90aa18b032429950cab60bedb0d090a6c813593ec4fbc61cc1c68a4bd58261e4"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_white_wolf.wav",
       "expected": "Loup Blanc, réveille-toi. Choisis ta cible.",
       "transcribed": "L'oublant réveille toi, choisit à cible.",
       "word_error_rate": 0.571,
       "sha256": "8f908259367d0fc4be98b535438a5d87b772576e209052319398a5d7933face4"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_piper.wav",
       "expected": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
       "transcribed": "joueur de flûte, réveille-toi, qui veux t'acharmez ?",
       "word_error_rate": 0.222,
       "sha256": "74a7e1f36aebe7c732a5fa42275c9fae5e3f34ff3fcc3b325dc55fc1cfb98f95"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_scapegoat.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_scapegoat.wav",
       "expected": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
       "transcribed": "Bouquet-missaire désigne les joueurs qui pourront voter demain.",
       "word_error_rate": 0.222,
       "sha256": "8c4b391e2d658a36a72e0cc7bb183d0a6c5aa6531c3049bd6efa8ba8d5c01449"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_dawn.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_dawn.wav",
       "expected": "Le jour se lève. Le village découvre les événements de la nuit.",
       "transcribed": "Le jour se lève. Le village découvre les événements de la nuit.",
       "word_error_rate": 0.0,
       "sha256": "543ac35ee1b64232e8248f30aea9f9e90b192230f2d490a71e8872eba073617c"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_hunter.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_hunter.wav",
       "expected": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "transcribed": "Chasseur, ton dernier souffle te laisse un dernier tir.",
       "word_error_rate": 0.0,
       "sha256": "b1b6fcea23fab7f5e6793a4141e4c98d7b6ea70911a132b9932d82025ef79d1b"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_day.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_day.wav",
       "expected": "Le village est réveillé. Place au débat.",
       "transcribed": "Le village est réveillé, place au débat.",
       "word_error_rate": 0.0,
       "sha256": "8e990838a352d0b884bdc4107a17f40de9a37672460f613fdd256b7a9e296f97"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_voting.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_voting.wav",
       "expected": "Le village vote. Désignez un joueur ou choisissez le vote blanc.",
       "transcribed": "Le village vote, désigner un joueur ou choisissez le vote blanc.",
       "word_error_rate": 0.091,
       "sha256": "d55227aa4726a6fb2215047764010cbe542ba6c5f47c9cc561a51b595b80c755"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_vote_result.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_vote_result.wav",
       "expected": "Le scrutin est terminé. Le village découvre le résultat.",
       "transcribed": "Le scrutin est terminé. Le village découvre le résultat.",
       "word_error_rate": 0.0,
       "sha256": "d8f70f6c73273da45b581bf9b1d0a0bb9b026c931b572c57f7b33f07d1141825"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_seer.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_seer.wav",
       "expected": "Voyante, referme les yeux et rendors-toi.",
       "transcribed": "Voyante, referme les yeux et rende ortois.",
       "word_error_rate": 0.286,
       "sha256": "862663cb1daaeec05bbe40cab9fcb52da95012527f0d91ea469ce6ae8701cc4f"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_wolves.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_wolves.wav",
       "expected": "Loups-Garous, refermez les yeux et rendormez-vous.",
       "transcribed": "Le garouse, refermer les yeux et rendormez-vous.",
       "word_error_rate": 0.375,
       "sha256": "5ce2f075e8386457bd81d38837055708ba2fdc90ecc1d82b97dd1e1d430bf048"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_witch.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_witch.wav",
       "expected": "Sorcière, referme les yeux et rendors-toi.",
       "transcribed": "Sorcière, referme les yeux et rendort-toi.",
       "word_error_rate": 0.143,
       "sha256": "7a60156dd289cdf2724594597e49dc4577620d38f4ce4368b6184f17da716d4a"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_metamorph.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_metamorph.wav",
       "expected": "Métamorphe, referme les yeux et rendors-toi.",
       "transcribed": "Mette amorfe, referme les yeux et rende ortois.",
       "word_error_rate": 0.571,
       "sha256": "3bceea896226819e1a4b6686f474746c21d549500ca472846d748b03f41b2a24"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_cupid.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_cupid.wav",
       "expected": "Cupidon, referme les yeux et rendors-toi.",
       "transcribed": "Capit d'ombre, ferme les yeux et rende ortois.",
       "word_error_rate": 0.857,
       "sha256": "6c72b8dfe192bfc7cec310445dcfe1f75382a3b648ec7f2190afcf48261d25e2"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_guardian.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_guardian.wav",
       "expected": "Salvateur, referme les yeux et rendors-toi.",
       "transcribed": "Salvateur, referme les yeux et rend ortois.",
       "word_error_rate": 0.286,
       "sha256": "6fd7ea8bb0b74a0316f53614ddc2d369279262e274efe640fa5f169e171adfca"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_alpha.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_alpha.wav",
       "expected": "Grand Méchant Loup, referme les yeux et rendors-toi.",
       "transcribed": "Grand méchant l'eau, referme les yeux et rende ortois.",
       "word_error_rate": 0.444,
       "sha256": "f87ba5725c366da180f3ae65b88e5851284b7ab7092438233b6276236ad98bc9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_infection.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_infection.wav",
       "expected": "Père des Loups, referme les yeux et rendors-toi.",
       "transcribed": "Père des lourds, referme les yeux et rendort-toi.",
       "word_error_rate": 0.222,
       "sha256": "8fee7e686059b260bae3a07245aa659bda7a2a84f7d47deba3e64f3f07f6b9b9"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_white_wolf.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_white_wolf.wav",
       "expected": "Loup Blanc, referme les yeux et rendors-toi.",
       "transcribed": "Loup blanc, referme les yeux et rendort-toi.",
       "word_error_rate": 0.125,
       "sha256": "b6b1c85a706cd785a4e80d733d16084fb33abf6e0488281f543fe2eed036c5ae"
     },
     {
-      "file": "apps\\le_loup\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_piper.wav",
+      "file": "apps\\mordeviel\\assets\\audio\\classic\\neural\\werewolf\\mdj_close_piper.wav",
       "expected": "Joueur de Flûte, referme les yeux et rendors-toi.",
       "transcribed": "Joueurs de flûte, referment les yeux et rendort-toi.",
       "word_error_rate": 0.333,

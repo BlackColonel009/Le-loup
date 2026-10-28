@@ -24,7 +24,7 @@ def main():
         metadata.setdefault('approval_date', '2026-10-26')
         metadata.setdefault('approval_type', 'direct_integration_authorized_by_user')
         source.with_suffix('.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding='utf-8')
-        folder = ROOT / 'apps/le_loup/assets/audio/classic/neural' / name
+        folder = ROOT / 'apps/mordeviel/assets/audio/classic/neural' / name
         folder.mkdir(parents=True, exist_ok=True)
         manifest_path = folder / 'manifest.json'
         digest = hashlib.sha256(source.read_bytes()).hexdigest()

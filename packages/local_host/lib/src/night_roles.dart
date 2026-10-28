@@ -3,6 +3,7 @@ part of 'night_game.dart';
 const _nightCalls = {
   'metamorph': ('metamorph', 'le Métamorphe'),
   'cupid': ('cupid', 'Cupidon'),
+  'sisters': ('sisters', 'les Deux Sœurs'),
   'guardian': ('guardian', 'le Salvateur'),
   'seer': ('seer', 'la Voyante'),
   'wolves': ('pack', 'les Loups-Garous'),
@@ -78,8 +79,9 @@ extension _AdditionalRoles on NightGame {
     if (role == 'pack') return alive.any(_isWolf);
     if (!_hasLivingRole(role)) return false;
     return switch (action) {
-      'metamorph' => night == 1 && !_extra.metamorphUsed,
+      'metamorph' => !_extra.metamorphUsed && alive.any((id) => roles[id] == 'metamorph' && (night == 1 || editionOf(id) == 'horror')),
       'cupid' => night == 1 && !_extra.cupidUsed,
+      'sisters' => night == 1 && _recognizedSisters.isEmpty,
       'alpha' => !_extra.packBroken,
       'infection' => alive.any(
         (id) =>
@@ -141,7 +143,13 @@ extension _AdditionalRoles on NightGame {
         },
   ];
 
-  String _extraAnnouncement() => phase == 'scapegoat'
+  String _extraAnnouncement() => phase == 'mayor_election'
+      ? 'Le village élit son Maire. Chaque bulletin compte pour une voix.'
+      : phase == 'mayor_succession'
+      ? 'Le Maire transmet son titre à un joueur vivant.'
+      : phase == 'sisters'
+      ? 'Deux Sœurs, ouvrez les yeux et reconnaissez-vous.'
+      : phase == 'scapegoat'
       ? 'Bouc émissaire, désigne les joueurs qui pourront voter demain.'
       : _nightCalls.containsKey(phase)
       ? '${_nightCalls[phase]!.$2}, réveille-toi. Choisis ton action.'
@@ -210,6 +218,7 @@ extension _AdditionalRoles on NightGame {
   }
 
   void _startExtraNight() {
+    _resetVariantsNight();
     for (final id in _extra.infections.keys.toList()) {
       if (_extra.infections[id]! <= night) {
         if (alive.contains(id)) {
@@ -255,6 +264,10 @@ extension _AdditionalRoles on NightGame {
     }
     for (final entry in victims.entries) {
       final id = entry.key;
+      if (_mayor == id) {
+        _pendingMayor = id;
+        _mayor = null;
+      }
       if (_isWolf(id)) _extra.packBroken = true;
       alive.remove(id);
       _recordDeath(id, entry.value);
@@ -287,6 +300,14 @@ extension _AdditionalRoles on NightGame {
       _enter('hunter');
       return;
     }
+    if (_pendingMayor != null) {
+      _resolveVictory();
+      if (winner == null && alive.isNotEmpty) {
+        _enter('mayor_succession');
+        return;
+      }
+      _pendingMayor = null;
+    }
     _finish();
   }
 
@@ -294,7 +315,7 @@ extension _AdditionalRoles on NightGame {
     final victims = <String, String>{};
     void packAttack(String? id) {
       if (id == null || !alive.contains(id)) return;
-      if (id == _extra.protected) {
+      if (_guardBlocksPack(id)) {
         _log('effect', {'effect': 'protected', 'target': id});
         return;
       }
@@ -311,7 +332,7 @@ extension _AdditionalRoles on NightGame {
     if (!_saved) {
       if (_attack != null &&
           _extra.infectTarget == _attack &&
-          _attack != _extra.protected) {
+          !_guardBlocksPack(_attack)) {
         _extra.infections[_attack!] = night + 1;
         _log('effect', {'effect': 'infection_pending', 'target': _attack});
       } else {
@@ -323,11 +344,21 @@ extension _AdditionalRoles on NightGame {
     packAttack(_extra.extraAttack);
     if (_extra.whiteAttack != null) victims[_extra.whiteAttack!] = 'white_wolf';
     if (_poison != null) victims[_poison!] = 'poison';
+    _resolveVariantProtection(victims);
     _kill(victims);
     _extra.infections.removeWhere((id, _) => !alive.contains(id));
   }
 
   Map<String, dynamic>? _ability(String id) {
+    if (phase == 'mayor_succession' && _pendingMayor == id)
+      return {
+        'action': 'mayor.succeed',
+        'label': 'Transmettre mon titre de Maire',
+        'targets': alive.toList(),
+        'min': 1,
+        'max': 1,
+        'can_pass': false,
+      };
     final role = roles[id];
     Map<String, dynamic> choice(
       String command,
@@ -354,8 +385,10 @@ extension _AdditionalRoles on NightGame {
     }
     if (!alive.contains(id) || !_powerEnabled(id) || _done(id)) return null;
     final all = alive.toList();
-    if (phase == 'metamorph' && role == 'metamorph' && !_extra.metamorphUsed)
-      return choice('metamorph.swap', 'Échanger deux rôles', all, 2, 2);
+    if (phase == 'metamorph' && role == 'metamorph') {
+      if (_metaPeek.containsKey(id)) return choice('metamorph.swap','Échanger les deux cartes consultées',_metaPeek[id]!,2,2);
+      if (!_extra.metamorphUsed && (night == 1 || editionOf(id) == 'horror')) return choice(editionOf(id) == 'intense' ? 'metamorph.peek' : 'metamorph.swap',editionOf(id) == 'intense' ? 'Consulter deux camps avant l’échange' : 'Échanger deux rôles',all,2,2);
+    }
     if (phase == 'cupid' && role == 'cupid' && !_extra.cupidUsed)
       return choice('cupid.link', 'Lier deux amoureux', all, 2, 2);
     if (phase == 'guardian' && role == 'guardian') {
@@ -431,11 +464,18 @@ extension _AdditionalRoles on NightGame {
 
   Map<String, dynamic> _additionalPrivate(String id, bool canAct) {
     final ability = _ability(id);
-    final reaction = phase == 'scapegoat' && id == _extra.scapegoat;
+    final reaction =
+        phase == 'scapegoat' && id == _extra.scapegoat ||
+        phase == 'mayor_succession' && id == _pendingMayor;
     final ready =
         !closed && !paused && remainingMilliseconds > 0 && (canAct || reaction);
     return {
       'camp': _camp(id),
+      'edition': editionOf(id),
+      if (cardVariant(roles[id] ?? '',editionOf(id)) != null) 'variant': cardVariant(roles[id]!,editionOf(id)),
+      'variant_abilities': _variantAbilities(id),
+      if (_variantInfo[id] != null) 'variant_result': _variantInfo[id],
+      'veil_requested': _veilRequests.contains(id),
       'camp_label': _camp(id) == 'wolves'
           ? 'Loups-Garous'
           : _camp(id) == 'village'
@@ -466,6 +506,8 @@ extension _AdditionalRoles on NightGame {
   }
 
   Map<String, dynamic> get _additionalHost => {
+    'editions': Map.of(_editions),
+    'variant_results': {for(final entry in _variantInfo.entries) entry.key: entry.value},
     'protected': _extra.protected,
     'extra_attack': _extra.extraAttack,
     'white_attack': _extra.whiteAttack,
@@ -504,6 +546,7 @@ extension _AdditionalRoles on NightGame {
         final a = chosen[0], b = chosen[1], original = _roles[chosen[0]]!;
         _roles[a] = _roles[b]!;
         _roles[b] = original;
+        _swapCardMemory(a,b);
         _extra.metamorphUsed = true;
         for (final player in chosen) {
           _notice(

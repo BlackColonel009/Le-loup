@@ -64,7 +64,8 @@
   "extra_lines": {
     "old_witch": {
       "witch_potion": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
-      "death_witch": "Mes potions sont mortes avec moi… débrouillez-vous !"
+      "death_witch": "Mes potions sont mortes avec moi… débrouillez-vous !",
+      "horror_laugh": "Ha ha ha ! Hi hi hi…"
     },
     "werewolf": {
       "death_werewolf": "Vous m’avez trouvé… mais combien en reste-t-il ?",
@@ -78,7 +79,8 @@
       "ended_lovers": "Leur amour a défié tous les camps. Honneur aux amoureux !",
       "death_villager_female": "Je pars… ouvrez les yeux avant la prochaine nuit.",
       "death_little_girl": "J’ai vu des ombres… elles sont encore parmi vous.",
-      "death_cupid": "Mes flèches se taisent… que l’amour vous survive."
+      "death_cupid": "Mes flèches se taisent… que l’amour vous survive.",
+      "death_sisters": "Ma sœur… garde les yeux ouverts. La nuit n’a pas livré tous ses secrets."
     },
     "intense_male": {
       "death_hunter": "Je tombe… mais mon fusil parle encore.",

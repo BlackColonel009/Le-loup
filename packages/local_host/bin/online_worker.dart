@@ -30,6 +30,8 @@ Future<void> main() async {
               revealOnDeath: command['reveal_on_death'] as bool?,
               pack: command['pack'] as String?,
               sentences: (command['sentences'] as List?)?.cast<String>(),
+              cardStyles: (command['card_styles'] as Map?)
+                  ?.cast<String, String>(),
             );
           case 'narration.configure':
             host.setNarration(

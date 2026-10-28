@@ -16,5 +16,6 @@ const roleIds = {
   'idiot',
   'piper',
   'angel',
+  'sisters',
 };
 const wolfRoleIds = {'werewolf', 'alpha_wolf', 'white_wolf', 'wolf_father'};

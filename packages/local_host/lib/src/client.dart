@@ -12,6 +12,7 @@ class LobbyClient {
   String? _code;
   String? _nickname;
   String _appearance = 'male';
+  String? _accountToken;
   bool _closed = false;
   bool _inGame = false;
 
@@ -22,7 +23,13 @@ class LobbyClient {
       _token = null;
       id = null;
     }
-    await connect(_address!, _code!, _nickname!, appearance: _appearance);
+    await connect(
+      _address!,
+      _code!,
+      _nickname!,
+      appearance: _appearance,
+      communityToken: _accountToken,
+    );
   }
 
   Future<void> connect(
@@ -30,7 +37,9 @@ class LobbyClient {
     String code,
     String nickname, {
     String appearance = 'male',
+    String? communityToken,
   }) async {
+    _accountToken = communityToken;
     _appearance = appearance;
     final previous = _socket;
     _socket = null;
@@ -126,6 +135,7 @@ class LobbyClient {
         'code': code.trim(),
         'nickname': nickname.trim(),
         'appearance': _appearance,
+        if (remote && _accountToken != null) 'account_token': _accountToken,
       }),
     );
   }

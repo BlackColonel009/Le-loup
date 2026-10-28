@@ -2,7 +2,7 @@
 
 ## Résultat
 
-L'illustration active est `apps/le_loup/assets/village/intense/map_v3.png`.
+L'illustration active est `apps/mordeviel/assets/village/intense/map_v3.png`.
 L'ancienne `map.png` est conservée comme source historique. La nouvelle image
 est une variante créée avec l'outil intégré imagegen à partir de l'ancienne map.
 Elle ne contient pas de maisons : elles restent ajoutées par le jeu, une par
@@ -29,7 +29,7 @@ d'ensemble » affiche le plateau entier. Changer de thème recalcule le cadrage.
 `test/intense_map_layout_test.dart` vérifie les vingt emplacements sans
 chevauchement, le rendu en 1440 × 1000 et 390 × 844, l'interaction avec les maisons,
 le zoom, la stabilité des positions la nuit et le retour à la carte classique.
-Pour recréer les captures de contrôle, depuis `apps/le_loup` :
+Pour recréer les captures de contrôle, depuis `apps/mordeviel` :
 
 ```powershell
 flutter test test/intense_map_layout_test.dart --dart-define=CAPTURE_INTENSE_MAP=true

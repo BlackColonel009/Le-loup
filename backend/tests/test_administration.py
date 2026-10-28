@@ -4,17 +4,17 @@ import time
 
 from fastapi.testclient import TestClient
 
-from le_loup_api import create_admin
-from le_loup_api.main import app
-from le_loup_api.moderation import discouraged
+from mordeviel_api import create_admin
+from mordeviel_api.main import app
+from mordeviel_api.moderation import discouraged
 
 from .helpers import post_verified
 
 
 def test_admin_permissions_moderation_offers_maintenance(tmp_path, monkeypatch):
     path = tmp_path / "admin.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
-    monkeypatch.delenv("LE_LOUP_SUPPORT_TOKEN", raising=False)
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
+    monkeypatch.delenv("MORDEVIEL_SUPPORT_TOKEN", raising=False)
     monkeypatch.setattr(
         sys,
         "argv",

@@ -6,7 +6,7 @@ import wave
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'apps/le_loup/assets/audio/classic'
+OUT = ROOT / 'apps/mordeviel/assets/audio/classic'
 SR = 22050
 DURATION = 64
 n = SR * DURATION

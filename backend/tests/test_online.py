@@ -5,7 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 from .helpers import post_verified
 
@@ -20,7 +20,8 @@ def receive(socket, kind):
 
 
 @pytest.mark.skipif(
-    not os.getenv("LE_LOUP_DART"), reason="Set LE_LOUP_DART for real engine integration"
+    not os.getenv("MORDEVIEL_DART"),
+    reason="Set MORDEVIEL_DART for real engine integration",
 )
 def test_real_online_game_private_roles_host_permissions_and_reconnect():
     with TestClient(app) as api, ExitStack() as stack:
@@ -48,10 +49,18 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
                 },
                 "camp_only": False,
                 "pack": "intense",
+                "card_styles": {
+                    "werewolf#0": "horror",
+                    "villager#0": "classic",
+                    "villager#1": "intense",
+                    "villager#2": "horror",
+                },
             }
         )
         receive(mdj, "command.ok")
-        mdj.send_json({"action": "narration.configure", "profile": "duke", "automatic": True})
+        mdj.send_json(
+            {"action": "narration.configure", "profile": "duke", "automatic": True}
+        )
         receive(mdj, "command.ok")
         players = []
         tokens = []
@@ -79,14 +88,24 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
             players.append(player)
         mdj.send_json({"action": "start"})
         receive(mdj, "command.ok")
+        dealt = []
         for player in players:
             role = receive(player, "game.private")
             assert role["role"] in {"villager", "werewolf"}
+            dealt.append((role["role"], role["edition"]))
+        assert sorted(edition for role, edition in dealt if role == "villager") == [
+            "classic",
+            "horror",
+            "intense",
+        ]
+        assert [edition for role, edition in dealt if role == "werewolf"] == ["horror"]
         mdj.send_json({"action": "night.start", "seconds": 120})
         receive(mdj, "command.ok")
         mdj.send_json({"action": "night.call", "call": "wolves"})
         receive(mdj, "command.ok")
-        mdj.send_json({"action": "narration.configure", "profile": "duke", "automatic": False})
+        mdj.send_json(
+            {"action": "narration.configure", "profile": "duke", "automatic": False}
+        )
         receive(mdj, "command.ok")
         for player in players:
             for _ in range(100):
@@ -96,6 +115,27 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect():
                     break
             else:
                 raise AssertionError("Shared narration mode was not received")
+        wolf = players[
+            next(i for i, (role, _) in enumerate(dealt) if role == "werewolf")
+        ]
+        revision = event["game"]["phase_revision"]
+        wolf.send_json(
+            {
+                "version": 1,
+                "type": "game.action",
+                "action": "wolves.veil",
+                "phase_revision": revision,
+                "targets": [],
+            }
+        )
+        for _ in range(100):
+            private = receive(wolf, "game.private")
+            if private.get("veil_requested"):
+                break
+        else:
+            raise AssertionError(
+                "Horror wolf ability was not accepted over the remote gateway"
+            )
         # Host commands sent through the player channel never grant MDJ access.
         players[0].send_json({"type": "host.command", "action": "night.finish"})
         # A disconnected player can reclaim only their own private session.

@@ -2,15 +2,15 @@ import sqlite3
 
 from fastapi.testclient import TestClient
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 from .helpers import post_verified
 
 
 def test_community_accounts_chat_and_private_support(tmp_path, monkeypatch):
     path = tmp_path / "community.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
-    monkeypatch.setenv("LE_LOUP_SUPPORT_TOKEN", "test-only-support-secret")
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_SUPPORT_TOKEN", "test-only-support-secret")
     with TestClient(app) as api:
         assert api.get("/community/messages").status_code == 401
         first = post_verified(

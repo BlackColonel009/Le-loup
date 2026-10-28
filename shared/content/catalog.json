@@ -1,0 +1,2158 @@
+{
+  "packs": [
+    {
+      "id": "stickers-classic",
+      "title": "Émotions du village",
+      "kind": "stickers",
+      "theme": null,
+      "version": "596993bbd001872d",
+      "size": 27923560,
+      "files": [
+        {
+          "asset": "assets/stickers/classic/classic_alpha_proud.png",
+          "size": 1781358,
+          "sha256": "6dfe6728b4bd85a44c0437901de0cdef968b988c46470dce44255a4311e1aa80",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/6dfe6728b4bd85a44c0437901de0cdef968b988c46470dce44255a4311e1aa80"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_cupid_love.png",
+          "size": 1494812,
+          "sha256": "4a53383d3d0e79f6b18dc944b4a197f3c14876249219abd74583fa765b3676aa",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/4a53383d3d0e79f6b18dc944b4a197f3c14876249219abd74583fa765b3676aa"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_elder_patient.png",
+          "size": 1510337,
+          "sha256": "cc0c0f6abf09fc562767dc580aa5cbba839c00f07764d80fd08124b5e42f01b2",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/cc0c0f6abf09fc562767dc580aa5cbba839c00f07764d80fd08124b5e42f01b2"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_guardian_alert.png",
+          "size": 1690314,
+          "sha256": "feebcb190f217558053a18a8c561ddd5607c61d5d28f292eff4502f888f01776",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/feebcb190f217558053a18a8c561ddd5607c61d5d28f292eff4502f888f01776"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_hunter_ready.png",
+          "size": 1538016,
+          "sha256": "59a33f5d306132565a47cb5d727ec8ef577af87e764918005621656ab348364a",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/59a33f5d306132565a47cb5d727ec8ef577af87e764918005621656ab348364a"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_idiot_confused.png",
+          "size": 1906587,
+          "sha256": "9ca55b970eec2e2b1a4639ce6fae20a523f0fe3a6f61a947c7894b4bfd2e6af8",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/9ca55b970eec2e2b1a4639ce6fae20a523f0fe3a6f61a947c7894b4bfd2e6af8"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_mason_secret.png",
+          "size": 1848156,
+          "sha256": "4bd1e064769de46e71703485285131969a90f6960d9b42e95e0c49831a988782",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/4bd1e064769de46e71703485285131969a90f6960d9b42e95e0c49831a988782"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_mayor_confident.png",
+          "size": 1368497,
+          "sha256": "d018fe88ce5dea122c753ebe6929e6b7d16afb117c4abe230567fb932ba84f51",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/d018fe88ce5dea122c753ebe6929e6b7d16afb117c4abe230567fb932ba84f51"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_metamorph_sneaky.png",
+          "size": 2119876,
+          "sha256": "1805fd83fed36715b8dcd747bd6062a27deee715ec06f2be01cd431cf2b77d40",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/1805fd83fed36715b8dcd747bd6062a27deee715ec06f2be01cd431cf2b77d40"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_scapegoat_scared.png",
+          "size": 1443755,
+          "sha256": "a05814d2c1e15451dc9c9fa21b41ea978ace484bef565997f22859777c9cb7ee",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/a05814d2c1e15451dc9c9fa21b41ea978ace484bef565997f22859777c9cb7ee"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_seer_serene.png",
+          "size": 2337001,
+          "sha256": "fcb0e8b3a51d5baf769ff62e080db5a527a3a4aebbe4ef244ef58caa7b3d2978",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/fcb0e8b3a51d5baf769ff62e080db5a527a3a4aebbe4ef244ef58caa7b3d2978"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_sisters_teamwork.png",
+          "size": 1663129,
+          "sha256": "0c41db25696b8cc0f5dc5a96b81e93ca92a464ea0aac07c3270a2dcc290ed3fd",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/0c41db25696b8cc0f5dc5a96b81e93ca92a464ea0aac07c3270a2dcc290ed3fd"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_villager_joy.png",
+          "size": 1126929,
+          "sha256": "0b1c001ee38fddde418e369eae26a2e84b68370e2b184f5bf7bbdac62ae779a6",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/0b1c001ee38fddde418e369eae26a2e84b68370e2b184f5bf7bbdac62ae779a6"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_werewolf_angry.png",
+          "size": 1435727,
+          "sha256": "dcba0505eeb5e6686d354009f3a8562659f9f347016bb2256a04a69dfc351218",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/dcba0505eeb5e6686d354009f3a8562659f9f347016bb2256a04a69dfc351218"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_wild_child_curious.png",
+          "size": 1533816,
+          "sha256": "6fa8b3304aa8f32f026c49478ecac4611170a564618318d3be3fccfec4aeaff5",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/6fa8b3304aa8f32f026c49478ecac4611170a564618318d3be3fccfec4aeaff5"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_witch_determined.png",
+          "size": 1470268,
+          "sha256": "e57ad3968a7951729d428f40108f251f0cbe0adcfc465ca12ef30f0d6763189a",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/e57ad3968a7951729d428f40108f251f0cbe0adcfc465ca12ef30f0d6763189a"
+        },
+        {
+          "asset": "assets/stickers/classic/classic_wolf_father_command.png",
+          "size": 1654982,
+          "sha256": "880236b4bfd5d5d1212179dea0fd0355b986d36c0b63addabf3d8282c6fd5f6b",
+          "url": "/content/packs/stickers-classic/596993bbd001872d/880236b4bfd5d5d1212179dea0fd0355b986d36c0b63addabf3d8282c6fd5f6b"
+        }
+      ]
+    },
+    {
+      "id": "voice-cold-killer",
+      "title": "Voix · Tueur de sang-froid",
+      "kind": "audio",
+      "theme": null,
+      "version": "e3429bf4492fb884",
+      "size": 6763736,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/death_metamorph.wav",
+          "size": 184364,
+          "sha256": "ebefa75a13dc2a82648dec4f1239404e56a878f85501df89a7f12ce5e70435ff",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/ebefa75a13dc2a82648dec4f1239404e56a878f85501df89a7f12ce5e70435ff"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_alpha.wav",
+          "size": 226604,
+          "sha256": "6f1a4a7c862b0f197386a85b919517fc03267df408da090cf31f5d86b1c9f95c",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/6f1a4a7c862b0f197386a85b919517fc03267df408da090cf31f5d86b1c9f95c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_alpha.wav",
+          "size": 184364,
+          "sha256": "92fe2886959ef8c4d019e946f93d1ec84b8f5b513e4061b84836cb1085bca806",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/92fe2886959ef8c4d019e946f93d1ec84b8f5b513e4061b84836cb1085bca806"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_cupid.wav",
+          "size": 130604,
+          "sha256": "5fd829cb94258edc16ac49177e16965bc9248d9519fe4f565de5eac83aeb2991",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/5fd829cb94258edc16ac49177e16965bc9248d9519fe4f565de5eac83aeb2991"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_guardian.wav",
+          "size": 211244,
+          "sha256": "bb0e23b995d9500c3a92bc79a61a21719662594cfe35123d14c7c7347b9f8e68",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/bb0e23b995d9500c3a92bc79a61a21719662594cfe35123d14c7c7347b9f8e68"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_infection.wav",
+          "size": 207404,
+          "sha256": "36cb7b005a6a1b4ef17c3a0a42229343e111abcf71376c10f7099a3ad1bdd81d",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/36cb7b005a6a1b4ef17c3a0a42229343e111abcf71376c10f7099a3ad1bdd81d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_metamorph.wav",
+          "size": 184364,
+          "sha256": "0c1429a5d18f8800fcc91beb5da61a3e8e68907894af85d6e965b2438f0e98ac",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/0c1429a5d18f8800fcc91beb5da61a3e8e68907894af85d6e965b2438f0e98ac"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_piper.wav",
+          "size": 142124,
+          "sha256": "667dee5f6181f46aeb7c8793780a81baf6b9a08dfdfd85dcd002464e73b560a8",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/667dee5f6181f46aeb7c8793780a81baf6b9a08dfdfd85dcd002464e73b560a8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_seer.wav",
+          "size": 161324,
+          "sha256": "ce90816a52824704a32dce793492ee6145a7de4c2f42a8a7ae625a1d18d619f5",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/ce90816a52824704a32dce793492ee6145a7de4c2f42a8a7ae625a1d18d619f5"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_sisters.wav",
+          "size": 176684,
+          "sha256": "bf7586d3cdf5f98aefdda05b0ce381b2fca16a2c7d55cc6b7dd96525dde80600",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/bf7586d3cdf5f98aefdda05b0ce381b2fca16a2c7d55cc6b7dd96525dde80600"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_white_wolf.wav",
+          "size": 145964,
+          "sha256": "5d8979bf78609454739b195c986e24d99cdb1ee5900c32e019b3fac3f5cc4737",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/5d8979bf78609454739b195c986e24d99cdb1ee5900c32e019b3fac3f5cc4737"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_witch.wav",
+          "size": 161324,
+          "sha256": "14ee8092d5db17e05dd58928361a3284ccb3faf6d1ec02f3dcaf12aac8f47a85",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/14ee8092d5db17e05dd58928361a3284ccb3faf6d1ec02f3dcaf12aac8f47a85"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_close_wolves.wav",
+          "size": 172844,
+          "sha256": "e5d14eac8cc4822ca0a4e1b7bc0afd25a4a4d3313cbd69cf896bc0a0dd451590",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/e5d14eac8cc4822ca0a4e1b7bc0afd25a4a4d3313cbd69cf896bc0a0dd451590"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_cupid.wav",
+          "size": 238124,
+          "sha256": "8099a75016d9c334d495ab817dfed851421fd3fd5eb970a43d69a76a860c0e19",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/8099a75016d9c334d495ab817dfed851421fd3fd5eb970a43d69a76a860c0e19"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_dawn.wav",
+          "size": 222764,
+          "sha256": "3d8685b3f240ccbf4fbf9c3e8e09638a3058aa2b2a69e5277b6515b7eda7589f",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/3d8685b3f240ccbf4fbf9c3e8e09638a3058aa2b2a69e5277b6515b7eda7589f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_day.wav",
+          "size": 169004,
+          "sha256": "30be4c6930ebd4395c23006818190fe2f2991d472b3a21770a7336a659e5a3e3",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/30be4c6930ebd4395c23006818190fe2f2991d472b3a21770a7336a659e5a3e3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_guardian.wav",
+          "size": 215084,
+          "sha256": "01c7618549253dc89561c4999ebdb74b8744bfba9d601ebf58f9ed5dda329971",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/01c7618549253dc89561c4999ebdb74b8744bfba9d601ebf58f9ed5dda329971"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_hunter.wav",
+          "size": 192044,
+          "sha256": "94746d3c4d515773650d5200a1dc0e35708dbbf280fe324fb09f29309aec28aa",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/94746d3c4d515773650d5200a1dc0e35708dbbf280fe324fb09f29309aec28aa"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_infection.wav",
+          "size": 203564,
+          "sha256": "75bfb1b51ad79e68ee9abc06adabc7a759c6a069126da3fea760874a81c577d3",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/75bfb1b51ad79e68ee9abc06adabc7a759c6a069126da3fea760874a81c577d3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_mayor_election.wav",
+          "size": 249644,
+          "sha256": "6091a4a9e04336686055f9933d5805fe44c2c1e927f1ad6c11e5a8cb51fba956",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/6091a4a9e04336686055f9933d5805fe44c2c1e927f1ad6c11e5a8cb51fba956"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_mayor_succession.wav",
+          "size": 207404,
+          "sha256": "c8ca51adc1199ca9e84855f19bc6fc439932544d658d4838ca1cb467f555fdc4",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/c8ca51adc1199ca9e84855f19bc6fc439932544d658d4838ca1cb467f555fdc4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_metamorph.wav",
+          "size": 218924,
+          "sha256": "5c7cefcd5328020f046961afda08246db0be78f49bdf18de9e9eb0289222cf8d",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/5c7cefcd5328020f046961afda08246db0be78f49bdf18de9e9eb0289222cf8d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_piper.wav",
+          "size": 192044,
+          "sha256": "8c82d0b2d3a69cdf6883712edb3d02ac969bb77d3db0d50e679e2ca96ff0e912",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/8c82d0b2d3a69cdf6883712edb3d02ac969bb77d3db0d50e679e2ca96ff0e912"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_role_reveal.wav",
+          "size": 130604,
+          "sha256": "b8593562141955066b4c930297a6de2401d0c29074001b6f305db81d4607efa2",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/b8593562141955066b4c930297a6de2401d0c29074001b6f305db81d4607efa2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_scapegoat.wav",
+          "size": 192044,
+          "sha256": "88880abdd955cc47a017657a0568d4452206749e5fce559116eb407b07c62d7f",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/88880abdd955cc47a017657a0568d4452206749e5fce559116eb407b07c62d7f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_seer.wav",
+          "size": 284204,
+          "sha256": "821b2f600255a4b8a48a25fb828183e64a4e0bfa00a028b8449b96daff650a19",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/821b2f600255a4b8a48a25fb828183e64a4e0bfa00a028b8449b96daff650a19"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_sisters.wav",
+          "size": 188204,
+          "sha256": "10cccb16c342da6ce15b8cfc32607fe7c7c1ba02d3c44dd0f380a473459f2af7",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/10cccb16c342da6ce15b8cfc32607fe7c7c1ba02d3c44dd0f380a473459f2af7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_sleep.wav",
+          "size": 157484,
+          "sha256": "6c2d79091f08f496118d13218f03c673544d200abc458cb474f0819bd7b41f6e",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/6c2d79091f08f496118d13218f03c673544d200abc458cb474f0819bd7b41f6e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_vote_result.wav",
+          "size": 207404,
+          "sha256": "42058af2ca08ca9ed7f5398cbe8c48907e0633eefe59d291ec1c3be93920ac1b",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/42058af2ca08ca9ed7f5398cbe8c48907e0633eefe59d291ec1c3be93920ac1b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_voting.wav",
+          "size": 211244,
+          "sha256": "e9daba2e32c4ee378bf5c518ba9e6fa98348c6b7c5604c0a89d45d528148f90f",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/e9daba2e32c4ee378bf5c518ba9e6fa98348c6b7c5604c0a89d45d528148f90f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_white_wolf.wav",
+          "size": 184364,
+          "sha256": "25303a80bf7e759115c1632f06395d9cc70e9cf5b4b0b8c86532615a2281a04e",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/25303a80bf7e759115c1632f06395d9cc70e9cf5b4b0b8c86532615a2281a04e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_witch.wav",
+          "size": 172844,
+          "sha256": "8dfddb15fc0e1da237cefb70c2abd584f5dbd2a97898655f90cd5dfcbe01b5c8",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/8dfddb15fc0e1da237cefb70c2abd584f5dbd2a97898655f90cd5dfcbe01b5c8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/mdj_wolves.wav",
+          "size": 207404,
+          "sha256": "be1e9a65c384a93565b4662b869e946f3f0c3e595058be262f1921c9641c576c",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/be1e9a65c384a93565b4662b869e946f3f0c3e595058be262f1921c9641c576c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/cold_killer/wolves.wav",
+          "size": 430124,
+          "sha256": "bd64177c4063d01358b9767ce7fbef5d224b30144904c01843fe159ba7eb8823",
+          "url": "/content/packs/voice-cold-killer/e3429bf4492fb884/bd64177c4063d01358b9767ce7fbef5d224b30144904c01843fe159ba7eb8823"
+        }
+      ]
+    },
+    {
+      "id": "voice-duke",
+      "title": "Voix · Le Duc",
+      "kind": "audio",
+      "theme": null,
+      "version": "5f415d430933abac",
+      "size": 6387504,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/duke/death_scapegoat.wav",
+          "size": 161324,
+          "sha256": "d06fa13649f4de390ba373766bae7b52429f1e2912dd358f9de62523c5b0ad34",
+          "url": "/content/packs/voice-duke/5f415d430933abac/d06fa13649f4de390ba373766bae7b52429f1e2912dd358f9de62523c5b0ad34"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/ended_draw.wav",
+          "size": 188204,
+          "sha256": "54341de9b76eaec4381aaaa21cd2e2539735d4da1e5ed111a8d3ef06f08720b4",
+          "url": "/content/packs/voice-duke/5f415d430933abac/54341de9b76eaec4381aaaa21cd2e2539735d4da1e5ed111a8d3ef06f08720b4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/ended_village.wav",
+          "size": 153644,
+          "sha256": "eb668f9be03c2469d1ffe1ce7b0eeed02c33ea161bf7d06c6e8e4adc8689f091",
+          "url": "/content/packs/voice-duke/5f415d430933abac/eb668f9be03c2469d1ffe1ce7b0eeed02c33ea161bf7d06c6e8e4adc8689f091"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_alpha.wav",
+          "size": 172844,
+          "sha256": "022dbe17daabeb27477ddc4311e93830bfc62e594e32b324e4da283dd8d796b2",
+          "url": "/content/packs/voice-duke/5f415d430933abac/022dbe17daabeb27477ddc4311e93830bfc62e594e32b324e4da283dd8d796b2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_alpha.wav",
+          "size": 172844,
+          "sha256": "6633bc216ff891594adca016790ed9ade3fda0fe78c45d02aa6941c65cf3a8a7",
+          "url": "/content/packs/voice-duke/5f415d430933abac/6633bc216ff891594adca016790ed9ade3fda0fe78c45d02aa6941c65cf3a8a7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_cupid.wav",
+          "size": 134444,
+          "sha256": "fc1d495512dc36c6a4155af67ad83a29249e1c5defe99bedc6559ea13d5242dd",
+          "url": "/content/packs/voice-duke/5f415d430933abac/fc1d495512dc36c6a4155af67ad83a29249e1c5defe99bedc6559ea13d5242dd"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_guardian.wav",
+          "size": 184364,
+          "sha256": "be30546b48b8950a7b157ba4228456568def6335c8b4ee18864f51137789fb5c",
+          "url": "/content/packs/voice-duke/5f415d430933abac/be30546b48b8950a7b157ba4228456568def6335c8b4ee18864f51137789fb5c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_infection.wav",
+          "size": 207404,
+          "sha256": "c45a9d3c3ee0e3954eadcfcfde56d88b1c99a7b369a3de371dde3f30c4b58ea0",
+          "url": "/content/packs/voice-duke/5f415d430933abac/c45a9d3c3ee0e3954eadcfcfde56d88b1c99a7b369a3de371dde3f30c4b58ea0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_metamorph.wav",
+          "size": 169004,
+          "sha256": "fa820b45e61ee413e9e6012435e8be22999d8c9bee964752dff5f198bd763934",
+          "url": "/content/packs/voice-duke/5f415d430933abac/fa820b45e61ee413e9e6012435e8be22999d8c9bee964752dff5f198bd763934"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_piper.wav",
+          "size": 165164,
+          "sha256": "516934db835048f5a0194011f93d1fe1b6b52b8e45846605796183310da01c6f",
+          "url": "/content/packs/voice-duke/5f415d430933abac/516934db835048f5a0194011f93d1fe1b6b52b8e45846605796183310da01c6f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_seer.wav",
+          "size": 134444,
+          "sha256": "ead78ec467f71c4f4cedd7958314950acac3a7d92e263e239abe2ec093071385",
+          "url": "/content/packs/voice-duke/5f415d430933abac/ead78ec467f71c4f4cedd7958314950acac3a7d92e263e239abe2ec093071385"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_sisters.wav",
+          "size": 192044,
+          "sha256": "36f5f3c767926a397d7d622aaa9aa270f8c34e327a12e8a6e0a7c9edcb16dc6a",
+          "url": "/content/packs/voice-duke/5f415d430933abac/36f5f3c767926a397d7d622aaa9aa270f8c34e327a12e8a6e0a7c9edcb16dc6a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_white_wolf.wav",
+          "size": 126764,
+          "sha256": "a8ba6fe6cc1d735026544e38ac9363f596836f6e22c5bd29162eebaade3fd685",
+          "url": "/content/packs/voice-duke/5f415d430933abac/a8ba6fe6cc1d735026544e38ac9363f596836f6e22c5bd29162eebaade3fd685"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_witch.wav",
+          "size": 165164,
+          "sha256": "7ca105bcd934cd4b29da16aab808fb232bca580c38fcb1c7156ab9b38f018187",
+          "url": "/content/packs/voice-duke/5f415d430933abac/7ca105bcd934cd4b29da16aab808fb232bca580c38fcb1c7156ab9b38f018187"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_close_wolves.wav",
+          "size": 149804,
+          "sha256": "103f07edb419621e41dfaa77ecc7373da905ad3947b60c8f6686d7d66d905366",
+          "url": "/content/packs/voice-duke/5f415d430933abac/103f07edb419621e41dfaa77ecc7373da905ad3947b60c8f6686d7d66d905366"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_cupid.wav",
+          "size": 165164,
+          "sha256": "df23c415c16747ae0e3736ca77a03f62aa03b1a30575567bb05803877f59d244",
+          "url": "/content/packs/voice-duke/5f415d430933abac/df23c415c16747ae0e3736ca77a03f62aa03b1a30575567bb05803877f59d244"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_dawn.wav",
+          "size": 199724,
+          "sha256": "b10697994f17052a47be7ab9969b3961d9e113e54d544b6c311bf399ba19e498",
+          "url": "/content/packs/voice-duke/5f415d430933abac/b10697994f17052a47be7ab9969b3961d9e113e54d544b6c311bf399ba19e498"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_day.wav",
+          "size": 153644,
+          "sha256": "f02530f42050a5cfa1bfeaa771b2cf5aef07381c73c8479b05fd4c5e8e1f13d8",
+          "url": "/content/packs/voice-duke/5f415d430933abac/f02530f42050a5cfa1bfeaa771b2cf5aef07381c73c8479b05fd4c5e8e1f13d8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_guardian.wav",
+          "size": 184364,
+          "sha256": "4752f2cd4b5ae3f9595ee21230023f06779363944028d67ae142b0ad9a9d26ea",
+          "url": "/content/packs/voice-duke/5f415d430933abac/4752f2cd4b5ae3f9595ee21230023f06779363944028d67ae142b0ad9a9d26ea"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_hunter.wav",
+          "size": 153644,
+          "sha256": "972cdc65fbfcd93ad5db48b813061600dcad734fe0bcd793aad2ba39521c11c2",
+          "url": "/content/packs/voice-duke/5f415d430933abac/972cdc65fbfcd93ad5db48b813061600dcad734fe0bcd793aad2ba39521c11c2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_infection.wav",
+          "size": 226604,
+          "sha256": "70b4bee7dcebc2ee446f019a77ea5e111d4ad9f8936358d1bd3459a3bde27040",
+          "url": "/content/packs/voice-duke/5f415d430933abac/70b4bee7dcebc2ee446f019a77ea5e111d4ad9f8936358d1bd3459a3bde27040"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_mayor_election.wav",
+          "size": 195884,
+          "sha256": "17938febdaf48b004edadbbbf244727e57be605fdde83322015d09041ad34073",
+          "url": "/content/packs/voice-duke/5f415d430933abac/17938febdaf48b004edadbbbf244727e57be605fdde83322015d09041ad34073"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_mayor_succession.wav",
+          "size": 203564,
+          "sha256": "354d59b44a888b069addfade221f807bd77804f0bf78cbf93851e470365f3e01",
+          "url": "/content/packs/voice-duke/5f415d430933abac/354d59b44a888b069addfade221f807bd77804f0bf78cbf93851e470365f3e01"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_metamorph.wav",
+          "size": 192044,
+          "sha256": "cb6886710d8b38c0945813cd4bf3cd739d90d6d1f77ad17cc3a87030657c9138",
+          "url": "/content/packs/voice-duke/5f415d430933abac/cb6886710d8b38c0945813cd4bf3cd739d90d6d1f77ad17cc3a87030657c9138"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_piper.wav",
+          "size": 184364,
+          "sha256": "88ca95ef7aac75e5107683ecd179cc1ff1a2b35adf8e2d114fd70e5d49b07aa6",
+          "url": "/content/packs/voice-duke/5f415d430933abac/88ca95ef7aac75e5107683ecd179cc1ff1a2b35adf8e2d114fd70e5d49b07aa6"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_role_reveal.wav",
+          "size": 134444,
+          "sha256": "9d0d4d66dbc34aab010123920b17e8e584ab1cd2acae1ec79ab58876de47336c",
+          "url": "/content/packs/voice-duke/5f415d430933abac/9d0d4d66dbc34aab010123920b17e8e584ab1cd2acae1ec79ab58876de47336c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_scapegoat.wav",
+          "size": 184364,
+          "sha256": "af6aafa3f05d39105fc9dcd75f892a3a4627f9bd8aaaed6e47fbdd40aeca4060",
+          "url": "/content/packs/voice-duke/5f415d430933abac/af6aafa3f05d39105fc9dcd75f892a3a4627f9bd8aaaed6e47fbdd40aeca4060"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_seer.wav",
+          "size": 284204,
+          "sha256": "225496dd017d83bed182c995930ceddd66bb0baec413a439f4c38c0ed477ce9b",
+          "url": "/content/packs/voice-duke/5f415d430933abac/225496dd017d83bed182c995930ceddd66bb0baec413a439f4c38c0ed477ce9b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_sisters.wav",
+          "size": 180524,
+          "sha256": "3ce3a2bf0138ff84caeff7c98f430262abeae8a5a0bc65f328b466298e9b5af0",
+          "url": "/content/packs/voice-duke/5f415d430933abac/3ce3a2bf0138ff84caeff7c98f430262abeae8a5a0bc65f328b466298e9b5af0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_sleep.wav",
+          "size": 122924,
+          "sha256": "9c23f0de163170ee5f66aec2df6e8f69a5ecf51b95d2c23072e1e0dbdbb29ff2",
+          "url": "/content/packs/voice-duke/5f415d430933abac/9c23f0de163170ee5f66aec2df6e8f69a5ecf51b95d2c23072e1e0dbdbb29ff2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_vote_result.wav",
+          "size": 172844,
+          "sha256": "1f035708854e21211ae88dbe280f9d7d0955b21eb6bc4f5e5382ad84a8da3529",
+          "url": "/content/packs/voice-duke/5f415d430933abac/1f035708854e21211ae88dbe280f9d7d0955b21eb6bc4f5e5382ad84a8da3529"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_voting.wav",
+          "size": 188204,
+          "sha256": "16d1f2dc438100ef7f24fbdba351ce73e6c3be06a83a5b12d81b585fb5114869",
+          "url": "/content/packs/voice-duke/5f415d430933abac/16d1f2dc438100ef7f24fbdba351ce73e6c3be06a83a5b12d81b585fb5114869"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_white_wolf.wav",
+          "size": 199724,
+          "sha256": "af2119dd555caddcb9b5bee38059a3672af80044f46d83d4b33cf0fde7245be1",
+          "url": "/content/packs/voice-duke/5f415d430933abac/af2119dd555caddcb9b5bee38059a3672af80044f46d83d4b33cf0fde7245be1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_witch.wav",
+          "size": 157484,
+          "sha256": "aa60a85e8061f056aec28092d3f7d34a41c39dc597413091d4a1940e9fa14711",
+          "url": "/content/packs/voice-duke/5f415d430933abac/aa60a85e8061f056aec28092d3f7d34a41c39dc597413091d4a1940e9fa14711"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/mdj_wolves.wav",
+          "size": 169004,
+          "sha256": "34dfeac5a01319eec7ddffff9266baefc060647f3278faa2d9573ae35439066f",
+          "url": "/content/packs/voice-duke/5f415d430933abac/34dfeac5a01319eec7ddffff9266baefc060647f3278faa2d9573ae35439066f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/duke/wolves.wav",
+          "size": 257324,
+          "sha256": "193e68bff353ed247a471bf56e02b172ad1771e6691634d11e9d87333a93beba",
+          "url": "/content/packs/voice-duke/5f415d430933abac/193e68bff353ed247a471bf56e02b172ad1771e6691634d11e9d87333a93beba"
+        }
+      ]
+    },
+    {
+      "id": "voice-ghost",
+      "title": "Voix · Fantôme",
+      "kind": "audio",
+      "theme": null,
+      "version": "ed690773af6a2976",
+      "size": 6566830,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/ghost/death_angel.wav",
+          "size": 176684,
+          "sha256": "09cc8d0bd8ba28438f96c1b78a6653d4073975d1783a79d49c2d64bca9b91a5e",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/09cc8d0bd8ba28438f96c1b78a6653d4073975d1783a79d49c2d64bca9b91a5e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/ended_angel.wav",
+          "size": 188204,
+          "sha256": "c006bc5d53e0e737f7e62ac90f1f792f7d92e0f2b381008645cb722bb1b9229c",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/c006bc5d53e0e737f7e62ac90f1f792f7d92e0f2b381008645cb722bb1b9229c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_alpha.wav",
+          "size": 245804,
+          "sha256": "0347fdb6a6012a2cdc84e800c3d48d1fb5f788a53d6fa22b76c8c2ca203800a1",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/0347fdb6a6012a2cdc84e800c3d48d1fb5f788a53d6fa22b76c8c2ca203800a1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_alpha.wav",
+          "size": 218924,
+          "sha256": "0a8e44c195f6332161f4f9ee384c87aaa86638564391b041cd2d9f442de8af84",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/0a8e44c195f6332161f4f9ee384c87aaa86638564391b041cd2d9f442de8af84"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_cupid.wav",
+          "size": 138284,
+          "sha256": "24c8335075dce738f6332950f05cda1a270bb9326364ee51d1764e45bac5fcb3",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/24c8335075dce738f6332950f05cda1a270bb9326364ee51d1764e45bac5fcb3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_guardian.wav",
+          "size": 176684,
+          "sha256": "93a87b31e63dc4a02887d3fa1379ffea723dce537326115f46a9f32768c25b03",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/93a87b31e63dc4a02887d3fa1379ffea723dce537326115f46a9f32768c25b03"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_infection.wav",
+          "size": 169004,
+          "sha256": "db917f216029d9533e0c2eb5d1021fde84f641742ffe68b6da52884397f5674a",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/db917f216029d9533e0c2eb5d1021fde84f641742ffe68b6da52884397f5674a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_metamorph.wav",
+          "size": 184364,
+          "sha256": "a45c4d21c891675586cdcb3bb7b2c51f598d2def9a9a34c6acef2b0beb0d9860",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/a45c4d21c891675586cdcb3bb7b2c51f598d2def9a9a34c6acef2b0beb0d9860"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_piper.wav",
+          "size": 161324,
+          "sha256": "6cb3069dc5db278b2e01a179cb2cd3ae8a9a1eebe225df67405389b9d479620a",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/6cb3069dc5db278b2e01a179cb2cd3ae8a9a1eebe225df67405389b9d479620a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_seer.wav",
+          "size": 157484,
+          "sha256": "b6d726d5a49ec53ae50ca69a0461eb5a2c7851bf78cbc0c4d982a0a66b3bfeb2",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/b6d726d5a49ec53ae50ca69a0461eb5a2c7851bf78cbc0c4d982a0a66b3bfeb2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_sisters.wav",
+          "size": 149804,
+          "sha256": "6e52010c5bcb2e54f3f15560f898f94ef73daaa408787c971141566a74e53127",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/6e52010c5bcb2e54f3f15560f898f94ef73daaa408787c971141566a74e53127"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_white_wolf.wav",
+          "size": 176684,
+          "sha256": "f6bf52ebe247a3ae7da3c5411bfed525d04c88babcab8124fefb52c249e59e6b",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/f6bf52ebe247a3ae7da3c5411bfed525d04c88babcab8124fefb52c249e59e6b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_witch.wav",
+          "size": 145964,
+          "sha256": "99972886f2a7f1133204bc9aaa3ea4952926f55652b3c69f6ce25ea2f01ed3b8",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/99972886f2a7f1133204bc9aaa3ea4952926f55652b3c69f6ce25ea2f01ed3b8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_close_wolves.wav",
+          "size": 153644,
+          "sha256": "6aa10c4ac44edb2b41e49266cc70af03ff51d47a9ada5e33a43a8b45b0682fa4",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/6aa10c4ac44edb2b41e49266cc70af03ff51d47a9ada5e33a43a8b45b0682fa4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_cupid.wav",
+          "size": 184364,
+          "sha256": "ce0db51222d8b9dc352fae16bd1b508b50764aaaab012c1003c37e0b8ca449f4",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/ce0db51222d8b9dc352fae16bd1b508b50764aaaab012c1003c37e0b8ca449f4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_dawn.wav",
+          "size": 230444,
+          "sha256": "ef37fc5343e2bdb78c9674eddd0c4da52067c614d1305d0ad28f35fce1e72de2",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/ef37fc5343e2bdb78c9674eddd0c4da52067c614d1305d0ad28f35fce1e72de2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_day.wav",
+          "size": 169004,
+          "sha256": "6f4658bcea8bc0e5c501a6c45f285e92029fd049e871c8b2200c0a3de4599a86",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/6f4658bcea8bc0e5c501a6c45f285e92029fd049e871c8b2200c0a3de4599a86"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_guardian.wav",
+          "size": 188204,
+          "sha256": "317dbe46999d2859fda3d3daffe327bddbd29201a50e134b8f00e519da7fad03",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/317dbe46999d2859fda3d3daffe327bddbd29201a50e134b8f00e519da7fad03"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_hunter.wav",
+          "size": 172844,
+          "sha256": "a6723133e682c4b0d2551aec8043d0d8a0a6554ed649a5e4163a0191b311c65e",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/a6723133e682c4b0d2551aec8043d0d8a0a6554ed649a5e4163a0191b311c65e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_infection.wav",
+          "size": 222764,
+          "sha256": "964f2b6cff73924faaeebc4205e5011a40a3fba221174f55d590146622bd32ac",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/964f2b6cff73924faaeebc4205e5011a40a3fba221174f55d590146622bd32ac"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_mayor_election.wav",
+          "size": 245804,
+          "sha256": "e60453cc7ef2c0ccb952b1fe8d9121cb601fbe296b7af0e6c0519c5171ed63b6",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/e60453cc7ef2c0ccb952b1fe8d9121cb601fbe296b7af0e6c0519c5171ed63b6"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_mayor_succession.wav",
+          "size": 192044,
+          "sha256": "a43e070f4248cdef2c1ed37eddc6ba167e2c33a31edd49f287485a3c3233fdf0",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/a43e070f4248cdef2c1ed37eddc6ba167e2c33a31edd49f287485a3c3233fdf0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_metamorph.wav",
+          "size": 207404,
+          "sha256": "1123fc8e5ede7925158df2942f6380e8f82916e021b99f2ca2da2a4b25a1e1a3",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/1123fc8e5ede7925158df2942f6380e8f82916e021b99f2ca2da2a4b25a1e1a3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_piper.wav",
+          "size": 195884,
+          "sha256": "062087f28df5e6e845d493b0d6652bbaaf21b7642f5691811acf94ee4dd99d3b",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/062087f28df5e6e845d493b0d6652bbaaf21b7642f5691811acf94ee4dd99d3b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_role_reveal.wav",
+          "size": 169004,
+          "sha256": "bcc559e89ecd1a3be8fd34f3113a34299e9162a4cd7ba95c74cdd421475aea89",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/bcc559e89ecd1a3be8fd34f3113a34299e9162a4cd7ba95c74cdd421475aea89"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_scapegoat.wav",
+          "size": 207404,
+          "sha256": "054af8370b3721f6a8ac2e46e4ef09122e9b6803938c43c2686257e74a8dacf5",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/054af8370b3721f6a8ac2e46e4ef09122e9b6803938c43c2686257e74a8dacf5"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_seer.wav",
+          "size": 226604,
+          "sha256": "fef12f57e371dbe6d33cc7b7d2ef32b889213d114ac88a1f8ca5a1142fcce856",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/fef12f57e371dbe6d33cc7b7d2ef32b889213d114ac88a1f8ca5a1142fcce856"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_sisters.wav",
+          "size": 180524,
+          "sha256": "a0393a8f51f3cf1611f59e54a8cde0af125dd4a8b6d16ba7b85234562b7eda03",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/a0393a8f51f3cf1611f59e54a8cde0af125dd4a8b6d16ba7b85234562b7eda03"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_sleep.wav",
+          "size": 138284,
+          "sha256": "14129390d5649ce31fd6b589a30dd24070c3e928234e5e280b9f584059b5c660",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/14129390d5649ce31fd6b589a30dd24070c3e928234e5e280b9f584059b5c660"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_vote_result.wav",
+          "size": 149804,
+          "sha256": "9285cd3c4aa5917b46a538d42d6f7efc2b6519d75d5b174c6385bbd5e1b54a19",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/9285cd3c4aa5917b46a538d42d6f7efc2b6519d75d5b174c6385bbd5e1b54a19"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_voting.wav",
+          "size": 234284,
+          "sha256": "4bd14c558558112b6ebba9676e5f02aed3de3ea7013377a4011ba357a475de86",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/4bd14c558558112b6ebba9676e5f02aed3de3ea7013377a4011ba357a475de86"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_white_wolf.wav",
+          "size": 169004,
+          "sha256": "a8834a71393abdd3f89f9c2de8d107d7805e6a4f0c918dde0030d8a31a6f5a9a",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/a8834a71393abdd3f89f9c2de8d107d7805e6a4f0c918dde0030d8a31a6f5a9a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_witch.wav",
+          "size": 172844,
+          "sha256": "496b7c0cb7be29781d0ef4cd2136ce110caf15a5c5f4de8cd8d9ab90b745a353",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/496b7c0cb7be29781d0ef4cd2136ce110caf15a5c5f4de8cd8d9ab90b745a353"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/mdj_wolves.wav",
+          "size": 184364,
+          "sha256": "44232f26e54b401752f1329fdc036da691fa254b66762da34bbedafdf951be18",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/44232f26e54b401752f1329fdc036da691fa254b66762da34bbedafdf951be18"
+        },
+        {
+          "asset": "assets/audio/classic/neural/ghost/wolves.wav",
+          "size": 283094,
+          "sha256": "74fcaeb6a56ca4a7e031fec9967e7e5134ff5ea2d83de528cef7e302a20b812b",
+          "url": "/content/packs/voice-ghost/ed690773af6a2976/74fcaeb6a56ca4a7e031fec9967e7e5134ff5ea2d83de528cef7e302a20b812b"
+        }
+      ]
+    },
+    {
+      "id": "voice-intense-female",
+      "title": "Voix · Féminine grave",
+      "kind": "audio",
+      "theme": null,
+      "version": "ac826cfe46c326f4",
+      "size": 5872812,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_alpha.wav",
+          "size": 230444,
+          "sha256": "6b25272585969a900aeed7698bb59cbb7a37c66e9d4dcb28bf1878625ed72f33",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/6b25272585969a900aeed7698bb59cbb7a37c66e9d4dcb28bf1878625ed72f33"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_alpha.wav",
+          "size": 180524,
+          "sha256": "3b57a0702b777ad37d6edd771de645a2ff069042df192465ce7c8eff978167da",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/3b57a0702b777ad37d6edd771de645a2ff069042df192465ce7c8eff978167da"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_cupid.wav",
+          "size": 138284,
+          "sha256": "43e505f908f3775baefc44680d40795f45fcb98d7a64735008ba955ebb5bee36",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/43e505f908f3775baefc44680d40795f45fcb98d7a64735008ba955ebb5bee36"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_guardian.wav",
+          "size": 165164,
+          "sha256": "c1f86e4b1a3860bc2436b046b7db343b195f544cc23b9b1d73f22e8e3006e0fe",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/c1f86e4b1a3860bc2436b046b7db343b195f544cc23b9b1d73f22e8e3006e0fe"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_infection.wav",
+          "size": 169004,
+          "sha256": "59ade650ef6bdd03b2d19fa6e75fa77f9bde614a5d70e1d2d54568732d4b0503",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/59ade650ef6bdd03b2d19fa6e75fa77f9bde614a5d70e1d2d54568732d4b0503"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_metamorph.wav",
+          "size": 157484,
+          "sha256": "6d4212f9eba94012d4dd78711cf829062ff6a7fc75c098943c5ad20431d08657",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/6d4212f9eba94012d4dd78711cf829062ff6a7fc75c098943c5ad20431d08657"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_piper.wav",
+          "size": 165164,
+          "sha256": "0ca19a615f78865339ceb28fb39888272ec892c970f8121a95f2a8b9b424b5aa",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/0ca19a615f78865339ceb28fb39888272ec892c970f8121a95f2a8b9b424b5aa"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_seer.wav",
+          "size": 157484,
+          "sha256": "9def2c2aba9c7f8a9564ac2099408539c1daff67c434f32d1c14dcef3455accb",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/9def2c2aba9c7f8a9564ac2099408539c1daff67c434f32d1c14dcef3455accb"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_sisters.wav",
+          "size": 145964,
+          "sha256": "fcb01fdc4382e8033dd7438b574780d6f1541e7690f346d08e6fd0fd0bd70267",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/fcb01fdc4382e8033dd7438b574780d6f1541e7690f346d08e6fd0fd0bd70267"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_white_wolf.wav",
+          "size": 172844,
+          "sha256": "8b7a7c101c45b5b0bf2f6430636051d8dbee1756400cbd379839252cbb7af869",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/8b7a7c101c45b5b0bf2f6430636051d8dbee1756400cbd379839252cbb7af869"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_witch.wav",
+          "size": 134444,
+          "sha256": "321b57bd3887a78164c3df542ed0c65729bb745f03472a1284eb1b7d85fca888",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/321b57bd3887a78164c3df542ed0c65729bb745f03472a1284eb1b7d85fca888"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_close_wolves.wav",
+          "size": 161324,
+          "sha256": "00e4563ca92a487801c1f8f43a3ace1aeb0a9e1332ca63b09a47b857615fcc1b",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/00e4563ca92a487801c1f8f43a3ace1aeb0a9e1332ca63b09a47b857615fcc1b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_cupid.wav",
+          "size": 188204,
+          "sha256": "04897bfd95d885daeb630201d633a233a9892d463bc6e04ad9edefed040612a8",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/04897bfd95d885daeb630201d633a233a9892d463bc6e04ad9edefed040612a8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_dawn.wav",
+          "size": 195884,
+          "sha256": "1070c099f9b2aaf715c67017cd383e346baeda606c8461f97ee2e2fab15b0692",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/1070c099f9b2aaf715c67017cd383e346baeda606c8461f97ee2e2fab15b0692"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_day.wav",
+          "size": 126764,
+          "sha256": "008f1500dab6dd5cfb414af00bdf6c8bed522925c51fde0cc90d26da33551e51",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/008f1500dab6dd5cfb414af00bdf6c8bed522925c51fde0cc90d26da33551e51"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_guardian.wav",
+          "size": 199724,
+          "sha256": "ac05b97a58b02135eb5d4ef590b7a07c2b1aca0d61322fa4fd6d60c19c2f9a14",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/ac05b97a58b02135eb5d4ef590b7a07c2b1aca0d61322fa4fd6d60c19c2f9a14"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_hunter.wav",
+          "size": 176684,
+          "sha256": "0576ee155202ebb5a3fb9aad8964c4439f435960055edbc33feabd304b6347b1",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/0576ee155202ebb5a3fb9aad8964c4439f435960055edbc33feabd304b6347b1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_infection.wav",
+          "size": 195884,
+          "sha256": "903272fe5d3f30e917920368366bce3e6afbea3b68d6460fdec8545f8523853e",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/903272fe5d3f30e917920368366bce3e6afbea3b68d6460fdec8545f8523853e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_mayor_election.wav",
+          "size": 195884,
+          "sha256": "a6b1b20c7edd70a96677138998f2f29cf29ca8b23857eb715a6fe46f0d887704",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/a6b1b20c7edd70a96677138998f2f29cf29ca8b23857eb715a6fe46f0d887704"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_mayor_succession.wav",
+          "size": 176684,
+          "sha256": "dd0168758784db6e34400d7a123eebc00fee57028292468b80f510d99d739b38",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/dd0168758784db6e34400d7a123eebc00fee57028292468b80f510d99d739b38"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_metamorph.wav",
+          "size": 215084,
+          "sha256": "d2aafa2b4eb00cfaa72213f783c26a39a73a5a14262fa536340d01595d51e422",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/d2aafa2b4eb00cfaa72213f783c26a39a73a5a14262fa536340d01595d51e422"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_piper.wav",
+          "size": 192044,
+          "sha256": "1c2aec08315c74f482134c0384a35b72f15365aadc57f2894f0587a93a1ea0ab",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/1c2aec08315c74f482134c0384a35b72f15365aadc57f2894f0587a93a1ea0ab"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_role_reveal.wav",
+          "size": 149804,
+          "sha256": "b94dc3b77e1ac5eed4d8010cf4f4a693a9b6988f7ca8756599095251e69ea43f",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/b94dc3b77e1ac5eed4d8010cf4f4a693a9b6988f7ca8756599095251e69ea43f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_scapegoat.wav",
+          "size": 199724,
+          "sha256": "07d6f32f2b0c6bceda939d47c22b3c0d4d32aada223d877179daa3a225d4faa1",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/07d6f32f2b0c6bceda939d47c22b3c0d4d32aada223d877179daa3a225d4faa1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_seer.wav",
+          "size": 207404,
+          "sha256": "62c769f12268375b8e50680da124671c95f1af75ef43f8a3c07a2316dc6bccd8",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/62c769f12268375b8e50680da124671c95f1af75ef43f8a3c07a2316dc6bccd8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_sisters.wav",
+          "size": 165164,
+          "sha256": "a50f2074c120ebd68a125a426a08a71ef0b695c90f81a478d4e40b98a84fcd9a",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/a50f2074c120ebd68a125a426a08a71ef0b695c90f81a478d4e40b98a84fcd9a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_sleep.wav",
+          "size": 142124,
+          "sha256": "8b008f41761e174dafb8df45a9ca6285f3268818a22db55c9275e8006f35748c",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/8b008f41761e174dafb8df45a9ca6285f3268818a22db55c9275e8006f35748c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_vote_result.wav",
+          "size": 188204,
+          "sha256": "703f44d4416aeb6d9e7d77c62195cd91c1687d591a6dfd035ba5138439b91892",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/703f44d4416aeb6d9e7d77c62195cd91c1687d591a6dfd035ba5138439b91892"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_voting.wav",
+          "size": 203564,
+          "sha256": "0408e222e0644ffd7fe7fb95e09bc533b093456c5c67e696120139535834a8fa",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/0408e222e0644ffd7fe7fb95e09bc533b093456c5c67e696120139535834a8fa"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_white_wolf.wav",
+          "size": 195884,
+          "sha256": "a460c2074d3a4d5953c2272043e7ec9a7b6c30320798969652b86671217c5da9",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/a460c2074d3a4d5953c2272043e7ec9a7b6c30320798969652b86671217c5da9"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_witch.wav",
+          "size": 126764,
+          "sha256": "39d8bb31478358109ea2f7e0ddc076aa12fe0882f4ad8068d7671e72600c911e",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/39d8bb31478358109ea2f7e0ddc076aa12fe0882f4ad8068d7671e72600c911e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/mdj_wolves.wav",
+          "size": 172844,
+          "sha256": "ea5004ba34dfa96299ef846e53bc6c6aa6ad20b57eecc20b9ab984fe46533eb9",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/ea5004ba34dfa96299ef846e53bc6c6aa6ad20b57eecc20b9ab984fe46533eb9"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_female/wolves.wav",
+          "size": 280364,
+          "sha256": "b6353769d15d8d139b97c85b4136399a85e9d94779bb5092cf467f4a6cbf9d69",
+          "url": "/content/packs/voice-intense-female/ac826cfe46c326f4/b6353769d15d8d139b97c85b4136399a85e9d94779bb5092cf467f4a6cbf9d69"
+        }
+      ]
+    },
+    {
+      "id": "voice-intense-male",
+      "title": "Voix · Masculine grave",
+      "kind": "audio",
+      "theme": null,
+      "version": "a3ae23580e30822c",
+      "size": 7097860,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/intense_male/death_guardian.wav",
+          "size": 188204,
+          "sha256": "fa8e1726b4a3bc6fb7a4741c715ddd9eb4074eeccb5e068ca438f8f0306e368a",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/fa8e1726b4a3bc6fb7a4741c715ddd9eb4074eeccb5e068ca438f8f0306e368a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/death_hunter.wav",
+          "size": 207404,
+          "sha256": "e504f6e3611b91f3821952a1351fc7bf2aadc4cc2775f827fb5ce62920fa34f2",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/e504f6e3611b91f3821952a1351fc7bf2aadc4cc2775f827fb5ce62920fa34f2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_alpha.wav",
+          "size": 288044,
+          "sha256": "96454158775adf552c58e25271ca50758a01325899539786bc22175036532506",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/96454158775adf552c58e25271ca50758a01325899539786bc22175036532506"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_alpha.wav",
+          "size": 226604,
+          "sha256": "10b8472cd13ce9dfcb88e5c0b34d9ba5919a105603b62edc7d9421b4947eb63c",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/10b8472cd13ce9dfcb88e5c0b34d9ba5919a105603b62edc7d9421b4947eb63c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_cupid.wav",
+          "size": 145964,
+          "sha256": "490d4c11f9a00df5b8e7f736b1fd6986f80c916586f9e27fad403be6c7992961",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/490d4c11f9a00df5b8e7f736b1fd6986f80c916586f9e27fad403be6c7992961"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_guardian.wav",
+          "size": 195884,
+          "sha256": "a400d3f248f4b559502051093d680e7d4e9992d1a0cae469bca7bf39c41abd52",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/a400d3f248f4b559502051093d680e7d4e9992d1a0cae469bca7bf39c41abd52"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_infection.wav",
+          "size": 142124,
+          "sha256": "be594039b5548941ee25156cf4bb1e00dce397e4376d62067f0722a0970a10b2",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/be594039b5548941ee25156cf4bb1e00dce397e4376d62067f0722a0970a10b2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_metamorph.wav",
+          "size": 192044,
+          "sha256": "1a7a309cfccb1740cbf00f6ec7e7daba5a47a4e074670371dbe9d12bafcaa6a1",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/1a7a309cfccb1740cbf00f6ec7e7daba5a47a4e074670371dbe9d12bafcaa6a1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_piper.wav",
+          "size": 218924,
+          "sha256": "0743c8e563943e86ec5a4a35ad8b5bba3d5be8b783249858a9d49c70e02994c7",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/0743c8e563943e86ec5a4a35ad8b5bba3d5be8b783249858a9d49c70e02994c7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_seer.wav",
+          "size": 169004,
+          "sha256": "43cd4869fdaa2d11d1f517d375a61d54517239525748a62167911858f507885a",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/43cd4869fdaa2d11d1f517d375a61d54517239525748a62167911858f507885a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_sisters.wav",
+          "size": 169004,
+          "sha256": "575060ac6f2d62e886d4beb895e828056978ff525d3eddae930b2424d1540c30",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/575060ac6f2d62e886d4beb895e828056978ff525d3eddae930b2424d1540c30"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_white_wolf.wav",
+          "size": 130604,
+          "sha256": "1653b1f47b81576b179418d6b8ecc8e628490ca40d2fbba7bb08471fafc6e8e0",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/1653b1f47b81576b179418d6b8ecc8e628490ca40d2fbba7bb08471fafc6e8e0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_witch.wav",
+          "size": 176684,
+          "sha256": "db0ba6647fbd45fe34610e99854930285a2cb2f055c8811d7982956314875d8b",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/db0ba6647fbd45fe34610e99854930285a2cb2f055c8811d7982956314875d8b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_close_wolves.wav",
+          "size": 207404,
+          "sha256": "27602b1974d705d493473c1dc0f52f77a7093bf2d66704b6eb752bbc515849cb",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/27602b1974d705d493473c1dc0f52f77a7093bf2d66704b6eb752bbc515849cb"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_cupid.wav",
+          "size": 203564,
+          "sha256": "84447c5515648db7db324c0509261736405bc28275402131b6b289787f0bf831",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/84447c5515648db7db324c0509261736405bc28275402131b6b289787f0bf831"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_dawn.wav",
+          "size": 215084,
+          "sha256": "ab10c7d62657224022cb7863e24d33f08a7a1c691ebc54d5752d6ade214938e3",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/ab10c7d62657224022cb7863e24d33f08a7a1c691ebc54d5752d6ade214938e3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_day.wav",
+          "size": 157484,
+          "sha256": "1dc399d4cc5b25fa5fcfef04ede9522e33465b033cc586c8524507c054dec47e",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/1dc399d4cc5b25fa5fcfef04ede9522e33465b033cc586c8524507c054dec47e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_guardian.wav",
+          "size": 207404,
+          "sha256": "1d2683481204517878e31351661d9b9c10dd68414bc46d28f1022994974be028",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/1d2683481204517878e31351661d9b9c10dd68414bc46d28f1022994974be028"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_hunter.wav",
+          "size": 215084,
+          "sha256": "e504771bcdc719e6494b52ebe6274fcc9b44f553c6ea537b85df5fb0c9168a2e",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/e504771bcdc719e6494b52ebe6274fcc9b44f553c6ea537b85df5fb0c9168a2e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_infection.wav",
+          "size": 203564,
+          "sha256": "12b5a2bc49c6ababf0bec839cdf1d30b6b7a963e37526bca16a828606378cdfc",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/12b5a2bc49c6ababf0bec839cdf1d30b6b7a963e37526bca16a828606378cdfc"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_mayor_election.wav",
+          "size": 265004,
+          "sha256": "c2cdc40eb11cf7c7376c046b30461e669b380f5418f061aea2b1b347e2e4652d",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/c2cdc40eb11cf7c7376c046b30461e669b380f5418f061aea2b1b347e2e4652d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_mayor_succession.wav",
+          "size": 188204,
+          "sha256": "0f59ea058b2e75a9f66f96704b305f2a53d54c4dfd5c525c6267f2266e0fc20a",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/0f59ea058b2e75a9f66f96704b305f2a53d54c4dfd5c525c6267f2266e0fc20a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_metamorph.wav",
+          "size": 238124,
+          "sha256": "4a51ac47bb86f46229e5a809a38a832e34667716e5686414400fbd32cc19131f",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/4a51ac47bb86f46229e5a809a38a832e34667716e5686414400fbd32cc19131f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_piper.wav",
+          "size": 199724,
+          "sha256": "b81e5d1daac06ad81197fdd24873d72848c1328c62e498a14d350c87d5bcd921",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/b81e5d1daac06ad81197fdd24873d72848c1328c62e498a14d350c87d5bcd921"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_role_reveal.wav",
+          "size": 149804,
+          "sha256": "66c97acd3ffe7fd3426e26fb35eb198631115e0a3602395242e39251109770c0",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/66c97acd3ffe7fd3426e26fb35eb198631115e0a3602395242e39251109770c0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_scapegoat.wav",
+          "size": 215084,
+          "sha256": "0875efdf5b8e9ee3729d84fb59edc41308e5d18cf1c9b3392db7eb5d5d7d1a0b",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/0875efdf5b8e9ee3729d84fb59edc41308e5d18cf1c9b3392db7eb5d5d7d1a0b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_seer.wav",
+          "size": 253484,
+          "sha256": "4b35eddeab5cb08295708b25c163d78478bf70ddb02bc66cdf0f4051ab702db6",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/4b35eddeab5cb08295708b25c163d78478bf70ddb02bc66cdf0f4051ab702db6"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_sisters.wav",
+          "size": 161324,
+          "sha256": "bc41d2df9bc1f3146c2d09ca9773f0e82f6298873ab37b404ad86e628c87bea3",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/bc41d2df9bc1f3146c2d09ca9773f0e82f6298873ab37b404ad86e628c87bea3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_sleep.wav",
+          "size": 157484,
+          "sha256": "34437cfa9021c75aadce66e731d1989e1806bdfb6c1b4d710218512887324c5e",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/34437cfa9021c75aadce66e731d1989e1806bdfb6c1b4d710218512887324c5e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_vote_result.wav",
+          "size": 211244,
+          "sha256": "d35ffa0d4bacf910fd3bc186d8c17a22fb40230aebe1a4a5e9f57ef49e7d577f",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/d35ffa0d4bacf910fd3bc186d8c17a22fb40230aebe1a4a5e9f57ef49e7d577f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_voting.wav",
+          "size": 276524,
+          "sha256": "ae8ee9f32ee81c8cad584ed6940ac3b8619526e344c913bc762518644ea7aa9c",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/ae8ee9f32ee81c8cad584ed6940ac3b8619526e344c913bc762518644ea7aa9c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_white_wolf.wav",
+          "size": 176684,
+          "sha256": "b7fdb87d5f7715b141492b651eeb1b06244911bf662dc07a6fab449549973e26",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/b7fdb87d5f7715b141492b651eeb1b06244911bf662dc07a6fab449549973e26"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_witch.wav",
+          "size": 180524,
+          "sha256": "ee039bb7e66fcb96abc71fea350996053fde479a98d45acaf20827118f3f81e6",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/ee039bb7e66fcb96abc71fea350996053fde479a98d45acaf20827118f3f81e6"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/mdj_wolves.wav",
+          "size": 211244,
+          "sha256": "7df264a75661fb19c3ec84e8c08530a29ff0cec45a9e3d1c1f23162a81a2e28e",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/7df264a75661fb19c3ec84e8c08530a29ff0cec45a9e3d1c1f23162a81a2e28e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/intense_male/wolves.wav",
+          "size": 353324,
+          "sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2",
+          "url": "/content/packs/voice-intense-male/a3ae23580e30822c/6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2"
+        }
+      ]
+    },
+    {
+      "id": "voice-old-witch",
+      "title": "Voix · Vieille sorcière",
+      "kind": "audio",
+      "theme": null,
+      "version": "d7430429ab8a24f5",
+      "size": 7370544,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/old_witch/death_witch.wav",
+          "size": 180524,
+          "sha256": "da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/horror_laugh.wav",
+          "size": 153644,
+          "sha256": "b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_alpha.wav",
+          "size": 268844,
+          "sha256": "a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_alpha.wav",
+          "size": 199724,
+          "sha256": "8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_cupid.wav",
+          "size": 161324,
+          "sha256": "92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_guardian.wav",
+          "size": 153644,
+          "sha256": "f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_infection.wav",
+          "size": 207404,
+          "sha256": "bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_metamorph.wav",
+          "size": 169004,
+          "sha256": "cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_piper.wav",
+          "size": 172844,
+          "sha256": "bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_seer.wav",
+          "size": 176684,
+          "sha256": "6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_sisters.wav",
+          "size": 207404,
+          "sha256": "8753fc832d78121010b739c5f52002643f29f80e303003f918823083768a59ec",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/8753fc832d78121010b739c5f52002643f29f80e303003f918823083768a59ec"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_white_wolf.wav",
+          "size": 172844,
+          "sha256": "5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_witch.wav",
+          "size": 207404,
+          "sha256": "972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_close_wolves.wav",
+          "size": 169004,
+          "sha256": "08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_cupid.wav",
+          "size": 234284,
+          "sha256": "d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_dawn.wav",
+          "size": 199724,
+          "sha256": "02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_day.wav",
+          "size": 142124,
+          "sha256": "957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_guardian.wav",
+          "size": 222764,
+          "sha256": "c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_hunter.wav",
+          "size": 188204,
+          "sha256": "fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_infection.wav",
+          "size": 203564,
+          "sha256": "3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_mayor_election.wav",
+          "size": 222764,
+          "sha256": "e222a2ee0e86cb6765051eb3b50085331bd865a00164de25196a81d886939bdf",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/e222a2ee0e86cb6765051eb3b50085331bd865a00164de25196a81d886939bdf"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_mayor_succession.wav",
+          "size": 195884,
+          "sha256": "40924ac74932b4c575c54ad50f95e17a623844cff82371b572cba30a9112a6c8",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/40924ac74932b4c575c54ad50f95e17a623844cff82371b572cba30a9112a6c8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_metamorph.wav",
+          "size": 211244,
+          "sha256": "0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_piper.wav",
+          "size": 180524,
+          "sha256": "5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_role_reveal.wav",
+          "size": 149804,
+          "sha256": "d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_scapegoat.wav",
+          "size": 203564,
+          "sha256": "6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_seer.wav",
+          "size": 245804,
+          "sha256": "b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_sisters.wav",
+          "size": 180524,
+          "sha256": "f08a98aa3b0c930aa40cc8b5c2bb3b8c3e78961123e1a8f6b7e5df5387054794",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/f08a98aa3b0c930aa40cc8b5c2bb3b8c3e78961123e1a8f6b7e5df5387054794"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_sleep.wav",
+          "size": 199724,
+          "sha256": "bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_vote_result.wav",
+          "size": 222764,
+          "sha256": "1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_voting.wav",
+          "size": 215084,
+          "sha256": "bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_white_wolf.wav",
+          "size": 192044,
+          "sha256": "141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_witch.wav",
+          "size": 195884,
+          "sha256": "2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/mdj_wolves.wav",
+          "size": 215084,
+          "sha256": "b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/witch_potion.wav",
+          "size": 368684,
+          "sha256": "ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/wolves.wav",
+          "size": 380204,
+          "sha256": "c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5",
+          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5"
+        }
+      ]
+    },
+    {
+      "id": "voice-old-wizard",
+      "title": "Voix · Vieux sorcier",
+      "kind": "audio",
+      "theme": null,
+      "version": "769e65659a3fe212",
+      "size": 6973914,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/death_elder.wav",
+          "size": 188204,
+          "sha256": "28aabfeefbc594b3dccf3580b6964a7fa36fabb505d4fc9053eb100f3cc3b1b2",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/28aabfeefbc594b3dccf3580b6964a7fa36fabb505d4fc9053eb100f3cc3b1b2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/death_wolf_father.wav",
+          "size": 188204,
+          "sha256": "a4d6b05f236533d64ce418c7428757470531dd6b633d71934c208b62197b9be8",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/a4d6b05f236533d64ce418c7428757470531dd6b633d71934c208b62197b9be8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/elder_curse.wav",
+          "size": 188204,
+          "sha256": "377169921bc7ce1ee8b88dc5abb2868c81dad87897d7eda77df15041bf21aff1",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/377169921bc7ce1ee8b88dc5abb2868c81dad87897d7eda77df15041bf21aff1"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_alpha.wav",
+          "size": 222764,
+          "sha256": "da7eca34f23d27d87191daa726d30db268c33554710a1c0e59d6abd0c314491b",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/da7eca34f23d27d87191daa726d30db268c33554710a1c0e59d6abd0c314491b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_alpha.wav",
+          "size": 215084,
+          "sha256": "b111dffd1e0e2c1a122a937ee87bac1dec9e8d652119e0d485ccef4cfbb55953",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/b111dffd1e0e2c1a122a937ee87bac1dec9e8d652119e0d485ccef4cfbb55953"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_cupid.wav",
+          "size": 145964,
+          "sha256": "10cf5940d7f43d85c887d71830d0a624fb076c7767a92b5df53997183c5e132b",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/10cf5940d7f43d85c887d71830d0a624fb076c7767a92b5df53997183c5e132b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_guardian.wav",
+          "size": 180524,
+          "sha256": "6ba195e63d51351a7033a44ce1164401fe37a0dce6fc4208a4e034e53f6cb4aa",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/6ba195e63d51351a7033a44ce1164401fe37a0dce6fc4208a4e034e53f6cb4aa"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_infection.wav",
+          "size": 169004,
+          "sha256": "c9bce95e7338a813bc869616d07209d25d4e737183ade123b0f4ab3616974174",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/c9bce95e7338a813bc869616d07209d25d4e737183ade123b0f4ab3616974174"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_metamorph.wav",
+          "size": 169004,
+          "sha256": "7f69dba7418625fdadba5fd79c8ead5fc03d23c6866a0f7c700fdc9dc49e514b",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/7f69dba7418625fdadba5fd79c8ead5fc03d23c6866a0f7c700fdc9dc49e514b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_piper.wav",
+          "size": 207404,
+          "sha256": "3af610464e2a4bd5ee47cb64ca0f97ce7c609056622596b014a6c52b7a0f2f94",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/3af610464e2a4bd5ee47cb64ca0f97ce7c609056622596b014a6c52b7a0f2f94"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_seer.wav",
+          "size": 161324,
+          "sha256": "91794909f93e344b82f79b929dad9713293976ba110da23746b5c01f47a7b1e6",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/91794909f93e344b82f79b929dad9713293976ba110da23746b5c01f47a7b1e6"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_sisters.wav",
+          "size": 176684,
+          "sha256": "cac0a627b392fa39638663d7fc2e4a36851b9f8b4e6b21fec7aa5a63c08f40bf",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/cac0a627b392fa39638663d7fc2e4a36851b9f8b4e6b21fec7aa5a63c08f40bf"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_white_wolf.wav",
+          "size": 176684,
+          "sha256": "a9a574cc9feb02126e98cdf835382efba52ce3bc77273b6efef17924a0e6ed0e",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/a9a574cc9feb02126e98cdf835382efba52ce3bc77273b6efef17924a0e6ed0e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_witch.wav",
+          "size": 157484,
+          "sha256": "65107ea50312355c09ab7bc59caa63f554e5ab34a6859f78cfeddb5e37331235",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/65107ea50312355c09ab7bc59caa63f554e5ab34a6859f78cfeddb5e37331235"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_close_wolves.wav",
+          "size": 157484,
+          "sha256": "309faaa95265adfd329e7b47592d0428bb167c74b7ea011ea9227b56900c8885",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/309faaa95265adfd329e7b47592d0428bb167c74b7ea011ea9227b56900c8885"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_cupid.wav",
+          "size": 169004,
+          "sha256": "ada3ea61e882cd808da567620965e48b02d1006f1a4d0a5606908a7213f77c2c",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/ada3ea61e882cd808da567620965e48b02d1006f1a4d0a5606908a7213f77c2c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_dawn.wav",
+          "size": 215084,
+          "sha256": "70348333278e2923325638f59980a31741c977c8e325ea2e047852e386fb0e50",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/70348333278e2923325638f59980a31741c977c8e325ea2e047852e386fb0e50"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_day.wav",
+          "size": 169004,
+          "sha256": "cf2eacd8443ef5e482930568c3f009446f0b636028d97517b62f2e6502baf8be",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/cf2eacd8443ef5e482930568c3f009446f0b636028d97517b62f2e6502baf8be"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_guardian.wav",
+          "size": 268844,
+          "sha256": "60b8dacf65ad7f57b181839963f91922a69b49985d0a648b39efe40410d48a35",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/60b8dacf65ad7f57b181839963f91922a69b49985d0a648b39efe40410d48a35"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_hunter.wav",
+          "size": 195884,
+          "sha256": "96188349c9a57f035d8218f596ed4ef8629b92c70a5e72492c08cdc1f5dbeee7",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/96188349c9a57f035d8218f596ed4ef8629b92c70a5e72492c08cdc1f5dbeee7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_infection.wav",
+          "size": 203564,
+          "sha256": "473a29c2571c5f48c00d39d44e2e53752c9f582dd7b8fe995903581d4faab3e8",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/473a29c2571c5f48c00d39d44e2e53752c9f582dd7b8fe995903581d4faab3e8"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_mayor_election.wav",
+          "size": 234284,
+          "sha256": "5c45211aa4840e83d8dd049aad6288dfeddbea3f4b998caf7f021878d0fc44e5",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/5c45211aa4840e83d8dd049aad6288dfeddbea3f4b998caf7f021878d0fc44e5"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_mayor_succession.wav",
+          "size": 188204,
+          "sha256": "d6a8b91549b1b364b352270f1a388385c1aad7be92c3c57303a7c5e4bc278483",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/d6a8b91549b1b364b352270f1a388385c1aad7be92c3c57303a7c5e4bc278483"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_metamorph.wav",
+          "size": 192044,
+          "sha256": "d2becfa9c48c1e309cf65d487277934ebe7d6aa8ff3a6ad8ca19cbf74d87475b",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/d2becfa9c48c1e309cf65d487277934ebe7d6aa8ff3a6ad8ca19cbf74d87475b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_piper.wav",
+          "size": 203564,
+          "sha256": "44e74b53cc8e19621ac977c827b26d5c04cc97a15f5add06255e029194ac1be7",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/44e74b53cc8e19621ac977c827b26d5c04cc97a15f5add06255e029194ac1be7"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_role_reveal.wav",
+          "size": 145964,
+          "sha256": "c4fac884e591b1e803d9029d7eb42b2590ed889fa2237de65c71e39c609496dc",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/c4fac884e591b1e803d9029d7eb42b2590ed889fa2237de65c71e39c609496dc"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_scapegoat.wav",
+          "size": 172844,
+          "sha256": "2598614a0c12e748ecc0f4bfd7f1c3a446d6cccc60463c1fd70128c2f8938e09",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/2598614a0c12e748ecc0f4bfd7f1c3a446d6cccc60463c1fd70128c2f8938e09"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_seer.wav",
+          "size": 203564,
+          "sha256": "0ff6d506ce9f7c707a276aebcc3d9ae69cacbb2959ea8f0dc073b952ee33ad9d",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/0ff6d506ce9f7c707a276aebcc3d9ae69cacbb2959ea8f0dc073b952ee33ad9d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_sisters.wav",
+          "size": 165164,
+          "sha256": "1f280c95577208aae2bd41cdbca907623eb73f69bdf66dab4aa54b41e0cf7160",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/1f280c95577208aae2bd41cdbca907623eb73f69bdf66dab4aa54b41e0cf7160"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_sleep.wav",
+          "size": 165164,
+          "sha256": "3ef5dff95f063180a2202e010ae648cb1076a133852c15705a78304c5102a236",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/3ef5dff95f063180a2202e010ae648cb1076a133852c15705a78304c5102a236"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_vote_result.wav",
+          "size": 218924,
+          "sha256": "c362d431174d0a6cce02c2cfdc73893bd5c8c6f5cd58d87d9472201ed9274cd3",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/c362d431174d0a6cce02c2cfdc73893bd5c8c6f5cd58d87d9472201ed9274cd3"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_voting.wav",
+          "size": 199724,
+          "sha256": "6605565a9053cb6c32a782a2ae303ad58fa9cdd5722644a6da597b7971649cd5",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/6605565a9053cb6c32a782a2ae303ad58fa9cdd5722644a6da597b7971649cd5"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_white_wolf.wav",
+          "size": 195884,
+          "sha256": "ef5a6003f3229803c1707bd38ba1ce88ab1266f8cdd9d0e050fbc3816a069276",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/ef5a6003f3229803c1707bd38ba1ce88ab1266f8cdd9d0e050fbc3816a069276"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_witch.wav",
+          "size": 169004,
+          "sha256": "782a5fd875eb72e8ff69f16697bd4679d5b8d29e5d32bdec5c4d1acd10678f75",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/782a5fd875eb72e8ff69f16697bd4679d5b8d29e5d32bdec5c4d1acd10678f75"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/mdj_wolves.wav",
+          "size": 207404,
+          "sha256": "d7ea9ad99335bb526f3706488100e2b5fa85111b378499f4f30a4d199c0da20c",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/d7ea9ad99335bb526f3706488100e2b5fa85111b378499f4f30a4d199c0da20c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_wizard/wolves.wav",
+          "size": 386774,
+          "sha256": "0b704590bbfd2c791f3090bcafc3ce423b05705f0a3307e91824d03489c3e61c",
+          "url": "/content/packs/voice-old-wizard/769e65659a3fe212/0b704590bbfd2c791f3090bcafc3ce423b05705f0a3307e91824d03489c3e61c"
+        }
+      ]
+    },
+    {
+      "id": "voice-werewolf",
+      "title": "Voix · Loup-garou",
+      "kind": "audio",
+      "theme": null,
+      "version": "0a793b2fbfbb2612",
+      "size": 8199006,
+      "files": [
+        {
+          "asset": "assets/audio/classic/neural/werewolf/death_alpha_wolf.wav",
+          "size": 215084,
+          "sha256": "dc55a06c9cdc6e919eb8991801386727c39fbc761918ea12efda38734df29427",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/dc55a06c9cdc6e919eb8991801386727c39fbc761918ea12efda38734df29427"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/death_werewolf.wav",
+          "size": 192044,
+          "sha256": "8f844f611066d6bc578be2b9987cbdc3b6a84fe385f73da000d7bf302d3fafff",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/8f844f611066d6bc578be2b9987cbdc3b6a84fe385f73da000d7bf302d3fafff"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/death_white_wolf.wav",
+          "size": 215084,
+          "sha256": "281c3df1ea816fe9d0d07f2b9b686e36ea38501bd8484f6abf7283fdfb9ed881",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/281c3df1ea816fe9d0d07f2b9b686e36ea38501bd8484f6abf7283fdfb9ed881"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/ended_white_wolf.wav",
+          "size": 245804,
+          "sha256": "2b6d1c4d5e722490783885d43a87ea73d6a0da5ec6468f377d1e5df80e6ed003",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/2b6d1c4d5e722490783885d43a87ea73d6a0da5ec6468f377d1e5df80e6ed003"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/ended_wolves.wav",
+          "size": 215084,
+          "sha256": "b60bddb79561ac581559cd06416d2f6cbd7b2a449cb9f663c229088b8499a0cc",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/b60bddb79561ac581559cd06416d2f6cbd7b2a449cb9f663c229088b8499a0cc"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_alpha.wav",
+          "size": 226604,
+          "sha256": "652c37f0445b6acdd5ab918a888a34331c3bd85e1f8389eadcb6e8631b029a42",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/652c37f0445b6acdd5ab918a888a34331c3bd85e1f8389eadcb6e8631b029a42"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_alpha.wav",
+          "size": 211244,
+          "sha256": "f87ba5725c366da180f3ae65b88e5851284b7ab7092438233b6276236ad98bc9",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/f87ba5725c366da180f3ae65b88e5851284b7ab7092438233b6276236ad98bc9"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_cupid.wav",
+          "size": 130604,
+          "sha256": "6c72b8dfe192bfc7cec310445dcfe1f75382a3b648ec7f2190afcf48261d25e2",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/6c72b8dfe192bfc7cec310445dcfe1f75382a3b648ec7f2190afcf48261d25e2"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_guardian.wav",
+          "size": 172844,
+          "sha256": "6fd7ea8bb0b74a0316f53614ddc2d369279262e274efe640fa5f169e171adfca",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/6fd7ea8bb0b74a0316f53614ddc2d369279262e274efe640fa5f169e171adfca"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_infection.wav",
+          "size": 176684,
+          "sha256": "8fee7e686059b260bae3a07245aa659bda7a2a84f7d47deba3e64f3f07f6b9b9",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/8fee7e686059b260bae3a07245aa659bda7a2a84f7d47deba3e64f3f07f6b9b9"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_metamorph.wav",
+          "size": 188204,
+          "sha256": "3bceea896226819e1a4b6686f474746c21d549500ca472846d748b03f41b2a24",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/3bceea896226819e1a4b6686f474746c21d549500ca472846d748b03f41b2a24"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_piper.wav",
+          "size": 184364,
+          "sha256": "cfd1f5a44aa119f87cef9f31047146108a3161653425d18d693651db801d61ae",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/cfd1f5a44aa119f87cef9f31047146108a3161653425d18d693651db801d61ae"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_seer.wav",
+          "size": 184364,
+          "sha256": "862663cb1daaeec05bbe40cab9fcb52da95012527f0d91ea469ce6ae8701cc4f",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/862663cb1daaeec05bbe40cab9fcb52da95012527f0d91ea469ce6ae8701cc4f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_sisters.wav",
+          "size": 215084,
+          "sha256": "58dc7424a3b8e3f9b1d6b3e5220a2644a45bfeef32af6884be95656184cca41f",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/58dc7424a3b8e3f9b1d6b3e5220a2644a45bfeef32af6884be95656184cca41f"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_white_wolf.wav",
+          "size": 169004,
+          "sha256": "b6b1c85a706cd785a4e80d733d16084fb33abf6e0488281f543fe2eed036c5ae",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/b6b1c85a706cd785a4e80d733d16084fb33abf6e0488281f543fe2eed036c5ae"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_witch.wav",
+          "size": 184364,
+          "sha256": "7a60156dd289cdf2724594597e49dc4577620d38f4ce4368b6184f17da716d4a",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/7a60156dd289cdf2724594597e49dc4577620d38f4ce4368b6184f17da716d4a"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_close_wolves.wav",
+          "size": 199724,
+          "sha256": "5ce2f075e8386457bd81d38837055708ba2fdc90ecc1d82b97dd1e1d430bf048",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/5ce2f075e8386457bd81d38837055708ba2fdc90ecc1d82b97dd1e1d430bf048"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_cupid.wav",
+          "size": 195884,
+          "sha256": "c3e43393dd831813cc0dbf156e0314b89f0a45098e8764905b4ce45da0f86b74",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/c3e43393dd831813cc0dbf156e0314b89f0a45098e8764905b4ce45da0f86b74"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_dawn.wav",
+          "size": 234284,
+          "sha256": "543ac35ee1b64232e8248f30aea9f9e90b192230f2d490a71e8872eba073617c",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/543ac35ee1b64232e8248f30aea9f9e90b192230f2d490a71e8872eba073617c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_day.wav",
+          "size": 199724,
+          "sha256": "8e990838a352d0b884bdc4107a17f40de9a37672460f613fdd256b7a9e296f97",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/8e990838a352d0b884bdc4107a17f40de9a37672460f613fdd256b7a9e296f97"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_guardian.wav",
+          "size": 169004,
+          "sha256": "7e49be3f78c7c85818dc7d2e5fa68a42a8cc98153ded1ccb129365dc8a419f09",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/7e49be3f78c7c85818dc7d2e5fa68a42a8cc98153ded1ccb129365dc8a419f09"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_hunter.wav",
+          "size": 184364,
+          "sha256": "b1b6fcea23fab7f5e6793a4141e4c98d7b6ea70911a132b9932d82025ef79d1b",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/b1b6fcea23fab7f5e6793a4141e4c98d7b6ea70911a132b9932d82025ef79d1b"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_infection.wav",
+          "size": 226604,
+          "sha256": "90aa18b032429950cab60bedb0d090a6c813593ec4fbc61cc1c68a4bd58261e4",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/90aa18b032429950cab60bedb0d090a6c813593ec4fbc61cc1c68a4bd58261e4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_mayor_election.wav",
+          "size": 257324,
+          "sha256": "4069228aefd536d866f40377210242b473d2cc3b25940145b4e4889962e2eb95",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/4069228aefd536d866f40377210242b473d2cc3b25940145b4e4889962e2eb95"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_mayor_succession.wav",
+          "size": 218924,
+          "sha256": "b525a8f7b247f837a9fc7040baa201ed56b9b40f4238dc0c5f4824f80367481e",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/b525a8f7b247f837a9fc7040baa201ed56b9b40f4238dc0c5f4824f80367481e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_metamorph.wav",
+          "size": 215084,
+          "sha256": "274754af7c14312f48e3a306dac057a234edb4df4dab4109ecd9e86142225e86",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/274754af7c14312f48e3a306dac057a234edb4df4dab4109ecd9e86142225e86"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_piper.wav",
+          "size": 230444,
+          "sha256": "74a7e1f36aebe7c732a5fa42275c9fae5e3f34ff3fcc3b325dc55fc1cfb98f95",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/74a7e1f36aebe7c732a5fa42275c9fae5e3f34ff3fcc3b325dc55fc1cfb98f95"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_role_reveal.wav",
+          "size": 161324,
+          "sha256": "519780647b0e3cd635bebd3276dbfbfbae2d7d127b0b232ad56cfffe3d0b688d",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/519780647b0e3cd635bebd3276dbfbfbae2d7d127b0b232ad56cfffe3d0b688d"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_scapegoat.wav",
+          "size": 184364,
+          "sha256": "8c4b391e2d658a36a72e0cc7bb183d0a6c5aa6531c3049bd6efa8ba8d5c01449",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/8c4b391e2d658a36a72e0cc7bb183d0a6c5aa6531c3049bd6efa8ba8d5c01449"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_seer.wav",
+          "size": 245804,
+          "sha256": "549691a0aedfc0cf9459957fb4825cc3a61644ab5b97a32a68c03ea555ebd580",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/549691a0aedfc0cf9459957fb4825cc3a61644ab5b97a32a68c03ea555ebd580"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_sisters.wav",
+          "size": 192044,
+          "sha256": "9aecd185896c0834f14afdd92e4092a8b7367133a3725da9461dae8a31839275",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/9aecd185896c0834f14afdd92e4092a8b7367133a3725da9461dae8a31839275"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_sleep.wav",
+          "size": 195884,
+          "sha256": "7acba010aa858becf7da5ec0ea067cc3ed4eb28cf02ac556f066343625b91398",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/7acba010aa858becf7da5ec0ea067cc3ed4eb28cf02ac556f066343625b91398"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_vote_result.wav",
+          "size": 234284,
+          "sha256": "d8f70f6c73273da45b581bf9b1d0a0bb9b026c931b572c57f7b33f07d1141825",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/d8f70f6c73273da45b581bf9b1d0a0bb9b026c931b572c57f7b33f07d1141825"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_voting.wav",
+          "size": 265004,
+          "sha256": "d55227aa4726a6fb2215047764010cbe542ba6c5f47c9cc561a51b595b80c755",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/d55227aa4726a6fb2215047764010cbe542ba6c5f47c9cc561a51b595b80c755"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_white_wolf.wav",
+          "size": 176684,
+          "sha256": "8f908259367d0fc4be98b535438a5d87b772576e209052319398a5d7933face4",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/8f908259367d0fc4be98b535438a5d87b772576e209052319398a5d7933face4"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_witch.wav",
+          "size": 203564,
+          "sha256": "c310aecf3de04cf396a547d8d16cb160cc0dbfa41040b6f4aefd03a3f6367931",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/c310aecf3de04cf396a547d8d16cb160cc0dbfa41040b6f4aefd03a3f6367931"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/mdj_wolves.wav",
+          "size": 272684,
+          "sha256": "93d24b9ca765a1562bd84654b868c0c47045efd527daf1dbd1e3527e4928f41e",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/93d24b9ca765a1562bd84654b868c0c47045efd527daf1dbd1e3527e4928f41e"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/role_reveal.wav",
+          "size": 249644,
+          "sha256": "9fb1839a74fd293a73a8e4ff6917a8b9957298cc778c518485a8b5ed1c4e693c",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/9fb1839a74fd293a73a8e4ff6917a8b9957298cc778c518485a8b5ed1c4e693c"
+        },
+        {
+          "asset": "assets/audio/classic/neural/werewolf/wolves.wav",
+          "size": 359894,
+          "sha256": "1f3cedca0f4627c71153cc4e11b9a79c0b3b6bb6b5288837382d3241ae384ddc",
+          "url": "/content/packs/voice-werewolf/0a793b2fbfbb2612/1f3cedca0f4627c71153cc4e11b9a79c0b3b6bb6b5288837382d3241ae384ddc"
+        }
+      ]
+    },
+    {
+      "id": "horror-cards",
+      "title": "Horreur · Cartes",
+      "kind": "cards",
+      "theme": "horror",
+      "version": "679abe75919c4fd0",
+      "size": 66031371,
+      "files": [
+        {
+          "asset": "assets/cards/horror/alpha_wolf.png",
+          "size": 3264497,
+          "sha256": "89cc644e22d79ec025593d0582bedc65aeb8370d51612ce677217c5b33b6d9e1",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/89cc644e22d79ec025593d0582bedc65aeb8370d51612ce677217c5b33b6d9e1"
+        },
+        {
+          "asset": "assets/cards/horror/angel.png",
+          "size": 3303733,
+          "sha256": "9d94af8a7f8e4d766fe0dc951c004bab011403759c7c33a4a759f1bd56e4060c",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/9d94af8a7f8e4d766fe0dc951c004bab011403759c7c33a4a759f1bd56e4060c"
+        },
+        {
+          "asset": "assets/cards/horror/cupid.png",
+          "size": 3222201,
+          "sha256": "719bfcea01ff7ca655af56de064684802283709c2d9f664aa5f2af7fa64f4ba2",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/719bfcea01ff7ca655af56de064684802283709c2d9f664aa5f2af7fa64f4ba2"
+        },
+        {
+          "asset": "assets/cards/horror/elder.png",
+          "size": 3340277,
+          "sha256": "4f3f0d8cee92ea90301aaac6b364c38db3be813505bcb7b6a26870a44b629e07",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/4f3f0d8cee92ea90301aaac6b364c38db3be813505bcb7b6a26870a44b629e07"
+        },
+        {
+          "asset": "assets/cards/horror/guardian.png",
+          "size": 3489465,
+          "sha256": "6056f18d9d84049aee002912a1410382877e422e516d1df7d01302e4dd7da71f",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/6056f18d9d84049aee002912a1410382877e422e516d1df7d01302e4dd7da71f"
+        },
+        {
+          "asset": "assets/cards/horror/hunter.png",
+          "size": 3469010,
+          "sha256": "93dfc22c5788a950e76da8617cebe3732d04d318e5b448f47198ea08cecbf5dc",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/93dfc22c5788a950e76da8617cebe3732d04d318e5b448f47198ea08cecbf5dc"
+        },
+        {
+          "asset": "assets/cards/horror/idiot.png",
+          "size": 3202681,
+          "sha256": "5d88a65283d3b84663b4d391cf245686f77ead03ad891798946cf4f628ea4513",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/5d88a65283d3b84663b4d391cf245686f77ead03ad891798946cf4f628ea4513"
+        },
+        {
+          "asset": "assets/cards/horror/little_girl.png",
+          "size": 3328115,
+          "sha256": "eeb16c836c4b29bdd635f7e2d975cfe5905cb91db3d71db1101bfcbed4064f1b",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/eeb16c836c4b29bdd635f7e2d975cfe5905cb91db3d71db1101bfcbed4064f1b"
+        },
+        {
+          "asset": "assets/cards/horror/mayor.png",
+          "size": 3345974,
+          "sha256": "2e3e9df6137b488c114a7c3af7d28d6f55f57a3d795884b70e1d7b2bfd3c6da5",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/2e3e9df6137b488c114a7c3af7d28d6f55f57a3d795884b70e1d7b2bfd3c6da5"
+        },
+        {
+          "asset": "assets/cards/horror/metamorph.png",
+          "size": 3180337,
+          "sha256": "029e240b7ecd090fcbadcd7d5cfe693cfe8e767c41a84be75dd8104a11d36146",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/029e240b7ecd090fcbadcd7d5cfe693cfe8e767c41a84be75dd8104a11d36146"
+        },
+        {
+          "asset": "assets/cards/horror/piper.png",
+          "size": 3218740,
+          "sha256": "5791ed82403f1533e53e619f07d6355c3c5d9941140f0abcfc789a00bf81302d",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/5791ed82403f1533e53e619f07d6355c3c5d9941140f0abcfc789a00bf81302d"
+        },
+        {
+          "asset": "assets/cards/horror/scapegoat.png",
+          "size": 3350042,
+          "sha256": "7b0219f3dd68d7e799386f0c95f0cf9d6fca6b1669f2205b55e2700abbc6c971",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/7b0219f3dd68d7e799386f0c95f0cf9d6fca6b1669f2205b55e2700abbc6c971"
+        },
+        {
+          "asset": "assets/cards/horror/seer.png",
+          "size": 3386404,
+          "sha256": "479bf1b264cd90f19ece9f1404ba9ec7e22e799b0f5e11d339ef94e51caa4b5f",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/479bf1b264cd90f19ece9f1404ba9ec7e22e799b0f5e11d339ef94e51caa4b5f"
+        },
+        {
+          "asset": "assets/cards/horror/sisters.png",
+          "size": 3214728,
+          "sha256": "6063013bf45d2d70385418b0deab855be5b905a0d573a94d54c36bf94f64a2df",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/6063013bf45d2d70385418b0deab855be5b905a0d573a94d54c36bf94f64a2df"
+        },
+        {
+          "asset": "assets/cards/horror/villager.png",
+          "size": 3164413,
+          "sha256": "49e6f5daa0994a51b9b4bf1f46c9a88b3ab53e1eac041640d40868495034b1a9",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/49e6f5daa0994a51b9b4bf1f46c9a88b3ab53e1eac041640d40868495034b1a9"
+        },
+        {
+          "asset": "assets/cards/horror/villager_female.png",
+          "size": 3170227,
+          "sha256": "1b6fda8029dfc8bf98fcc3f4c59142dff123e2bf3485851a0aa8ecaebc1e8234",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/1b6fda8029dfc8bf98fcc3f4c59142dff123e2bf3485851a0aa8ecaebc1e8234"
+        },
+        {
+          "asset": "assets/cards/horror/werewolf.png",
+          "size": 3535969,
+          "sha256": "212432e133fb149ea9d33d9ca37a16ebb5ca0389792ea5cb2e3999b69e2f573b",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/212432e133fb149ea9d33d9ca37a16ebb5ca0389792ea5cb2e3999b69e2f573b"
+        },
+        {
+          "asset": "assets/cards/horror/white_wolf.png",
+          "size": 3267285,
+          "sha256": "56377a530706ca26e37416fe87101fdd699c90b54f3320b4030b8bcf6337cde3",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/56377a530706ca26e37416fe87101fdd699c90b54f3320b4030b8bcf6337cde3"
+        },
+        {
+          "asset": "assets/cards/horror/witch.png",
+          "size": 3225762,
+          "sha256": "59bc8e100e8d274d61eff46ae3a41a9f6f6ed42f13eb63ab096cb5558ca552af",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/59bc8e100e8d274d61eff46ae3a41a9f6f6ed42f13eb63ab096cb5558ca552af"
+        },
+        {
+          "asset": "assets/cards/horror/wolf_father.png",
+          "size": 3351511,
+          "sha256": "53968e4899aabcd3f3afa5a6b1c50c13786a30da6e5985c0bcd8e12000aed524",
+          "url": "/content/packs/horror-cards/679abe75919c4fd0/53968e4899aabcd3f3afa5a6b1c50c13786a30da6e5985c0bcd8e12000aed524"
+        }
+      ]
+    },
+    {
+      "id": "horror-village",
+      "title": "Horreur · Village et sentences",
+      "kind": "village",
+      "theme": "horror",
+      "version": "309d626dcc1aa3ab",
+      "size": 22858917,
+      "files": [
+        {
+          "asset": "assets/village/horror/card_back.png",
+          "size": 4013188,
+          "sha256": "c8bb7c5c983ad67e05fb344e700979a98f03baba63197606c9d679d2d9ca60fa",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/c8bb7c5c983ad67e05fb344e700979a98f03baba63197606c9d679d2d9ca60fa"
+        },
+        {
+          "asset": "assets/village/horror/house_day.png",
+          "size": 2225619,
+          "sha256": "94b83011743299f6ec20e2410c08bc6b7a0a531a9b3c5d91be81943840bd5710",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/94b83011743299f6ec20e2410c08bc6b7a0a531a9b3c5d91be81943840bd5710"
+        },
+        {
+          "asset": "assets/village/horror/house_eliminated.png",
+          "size": 2725401,
+          "sha256": "b90d70369d524dc4d908f95db9b7b05be714401a17e3a17e98ac4cbddc246183",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/b90d70369d524dc4d908f95db9b7b05be714401a17e3a17e98ac4cbddc246183"
+        },
+        {
+          "asset": "assets/village/horror/house_night.png",
+          "size": 2351810,
+          "sha256": "65750ceca517ebd70ac6ea9648716f33ded9fc1d4bd2af953e9979d5b0646c35",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/65750ceca517ebd70ac6ea9648716f33ded9fc1d4bd2af953e9979d5b0646c35"
+        },
+        {
+          "asset": "assets/village/horror/map.png",
+          "size": 3630053,
+          "sha256": "e05b84d3447e7fee61fa7561c07309d1658b2233097baaccf79ad65a268b55db",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/e05b84d3447e7fee61fa7561c07309d1658b2233097baaccf79ad65a268b55db"
+        },
+        {
+          "asset": "assets/village/horror/owl.png",
+          "size": 2555210,
+          "sha256": "234d85a06969649424bdb106f7777e13e0867afa40c4c6ea9548d16ba1f2f440",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/234d85a06969649424bdb106f7777e13e0867afa40c4c6ea9548d16ba1f2f440"
+        },
+        {
+          "asset": "assets/village/horror/owl_perched.png",
+          "size": 2190317,
+          "sha256": "2be2793f364748193f07dc747565b0b102e6f729579cfd754e16933d0350ebd4",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/2be2793f364748193f07dc747565b0b102e6f729579cfd754e16933d0350ebd4"
+        },
+        {
+          "asset": "assets/village/horror/sentences/bannissement.jpg",
+          "size": 33848,
+          "sha256": "84e06cb97f9dd86ce0c529706be98caede21f9bd939c1ddd1796eacd7530207d",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/84e06cb97f9dd86ce0c529706be98caede21f9bd939c1ddd1796eacd7530207d"
+        },
+        {
+          "asset": "assets/village/horror/sentences/cachot.jpg",
+          "size": 31287,
+          "sha256": "c36f01d79c4e10a4d516af7b6d9cd71e30098c6a3fe7abc498ffc86601a2e025",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/c36f01d79c4e10a4d516af7b6d9cd71e30098c6a3fe7abc498ffc86601a2e025"
+        },
+        {
+          "asset": "assets/village/horror/sentences/echafaud.jpg",
+          "size": 31750,
+          "sha256": "3dd26ff4e9871b9112ba129cf6a395aab1e91bb0c2915ceb696391d8df22c96b",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/3dd26ff4e9871b9112ba129cf6a395aab1e91bb0c2915ceb696391d8df22c96b"
+        },
+        {
+          "asset": "assets/village/horror/sentences/exil.jpg",
+          "size": 29925,
+          "sha256": "b0117edb60752a0451bb78beb83f13815a1c5ae3a03b3417a6e65c0fdc4cf6ed",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/b0117edb60752a0451bb78beb83f13815a1c5ae3a03b3417a6e65c0fdc4cf6ed"
+        },
+        {
+          "asset": "assets/village/horror/sentences/gibet.jpg",
+          "size": 35567,
+          "sha256": "36f0629225119f3432d38758da7a72c87e6c85f2879459873f37eafbdafaedc5",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/36f0629225119f3432d38758da7a72c87e6c85f2879459873f37eafbdafaedc5"
+        },
+        {
+          "asset": "assets/village/horror/sentences/guillotine.jpg",
+          "size": 31209,
+          "sha256": "66bc08a432ca2ea377d5a0ef6b06b0515633a072fe311ed54577fff791917fd2",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/66bc08a432ca2ea377d5a0ef6b06b0515633a072fe311ed54577fff791917fd2"
+        },
+        {
+          "asset": "assets/village/horror/sentences/jugement.jpg",
+          "size": 42262,
+          "sha256": "f645bed4c43badaf713a98a0451327cbfb7f64940293347c25563a60086e0f82",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/f645bed4c43badaf713a98a0451327cbfb7f64940293347c25563a60086e0f82"
+        },
+        {
+          "asset": "assets/village/horror/sentences/pilori.jpg",
+          "size": 32551,
+          "sha256": "1d2955ccf7a1c5b71d9fe9c936d4559c3e1409a56546b2486f3b6ac0096e88dd",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/1d2955ccf7a1c5b71d9fe9c936d4559c3e1409a56546b2486f3b6ac0096e88dd"
+        },
+        {
+          "asset": "assets/village/horror/wheel.png",
+          "size": 2898920,
+          "sha256": "555c75669c2cabe13b39b280c72d385e809d7ab8d265b2dc0e130f2378e99276",
+          "url": "/content/packs/horror-village/309d626dcc1aa3ab/555c75669c2cabe13b39b280c72d385e809d7ab8d265b2dc0e130f2378e99276"
+        }
+      ]
+    },
+    {
+      "id": "horror-ambience",
+      "title": "Horreur · Ambiances",
+      "kind": "ambience",
+      "theme": "horror",
+      "version": "b08959fcebc7dc61",
+      "size": 393688,
+      "files": [
+        {
+          "asset": "assets/audio/horror/owl.wav",
+          "size": 240044,
+          "sha256": "c755f4a96d3d7f5a5291c482db06e923668a9a9a589874a3fed12fd6dd6cc3cc",
+          "url": "/content/packs/horror-ambience/b08959fcebc7dc61/c755f4a96d3d7f5a5291c482db06e923668a9a9a589874a3fed12fd6dd6cc3cc"
+        },
+        {
+          "asset": "assets/audio/horror/witch_laugh.wav",
+          "size": 153644,
+          "sha256": "b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0",
+          "url": "/content/packs/horror-ambience/b08959fcebc7dc61/b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0"
+        }
+      ]
+    }
+  ]
+}

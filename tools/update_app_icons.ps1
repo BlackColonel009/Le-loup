@@ -1,7 +1,7 @@
 param([string]$Root = (Split-Path $PSScriptRoot -Parent))
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
-$app = Join-Path $Root 'apps/le_loup'
+$app = Join-Path $Root 'apps/mordeviel'
 $logo = [System.Drawing.Image]::FromFile((Join-Path $app 'assets/branding/logo.png'))
 function Save-IconPng([string]$Path, [int]$Size, [bool]$Opaque = $false, [double]$Margin = 0) {
     $bitmap = [System.Drawing.Bitmap]::new($Size, $Size)

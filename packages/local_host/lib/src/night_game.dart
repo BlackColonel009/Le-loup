@@ -4,7 +4,9 @@ import 'village_weather.dart';
 import 'role_rules.dart';
 import 'narration_lines.g.dart';
 import 'chat_stickers.g.dart';
+import 'card_variants.dart';
 part 'night_roles.dart';
+part 'night_variants.dart';
 
 /// Moteur autoritaire, indépendant du transport et de Flutter.
 class NightGame {
@@ -12,6 +14,8 @@ class NightGame {
     Map<String, String> roles, {
     this.campOnly = false,
     this.revealOnDeath = true,
+    this.electMayor = false,
+    Map<String, String> editions = const {},
     DateTime Function()? clock,
     int Function(int)? weatherDraw,
     int Function(int)? chanceDraw,
@@ -23,9 +27,30 @@ class NightGame {
        _weatherDraw = weatherDraw ?? Random.secure().nextInt,
        _chanceDraw = chanceDraw ?? Random.secure().nextInt {
     _recordNarration('role_reveal');
+    for (final id in roles.keys) {
+      final edition = editions[id] ?? 'classic';
+      if (!cardEditions.contains(edition))
+        throw ArgumentError('Édition inconnue.');
+      _editions[id] = edition;
+      _cardTokens[id] = 'card:$id';
+    }
+    final sisters = roles.values.where((r) => r == 'sisters').length;
+    if (sisters != 0 && sisters != 2)
+      throw ArgumentError(
+        'Les Deux Sœurs se jouent ensemble, avec exactement deux cartes.',
+      );
   }
 
   final Map<String, String> _roles;
+  final Map<String, String> _editions = {}, _cardTokens = {};
+  String editionOf(String id) => _editions[id] ?? 'classic';
+  final Set<String> _variantSpent = {}, _veilRequests = {};
+  final Map<String, Map<String, dynamic>> _variantInfo = {};
+  final Map<String, List<String>> _metaPeek = {};
+  final Map<String, int> _veiledUntil = {};
+  final Map<String, Map<String, String>> _deathOrigins = {};
+  String _guardMode = 'normal';
+  String? _guardActor;
   final List<String> sentenceOptions;
   Map<String, String> get roles => UnmodifiableMapView(_roles);
   final _RoleState _extra = _RoleState();
@@ -33,6 +58,7 @@ class NightGame {
   final Set<String> alive;
   final bool campOnly;
   final bool revealOnDeath;
+  final bool electMayor;
   final List<Map<String, dynamic>> _deathEvents = [];
   final List<Map<String, dynamic>> _history = [];
   void _log(String kind, Map<String, dynamic> details) {
@@ -67,7 +93,13 @@ class NightGame {
 
   void spinSentence(int index) {
     if (_voteSummary?['eliminated'] == null ||
-        !['hunter', 'scapegoat', 'vote_result', 'ended'].contains(phase)) {
+        ![
+          'hunter',
+          'scapegoat',
+          'mayor_succession',
+          'vote_result',
+          'ended',
+        ].contains(phase)) {
       throw StateError(
         'Une sentence est réservée à un joueur éliminé par le vote.',
       );
@@ -90,7 +122,13 @@ class NightGame {
   }
 
   void _recordDeath(String id, String cause) {
-    _log('death', {'target': id, 'cause': cause, 'role': roles[id]});
+    _log('death', {
+      'target': id,
+      'cause': cause,
+      'role': roles[id],
+      'edition': editionOf(id),
+      ...?_deathOrigins[id],
+    });
     _deathEvents.add({
       'id': 'death-${_deathEvents.length + 1}',
       'player': id,
@@ -165,6 +203,10 @@ class NightGame {
         )) {
       throw StateError('Cet appel nocturne n’est pas disponible.');
     }
+    if (action == 'sisters')
+      _recognizedSisters.addAll(
+        roles.keys.where((id) => roles[id] == 'sisters'),
+      );
     _enter(action);
   }
 
@@ -185,6 +227,10 @@ class NightGame {
   bool _hunterDone = false;
   List<String> deaths = [];
   final Map<String, String?> _votes = {};
+  String? _mayor, _pendingMayor;
+  int _mayorElectionNight = -1;
+  final Map<String, String?> _mayorBallots = {};
+  final Set<String> _recognizedSisters = {};
   final List<Map<String, String>> _dayMessages = [];
   Map<String, dynamic>? _voteSummary;
   bool chatOpen = true;
@@ -198,12 +244,18 @@ class NightGame {
       throw ArgumentError('Durée entre 15 et 600 secondes.');
     _votes.clear();
     _voteSummary = null;
-    _enter('voting');
+    if (electMayor && _mayor == null && _mayorElectionNight != night) {
+      _mayorElectionNight = night;
+      _mayorBallots.clear();
+      _enter('mayor_election');
+    } else {
+      _enter('voting');
+    }
     deadline = _clock().add(Duration(seconds: seconds));
   }
 
   void setChatOpen(bool value) {
-    if (!['day', 'voting', 'vote_result'].contains(phase))
+    if (!['day', 'mayor_election', 'voting', 'vote_result'].contains(phase))
       throw StateError('Le chat général est réservé à la journée.');
     chatOpen = value;
   }
@@ -211,7 +263,13 @@ class NightGame {
   bool get paused => _pausedMilliseconds != null;
   bool get timed =>
       (_atNight && phase != 'sleep') ||
-      ['hunter', 'scapegoat', 'voting'].contains(phase);
+      [
+        'hunter',
+        'scapegoat',
+        'voting',
+        'mayor_election',
+        'mayor_succession',
+      ].contains(phase);
   int get remainingMilliseconds => paused
       ? _pausedMilliseconds!
       : deadline == null
@@ -242,6 +300,11 @@ class NightGame {
       };
 
   Map<String, dynamic> get publicState => {
+    'mayor': _mayor,
+    'mayor_election_needed':
+        electMayor && _mayor == null && _mayorElectionNight != night,
+    if (phase == 'mayor_election')
+      'election_votes_received': _mayorBallots.length,
     'narration_events': [for (final e in _narrationEvents) Map.of(e)],
     if (phase == 'ended')
       'history': [for (final event in _history) _copyHistory(event)],
@@ -263,27 +326,49 @@ class NightGame {
     'winner_ids': List<String>.of(_extra.winners),
     'village_powers_lost': _extra.villagePowersLost,
     'chat_open': chatOpen,
-    if (['day', 'voting', 'vote_result'].contains(phase))
+    if (['day', 'mayor_election', 'voting', 'vote_result'].contains(phase))
       'day_messages': [for (final message in _dayMessages) Map.of(message)],
     if (phase == 'voting') 'votes_received': _votes.length,
     'vote_eligible_count': _eligibleVoters.length,
     if (_voteSummary != null) 'vote_result': Map.of(_voteSummary!),
     'reveal_roles_on_death': revealOnDeath,
+    'revealed_editions': {
+      for (final entry in roles.entries)
+        if (phase == 'ended' ||
+            revealOnDeath &&
+                !alive.contains(entry.key) &&
+                !_roleVeiled(entry.key) ||
+            _extra.gracedIdiots.contains(entry.key))
+          entry.key: editionOf(entry.key),
+    },
     'sentence_options': sentenceOptions,
     'death_events': [
       for (final event in _deathEvents)
         {
           ...event,
-          if (revealOnDeath || phase == 'ended') 'role': roles[event['player']],
+          if ((revealOnDeath && !_roleVeiled(event['player'] as String)) ||
+              phase == 'ended') ...{
+            'role': roles[event['player']],
+            'edition': editionOf(event['player'] as String),
+          },
+          if (_roleVeiled(event['player'] as String) && phase != 'ended')
+            'veiled': true,
         },
     ],
+    if (revealOnDeath)
+      'unveiled_roles': {
+        for (final id in _veiledUntil.keys)
+          if (!_roleVeiled(id)) id: roles[id],
+      },
     if (_sentence != null)
       'sentence': {..._sentence!, 'remaining_ms': sentenceRemaining},
     if (phase == 'ended' || revealOnDeath || _extra.gracedIdiots.isNotEmpty)
       'revealed_roles': {
         for (final entry in roles.entries)
           if (phase == 'ended' ||
-              (revealOnDeath && !alive.contains(entry.key)) ||
+              (revealOnDeath &&
+                  !alive.contains(entry.key) &&
+                  !_roleVeiled(entry.key)) ||
               _extra.gracedIdiots.contains(entry.key))
             entry.key: entry.value,
       },
@@ -300,7 +385,16 @@ class NightGame {
       'role': role,
       'phase_revision': revision,
       'alive': alive.contains(id),
-      'can_vote': phase == 'voting' && canAct && _eligibleVoters.contains(id),
+      'can_vote':
+          ['voting', 'mayor_election'].contains(phase) &&
+          canAct &&
+          _eligibleVoters.contains(id),
+      if (roles[id] == 'sisters' && _recognizedSisters.contains(id))
+        'sister_ids': _recognizedSisters.where((other) => other != id).toList(),
+      if (phase == 'mayor_election') ...{
+        'vote_submitted': _mayorBallots.containsKey(id),
+        'vote_target': _mayorBallots[id],
+      },
       if (['voting', 'vote_result'].contains(phase)) ...{
         'vote_submitted': _votes.containsKey(id),
         'vote_target': _votes[id],
@@ -456,6 +550,12 @@ class NightGame {
       case 'seer':
         _nightCompleted.add('seer');
         _enter('sleep');
+      case 'sisters':
+        _recognizedSisters.addAll(
+          roles.keys.where((id) => roles[id] == 'sisters'),
+        );
+        _nightCompleted.add('sisters');
+        _enter('sleep');
       case 'wolves':
         final wolves = alive.where(_isWolf).toList();
         final targets = wolves.map((id) => _wolfChoices[id]).toSet();
@@ -463,7 +563,7 @@ class NightGame {
             wolves.isNotEmpty && targets.length == 1 && targets.single != null
             ? targets.single
             : null;
-        if (_attack == _extra.protected) _attack = null;
+        if (_guardBlocksPack(_attack)) _attack = null;
         _nightCompleted.add('wolves');
         _wolfMessages.clear();
         _enter('sleep');
@@ -481,6 +581,24 @@ class NightGame {
         _beginReactions();
       case 'voting':
         _resolveVote();
+      case 'mayor_election':
+        final counts = <String, int>{};
+        for (final target in _mayorBallots.values) {
+          if (target != null && alive.contains(target))
+            counts[target] = (counts[target] ?? 0) + 1;
+        }
+        final best = counts.isEmpty ? 0 : counts.values.reduce(max);
+        final leaders = counts.keys.where((id) => counts[id] == best).toList();
+        if (leaders.length == 1) _mayor = leaders.single;
+        _log('mayor_election', {
+          'target': _mayor,
+          'ballots': Map.of(_mayorBallots),
+          'counts': counts,
+        });
+        _enter('day');
+      case 'mayor_succession':
+        _pendingMayor = null;
+        _beginReactions();
       default:
         if (_nightCalls.containsKey(phase)) {
           _nightCompleted.add(phase);
@@ -511,11 +629,12 @@ class NightGame {
     final eligible = _eligibleVoters.length;
     final counts = <String, int>{};
     var blank = 0;
-    for (final target in _votes.values) {
+    for (final ballot in _votes.entries) {
+      final target = ballot.value;
       if (target == null) {
         blank++;
       } else {
-        counts[target] = (counts[target] ?? 0) + 1;
+        counts[target] = (counts[target] ?? 0) + (ballot.key == _mayor ? 2 : 1);
       }
     }
     final best = [blank, ...counts.values].reduce((a, b) => a > b ? a : b);
@@ -603,6 +722,8 @@ class NightGame {
       'phase_revision': revision,
       'at': _clock().toIso8601String(),
       'actor': id,
+      'edition': editionOf(id),
+      'camp': _camp(id),
       'role': roles[id],
       for (final key in ['action', 'target', 'targets', 'save', 'kill'])
         if (action.containsKey(key))
@@ -611,6 +732,14 @@ class NightGame {
     };
     final position = _history.length;
     _act(id, action);
+    if (_variantInfo[id] != null &&
+        [
+          'seer.compare',
+          'seer.double',
+          'metamorph.peek',
+          'wolves.scent',
+        ].contains(action['action']))
+      event['result'] = _copyHistory(_variantInfo[id]);
     // Record only accepted commands, never chat contents or failed attempts.
     if (!(action['action'] as String).endsWith('.chat')) {
       if (action['action'] == 'seer.inspect')
@@ -652,7 +781,7 @@ class NightGame {
     if (action['action'] == 'day.chat') {
       if (action['phase_revision'] != revision ||
           !alive.contains(id) ||
-          !['day', 'voting', 'vote_result'].contains(phase) ||
+          !['day', 'mayor_election', 'voting', 'vote_result'].contains(phase) ||
           !chatOpen) {
         throw StateError('Le chat général est fermé pour vous.');
       }
@@ -668,6 +797,20 @@ class NightGame {
     }
     final role = roles[id];
     final target = action['target'];
+    if (phase == 'mayor_succession' &&
+        _pendingMayor == id &&
+        action['action'] == 'mayor.succeed') {
+      final targets = action['targets'];
+      if (targets is! List ||
+          targets.length != 1 ||
+          targets.single is! String ||
+          !alive.contains(targets.single))
+        throw ArgumentError('Choisissez un successeur vivant.');
+      _mayor = targets.single as String;
+      _pendingMayor = null;
+      _log('mayor_succession', {'actor': id, 'target': _mayor});
+      return;
+    }
     bool validTarget() =>
         target is String && target != id && alive.contains(target);
     if (phase == 'hunter' &&
@@ -684,19 +827,22 @@ class NightGame {
       if (_actExtra(id, action)) return;
       throw StateError('Un joueur éliminé ne peut plus agir.');
     }
-    if (phase == 'voting' && action['action'] == 'vote.cast') {
+    if (['voting', 'mayor_election'].contains(phase) &&
+        action['action'] == 'vote.cast') {
       if (!_eligibleVoters.contains(id))
         throw StateError('Vous ne disposez pas du droit de vote.');
       if (target != null && (target is! String || !alive.contains(target))) {
         throw ArgumentError('Désignez un joueur vivant ou votez blanc.');
       }
-      _votes[id] = target as String?;
+      (phase == 'mayor_election' ? _mayorBallots : _votes)[id] =
+          target as String?;
       return;
     }
     if (phase == 'wolves' && _isWolf(id) && action['action'] == 'wolves.chat') {
       _chat(id, action['text'], _wolfMessages);
       return;
     }
+    if (_actVariants(id, action)) return;
     if (_actExtra(id, action)) return;
     if (!_powerEnabled(id)) throw StateError('Votre pouvoir est désactivé.');
     if (phase == 'seer' &&

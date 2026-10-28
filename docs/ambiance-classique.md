@@ -73,7 +73,7 @@ Textes de lecture : Source Sans 3, même licence OFL, avec sa licence livrée so
 `assets/fonts/SOURCE_SANS_OFL.txt`.
 Source : https://github.com/google/fonts/tree/main/ofl/sourcesans3
 
-Logo fourni : copie de `le_loup/logo/logo.png` dans `assets/branding/logo.png`,
+Logo fourni : copie de `mordeviel/logo/logo.png` dans `assets/branding/logo.png`,
 affichée avec sa transparence à l’accueil. L’original reste intact.
 
 Les écrans se rapprochent de la planche artistique : taverne plus lumineuse,

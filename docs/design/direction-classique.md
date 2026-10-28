@@ -1,9 +1,9 @@
-# Le Loup — direction Classique
+# Mordeviel — direction Classique
 
-La planche `proposition-classique-v1.png` est une proposition artistique générée
-avec l’outil intégré imagegen à partir des références du projet. Elle ne constitue
-pas une capture de l’application. Les portraits, horodatages et ornements qu’elle
-montre restent des pistes visuelles, sans effet sur les rôles ou les règles.
+La capture `mordeviel-accueil.png` montre l’accueil réel de l’application avec
+le logo Mordeviel et le sous-titre Legendary. Elle est régénérée depuis les
+widgets Flutter. L’ancienne proposition artistique est archivée hors des
+ressources actives du projet.
 
 ## Déjà intégré
 
@@ -29,7 +29,7 @@ MDJ diffuse l’ambiance pour éviter l’écho entre téléphones.
 
 ## Brief de génération
 
-Trois écrans mobiles français assortis, de face : accueil « Le Loup », village
+Trois écrans mobiles français assortis, de face : accueil « Mordeviel », village
 médiéval illustré avec huit maisons, et conseil avec discussion et vote.
 Références : `assets/backgrounds/portrait.jpg` et `assets/village/map.jpg`.
 Atmosphère de conte médiéval à la lueur des lanternes, bleu nuit et or patiné,

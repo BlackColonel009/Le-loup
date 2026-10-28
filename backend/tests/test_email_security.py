@@ -3,14 +3,14 @@ import time
 
 from fastapi.testclient import TestClient
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 from .helpers import OUTBOX
 
 
 def test_email_required_reset_single_use_and_private_history(tmp_path, monkeypatch):
     path = tmp_path / "email.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     with TestClient(app) as api:
         assert (
             api.post(
@@ -91,7 +91,7 @@ def test_email_required_reset_single_use_and_private_history(tmp_path, monkeypat
 
 def test_codes_expire_and_five_failures_lock_challenge(tmp_path, monkeypatch):
     path = tmp_path / "attempts.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     with TestClient(app) as api:
         registered = api.post(
             "/community/register",

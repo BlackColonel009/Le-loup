@@ -6,7 +6,7 @@ import time
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 from .helpers import OUTBOX, post_verified
 
@@ -25,8 +25,8 @@ def register(api, name="Alice"):
 
 
 def test_website_and_gallery_public_access(tmp_path, monkeypatch):
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(tmp_path / "website.sqlite3"))
-    monkeypatch.setenv("LE_LOUP_PUBLIC_SUPPORT_EMAIL", "contact@example.test")
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(tmp_path / "website.sqlite3"))
+    monkeypatch.setenv("MORDEVIEL_PUBLIC_SUPPORT_EMAIL", "contact@example.test")
     with TestClient(app) as api:
         for path in (
             "/",
@@ -37,7 +37,7 @@ def test_website_and_gallery_public_access(tmp_path, monkeypatch):
         ):
             response = api.get(path)
             assert response.status_code == 200
-            assert "Legende of Wolf" in response.text
+            assert "Mordeviel" in response.text
             assert (
                 "frame-ancestors 'none'" in response.headers["content-security-policy"]
             )
@@ -57,7 +57,7 @@ def test_admin_download_link_permissions_validation_and_persistence(
     tmp_path, monkeypatch
 ):
     path = tmp_path / "downloads.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     url = "https://mega.nz/file/test-apk#cle-de-dechiffrement"
     body = {"download_url": url, "download_enabled": True, "download_version": "0.1.0"}
     endpoint = "/community/admin/site/download"
@@ -106,7 +106,7 @@ def test_admin_download_link_permissions_validation_and_persistence(
 
 def test_deletion_removes_only_owner_data_and_revokes_sessions(tmp_path, monkeypatch):
     path = tmp_path / "delete.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     with TestClient(app) as api:
         alice = register(api)
         bob = register(api, "Bob")
@@ -161,7 +161,7 @@ def test_deletion_expiry_attempt_limit_purpose_and_banned_account(
     tmp_path, monkeypatch
 ):
     path = tmp_path / "safety.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     with TestClient(app) as api:
         register(api)
         reset = api.post(
@@ -237,7 +237,7 @@ def test_gallery_admin_upload_edit_hide_delete_and_reject_invalid_images(
     tmp_path, monkeypatch
 ):
     path = tmp_path / "gallery.sqlite3"
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(path))
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(path))
     with TestClient(app) as api:
         auth = register(api)
         assert api.get("/community/admin/site/cards", headers=auth).status_code == 403

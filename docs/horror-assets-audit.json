@@ -1,0 +1,340 @@
+[
+  {
+    "file": "apps/mordeviel/assets/cards/horror/alpha_wolf.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "89cc644e22d79ec025593d0582bedc65aeb8370d51612ce677217c5b33b6d9e1",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/angel.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "9d94af8a7f8e4d766fe0dc951c004bab011403759c7c33a4a759f1bd56e4060c",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/cupid.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "719bfcea01ff7ca655af56de064684802283709c2d9f664aa5f2af7fa64f4ba2",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/elder.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "4f3f0d8cee92ea90301aaac6b364c38db3be813505bcb7b6a26870a44b629e07",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/guardian.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "6056f18d9d84049aee002912a1410382877e422e516d1df7d01302e4dd7da71f",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/hunter.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "93dfc22c5788a950e76da8617cebe3732d04d318e5b448f47198ea08cecbf5dc",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/idiot.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "5d88a65283d3b84663b4d391cf245686f77ead03ad891798946cf4f628ea4513",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/little_girl.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "eeb16c836c4b29bdd635f7e2d975cfe5905cb91db3d71db1101bfcbed4064f1b",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/mayor.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "2e3e9df6137b488c114a7c3af7d28d6f55f57a3d795884b70e1d7b2bfd3c6da5",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/metamorph.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "029e240b7ecd090fcbadcd7d5cfe693cfe8e767c41a84be75dd8104a11d36146",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/piper.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "5791ed82403f1533e53e619f07d6355c3c5d9941140f0abcfc789a00bf81302d",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/scapegoat.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "7b0219f3dd68d7e799386f0c95f0cf9d6fca6b1669f2205b55e2700abbc6c971",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/seer.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "479bf1b264cd90f19ece9f1404ba9ec7e22e799b0f5e11d339ef94e51caa4b5f",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/sisters.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "6063013bf45d2d70385418b0deab855be5b905a0d573a94d54c36bf94f64a2df",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/villager.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "49e6f5daa0994a51b9b4bf1f46c9a88b3ab53e1eac041640d40868495034b1a9",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/villager_female.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "1b6fda8029dfc8bf98fcc3f4c59142dff123e2bf3485851a0aa8ecaebc1e8234",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/werewolf.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "212432e133fb149ea9d33d9ca37a16ebb5ca0389792ea5cb2e3999b69e2f573b",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/white_wolf.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "56377a530706ca26e37416fe87101fdd699c90b54f3320b4030b8bcf6337cde3",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/witch.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "59bc8e100e8d274d61eff46ae3a41a9f6f6ed42f13eb63ab096cb5558ca552af",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/horror/wolf_father.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "53968e4899aabcd3f3afa5a6b1c50c13786a30da6e5985c0bcd8e12000aed524",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/card_back.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "c8bb7c5c983ad67e05fb344e700979a98f03baba63197606c9d679d2d9ca60fa",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/house_day.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "94b83011743299f6ec20e2410c08bc6b7a0a531a9b3c5d91be81943840bd5710",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/house_eliminated.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "b90d70369d524dc4d908f95db9b7b05be714401a17e3a17e98ac4cbddc246183",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/house_night.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "65750ceca517ebd70ac6ea9648716f33ded9fc1d4bd2af953e9979d5b0646c35",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/map.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "e05b84d3447e7fee61fa7561c07309d1658b2233097baaccf79ad65a268b55db",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/owl.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "234d85a06969649424bdb106f7777e13e0867afa40c4c6ea9548d16ba1f2f440",
+    "alpha": [
+      0,
+      254
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/owl_perched.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "2be2793f364748193f07dc747565b0b102e6f729579cfd754e16933d0350ebd4",
+    "alpha": [
+      0,
+      254
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/village/horror/wheel.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "555c75669c2cabe13b39b280c72d385e809d7ab8d265b2dc0e130f2378e99276",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/mayor.png",
+    "size": [
+      1049,
+      1499
+    ],
+    "mode": "RGB",
+    "sha256": "f9165c7aa789f6537ccc09615cfaaed6b2e6c54cd6dd633b726cd996de59597a",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/intense/mayor_intense.png",
+    "size": [
+      1048,
+      1501
+    ],
+    "mode": "RGB",
+    "sha256": "a8afaa58e86b6e68a1865e097fe1743ff5e0a004448225226126b62411653e3e",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/sisters.png",
+    "size": [
+      1049,
+      1499
+    ],
+    "mode": "RGB",
+    "sha256": "cb3b383505136113e170e85482486890bb64bbda6140c54e33b5e042add94817",
+    "alpha": null
+  },
+  {
+    "file": "apps/mordeviel/assets/cards/intense/sisters_intense.png",
+    "size": [
+      1048,
+      1501
+    ],
+    "mode": "RGB",
+    "sha256": "8e09331dea641c118c860184cbe105dd584621b1acd1f8a35ed08b709ed48c22",
+    "alpha": null
+  }
+]

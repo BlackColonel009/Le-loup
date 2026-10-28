@@ -1,0 +1,52 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "map",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-c7dd58b3-d6a9-4ac3-80c7-efb10343dacf.png",
+      "prompt": "A wide landscape 3:2 game terrain, high three-quarter aerial view, gothic medieval village clearing at blue twilight. Broad OPEN empty grounds for twenty separately placed house sprites in FOUR columns and FIVE rows, evenly spaced across the middle 85% of the image. Central subtle cobblestone council plaza, branching paths, moss and grass. Dense twisted forest ONLY at outer edges, a ruined tower and perched-owl tree at far top perimeter. No houses, no roofs, no text, no UI, no characters, no blood. Stylized high-quality 3D illustrated game environment, teal shadows, faint amber lanterns, moonlit mist. Readable unobstructed building plots."
+    },
+    {
+      "id": "house_day",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-86fcd7b5-27da-4db7-a913-672028ec66e7.png",
+      "prompt": "One standalone gothic medieval stone cottage, complete building in high three-quarter isometric perspective viewed from the front left, steep crooked slate roof, timber porch, moss, chimney, warm amber windows, subtle teal shadow. Friendly eerie haunted-village style, high-quality 3D game prop, no gore. Entire house and small stone foundation centered with generous transparent margin, isolated truly transparent background, no landscape, no text. View and proportions fit a square house slot."
+    },
+    {
+      "id": "house_night",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-013f2681-97f5-4219-a294-60e58bc4fd32.png",
+      "prompt": "One standalone gothic medieval stone cottage at NIGHT, complete building in high three-quarter isometric perspective viewed from the front left, steep crooked slate roof, timber porch, moss, chimney, glowing amber windows and tiny porch lantern, deep blue slate stone. Eerie haunted-village style, high-quality 3D game prop, no gore. Entire house and small stone foundation centered, generous transparent margin, truly transparent background, no landscape, no text. Square house slot."
+    },
+    {
+      "id": "house_eliminated",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-d942d4e3-68f8-4d27-9831-733fe83cd08d.png",
+      "prompt": "One abandoned gothic medieval stone cottage, complete building in high three-quarter isometric perspective viewed from the front left, steep crooked slate roof, timber porch, moss and chimney. Windows shuttered and dark, boarded front door with subtle red wax seal, cold violet-gray stone, extinguished lantern. High-quality 3D illustrated game prop, no gore, no fire, no person. Entire house and small stone foundation centered with transparent margin, isolated truly transparent background, no landscape, no text. Square house slot."
+    },
+    {
+      "id": "owl",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-9bd513e7-05ff-484d-8ea9-d3f1a482be42.png",
+      "prompt": "One ominous realistic stylized 3D eagle owl facing camera, symmetrical spread wings, luminous amber-yellow eyes, intact beautiful feather detail, dark brown and silver feathers. Mid flight, both wings and talons fully visible, centered isolated on truly transparent background. Cinematic gothic game sprite, eerie but no gore, no fog or glow outside owl outline, no ground, no branch, no text."
+    },
+    {
+      "id": "wheel",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-2424f28b-7630-42be-b38b-b4baf3c42dfe.png",
+      "prompt": "A perfectly circular gothic medieval fortune wheel game prop, straight-on view, EIGHT equal blank wedge segments, alternating deep navy and dark plum, tarnished bronze ornate outer ring with small wolf heads and crescent motifs, central round amber gemstone. Symmetric 3D illustrated collectible style, isolated on completely transparent background, no pointer, no stand, no letters or numbers, no gore. Entire circle inside square frame."
+    },
+    {
+      "id": "card_back",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-51915321-e325-49d1-883a-7ff2df66a04d.png",
+      "prompt": "Portrait 2:3 playing card BACK, dark midnight blue leather with intricate tarnished bronze gothic filigree and symmetrical central silver wolf emblem under a crescent moon, faint tree silhouettes, elegant spooky medieval collectible style. Full rectangular card, no text, no gore, no blood."
+    },
+    {
+      "id": "sisters_classic",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-d3147711-757e-44ee-82ab-a9680d7dddba.png",
+      "destination": "apps/mordeviel/assets/cards/sisters.png",
+      "prompt": "Create a matching card in exactly this reference deck style and portrait layout. Replace character with TWO distinct medieval adult sisters standing shoulder to shoulder, matching moon pendants, subtle moonlit village background. Maintain frame and parchment. Exact French title \"DEUX SŒURS\", bottom rules: \"Camp : Village\" then \"La première nuit, reconnaissez votre sœur.\" Clear readable lettering, no extra words. No gore. Warm illustrated fantasy."
+    },
+    {
+      "id": "sisters_intense",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-bfd87f7f-01e0-43ff-a51d-5433688a0429.png",
+      "destination": "apps/mordeviel/assets/cards/intense/sisters_intense.png",
+      "prompt": "Create a matching card in exactly this reference deck style and portrait layout. Replace character with TWO distinct medieval adult sisters standing shoulder to shoulder, matching moon pendants, subtle moonlit village background. Maintain frame and parchment. Exact French title \"DEUX SŒURS\", bottom rules: \"Camp : Village\" then \"La première nuit, reconnaissez votre sœur.\" Clear readable lettering, no extra words. No gore. Warm illustrated fantasy."
+    }
+  ]
+}

@@ -5,8 +5,8 @@ import shutil
 from PIL import Image
 
 root = Path(__file__).resolve().parents[1]
-source = root / 'le_loup/Map/home_rip.png'
-target = root / 'apps/le_loup/assets/village/house_eliminated.png'
+source = root / 'mordeviel/Map/home_rip.png'
+target = root / 'apps/mordeviel/assets/village/house_eliminated.png'
 with Image.open(source) as image:
     image.verify()
 if target.exists() and hashlib.sha256(source.read_bytes()).digest() == hashlib.sha256(target.read_bytes()).digest():
@@ -17,7 +17,7 @@ else:
     print('Nouveau visuel intégré :', target)
 
 # Métadonnées de cadrage uniquement : aucun pixel source n'est modifié.
-geometry = root / 'apps/le_loup/lib/village/house_sprite_geometry.dart'
+geometry = root / 'apps/mordeviel/lib/village/house_sprite_geometry.dart'
 lines = [
     '// Généré par tools/sync_eliminated_house.py ; sources PNG conservées intactes.',
     'class HouseSpriteGeometry {',

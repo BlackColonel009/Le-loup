@@ -6,7 +6,7 @@ import re
 import wave
 
 ROOT = Path(__file__).resolve().parents[2]
-APP = ROOT / 'apps/le_loup'
+APP = ROOT / 'apps/mordeviel'
 
 def main():
     catalog_path = APP / 'lib/audio/voice_profiles.dart'
@@ -29,7 +29,7 @@ def main():
         catalog.append('    isApproved: ' + str(approved).lower() + ',')
         catalog.append('    availableCues: {' + ', '.join("'" + c + "'" for c in sorted(cues)) + '},')
         catalog.append('  ),')
-        declarations.extend('    - assets/audio/classic/' + prefix + cue for cue in sorted(cues))
+        declarations.extend('    - assets/audio/classic/' + prefix + cue for cue in sorted(cues) if profile.startswith('classic_') or cue == 'preview.wav')
     catalog.extend(['];', 'VoiceProfile voiceProfileById(String? id) => voiceProfiles.firstWhere(',
                     '  (p) => p.id == id, orElse: () => voiceProfiles.first,', ');', ''])
     pubspec_path = APP / 'pubspec.yaml'

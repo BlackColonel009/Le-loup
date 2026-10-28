@@ -58,6 +58,13 @@ Future<void> main() async {
       ),
     );
     host.startVote(seconds: 60);
+    await until(
+      () => rooms.values.every((room) => room['phase'] == 'mayor_election'),
+    );
+    // An undecided election leaves the office vacant without eliminating anyone.
+    host.advanceNight();
+    await until(() => rooms.values.every((room) => room['phase'] == 'day'));
+    host.startVote(seconds: 60);
     final targetIndex = roles.entries
         .firstWhere((entry) => entry.key != 0 && entry.value == 'villager')
         .key;

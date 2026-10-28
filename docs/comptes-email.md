@@ -14,7 +14,7 @@ vérifié, l'état du compte et les restrictions éventuelles. L'historique prov
 uniquement des lignes d'achat du compte connecté ; il est vide tant qu'aucun achat
 n'a été effectué. Les paiements restent désactivés et aucun achat fictif n'est créé.
 
-## Connexion conservée pendant 24 heures
+## Connexion conservée pendant 14 jours pour les joueurs
 
 Après une authentification et la vérification email, l'application conserve le
 jeton dans le stockage sécurisé de l'appareil. Quitter la communauté, revenir à
@@ -22,9 +22,9 @@ l'accueil ou fermer puis rouvrir l'application ne demande pas une nouvelle
 connexion tant que cette session reste valide. Aucun mot de passe ni droit
 administrateur n'est enregistré dans ce cache ; les droits sont relus du serveur.
 
-Les nouveaux jetons expirent 24 heures après leur création. Ouvrir la communauté
+Les nouveaux jetons des joueurs expirent 14 jours après leur création ; ceux des administrateurs restent limités à 24 heures. Ouvrir la communauté
 ne repousse pas cette échéance. L'API renvoie `expires_at` à la connexion ; l'app
-respecte cette date, avec une limite locale de 24 heures pour les anciens serveurs.
+respecte cette date, avec un plafond local de 14 jours pour les joueurs et de 24 heures à la connexion administrateur. Les sessions existantes conservent leur échéance initiale : une nouvelle connexion est nécessaire pour recevoir la nouvelle durée. La promotion par le script administrateur révoque les anciennes sessions du joueur.
 À expiration, déconnexion volontaire, invalidation serveur, bannissement,
 changement de mot de passe ou suppression de compte, le jeton local est effacé.
 Une panne réseau temporaire conserve la session afin de permettre une reprise.
@@ -52,12 +52,12 @@ Copier les noms présents dans backend/.env.example et renseigner dans le fichie
 privé backend/.env, sans le committer :
 
 ```dotenv
-LE_LOUP_SMTP_HOST=smtp.votre-fournisseur.fr
-LE_LOUP_SMTP_PORT=587
+MORDEVIEL_SMTP_HOST=smtp.votre-fournisseur.fr
+MORDEVIEL_SMTP_PORT=587
 SMTP_USE_TLS=true
-LE_LOUP_SMTP_USERNAME=votre-identifiant
-LE_LOUP_SMTP_PASSWORD=votre-secret
-LE_LOUP_SMTP_FROM=contact@votre-domaine.fr
+MORDEVIEL_SMTP_USERNAME=votre-identifiant
+MORDEVIEL_SMTP_PASSWORD=votre-secret
+MORDEVIEL_SMTP_FROM=contact@votre-domaine.fr
 ```
 
 Le port 587 utilise STARTTLS ; le port 465 utilise TLS implicite. Le certificat
@@ -71,7 +71,7 @@ FastAPI charge désormais backend/.env automatiquement au démarrage, sans écra
 les variables déjà définies dans le service. L'option explicite reste possible :
 
 ```powershell
-backend/.venv/Scripts/python.exe -m uvicorn le_loup_api.main:app --env-file backend/.env --host 0.0.0.0 --port 8000
+backend/.venv/Scripts/python.exe -m uvicorn mordeviel_api.main:app --env-file backend/.env --host 0.0.0.0 --port 8000
 ```
 
 Sur Contabo, utiliser le chemin Linux de l'environnement Python et du .env.
@@ -83,7 +83,7 @@ avec son mot de passe et en demandant un nouveau code.
 Pour le premier administrateur :
 
 ```powershell
-backend/.venv/Scripts/python.exe -m le_loup_api.create_admin --nickname "Logan R.D" --email "votre-adresse@votre-domaine.fr"
+backend/.venv/Scripts/python.exe -m mordeviel_api.create_admin --nickname "Logan R.D" --email "votre-adresse@votre-domaine.fr"
 ```
 
 La commande demande le mot de passe en privé. La première connexion dans l'app

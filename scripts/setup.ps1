@@ -8,7 +8,7 @@ try {
     }
     & backend/.venv/Scripts/python.exe -m pip install -e './backend[dev]'
     if ($LASTEXITCODE -ne 0) { throw 'Installation Python impossible.' }
-    Push-Location apps/le_loup
+    Push-Location apps/mordeviel
     try {
         flutter pub get
         if ($LASTEXITCODE -ne 0) { throw 'Installation Flutter impossible.' }

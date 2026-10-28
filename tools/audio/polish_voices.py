@@ -3,7 +3,7 @@ from pathlib import Path
 import wave
 import numpy as np
 
-root = Path(__file__).resolve().parents[2] / 'apps/le_loup/assets/audio/classic'
+root = Path(__file__).resolve().parents[2] / 'apps/mordeviel/assets/audio/classic'
 for path in root.glob('*.wav'):
     if path.stem not in {'role_reveal', 'sleep', 'seer', 'wolves', 'witch', 'dawn',
                          'hunter', 'day', 'voting', 'vote_result',

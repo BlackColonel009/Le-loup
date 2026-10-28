@@ -3,7 +3,7 @@ from pathlib import Path
 import wave
 import numpy as np
 
-OUT = Path(__file__).resolve().parents[2] / 'apps/le_loup/assets/audio/classic'
+OUT = Path(__file__).resolve().parents[2] / 'apps/mordeviel/assets/audio/classic'
 SR = 24000
 
 

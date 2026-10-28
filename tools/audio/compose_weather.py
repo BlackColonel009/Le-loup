@@ -3,7 +3,7 @@ from pathlib import Path
 import wave
 import numpy as np
 
-out = Path(__file__).resolve().parents[2] / 'apps/le_loup/assets/audio/classic'
+out = Path(__file__).resolve().parents[2] / 'apps/mordeviel/assets/audio/classic'
 sr = 22050
 rng = np.random.default_rng(97856)
 

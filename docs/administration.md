@@ -2,11 +2,11 @@
 
 ## Créer ton premier compte sur le serveur
 
-Dans l'environnement Python du backend, après définition de LE_LOUP_COMMUNITY_DB
+Dans l'environnement Python du backend, après définition de MORDEVIEL_COMMUNITY_DB
 si nécessaire, exécuter :
 
 ```powershell
-backend/.venv/Scripts/python.exe -m le_loup_api.create_admin --nickname "Logan R.D" --email "votre-adresse@votre-domaine.fr"
+backend/.venv/Scripts/python.exe -m mordeviel_api.create_admin --nickname "Logan R.D" --email "votre-adresse@votre-domaine.fr"
 ```
 
 Sur Contabo/Linux, utiliser le python de son environnement virtuel. La commande
@@ -55,7 +55,7 @@ ou redémarrage. Pendant la restriction, il peut lire et contacter le support.
 
 Le filtre lexical traite les majuscules, accents et certaines écritures
 contournées, en évitant les sous-chaînes à l'intérieur des mots ordinaires.
-La liste est dans backend/src/le_loup_api/moderation.py. Il ne comprend pas le
+La liste est dans backend/src/mordeviel_api/moderation.py. Il ne comprend pas le
 contexte et ne détecte pas toutes les insultes ; des mots ambigus peuvent être
 refusés. L'administrateur peut lever une sanction erronée. Les tickets privés
 ne sont pas filtrés pour permettre les demandes d'aide et contestations.

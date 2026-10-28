@@ -39,9 +39,9 @@ reproductibles avec `tools/audio/compose_weather.py` et numpy.
 
 ## Nouveau visuel de maison éliminée
 
-Le fichier source attendu est `le_loup/Map/home_rip.png`. Après son remplacement,
+Le fichier source attendu est `mordeviel/Map/home_rip.png`. Après son remplacement,
 `tools/sync_eliminated_house.py` vérifie le fichier et le copie sans retouche dans
-`apps/le_loup/assets/village/house_eliminated.png`. Le script ne touche pas au
+`apps/mordeviel/assets/village/house_eliminated.png`. Le script ne touche pas au
 visuel source. L’affichage utilise désormais les proportions natives et accepte
 une taille différente de l’ancien PNG. Le script régénère également
 `house_sprite_geometry.dart` à partir des marges transparentes des trois maisons,

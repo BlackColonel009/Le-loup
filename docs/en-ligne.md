@@ -34,7 +34,7 @@ service temporairement inaccessible, le site et le code sont conservés.
 Sans configuration, l'application utilise le serveur public
 https://legendeofwolf.newtechnologiestg.com pour les salons, la communauté et la
 boutique. La valeur commune est définie dans
-`apps/le_loup/lib/services/server_config.dart`.
+`apps/mordeviel/lib/services/server_config.dart`.
 Pour tester un backend de développement sur un téléphone, remplacer
 `API_BASE_URL` par l'IP accessible
 du PC (par exemple http://192.168.1.10:8000), sur un émulateur Android
@@ -48,18 +48,18 @@ ajouté à cette étape.
 ## Lancer le backend depuis la racine du dépôt
 
 ```powershell
-$env:LE_LOUP_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
-backend/.venv/Scripts/python.exe -m uvicorn le_loup_api.main:app --host 0.0.0.0 --port 8000
+$env:MORDEVIEL_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
+backend/.venv/Scripts/python.exe -m uvicorn mordeviel_api.main:app --host 0.0.0.0 --port 8000
 ```
 
 Les dépendances sont dans backend/pyproject.toml, dont websockets. Le serveur de
 jeu nécessite Python et Dart ; Flutter SDK n'est pas nécessaire en hébergement
-si le binaire Dart est installé. Sous Linux, définir LE_LOUP_DART avec son chemin
+si le binaire Dart est installé. Sous Linux, définir MORDEVIEL_DART avec son chemin
 ou fournir dart dans PATH. Conserver packages/local_host avec le backend.
 
 Utiliser **un seul worker Uvicorn**, les salons sont en mémoire. Le redémarrage du
 backend termine les parties. Par défaut : 16 salons simultanés, durée maximale
-6 heures. Configurables par LE_LOUP_MAX_ROOMS et LE_LOUP_ROOM_LIFETIME (secondes).
+6 heures. Configurables par MORDEVIEL_MAX_ROOMS et MORDEVIEL_ROOM_LIFETIME (secondes).
 Le MDJ peut se reconnecter avec son jeton tant que son salon existe ; sa coupure
 ne détruit pas la partie. Une seule connexion MDJ active est acceptée.
 
@@ -89,17 +89,17 @@ en parallèle des réponses aux commandes.
 L'accès Internet devra passer par HTTPS/WSS avec un reverse proxy, sans exposer
 les ports internes Dart. Les clients natifs ne fournissent pas d'Origin ; pour
 un futur navigateur, les origines autorisées seront listées explicitement dans
-LE_LOUP_ALLOWED_ORIGINS, séparées par des virgules. Ni appels vocaux ni sauvegarde
+MORDEVIEL_ALLOWED_ORIGINS, séparées par des virgules. Ni appels vocaux ni sauvegarde
 persistante ne sont ajoutés à cette étape.
 
 ```powershell
-$env:LE_LOUP_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
+$env:MORDEVIEL_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
 backend/.venv/Scripts/python.exe -m pytest backend/tests -q
 ```
 
 Le test d'intégration utilise réellement le moteur Dart derrière FastAPI :
 création, rejet d'un faux MDJ, pack partagé, quatre joueurs, distribution privée,
-appels nocturnes et reconnexion. Sans LE_LOUP_DART, ce test est explicitement sauté.
+appels nocturnes et reconnexion. Sans MORDEVIEL_DART, ce test est explicitement sauté.
 
 `packages/local_host/tool/online_client_smoke.dart` teste le client Dart réel
 contre un serveur démarré : création par OnlineHost, quatre LobbyClient, partage

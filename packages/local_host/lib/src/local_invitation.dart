@@ -22,7 +22,7 @@ class LocalInvitation {
   const LocalInvitation._(this.address, this.code);
   final String address, code;
   String get payload => Uri(
-    scheme: 'leloup',
+    scheme: 'mordeviel',
     host: 'join',
     queryParameters: {'v': '1', 'address': address, 'code': code},
   ).toString();
@@ -30,14 +30,14 @@ class LocalInvitation {
   factory LocalInvitation.parse(String raw) {
     final uri = raw.length > 512 ? null : Uri.tryParse(raw.trim());
     if (uri == null ||
-        uri.scheme != 'leloup' ||
+        uri.scheme != 'mordeviel' ||
         uri.host != 'join' ||
         uri.hasPort ||
         uri.userInfo.isNotEmpty ||
         uri.path.isNotEmpty ||
         uri.hasFragment) {
       throw const FormatException(
-        'Ce QR code n’est pas une invitation Le Loup.',
+        'Ce QR code n’est pas une invitation Mordeviel.',
       );
     }
     final all = uri.queryParametersAll;
@@ -46,7 +46,7 @@ class LocalInvitation {
         all.values.any((values) => values.length != 1) ||
         all['v']?.single != '1') {
       throw const FormatException(
-        'Invitation Le Loup invalide ou non prise en charge.',
+        'Invitation Mordeviel invalide ou non prise en charge.',
       );
     }
     return LocalInvitation(

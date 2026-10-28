@@ -2,7 +2,7 @@ import asyncio
 
 from httpx import ASGITransport, AsyncClient
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 
 def test_health_exposes_protocol_version():
@@ -16,6 +16,6 @@ def test_health_exposes_protocol_version():
     assert response.status_code == 200
     assert response.json() == {
         "status": "ok",
-        "service": "le-loup-api",
+        "service": "mordeviel-api",
         "protocol": "1",
     }

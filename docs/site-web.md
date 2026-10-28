@@ -1,4 +1,4 @@
-# Vitrine Legende of Wolf
+# Vitrine Mordeviel
 
 Le site est livré dans le paquet FastAPI : aucun serveur Node ni compilation
 web supplémentaire. Nginx continue à transmettre les requêtes à 127.0.0.1:8090.
@@ -14,7 +14,7 @@ de partie dans le navigateur.
 - `/support` : aide et contact.
 - `/administration` : connexion administrateur et gestion des cartes du site.
 
-Les pages et les ressources sont dans `backend/src/le_loup_api/web`.
+Les pages et les ressources sont dans `backend/src/mordeviel_api/web`.
 Les captures proviennent du rendu des vrais widgets Flutter avec des données de
 démonstration ; les cadres de téléphone sont illustratifs, pas des photographies
 d'appareils. Les visuels Horreur pourront être ajoutés via le dashboard.
@@ -25,18 +25,18 @@ Depuis la racine du dépôt :
 
 ```powershell
 backend/.venv/Scripts/python.exe -m pip install -e ./backend
-backend/.venv/Scripts/python.exe -m uvicorn le_loup_api.main:app --host 127.0.0.1 --port 8090
+backend/.venv/Scripts/python.exe -m uvicorn mordeviel_api.main:app --host 127.0.0.1 --port 8090
 ```
 
 Ouvrir http://127.0.0.1:8090. Pour isoler les données d'essai, définir d'abord
-`LE_LOUP_COMMUNITY_DB` vers une base temporaire, sans toucher à la base réelle.
+`MORDEVIEL_COMMUNITY_DB` vers une base temporaire, sans toucher à la base réelle.
 
 ## Mise en place sur Contabo
 
 Après commit et push des modifications du poste local, exécuter sur le serveur :
 
 ```bash
-cd /var/www/Le-loup
+cd /var/www/Mordeviel
 git pull --ff-only
 backend/venv/bin/python -m pip install -e ./backend
 ```
@@ -44,7 +44,7 @@ backend/venv/bin/python -m pip install -e ./backend
 Configurer dans `backend/.env` :
 
 ```dotenv
-LE_LOUP_PUBLIC_SUPPORT_EMAIL=adresse-publique-du-support
+MORDEVIEL_PUBLIC_SUPPORT_EMAIL=adresse-publique-du-support
 ```
 
 Remplacer par une vraie adresse. Cette adresse est rendue publique ; elle est
@@ -67,7 +67,7 @@ Puis, en dehors d'une partie en cours :
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
-sudo systemctl restart legendeofwolf
+sudo systemctl restart mordeviel
 curl -fsS https://legendeofwolf.newtechnologiestg.com/health
 curl -fsS https://legendeofwolf.newtechnologiestg.com/gallery/cards
 ```
@@ -109,7 +109,7 @@ rechargement de la page ; les accès API restent contrôlés côté serveur.
 Les cartes sont dans la table `site_cards` de la base communauté. Les images
 téléversées sont stockées dans `site-uploads/` à côté de cette base, donc par
 défaut `backend/data/site-uploads/`. Sauvegarder ensemble la base et ce dossier.
-Avec le service existant, le compte `legendeofwolf` doit avoir accès en écriture
+Avec le service existant, le compte `mordeviel` doit avoir accès en écriture
 au dossier de données. Ne pas stocker les téléversements dans le code Git.
 
 Les images acceptées sont PNG, JPEG ou WebP, jusqu'à 4 Mo et 4096 pixels par côté.

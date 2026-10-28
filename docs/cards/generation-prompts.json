@@ -1,139 +1,139 @@
 {
   "generator": "Built-in image_gen.imagegen",
   "date": "2026-10-26",
-  "reference_frame": "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-  "style_reference": "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png",
+  "reference_frame": "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+  "style_reference": "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png",
   "cards": [
     {
       "id": "little_girl",
-      "asset": "apps/le_loup/assets/cards/little_girl.png",
+      "asset": "apps/mordeviel/assets/cards/little_girl.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-358c2549-0822-482a-981d-a16c632092fa.png",
       "prompt": "Create ONE finished French classic Werewolf role card LA PETITE FILLE. Preserve the provided carved wooden frame, title plank and parchment. Match the friendly existing villager illustration. Upper art: A fully clothed curious village girl about ten, chestnut braids, green medieval dress and cream shawl, cautiously peeking from a wooden shutter at a distant wolf silhouette under the moon. Innocent resourcefulness, no violence. Exact title: LA PETITE FILLE. Parchment: Camp : Village. Pendant l’éveil des loups, observez discrètement… sans vous faire repérer !. Bottom medallions: village silhouette and moon. Family-friendly warm medieval storybook 2D illustration. Portrait card, complete border, no watermark.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\types cartes classiques\\villagois.jpg"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\types cartes classiques\\villagois.jpg"
       ]
     },
     {
       "id": "metamorph",
-      "asset": "apps/le_loup/assets/cards/metamorph.png",
+      "asset": "apps/mordeviel/assets/cards/metamorph.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-958de84a-0138-4b02-9755-28d356791437.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game role card, not a collage. Reference image 1 is the user's brown carved wooden card frame: preserve its outline, arched art window, engraved ornaments, wooden title plank, parchment rules panel, upper village and flame medallions, two lower medallions. Reference image 2 is the already-created Petite Fille card: match this exact art direction, frame proportions and typography for a cohesive deck. Portrait same aspect as references (about 0.70 width/height), complete border visible. Upper illustration: A clever young adult medieval rogue in a teal hooded cloak, holding two small wooden theater masks, one warm and one mysterious, with subtle pale magical wisps between them. Mischievous but approachable, moonlit village alley. Warm polished hand-painted 2D medieval storybook cartoon, expressive face, brown linework and detailed yet readable shapes. Classic family-friendly edition, not premium or horror. Exact title on plank: \"LE MÉTAMORPHE\". Exact lower parchment text: \"Camp : Village\" and \"Une fois au début de la partie, échangez les rôles de deux joueurs.\". Clear large French lettering with correct accents, carefully fitted, no extra text. Lower round medallions contain two intertwined masks and moon. Only ONE character card; no watermark, no mockup, no outside scene or hands holding the card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "cupid",
-      "asset": "apps/le_loup/assets/cards/cupid.png",
+      "asset": "apps/mordeviel/assets/cards/cupid.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-6afc9306-9bfd-4d0b-a5ab-b3056242ec59.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game role card, not a collage. Reference image 1 is the user's brown carved wooden card frame: preserve its outline, arched art window, engraved ornaments, wooden title plank, parchment rules panel, upper village and flame medallions, two lower medallions. Reference image 2 is the already-created Petite Fille card: match this exact art direction, frame proportions and typography for a cohesive deck. Portrait same aspect as references (about 0.70 width/height), complete border visible. Upper illustration: A fully clothed young adult winged cupid archer, curly auburn hair, cream tunic and burgundy cape, holding a small bow and a heart-tipped arrow; two intertwined glowing ribbons suggest a bond. Romantic storybook medieval village garden, no nudity. Warm polished hand-painted 2D medieval storybook cartoon, expressive face, brown linework and detailed yet readable shapes. Classic family-friendly edition, not premium or horror. Exact title on plank: \"CUPIDON\". Exact lower parchment text: \"Camp : Village\" and \"Liez deux amoureux. Si l’un meurt, l’autre le suit.\". Clear large French lettering with correct accents, carefully fitted, no extra text. Lower round medallions contain intertwined hearts and moon. Only ONE character card; no watermark, no mockup, no outside scene or hands holding the card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "guardian",
-      "asset": "apps/le_loup/assets/cards/guardian.png",
+      "asset": "apps/mordeviel/assets/cards/guardian.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-c35889c9-b755-4268-8b19-66591b35db76.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game role card, not a collage. Reference image 1 is the user's brown carved wooden card frame: preserve its outline, arched art window, engraved ornaments, wooden title plank, parchment rules panel, upper village and flame medallions, two lower medallions. Reference image 2 is the already-created Petite Fille card: match this exact art direction, frame proportions and typography for a cohesive deck. Portrait same aspect as references (about 0.70 width/height), complete border visible. Upper illustration: A reassuring adult female medieval village guardian in a blue cloak and practical leather armor, carrying a round wooden shield bearing a softly glowing protective rune. Protective stance beside a village doorway under moonlight, warm lantern glow. Warm polished hand-painted 2D medieval storybook cartoon, expressive face, brown linework and detailed yet readable shapes. Classic family-friendly edition, not premium or horror. Exact title on plank: \"LE SALVATEUR\". Exact lower parchment text: \"Camp : Village\" and \"Chaque nuit, protégez un joueur. Jamais la même cible deux nuits de suite.\". Clear large French lettering with correct accents, carefully fitted, no extra text. Lower round medallions contain shield and moon. Only ONE character card; no watermark, no mockup, no outside scene or hands holding the card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "elder",
-      "asset": "apps/le_loup/assets/cards/elder.png",
+      "asset": "apps/mordeviel/assets/cards/elder.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-0aa8e85c-0060-498a-9f72-cdefb380e68b.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A wise elderly village man with a long white beard, kind weathered face, brown wool cloak and oak staff, seated under an ancient oak tree. Warm amber village lights and protective ancient roots, dignified family-friendly storybook portrait. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"L’ANCIEN\". Exact lower parchment text: \"Camp : Village\" followed by \"Survivez à une attaque des loups. Si le village vous élimine, ses pouvoirs s’éteignent.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: oak tree and village silhouette. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "scapegoat",
-      "asset": "apps/le_loup/assets/cards/scapegoat.png",
+      "asset": "apps/mordeviel/assets/cards/scapegoat.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-0819e383-3d8f-418d-9f75-6f696f38e1ff.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: An anxious but sympathetic adult medieval villager with a short beard, patched ochre vest and small carved goat pendant, standing in the village square. A few distant pointing silhouettes suggest unfair blame; no chains, no weapons, no execution scene. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"LE BOUC ÉMISSAIRE\". Exact lower parchment text: \"Camp : Village\" followed by \"À égalité au vote, vous êtes éliminé. Choisissez qui pourra voter le lendemain.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: balanced scales and village silhouette. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "alpha_wolf",
-      "asset": "apps/le_loup/assets/cards/alpha_wolf.png",
+      "asset": "apps/mordeviel/assets/cards/alpha_wolf.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-1e31afea-3343-4899-9384-ba2f7efc5694.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A powerful dark gray anthropomorphic alpha werewolf with a thick mane, amber eyes and a dignified leather mantle, towering protectively in a moonlit forest. Two claw marks carved on a tree symbolize its second hunt. Menacing classic storybook tone, no blood or victim. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"LE GRAND MÉCHANT LOUP\". Exact lower parchment text: \"Camp : Loups-Garous\" followed by \"Tant qu’aucun loup de la meute n’est mort, vous pouvez dévorer une seconde victime.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: wolf head and two moons. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "white_wolf",
-      "asset": "apps/le_loup/assets/cards/white_wolf.png",
+      "asset": "apps/mordeviel/assets/cards/white_wolf.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-587a204a-95db-4fc7-b9d4-4cf835808613.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A striking white-furred anthropomorphic werewolf with ice-blue eyes, silver-gray cloak and proud solitary posture, standing apart from small dark wolf silhouettes beneath a pale full moon. Cold blue forest against warm wooden border, no gore. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"LE LOUP BLANC\". Exact lower parchment text: \"Camp : Solitaire\" followed by \"Une nuit sur deux, éliminez un autre loup. Gagnez en restant seul survivant.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: single white wolf head and moon. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "wolf_father",
-      "asset": "apps/le_loup/assets/cards/wolf_father.png",
+      "asset": "apps/mordeviel/assets/cards/wolf_father.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-54cded67-7c63-49b6-a946-8fd9927c53cd.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: An older imposing silver-and-charcoal werewolf patriarch with a braided mane, rustic brown cloak and carved wooden staff, extending an open claw surrounded by a restrained green magical glow. A moonlit village doorway behind him suggests transformation, no blood or biting. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"LE PÈRE DES LOUPS\". Exact lower parchment text: \"Camp : Loups-Garous\" followed by \"Une fois par partie, infectez la victime de la meute au lieu de la tuer.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: wolf head and small green rune. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "idiot",
-      "asset": "apps/le_loup/assets/cards/idiot.png",
+      "asset": "apps/mordeviel/assets/cards/idiot.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-d20bf699-bc92-4d8e-b47e-f573a50c8a56.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A cheerful eccentric adult village jester with a patched green and ochre cap, crooked wooden spoon and friendly expressive face, shrugging with innocent humor in a sunny medieval village square. Lovable and clever-looking, not demeaning, no disability caricature. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"L’IDIOT DU VILLAGE\". Exact lower parchment text: \"Camp : Village\" followed by \"Gracié à votre premier vote d’élimination, vous restez en vie mais perdez votre vote.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: small jester cap and crossed ballot. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "piper",
-      "asset": "apps/le_loup/assets/cards/piper.png",
+      "asset": "apps/mordeviel/assets/cards/piper.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-a27a5608-ad1a-4d58-a219-b382f636c87b.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A mysterious adult traveling musician in a plum cloak and dark green feathered hat, playing a wooden transverse flute. Two subtle luminous musical ribbons curl toward distant village windows. Captivating medieval storybook illustration, magical but not sinister horror. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"LE JOUEUR DE FLÛTE\". Exact lower parchment text: \"Camp : Solitaire\" followed by \"Charmez deux joueurs chaque nuit. Gagnez si tous les autres survivants sont charmés.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: flute and two musical notes. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     },
     {
       "id": "angel",
-      "asset": "apps/le_loup/assets/cards/angel.png",
+      "asset": "apps/mordeviel/assets/cards/angel.png",
       "generated_source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-c7a27aef-5794-4bfc-b0a2-20b41d9461d3.png",
       "prompt": "Use case: illustration-story. Generate ONE finished French CLASSIC Werewolf game card, not a collage. Reference image 1 is the user's classic brown carved wood frame: preserve its outline, arched illustration window, ornaments, wooden title plank, parchment rules area, upper village and flame medallions, two lower medallions. Reference image 2 is the created Petite Fille card: match its precise deck art direction, frame proportions and lettering style. Same portrait ratio about 0.70 width/height, complete outer border visible. Upper picture: A serene fully clothed androgynous young adult angel with soft ivory feathered wings, luminous halo and simple cream medieval robe, holding an olive branch while looking knowingly toward the village council square. Dawn light, tender mysterious expression, no bow or arrows. Warm polished hand-painted 2D medieval storybook cartoon, expressive character, brown linework, clear silhouette. Classic family-friendly edition, no gore, not horror/premium. Exact title plank lettering: \"L’ANGE\". Exact lower parchment text: \"Camp : Solitaire\" followed by \"Faites-vous éliminer au premier vote du village pour remporter la partie.\". Fit all lettering legibly inside the correct areas, correct French accents, no extra text or words. Two bottom medallions: halo and wing. Output one complete role card only. No watermark, no photorealistic mockup, no hands or scene outside card.",
       "status": "created_and_integrated_as_collection_card",
       "reference_images": [
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\le_loup\\Bordures de cartes\\Carte types bordures classique.jpg",
-        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\le_loup\\assets\\cards\\little_girl.png"
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\mordeviel\\Bordures de cartes\\Carte types bordures classique.jpg",
+        "C:\\Users\\hp\\Documents\\ChatGPT\\Le loup\\apps\\mordeviel\\assets\\cards\\little_girl.png"
       ]
     }
   ]

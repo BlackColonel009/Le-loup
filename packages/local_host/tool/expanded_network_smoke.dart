@@ -25,12 +25,12 @@ Future<void> main() async {
   try {
     await host.start(port: 0);
     host.configure(
-      {for (final role in roleIds) role: 1},
+      {for (final role in roleIds) role: role == 'sisters' ? 2 : 1},
       campOnly: false,
       pack: 'intense',
       sentences: sentences,
     );
-    for (var i = 0; i < roleIds.length; i++) {
+    for (var i = 0; i < roleIds.length + 1; i++) {
       final index = i, client = LobbyClient();
       clients.add(client);
       subscriptions.add(
@@ -67,19 +67,25 @@ Future<void> main() async {
       client.setReady(true);
     }
     await until(() => host.launchError == null);
-    await until(() => themed.length == roleIds.length);
+    await until(() => themed.length == roleIds.length + 1);
     host.startGame();
     check(
       (host.snapshot['game'] as Map)['sentence_options'].first == 'Sentence 0',
       'Custom sentences lost at launch',
     );
-    await until(() => private.length == roleIds.length);
+    await until(() => private.length == roleIds.length + 1);
     int actor(String role) =>
         private.keys.firstWhere((i) => private[i]!['role'] == role);
     host.startNight();
     host.callNight('metamorph');
     await until(() => private.values.any((p) => p['ability'] is Map));
     final meta = actor('metamorph'), seer = actor('seer');
+    clients[meta].gameAction(
+      'metamorph.peek',
+      (host.snapshot['game'] as Map)['phase_revision'] as int,
+      targets: [ids[meta]!, ids[seer]!],
+    );
+    await until(() => private[meta]?['variant_result'] != null);
     clients[meta].gameAction(
       'metamorph.swap',
       (host.snapshot['game'] as Map)['phase_revision'] as int,
@@ -134,7 +140,7 @@ Future<void> main() async {
     }
     check(!leak, 'Private state leaked on public transport');
     print(
-      '17-role network OK: composition, private exchanges, lovers, guardian and all wolf variants.',
+      '18-role network OK: paired sisters, composition, private exchanges, lovers, guardian and all wolf variants.',
     );
   } finally {
     for (final sub in subscriptions) {

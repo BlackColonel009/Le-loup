@@ -16,21 +16,21 @@ def main():
     parser.add_argument("--send-test", action="store_true")
     args = parser.parse_args()
     load_dotenv(Path(__file__).resolve().parents[1] / "backend/.env", override=False)
-    from le_loup_api.email_security import normalize_email, require_mailer
+    from mordeviel_api.email_security import normalize_email, require_mailer
 
     stage = "configuration"
     accepted = False
     smtp = None
     try:
         require_mailer()
-        address = normalize_email(os.environ["LE_LOUP_SMTP_FROM"])
-        recipient = os.getenv("LE_LOUP_SMTP_USERNAME", "")
+        address = normalize_email(os.environ["MORDEVIEL_SMTP_FROM"])
+        recipient = os.getenv("MORDEVIEL_SMTP_USERNAME", "")
         try:
             recipient = normalize_email(recipient)
         except HTTPException:
             recipient = address
-        host = os.environ["LE_LOUP_SMTP_HOST"]
-        port = int(os.getenv("LE_LOUP_SMTP_PORT", "587"))
+        host = os.environ["MORDEVIEL_SMTP_HOST"]
+        port = int(os.getenv("MORDEVIEL_SMTP_PORT", "587"))
         context = ssl.create_default_context()
         stage = "connexion TLS"
         smtp = (
@@ -43,16 +43,16 @@ def main():
         print("Connexion SMTP chiffrée et certificat : OK")
         stage = "authentification"
         smtp.login(
-            os.environ["LE_LOUP_SMTP_USERNAME"], os.environ["LE_LOUP_SMTP_PASSWORD"]
+            os.environ["MORDEVIEL_SMTP_USERNAME"], os.environ["MORDEVIEL_SMTP_PASSWORD"]
         )
         print("Authentification SMTP : OK")
         if args.send_test:
             message = EmailMessage()
             message["From"] = address
             message["To"] = recipient
-            message["Subject"] = "Legende of Wolf · Test SMTP"
+            message["Subject"] = "Mordeviel · Test SMTP"
             message.set_content(
-                "Bonjour,\n\nCet unique message confirme le test de la configuration SMTP de Legende of Wolf.\nIl ne contient aucun code de récupération ni mot de passe.\n\nby Logan R.D"
+                "Bonjour,\n\nCet unique message confirme le test de la configuration SMTP de Mordeviel.\nIl ne contient aucun code de récupération ni mot de passe.\n\nby Logan R.D"
             )
             stage = "envoi du message de test"
             refused = smtp.send_message(message)

@@ -9,7 +9,7 @@ import numpy as np
 
 root = Path(__file__).resolve().parents[2]
 catalog = json.loads((Path(__file__).parent / 'voice_profiles.json').read_text(encoding='utf-8'))
-assets = root / 'apps/le_loup/assets/audio/classic'
+assets = root / 'apps/mordeviel/assets/audio/classic'
 lines = [
     '// Généré par tools/audio/build_voice_profiles.py.',
     'class VoiceProfile {',
@@ -61,4 +61,4 @@ for profile in catalog['profiles']:
     lines.append('  VoiceProfile(' + ', '.join(json.dumps(v, ensure_ascii=False) for v in values) + '),')
     print(identity, len(catalog['lines'][profile['edition']]), 'fichiers')
 lines += ['];', 'VoiceProfile voiceProfileById(String? id) => voiceProfiles.firstWhere((p) => p.id == id, orElse: () => voiceProfiles.first);', '']
-(root / 'apps/le_loup/lib/audio/voice_profiles.dart').write_text('\n'.join(lines), encoding='utf-8')
+(root / 'apps/mordeviel/lib/audio/voice_profiles.dart').write_text('\n'.join(lines), encoding='utf-8')

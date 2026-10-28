@@ -28,4 +28,10 @@ const mdjNarrationLines = <String, String>{
   "close_infection": "Père des Loups, referme les yeux et rendors-toi.",
   "close_white_wolf": "Loup Blanc, referme les yeux et rendors-toi.",
   "close_piper": "Joueur de Flûte, referme les yeux et rendors-toi.",
+  "sisters": "Deux Sœurs, ouvrez les yeux et reconnaissez-vous.",
+  "close_sisters": "Deux Sœurs, refermez les yeux et rendormez-vous.",
+  "mayor_election":
+      "Le village élit son Maire. Désignez la personne qui portera votre voix.",
+  "mayor_succession":
+      "Maire, ton dernier devoir est de choisir ton successeur.",
 };

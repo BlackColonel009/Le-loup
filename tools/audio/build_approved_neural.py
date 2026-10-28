@@ -16,7 +16,7 @@ import wave
 ROOT = Path(__file__).resolve().parents[2]
 BASE = 'https://qwen-qwen3-tts.hf.space'
 PROFILES = ('werewolf', 'ghost', 'old_wizard')
-OUT = ROOT / 'apps/le_loup/assets/audio/classic/neural'
+OUT = ROOT / 'apps/mordeviel/assets/audio/classic/neural'
 
 def request(path, data=None, headers=None):
     headers = dict(headers or {})

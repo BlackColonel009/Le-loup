@@ -1,0 +1,23 @@
+{
+  "mode": "built-in image_gen, original references preserved",
+  "assets": [
+    {
+      "id": "mayor_classic",
+      "destination": "apps/mordeviel/assets/cards/mayor.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-f7365139-aaeb-4942-94f4-710c82df5efc.png",
+      "prompt": "Create the MAYOR function card matching exactly this reference deck style, frame, portrait proportions and illustrated medieval aesthetics. Character: a dignified medieval village mayor with a ceremonial sash, bronze wolf seal, closed ledger and hand raised addressing the village square; natural human face, no sinister camp implied, no modern suit. Exact title \"LE MAIRE\". Bottom parchment exact short text \"Fonction publique\" then \"Vote double sur un suspect.\" then \"À sa mort, il désigne son successeur.\" Clear readable French, no extra text. This public office coexists with any secret role. No gore."
+    },
+    {
+      "id": "mayor_intense",
+      "destination": "apps/mordeviel/assets/cards/intense/mayor_intense.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-a27110c5-e683-412b-944e-df590bd0aea1.png",
+      "prompt": "Create the MAYOR function card matching exactly this reference deck style, frame, portrait proportions and illustrated medieval aesthetics. Character: a dignified medieval village mayor with a ceremonial sash, bronze wolf seal, closed ledger and hand raised addressing the village square; natural human face, no sinister camp implied, no modern suit. Exact title \"LE MAIRE\". Bottom parchment exact short text \"Fonction publique\" then \"Vote double sur un suspect.\" then \"À sa mort, il désigne son successeur.\" Clear readable French, no extra text. This public office coexists with any secret role. No gore."
+    },
+    {
+      "id": "horror_owl_perched",
+      "destination": "apps/mordeviel/assets/village/horror/owl_perched.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-467ea308-0066-4b68-8d9c-cf84f20bd61c.png",
+      "prompt": "Create a matching companion sprite to this flying owl: the SAME eagle owl perched upright with both wings CLOSED, luminous amber yellow eyes looking directly at viewer, intact dark brown and silver feathers, small gnarled bare tree branch under its talons. Entire owl and branch fully visible. Gothic high-quality 3D illustrated game sprite. Isolated completely transparent alpha background. No text, no fog, no background aura, no gore."
+    }
+  ]
+}

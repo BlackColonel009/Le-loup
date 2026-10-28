@@ -157,6 +157,17 @@
       "subject": "A serene fully clothed androgynous young adult angel with soft ivory feathered wings, luminous halo and simple cream medieval robe, holding an olive branch while looking knowingly toward the village council square. Dawn light, tender mysterious expression, no bow or arrows.",
       "symbol": "halo and wing",
       "implemented": true
+    },
+    {
+      "id": "sisters",
+      "name": "Deux Sœurs",
+      "camp": "Village",
+      "phase": "Première nuit",
+      "summary": "Vous connaissez votre sœur, une alliée du Village au début de la partie.",
+      "details": "Les deux cartes sont ajoutées ensemble. À leur appel pendant la première nuit, les Sœurs se reconnaissent discrètement. Elles débattent et votent normalement, sans chat privé permanent. La mort de l’une ne tue pas l’autre. Si une Sœur est infectée, l’autre ne reçoit aucune notification : leur confiance peut être trompée.",
+      "implemented": true,
+      "subject": "Two medieval sisters with matching moon pendants",
+      "symbol": "two moon pendants"
     }
   ]
 }

@@ -1,6 +1,9 @@
 .tmp/
 .tools/
-apps/le_loup/android/.kotlin/
+# Ignored caches retained by Windows in the former Flutter working directory.
+apps/le_loup/
+apps/noctemeute/
+apps/mordeviel/android/.kotlin/
 **/.venv/
 **/__pycache__/
 **/*.egg-info/
@@ -9,6 +12,7 @@ apps/le_loup/android/.kotlin/
 backend/build/
 .env
 backend/data/
+backend/content/packs/
 **/.env
 !.env.example
 

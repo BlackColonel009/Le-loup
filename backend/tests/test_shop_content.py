@@ -1,13 +1,13 @@
 from fastapi.testclient import TestClient
 
-from le_loup_api.main import app
+from mordeviel_api.main import app
 
 from .helpers import post_verified
 
 
 def test_official_content_and_disabled_purchases(tmp_path, monkeypatch):
-    monkeypatch.setenv("LE_LOUP_COMMUNITY_DB", str(tmp_path / "content.sqlite3"))
-    monkeypatch.setenv("LE_LOUP_SUPPORT_TOKEN", "admin-test-content")
+    monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(tmp_path / "content.sqlite3"))
+    monkeypatch.setenv("MORDEVIEL_SUPPORT_TOKEN", "admin-test-content")
     with TestClient(app) as api:
         info = api.get("/community/info").json()
         assert len(info["faq"]) >= 4 and info["announcements"]

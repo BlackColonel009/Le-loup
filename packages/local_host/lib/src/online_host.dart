@@ -5,7 +5,16 @@ import 'game_host.dart';
 
 /// Credentials stay in memory and never appear in room snapshots or URLs.
 class OnlineHost implements GameHost {
-  OnlineHost(String server) : base = onlineServerUri(server);
+  OnlineHost(
+    String server, {
+    this.communityToken,
+    this.publicRoom = false,
+    this.title = 'Le village de la nuit',
+    this.initialTheme = 'classic',
+  }) : base = onlineServerUri(server);
+  final String? communityToken;
+  final bool publicRoom;
+  final String title, initialTheme;
   final Uri base;
   final _updates = StreamController<Map<String, dynamic>>.broadcast();
   Map<String, dynamic> _room = {};
@@ -47,7 +56,16 @@ class OnlineHost implements GameHost {
           .postUrl(base.resolve('rooms'))
           .timeout(const Duration(seconds: 12));
       request.headers.contentType = ContentType.json;
-      request.write(jsonEncode({'nickname': nickname.trim()}));
+      if (communityToken != null)
+        request.headers.set('Authorization', 'Bearer $communityToken');
+      request.write(
+        jsonEncode({
+          'nickname': nickname.trim(),
+          'public': publicRoom,
+          'title': title,
+          'theme': initialTheme,
+        }),
+      );
       final response = await request.close().timeout(
         const Duration(seconds: 20),
       );
@@ -175,12 +193,14 @@ class OnlineHost implements GameHost {
     bool? revealOnDeath,
     String? pack,
     List<String>? sentences,
+    Map<String, String>? cardStyles,
   }) => _send('configure', {
     'deck': deck,
     'camp_only': campOnly,
     if (revealOnDeath != null) 'reveal_on_death': revealOnDeath,
     if (pack != null) 'pack': pack,
     if (sentences != null) 'sentences': sentences,
+    if (cardStyles != null) 'card_styles': cardStyles,
   });
   @override
   void setLocked(bool value) => _send('lock', {'locked': value});

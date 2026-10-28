@@ -1,6 +1,6 @@
 import pytest
 
-from le_loup_api import email_security
+from mordeviel_api import email_security
 
 from .helpers import OUTBOX
 

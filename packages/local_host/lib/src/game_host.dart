@@ -15,6 +15,7 @@ abstract interface class GameHost {
     bool? revealOnDeath,
     String? pack,
     List<String>? sentences,
+    Map<String, String>? cardStyles,
   });
   void setLocked(bool value);
   void setNarration({required String profile, required bool automatic});

@@ -43,9 +43,9 @@ Aucune sélection nocturne supplémentaire n’est rendue publique en cours de j
 Mettre à jour l’application **et** le moteur Dart sur le serveur :
 
 ```bash
-cd /var/www/Le-loup
+cd /var/www/Mordeviel
 git pull
-sudo systemctl restart legendeofwolf
+sudo systemctl restart mordeviel
 ```
 
 Pas de nouvelle dépendance Python/Dart ni migration de base. Les nouveaux salons

@@ -1,0 +1,7 @@
+{
+  "brand": "Mordeviel",
+  "subtitle": "Legendary",
+  "tool": "image_gen.imagegen (built-in edit)",
+  "transparent_background": true,
+  "prompt": "Use case: text-localization. Edit the supplied transparent medieval emblem logo. Replace ONLY the large main word NOCTEMEUTE with exact uppercase MORDEVIEL. Keep LEGENDARY unchanged on the smaller parchment ribbon. Preserve the two black wolves, full moon, golden village, burgundy shield, wood-and-gold circular frame, silver trim, original composition, colors and carved silver-and-gold medieval lettering style. Fit MORDEVIEL legibly and elegantly across the wooden title plaque. No extra text. Preserve real alpha transparency outside the emblem; no opaque background or mockup."
+}

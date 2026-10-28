@@ -34,6 +34,10 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | Rendormissement : Père des Loups | « Père des Loups, referme les yeux et rendors-toi. » |
 | Rendormissement : Loup Blanc | « Loup Blanc, referme les yeux et rendors-toi. » |
 | Rendormissement : Joueur de Flûte | « Joueur de Flûte, referme les yeux et rendors-toi. » |
+| Deux Sœurs | « Deux Sœurs, ouvrez les yeux et reconnaissez-vous. » |
+| Rendormissement : Deux Sœurs | « Deux Sœurs, refermez les yeux et rendormez-vous. » |
+| Élection du Maire | « Le village élit son Maire. Désignez la personne qui portera votre voix. » |
+| Succession du Maire | « Maire, ton dernier devoir est de choisir ton successeur. » |
 
 ## Dernières paroles des cartes
 
@@ -75,6 +79,7 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | Événement | Voix | Texte |
 | --- | --- | --- |
 | Potion confirmée | Vieille sorcière | « Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé ! » |
+| horror_laugh | Vieille sorcière | « Ha ha ha ! Hi hi hi… » |
 | Malédiction de l’Ancien | Vieux sorcier | « Que le ciel vous pardonne… et vous prive de vos pouvoirs. » |
 
 La malédiction nécessite la perte réelle des pouvoirs du Village. Les dernières paroles identifiantes ne sont jouées que pour un rôle révélé publiquement.

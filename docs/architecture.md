@@ -10,7 +10,7 @@ actuel ; les sections ci-dessous décrivent aussi les étapes historiques du LAN
 - [Variantes expérimentales et arbitrages proposés](variantes-test.md)
 - [Structure de données proposée](donnees-jeu.md)
 
-- `apps/le_loup` : interface Flutter, Android/iOS, et clients web/Windows générés.
+- `apps/mordeviel` : interface Flutter, Android/iOS, et clients web/Windows générés.
 - `packages/local_host` : serveur et client WebSocket Dart natifs, branchés au salon Flutter ; incompatibles web (`dart:io`).
 - `backend` : serveur distant FastAPI.
 - `docs` : décisions et contrat partagé.

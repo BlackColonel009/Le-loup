@@ -12,7 +12,7 @@ affichée aux joueurs. Elle requiert une connexion Internet et le backend lancé
 
 - Inscription avec pseudo unique (2–24 caractères), email vérifié et mot de passe
   (8–128). La session de l'app est conservée dans le stockage sécurisé pendant
-  24 heures, y compris après fermeture de l'app ou retour à l'accueil.
+  14 jours pour les joueurs (24 heures pour les administrateurs), y compris après fermeture de l'app ou retour à l'accueil.
 - Discussion publique, questions et partages sous forme de texte/liens.
   Actualisation toutes les cinq secondes et manuelle ; 50 derniers messages.
 - Signalement d'un message au support.
@@ -26,11 +26,11 @@ affichée aux joueurs. Elle requiert une connexion Internet et le backend lancé
 
 Cette nouvelle fonction ajoute une base SQLite persistante, indépendante des
 salons de jeu en mémoire. Fichier par défaut : backend/data/community.sqlite3,
-ignoré par Git. Définir LE_LOUP_COMMUNITY_DB pour un autre emplacement.
+ignoré par Git. Définir MORDEVIEL_COMMUNITY_DB pour un autre emplacement.
 Sauvegarder ce fichier sur Contabo et conserver son volume lors des déploiements.
 Les mots de passe sont dérivés avec scrypt et sel aléatoire, les jetons de session
 sont aléatoires et leur empreinte seule est stockée. Les nouvelles sessions
-expirent après 24 heures, sans renouvellement automatique à chaque consultation.
+expirent après 14 jours pour les joueurs et 24 heures pour les administrateurs, sans renouvellement automatique à chaque consultation.
 Les routes limitent les tentatives de connexion, les messages et les demandes.
 
 Cette première version n'inclut pas encore la récupération d'un mot de passe
@@ -39,7 +39,7 @@ dans l'app. Ces fonctions seront à compléter avant une ouverture à grande éc
 
 ## Répondre et modérer
 
-Configurer LE_LOUP_SUPPORT_TOKEN dans l'environnement privé du serveur avec un
+Configurer MORDEVIEL_SUPPORT_TOKEN dans l'environnement privé du serveur avec un
 secret long et aléatoire. Ne jamais l'inclure dans Flutter, Git ou une invitation.
 Sans cette variable, les accès administrateur sont désactivés.
 

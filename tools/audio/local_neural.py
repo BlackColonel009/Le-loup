@@ -115,7 +115,7 @@ def main():
             metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
             if not metadata.get('approved'):
                 continue
-            target = ROOT / 'apps/le_loup/assets/audio/classic/neural' / profile
+            target = ROOT / 'apps/mordeviel/assets/audio/classic/neural' / profile
             manifest_path = target / 'manifest.json'
             manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
             lines = json.loads((ROOT / 'tools/audio/voice_profiles.json').read_text(encoding='utf-8'))['lines'][by_id[profile]['edition']]

@@ -1,7 +1,7 @@
 # Extension de la collection Classique
 
 Douze nouvelles cartes illustrées, ajoutées aux cinq cartes existantes.
-Les PNG finaux sont dans `apps/le_loup/assets/cards/`. Les images originales
+Les PNG finaux sont dans `apps/mordeviel/assets/cards/`. Les images originales
 existantes n'ont pas été remplacées.
 
 La galerie « Les cartes du village » montre les 17 cartes. Les nouvelles fiches

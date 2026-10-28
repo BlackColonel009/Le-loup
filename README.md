@@ -1,4 +1,9 @@
-# Le Loup
+# Mordeviel
+
+**Legendary** — sous-titre du jeu. Identité retenue : **Mordeviel**.
+Application, vitrine, emails, logo et icônes utilisent ce nom. Le domaine public
+reste `https://legendeofwolf.newtechnologiestg.com`.
+Voir [le récapitulatif du renommage](docs/changement-nom-mordeviel.md).
 
 Jeu de loup-garou animé par un maître du jeu, en réseau local ou à distance.
 
@@ -20,7 +25,7 @@ Il n'est pas versionné et doit être recréé sur chaque machine.
 ## Flutter
 
 ```powershell
-cd apps/le_loup
+cd apps/mordeviel
 flutter pub get
 flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
 ```
@@ -60,7 +65,7 @@ Le salon local est réservé aux applications natives ; le web affiche une expli
 ```powershell
 python -m venv backend/.venv
 backend/.venv/Scripts/python.exe -m pip install -e './backend[dev]'
-backend/.venv/Scripts/python.exe -m uvicorn le_loup_api.main:app --reload --host 0.0.0.0
+backend/.venv/Scripts/python.exe -m uvicorn mordeviel_api.main:app --reload --host 0.0.0.0
 ```
 
 API : http://127.0.0.1:8000/docs — diagnostic : http://127.0.0.1:8000/health.
@@ -76,7 +81,7 @@ avec `pip install --no-deps -e ./backend`. Ce relevé inclut des dépendances Wi
 ```powershell
 backend/.venv/Scripts/python.exe -m pytest backend/tests
 backend/.venv/Scripts/python.exe -m ruff check backend
-cd apps/le_loup
+cd apps/mordeviel
 flutter analyze
 flutter test
 ```
@@ -108,7 +113,7 @@ physique sur le Wi-Fi : son accès au PC passe par un réseau virtuel.
 Un test Android contre un salon de développement ouvert est disponible :
 
 ```powershell
-cd apps/le_loup
+cd apps/mordeviel
 flutter test integration_test/network_test.dart -d emulator-5556 --dart-define=TEST_HOST=10.0.2.2:PORT --dart-define=TEST_ROOM_CODE=CODE
 ```
 
@@ -133,8 +138,8 @@ de la Sorcière et du Chasseur sont expliquées au verso. Cette galerie est un
 aperçu public des rôles possibles, pas une attribution de rôle en partie.
 Les trois bordures peuvent être prévisualisées au verso, sans boutique ni achat.
 Les décors portrait et paysage sont utilisés séparément ; le montage cumulé
-n'est pas utilisé. Les sources originales restent dans `le_loup/` ; les copies
-embarquées sont dans `apps/le_loup/assets/`.
+n'est pas utilisé. Les sources originales restent dans `mordeviel/` ; les copies
+embarquées sont dans `apps/mordeviel/assets/`.
 
 L'harmonisation des illustrations elles-mêmes (style du Villageois, compagnon
 du Chasseur, ornements des cadres) n'a pas été effectuée : les images restent
@@ -245,7 +250,7 @@ d'animation et conduit aux commandes correspondantes sans les chercher plus bas.
 Le passage à la nuit conserve la durée des appels choisie par le MDJ.
 Les peaux premium et scènes d'exécution ne sont pas implémentées.
 
-Les assets sont dans `apps/le_loup/assets/village/`, copiés depuis `le_loup/Map/`.
+Les assets sont dans `apps/mordeviel/assets/village/`, copiés depuis `mordeviel/Map/`.
 Les animations respectent la réduction des animations du système. Les PNG de
 petite définition conviennent au prototype et pourront être remplacés à l'identique.
 Tests dédiés : `flutter test test/village_test.dart` et
@@ -257,7 +262,7 @@ Salon Flutter relié au serveur local Dart : arrivées/départs, statut prêt,
 fermeture des inscriptions et retrait par le MDJ. Tests WebSocket exécutés sur
 ordinateur ; compilation Windows debug réussie. Validation sur téléphones
 physiques encore nécessaire. Exécutable local :
-`apps/le_loup/build/windows/x64/runner/Debug/le_loup.exe` (conserver les DLL et le
+`apps/mordeviel/build/windows/x64/runner/Debug/mordeviel.exe` (conserver les DLL et le
 dossier `data` à côté ; ne pas distribuer uniquement le fichier EXE).
 La composition, le Codex, la distribution privée et la reprise de rôle après
 coupure sont implémentés en LAN. L'API distante conserve uniquement son diagnostic.

@@ -74,7 +74,7 @@ partie restent couverts par les scénarios de moteur séparés.
 
 ## Reproduire
 
-Depuis `apps/le_loup` :
+Depuis `apps/mordeviel` :
 
 ```powershell
 flutter test --no-pub
@@ -83,7 +83,7 @@ flutter test --no-pub
 Depuis la racine du dépôt :
 
 ```powershell
-$env:LE_LOUP_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
+$env:MORDEVIEL_DART = 'C:\bibliotheque\flutter\bin\cache\dart-sdk\bin\dart.exe'
 backend/.venv/Scripts/python.exe -m pytest backend/tests -q
 ```
 
@@ -117,7 +117,7 @@ l'audio et les connexions dans les conditions réelles de la partie.
 - Analyse Dart ciblée : aucune anomalie sur les fichiers des cérémonies.
 - Après harmonisation de la police des cartes Intense : 13 tests ciblés réussis.
 - Captures réelles du rendu Flutter : Village, Loups et malédiction de l’Ancien,
-  sous `apps/le_loup/build/previews/` (fichiers de travail non publiés).
+  sous `apps/mordeviel/build/previews/` (fichiers de travail non publiés).
 - Treize nouveaux WAV neuronaux, intégrité vérifiée et déclaration Flutter
   générée, plus deux jingles originaux. Contrôle de contenu par transcription
   locale consigné dans `audio-auditions/events-transcription-checks.json` ;
@@ -167,7 +167,7 @@ Détails fonctionnels : `ceremonies-fin-partie.md`.
 - Les tests backend attendent désormais la fermeture des WebSockets avant de
   démonter leur contexte, pour éviter une course de fermeture du test.
 - Aucune compilation APK. La mise à jour en ligne nécessite un pull puis le
-  redémarrage du service `legendeofwolf`, sans migration ni nouvelle dépendance
+  redémarrage du service `mordeviel`, sans migration ni nouvelle dépendance
   Python/Dart sur le serveur.
 
 Voir `statuts-maisons.md`, `voix-parametrables.md` et `textes-voix-off.md`.

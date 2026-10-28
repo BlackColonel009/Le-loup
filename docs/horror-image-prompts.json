@@ -1,0 +1,125 @@
+{
+  "mode": "built-in image_gen; reference edits and matching new illustrations; originals preserved",
+  "cards": [
+    {
+      "id": "elder",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-c4ea51ae-f0f8-4083-be38-1f5ebc468b4f.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"ANCIEN\" and subtitle \"Gardien des secrets\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/elder.png"
+    },
+    {
+      "id": "scapegoat",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-4b58d9c6-ca98-43ad-9f83-0702579c84e7.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"BOUC ÉMISSAIRE\" and subtitle \"Le poids du jugement\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/scapegoat.png"
+    },
+    {
+      "id": "hunter",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-765a773f-15f8-462c-9560-802ce6585df5.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"CHASSEUR\" and subtitle \"La dernière riposte\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/hunter.png"
+    },
+    {
+      "id": "little_girl",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-6ce1616c-3cfa-4fff-937d-b3496b747ca4.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"PETITE FILLE\" and subtitle \"Témoin de la nuit\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/little_girl.png"
+    },
+    {
+      "id": "werewolf",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-a0da6c7c-d416-4bd4-b23f-a7063656d83d.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"LOUP-GAROU\" and subtitle \"La faim des ombres\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/werewolf.png"
+    },
+    {
+      "id": "mayor",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-2553c76b-3141-472d-8191-0ac0b7d5f170.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"MAIRE\" and subtitle \"La voix du village\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/mayor.png"
+    },
+    {
+      "id": "guardian",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-44ee8b12-e524-44f5-8da2-c51f393cb46f.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"SALVATEUR\" and subtitle \"Veilleur des ténèbres\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/guardian.png"
+    },
+    {
+      "id": "seer",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-8c7059d9-508f-4687-80fb-75e8c665a05a.png",
+      "prompt": "Edit this horror playing card for Mordeviel. Preserve portrait 2:3-ish card layout, aged ivory parchment, weathered gothic border, original character identity and illustrated medieval style. REDUCE EXPLICIT GORE throughout: remove exposed organs, severed body parts, skeletal flesh, bloody wounds and dripping blood. Replace with mist, shadows, ancient seals, branches and tarnished metal. Keep ominous suspense, pale faces and dark atmosphere, warm ivory readable bottom area. Human faces anatomically intact, especially the mayor and little girl. For little girl use an old cloth doll, for seer show mist silhouettes in crystal ball, hunter holds crossbow without butcher pot. Exact ONLY readable French title \"VOYANTE\" and subtitle \"Vision interdite\". All other tiny text removed, decorative harmless runes allowed. No modern objects. Production quality cohesive collectible card.",
+      "destination": "apps/mordeviel/assets/cards/horror/seer.png"
+    },
+    {
+      "id": "villager",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-9da059fd-cc28-453d-b67b-f57281bd14e4.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a wary medieval male villager holding a lantern. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"VILLAGEOIS\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Une lumière dans la nuit\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/villager.png"
+    },
+    {
+      "id": "villager_female",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-6792ba25-4265-4427-adb6-b124c73308e1.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a wary medieval female villager holding a lantern. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"VILLAGEOISE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Une lumière dans la nuit\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/villager_female.png"
+    },
+    {
+      "id": "witch",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-263d6966-a640-4827-97e9-1bbbc9b585e1.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a mysterious elderly witch with a small glowing violet potion and closed spellbook. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"SORCIÈRE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Les secrets du chaudron\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/witch.png"
+    },
+    {
+      "id": "metamorph",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-69eb53ac-360b-473a-8ac4-ec248e20d2b2.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a masked hooded medieval thief holding two ornate masks. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"MÉTAMORPHE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Le visage du doute\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/metamorph.png"
+    },
+    {
+      "id": "cupid",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-f35a5681-157e-43b6-a46e-01f20f0f20a9.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a mysterious young adult winged archer with silver bow and red ribbon linking two amulets. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"CUPIDON\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Liés par le destin\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/cupid.png"
+    },
+    {
+      "id": "alpha_wolf",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-12b3eae6-c9b1-4a31-ac16-6337af881830.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: an imposing dark wolf with silver mane and ancient scar, standing in fog. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"GRAND MÉCHANT LOUP\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Le maître de la meute\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/alpha_wolf.png"
+    },
+    {
+      "id": "white_wolf",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-14b9b3e8-7197-44b4-832d-2b8827000637.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a solitary white werewolf in moonlit ruins. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"LOUP BLANC\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Seul sous la lune\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/white_wolf.png"
+    },
+    {
+      "id": "wolf_father",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-ad43366c-d2ab-4469-9c24-894e1b9eb477.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: an ancient dignified werewolf with ritual medallion and wolf silhouettes. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"PÈRE DES LOUPS\" in large legible dark red gothic lettering in bottom parchment, subtitle \"La morsure du pacte\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/wolf_father.png"
+    },
+    {
+      "id": "idiot",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-d9994614-f57e-459c-8912-ece8e8c03094.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: an innocent puzzled adult village fool with worn cap and tilted lantern. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"IDIOT DU VILLAGE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"La grâce du doute\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/idiot.png"
+    },
+    {
+      "id": "piper",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-6d4fa011-54f5-449a-9d5a-f3e40243f5f8.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a cloaked male flute player with ghostly musical wisps. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"JOUEUR DE FLÛTE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"La mélodie des ombres\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/piper.png"
+    },
+    {
+      "id": "angel",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-b872150f-702d-4c9a-99a7-ccbbf08f18e2.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: a solemn pale angel with folded silver wings and lantern. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"ANGE\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Le dernier présage\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/angel.png"
+    },
+    {
+      "id": "sisters",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a175be-e9a2-7de3-b1a1-7bdaf78313a0\\exec-f8c801d8-b4c5-4491-bc30-0fe55498809a.png",
+      "prompt": "Create ONE gothic illustrated playing card matching this reference layout and ornate aged bronze border, parchment footer and dark medieval realism. Portrait 2:3. Character: two distinct adult sisters standing together holding matching lunar pendants. Atmospheric eerie mist, amber candlelight, restrained deep red accents. Intact anatomy, no blood, no exposed organs, no gore, no skeletonized faces. Exact French text ONLY: title \"DEUX SŒURS\" in large legible dark red gothic lettering in bottom parchment, subtitle \"Une confiance dans la nuit\" beneath. No rules paragraph, no English, no invented small text. Cohesive Mordeviel horror deck.",
+      "destination": "apps/mordeviel/assets/cards/horror/sisters.png"
+    }
+  ]
+}

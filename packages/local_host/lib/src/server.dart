@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'night_game.dart';
+import 'card_variants.dart';
 import 'role_rules.dart';
 import 'game_host.dart';
 
@@ -166,6 +167,7 @@ class LocalHost implements GameHost {
 
   Map<String, int> get deck => Map.unmodifiable(_deck);
   String _visualPack = 'classic';
+  Map<String, String> _cardStyles = {};
   String get visualPack => _visualPack;
   List<String> _sentenceOptions = List.of(NightGame.sentences);
   List<String> get sentenceOptions => List.unmodifiable(_sentenceOptions);
@@ -180,9 +182,23 @@ class LocalHost implements GameHost {
     bool? revealOnDeath,
     String? pack,
     List<String>? sentences,
+    Map<String, String>? cardStyles,
   }) {
     if (started) throw StateError('La partie a déjà commencé.');
-    if (pack != null && !['classic', 'intense'].contains(pack)) {
+    if (cardStyles != null &&
+        (cardStyles.keys.any((key) {
+              final parts = key.split('#');
+              final id = parts.first;
+              if (!roleIds.contains(id) && id != 'mayor') return true;
+              if (parts.length == 1) return false;
+              final index = parts.length == 2 ? int.tryParse(parts[1]) : null;
+              return index == null || index < 0 || index >= (deck[id] ?? 0);
+            }) ||
+            cardStyles.values.any(
+              (style) => !['classic', 'intense', 'horror'].contains(style),
+            )))
+      throw ArgumentError('Habillage de carte invalide.');
+    if (pack != null && !['classic', 'intense', 'horror'].contains(pack)) {
       throw ArgumentError('Pack inconnu ou indisponible.');
     }
     if (sentences != null &&
@@ -199,9 +215,11 @@ class LocalHost implements GameHost {
         ].every(deck.containsKey) ||
         !deck.keys.every(roleIds.contains) ||
         deck.values.any((n) => n < 0 || n > 20) ||
+        ![0, 2].contains(deck['sisters'] ?? 0) ||
         deck.entries.any(
           (entry) =>
-              !['villager', 'werewolf'].contains(entry.key) && entry.value > 1,
+              !['villager', 'werewolf', 'sisters'].contains(entry.key) &&
+              entry.value > 1,
         )) {
       throw ArgumentError(
         'Composition invalide. Les rôles spéciaux sont uniques.',
@@ -209,7 +227,18 @@ class LocalHost implements GameHost {
     }
     _deck = {for (final id in roleIds) id: deck[id] ?? 0};
     seerCampOnly = campOnly;
-    if (pack != null) _visualPack = pack;
+    if (pack != null) {
+      if (pack != _visualPack && cardStyles == null) _cardStyles = {};
+      _visualPack = pack;
+    }
+    if (cardStyles != null) _cardStyles = Map.of(cardStyles);
+    _cardStyles.removeWhere((key, _) {
+      final parts = key.split('#');
+      return parts.first != 'mayor' &&
+          ((_deck[parts.first] ?? 0) == 0 ||
+              parts.length == 2 &&
+                  int.parse(parts[1]) >= (_deck[parts.first] ?? 0));
+    });
     if (sentences != null)
       _sentenceOptions = sentences.map((s) => s.trim()).toList();
     if (revealOnDeath != null) revealRolesOnDeath = revealOnDeath;
@@ -241,15 +270,21 @@ class LocalHost implements GameHost {
     if (error != null) throw StateError(error);
     final cards = [
       for (final entry in _deck.entries)
-        for (var i = 0; i < entry.value; i++) entry.key,
+        for (var i = 0; i < entry.value; i++)
+          (entry.key, cardEdition(_cardStyles, entry.key, i, _visualPack)),
     ]..shuffle(_random);
     var index = 0;
+    final editions = <String, String>{};
     for (final id in _players.keys) {
-      _roles[id] = cards[index++];
+      final card = cards[index++];
+      _roles[id] = card.$1;
+      editions[id] = card.$2;
     }
     started = true;
     _game = NightGame(
       _roles,
+      electMayor: true,
+      editions: editions,
       campOnly: seerCampOnly,
       revealOnDeath: revealRolesOnDeath,
       sentenceOptions: sentenceOptions,
@@ -306,6 +341,10 @@ class LocalHost implements GameHost {
     'code': code,
     'host': nickname,
     'visual_pack': visualPack,
+    'card_styles': Map.of(_cardStyles),
+    'pack_label': _cardStyles.values.any((style) => style != visualPack)
+        ? 'mixed'
+        : visualPack,
     'narration_profile': narrationProfile,
     'automatic_narration': automaticNarration,
     'sentence_options': List.of(sentenceOptions),
@@ -399,7 +438,7 @@ class LocalHost implements GameHost {
         request.response.write(
           jsonEncode({
             'status': 'ok',
-            'service': 'le-loup-local',
+            'service': 'mordeviel-local',
             'protocol': '1',
           }),
         );

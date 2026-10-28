@@ -3,7 +3,7 @@
 Classique, Intense et Horreur sont des habillages du même catalogue de 17 rôles.
 Aucun changement du moteur ni de pouvoir n'est associé à une édition.
 Les 16 JPG importés sont conservés dans le dossier source et copiés dans
-`apps/le_loup/assets/cards/intense/`. Seul le Bouc émissaire manque encore.
+`apps/mordeviel/assets/cards/intense/`. Seul le Bouc émissaire manque encore.
 
 ## Corrections appliquées dans l'application
 

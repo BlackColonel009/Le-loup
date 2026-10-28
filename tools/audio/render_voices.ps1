@@ -1,6 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
-$output = Join-Path $root 'apps/le_loup/assets/audio/classic'
+$output = Join-Path $root 'apps/mordeviel/assets/audio/classic'
 New-Item -ItemType Directory -Force -Path $output | Out-Null
 # Accès direct à la voix française OneCore, sans modifier le registre Windows.
 $token = New-Object -ComObject SAPI.SpObjectToken
