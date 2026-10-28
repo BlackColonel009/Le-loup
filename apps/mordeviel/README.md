@@ -2,7 +2,7 @@
 
 Application Flutter — by Logan R.D.
 
-Serveur public par défaut : https://legendeofwolf.newtechnologiestg.com
+Serveur public par défaut : https://mordeviel.newtechnologiestg.com
 Les salons en ligne, la communauté, les comptes, la maintenance et la boutique
 utilisent cette adresse commune (lib/services/server_config.dart).
 Le mode local conserve son serveur Dart sur l'appareil du maître du jeu.

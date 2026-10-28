@@ -8,7 +8,7 @@ sur 127.0.0.1 ; son port et ses commandes privées ne sont pas fournis aux joueu
 Flutter conserve son mode local. L'entrée « Jouer en ligne » et le contrôleur
 MDJ distant sont maintenant branchés dans les applications natives Android,
 iOS et Windows. Le serveur public est accessible en HTTPS sur
-`legendeofwolf.newtechnologiestg.com`. Le Web n'est pas
+`mordeviel.newtechnologiestg.com`. Le Web n'est pas
 encore pris en charge par le transport Dart natif.
 
 ## Essayer depuis l'application
@@ -17,7 +17,7 @@ encore pris en charge par le transport Dart natif.
    commande ci-dessous pour tester un backend de développement.
 2. Ouvrir **Jouer en ligne**, renseigner son pseudo et son apparence.
    Le MDJ choisit **Créer un salon**, puis copie l'invitation et le code.
-   L'interface affiche le domaine public legendeofwolf.newtechnologiestg.com.
+   L'interface affiche le domaine public mordeviel.newtechnologiestg.com.
 3. Les autres utilisent le code à six chiffres, puis
    **Rejoindre le village**. Les rôles, thèmes et commandes restent identiques
    au mode local. Le QR de réseau local n'est pas utilisé pour ce mode.
@@ -32,7 +32,7 @@ l'application. Elle ajoute le lien de téléchargement actif de `/site-config`,
 y compris la clé MEGA après `#`. Si les téléchargements sont désactivés ou le
 service temporairement inaccessible, le site et le code sont conservés.
 Sans configuration, l'application utilise le serveur public
-https://legendeofwolf.newtechnologiestg.com pour les salons, la communauté et la
+https://mordeviel.newtechnologiestg.com pour les salons, la communauté et la
 boutique. La valeur commune est définie dans
 `apps/mordeviel/lib/services/server_config.dart`.
 Pour tester un backend de développement sur un téléphone, remplacer

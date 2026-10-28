@@ -2,7 +2,7 @@
 
 **Legendary** — sous-titre du jeu. Identité retenue : **Mordeviel**.
 Application, vitrine, emails, logo et icônes utilisent ce nom. Le domaine public
-reste `https://legendeofwolf.newtechnologiestg.com`.
+reste `https://mordeviel.newtechnologiestg.com`.
 Voir [le récapitulatif du renommage](docs/changement-nom-mordeviel.md).
 
 Jeu de loup-garou animé par un maître du jeu, en réseau local ou à distance.

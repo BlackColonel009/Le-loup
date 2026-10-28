@@ -33,7 +33,7 @@ cd /var/www/Mordeviel
 git pull
 python3 tools/content/build_packs.py
 sudo systemctl restart mordeviel
-curl -fsS https://legendeofwolf.newtechnologiestg.com/content/packs
+curl -fsS https://mordeviel.newtechnologiestg.com/content/packs
 ```
 
 Le script utilise seulement Python standard et conserve les originaux. Les fichiers immuables et leur catalogue sont produits dans `backend/content/packs/` (ignoré par Git). Au premier démarrage, FastAPI les prépare si le catalogue n’existe pas. Relancer le script après chaque changement d’assets. Il conserve les anciennes versions pour permettre les téléchargements déjà commencés. Le service doit pouvoir lire ce répertoire ; adapter `MORDEVIEL_CONTENT_ROOT` seulement pour utiliser un autre volume et y publier les fichiers. Les mobiles doivent installer la nouvelle version de l’application avant de rejoindre un salon utilisant les nouveaux rôles.

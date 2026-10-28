@@ -131,7 +131,7 @@ def tick(db):
         if not valid:
             continue
         try:
-            base = os.getenv('MORDEVIEL_PUBLIC_URL', 'https://legendeofwolf.newtechnologiestg.com').rstrip('/')
+            base = os.getenv('MORDEVIEL_PUBLIC_URL', 'https://mordeviel.newtechnologiestg.com').rstrip('/')
             unsubscribe = f"{base}/community/mail/unsubscribe/{pref['token']}"
             message = EmailMessage()
             message['From'] = normalize_email(os.environ['MORDEVIEL_SMTP_FROM'])

@@ -29,12 +29,12 @@ void main() {
       (w) => w is TextField && w.decoration?.labelText == 'Serveur en ligne',
     );
     await tester.scrollUntilVisible(
-      find.text('legendeofwolf.newtechnologiestg.com'),
+      find.text('mordeviel.newtechnologiestg.com'),
       150,
       scrollable: find.byType(Scrollable).first,
     );
     expect(server, findsNothing);
-    expect(find.text('legendeofwolf.newtechnologiestg.com'), findsOneWidget);
+    expect(find.text('mordeviel.newtechnologiestg.com'), findsOneWidget);
     expect(find.textContaining('127.0.0.1'), findsNothing);
     expect(find.text('Scanner pour rejoindre'), findsNothing);
     expect(tester.takeException(), isNull);

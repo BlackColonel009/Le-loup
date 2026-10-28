@@ -4,7 +4,7 @@ Le nom principal est **Mordeviel** ; **Legendary** est son sous-titre.
 Cette identité est confirmée pour l’ensemble du projet. Les appellations
 précédentes restent uniquement dans les archives, les caches ignorés et les
 consignes historiques de génération des images.
-Le domaine public reste `https://legendeofwolf.newtechnologiestg.com`.
+Le domaine public reste `https://mordeviel.newtechnologiestg.com`.
 
 ## Sources et configuration
 

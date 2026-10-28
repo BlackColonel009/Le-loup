@@ -10,7 +10,7 @@ Dans le dashboard web : **Les rappels par email**. Dans l’application : dashbo
 
 Les dix phrases initiales sont définies dans `backend/src/mordeviel_api/community_mail.py`. Chaque membre reçoit un email individuel, sans les adresses des autres. Seuls les comptes vérifiés, non bannis et non désinscrits sont destinataires. Chaque mail comporte une page de désinscription avec confirmation, indépendante de la connexion au compte. Les mails de sécurité restent actifs.
 
-Le SMTP utilise les variables existantes et `SMTP_USE_TLS=true`. `MORDEVIEL_PUBLIC_URL` définit le domaine public dans les mails ; sa valeur par défaut est `https://legendeofwolf.newtechnologiestg.com`.
+Le SMTP utilise les variables existantes et `SMTP_USE_TLS=true`. `MORDEVIEL_PUBLIC_URL` définit le domaine public dans les mails ; sa valeur par défaut est `https://mordeviel.newtechnologiestg.com`.
 
 Les compteurs indiquent les envois acceptés par SMTP et les échecs ; ils ne prouvent pas une arrivée en boîte de réception. Un envoi est réservé avant SMTP pour éviter les doubles envois au redémarrage. En cas d’échec ou d’interruption pendant l’envoi, aucune relance automatique de ce mail incertain : le membre attend la prochaine campagne. Un lot traite au maximum 100 destinataires par passage. Les données de livraison sont purgées après 30 jours au prochain passage actif.
 

@@ -94,7 +94,7 @@ Le fichier `classic_scenario_driver.dart` est un utilitaire, pas un programme au
 Pour rejouer la grande partie de contrôle :
 
 ```powershell
-dart run tool/full_online_audit.dart https://legendeofwolf.newtechnologiestg.com
+dart run tool/full_online_audit.dart https://mordeviel.newtechnologiestg.com
 ```
 
 Cette commande crée un salon et vingt clients simulés puis les ferme. Lancer

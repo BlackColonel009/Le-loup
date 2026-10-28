@@ -68,8 +68,8 @@ Puis, en dehors d'une partie en cours :
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
 sudo systemctl restart mordeviel
-curl -fsS https://legendeofwolf.newtechnologiestg.com/health
-curl -fsS https://legendeofwolf.newtechnologiestg.com/gallery/cards
+curl -fsS https://mordeviel.newtechnologiestg.com/health
+curl -fsS https://mordeviel.newtechnologiestg.com/gallery/cards
 ```
 
 Le redémarrage termine les salons en mémoire. Les comptes, la galerie et les
@@ -95,7 +95,7 @@ personne non connectée avant de l'activer.
 
 ### Cartes présentées
 
-Ouvrir `https://legendeofwolf.newtechnologiestg.com/administration` et se connecter
+Ouvrir `https://mordeviel.newtechnologiestg.com/administration` et se connecter
 avec un compte administrateur du backend. Les comptes joueurs ne peuvent pas
 gérer les cartes. Si nécessaire, créer le compte depuis le serveur selon
 `docs/administration.md` ; aucun compte ni mot de passe prédéfini n'est ajouté.

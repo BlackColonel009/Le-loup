@@ -71,7 +71,7 @@ def tick(db, rooms):
             continue
         try:
             base = os.getenv(
-                "MORDEVIEL_PUBLIC_URL", "https://legendeofwolf.newtechnologiestg.com"
+                "MORDEVIEL_PUBLIC_URL", "https://mordeviel.newtechnologiestg.com"
             ).rstrip("/")
             optout = f"{base}/social/email/unsubscribe/{pref['optout']}"
             text = f"{sender['nickname']} vient d’ouvrir un salon et vous invite à rejoindre le village.\nOuvrez l’application puis vos Invitations pour retrouver les détails et rejoindre la partie tant que le salon est disponible.\nLes loups rôdent… votre place vous attend !"

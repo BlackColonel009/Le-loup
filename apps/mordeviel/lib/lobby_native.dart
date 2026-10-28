@@ -1098,7 +1098,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            'legendeofwolf.newtechnologiestg.com',
+            'mordeviel.newtechnologiestg.com',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
