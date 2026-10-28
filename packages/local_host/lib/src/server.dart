@@ -265,6 +265,17 @@ class LocalHost implements GameHost {
     return null;
   }
 
+  /// Host-only metadata: never accepted as a command from a joining player.
+  bool _testMode = false;
+  void markTestPlayer(String id) {
+    if (started || !_players.containsKey(id)) {
+      throw StateError('Joueur de test indisponible.');
+    }
+    _testMode = true;
+    _players[id]!['is_bot'] = true;
+    _publish();
+  }
+
   void startGame() {
     final error = launchError;
     if (error != null) throw StateError(error);
@@ -336,6 +347,7 @@ class LocalHost implements GameHost {
   Stream<Map<String, dynamic>> get updates => _updates.stream;
 
   Map<String, dynamic> get publicSnapshot => {
+    'test_mode': _testMode,
     'type': 'room.snapshot',
     'version': 1,
     'code': code,
@@ -394,6 +406,7 @@ class LocalHost implements GameHost {
     }
     this.nickname = nickname.trim();
     code = '${100000 + _random.nextInt(900000)}';
+    _testMode = false;
     locked = false;
     started = false;
     _server = await HttpServer.bind(

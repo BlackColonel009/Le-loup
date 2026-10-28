@@ -26,6 +26,25 @@ def initialize(db):
             id TEXT PRIMARY KEY,title TEXT NOT NULL,role_name TEXT NOT NULL,
             edition TEXT NOT NULL,description TEXT NOT NULL,image TEXT NOT NULL,
             published INTEGER NOT NULL DEFAULT 1,position INTEGER NOT NULL DEFAULT 0)""")
+        if not connection.execute(
+            "SELECT value FROM settings WHERE key='site_horror_gallery_seeded'"
+        ).fetchone():
+            for position, (key, title, description) in enumerate([
+                ('werewolf', 'Le Loup-Garou', 'La meute prend un visage terrifiant dans l’édition Horreur.'),
+                ('seer', 'La Voyante', 'Un regard inquiétant sur les secrets du village.'),
+                ('witch', 'La Sorcière', 'Potions et sombres présages dans l’édition Horreur.'),
+            ]):
+                # Keep existing administrator-published cards and their visibility.
+                if not connection.execute(
+                    "SELECT 1 FROM site_cards WHERE edition='horror' AND role_name=?",
+                    (title,),
+                ).fetchone():
+                    connection.execute(
+                        "INSERT INTO site_cards VALUES(?,?,?,?,?,?,1,?)",
+                        (uuid.uuid4().hex, title, title, 'horror', description,
+                         f'asset:{key}-horror.png', position),
+                    )
+            connection.execute("INSERT INTO settings VALUES('site_horror_gallery_seeded','1')")
         if connection.execute(
             "SELECT value FROM settings WHERE key='site_gallery_seeded'"
         ).fetchone():

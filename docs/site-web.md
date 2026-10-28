@@ -17,7 +17,10 @@ de partie dans le navigateur.
 Les pages et les ressources sont dans `backend/src/mordeviel_api/web`.
 Les captures proviennent du rendu des vrais widgets Flutter avec des données de
 démonstration ; les cadres de téléphone sont illustratifs, pas des photographies
-d'appareils. Les visuels Horreur pourront être ajoutés via le dashboard.
+d'appareils. La galerie Horreur présente désormais le Loup-Garou, la Voyante et
+la Sorcière avec les illustrations du jeu. Ces trois cartes sont ajoutées une
+seule fois au démarrage, y compris sur une base déjà initialisée. Les cartes
+et choix de visibilité existants du dashboard sont conservés.
 
 ## Aperçu sur Windows
 

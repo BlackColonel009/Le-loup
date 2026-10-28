@@ -49,8 +49,37 @@ def test_website_and_gallery_public_access(tmp_path, monkeypatch):
             "download_url": "",
             "download_version": "",
         }
-        assert len(api.get("/gallery/cards").json()["cards"]) == 6
+        cards = api.get("/gallery/cards").json()["cards"]
+        assert len(cards) == 9
+        horror = [card for card in cards if card['edition'] == 'horror']
+        assert len(horror) == 3
+        for card in horror:
+            response = api.get(card['image_url'])
+            assert response.status_code == 200
+            assert response.headers['content-type'] == 'image/png'
         assert api.get("/community/admin/site/cards").status_code == 403
+
+
+def test_horror_gallery_upgrades_existing_database_once(tmp_path, monkeypatch):
+    path = tmp_path / 'existing-gallery.sqlite3'
+    monkeypatch.setenv('MORDEVIEL_COMMUNITY_DB', str(path))
+    with TestClient(app):
+        pass
+    with sqlite3.connect(path) as connection:
+        connection.execute("DELETE FROM site_cards WHERE edition='horror'")
+        connection.execute("DELETE FROM settings WHERE key='site_horror_gallery_seeded'")
+        connection.execute("UPDATE site_cards SET title='Carte personnalisée',published=0 WHERE edition='classic'")
+    with TestClient(app) as api:
+        cards = api.get('/gallery/cards').json()['cards']
+        assert len([card for card in cards if card['edition'] == 'horror']) == 3
+        assert not any(card['edition'] == 'classic' for card in cards)
+    with sqlite3.connect(path) as connection:
+        connection.execute("UPDATE site_cards SET published=0 WHERE edition='horror'")
+    with TestClient(app) as api:
+        assert not any(card['edition'] == 'horror' for card in api.get('/gallery/cards').json()['cards'])
+    with sqlite3.connect(path) as connection:
+        assert connection.execute("SELECT COUNT(*) FROM site_cards WHERE edition='horror'").fetchone()[0] == 3
+        assert connection.execute("SELECT COUNT(*) FROM site_cards WHERE title='Carte personnalisée' AND published=0").fetchone()[0] == 3
 
 
 def test_admin_download_link_permissions_validation_and_persistence(

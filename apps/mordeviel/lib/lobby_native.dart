@@ -310,6 +310,113 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   final _address = TextEditingController();
   final _code = TextEditingController();
   GameHost? _host;
+  TestBotTable? _testBots;
+  bool _botAdmin = false;
+  bool _addingBots = false;
+  DateTime? _botAdminUntil;
+  bool get _canManageBots =>
+      !widget.online &&
+      _botAdmin &&
+      (_botAdminUntil?.isAfter(DateTime.now()) ?? false);
+
+  Future<bool> _checkBotAdmin() async {
+    if (widget.online) return false;
+    var allowed = false;
+    DateTime? until;
+    try {
+      final session = await SocialApi.instance.session();
+      if (session != null) {
+        final profile = await SocialApi.instance.request('/community/me');
+        allowed =
+            (profile['user'] as Map?)?['role'] == 'admin' &&
+            session.expiresAt.isAfter(DateTime.now());
+        until = session.expiresAt;
+      }
+    } catch (_) {
+      // Never grant administrator access from an offline cache or a nickname.
+    }
+    if (!mounted) return false;
+    setState(() {
+      _botAdmin = allowed;
+      _botAdminUntil = until;
+    });
+    return allowed;
+  }
+
+  Future<void> _addTestBots() async {
+    if (_addingBots || _host is! LocalHost || _room?['phase'] != 'lobby') {
+      return;
+    }
+    setState(() => _addingBots = true);
+    try {
+      if (!await _checkBotAdmin()) {
+        throw StateError(
+          'Connecte-toi avec ton compte administrateur pour utiliser les bots.',
+        );
+      }
+      if (!mounted) return;
+      final host = _host as LocalHost;
+      final players = (_room?['players'] as List? ?? []).length;
+      final missing =
+          host.deck.values.fold<int>(0, (sum, count) => sum + count) - players;
+      var count = missing.clamp(1, (20 - players).clamp(1, 20));
+      final chosen = await showDialog<int>(
+        context: context,
+        builder: (dialog) => StatefulBuilder(
+          builder: (context, update) => AlertDialog(
+            title: const Text('Joueurs virtuels · Admin'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Partie locale de test, sans statistiques publiques. Tu gardes les commandes du MDJ. Prévois une carte par joueur.',
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: count > 1 ? () => update(() => count--) : null,
+                      icon: const Icon(Icons.remove_circle_outline),
+                    ),
+                    Text('$count bot${count > 1 ? 's' : ''}'),
+                    IconButton(
+                      onPressed: count < 20 - players
+                          ? () => update(() => count++)
+                          : null,
+                      icon: const Icon(Icons.add_circle_outline),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialog),
+                child: const Text('Annuler'),
+              ),
+              FilledButton(
+                onPressed: players < 20
+                    ? () => Navigator.pop(dialog, count)
+                    : null,
+                child: const Text('Ajouter'),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (chosen == null || !mounted || !identical(_host, host)) return;
+      // Revalidate after the dialog: the account may have expired meanwhile.
+      if (!await _checkBotAdmin() || !identical(_host, host)) return;
+      _testBots ??= TestBotTable(host);
+      await _testBots!.add(chosen);
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _addingBots = false);
+    }
+  }
+
   LobbyClient? _client;
   StreamSubscription<Map<String, dynamic>>? _subscription;
   Map<String, dynamic>? _room;
@@ -329,6 +436,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   @override
   void initState() {
     super.initState();
+    if (!widget.online) unawaited(_checkBotAdmin());
     _name.text = widget.initialNickname ?? '';
     _code.text = widget.initialCode ?? '';
     if (widget.online) {
@@ -719,6 +827,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     _joinTimeout?.cancel();
     _subscription?.cancel();
     _client?.dispose();
+    _testBots?.dispose();
     _host?.dispose();
     _keepAwake(false);
     _name.dispose();
@@ -735,6 +844,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
     await _subscription?.cancel();
     _subscription = null;
     await _client?.dispose();
+    await _testBots?.dispose();
+    _testBots = null;
     await _host?.dispose();
     _client = null;
     _host = null;
@@ -786,6 +897,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               )
             : LocalHost();
         _host = host;
+        if (!widget.online) unawaited(_checkBotAdmin());
         await host.start(nickname: _name.text, port: 0);
         host.setNarration(
           profile: selectedNarrator,
@@ -1363,6 +1475,80 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
             icon: const Icon(Icons.qr_code_2),
             label: const Text('Inviter par QR code'),
           ),
+        if (_host is LocalHost && _canManageBots) ...[
+          if (!started)
+            OutlinedButton.icon(
+              onPressed: _addingBots ? null : _addTestBots,
+              icon: const Icon(Icons.smart_toy_outlined),
+              label: Text(
+                _addingBots
+                    ? 'Connexion des bots…'
+                    : 'Ajouter des joueurs virtuels',
+              ),
+            ),
+          if (_testBots != null)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'Simulation · Administrateur',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Les bots décident seuls. Lance les appels et les votes avec les commandes du MDJ.',
+                    ),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Pause des bots'),
+                      value: _testBots!.paused,
+                      onChanged: (value) =>
+                          setState(() => _testBots!.paused = value),
+                    ),
+                    DropdownButtonFormField<int>(
+                      initialValue: 900,
+                      decoration: const InputDecoration(
+                        labelText: 'Vitesse de décision',
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 250,
+                          child: Text('Rapide · 0,25 s'),
+                        ),
+                        DropdownMenuItem(
+                          value: 900,
+                          child: Text('Normale · 0,9 s'),
+                        ),
+                        DropdownMenuItem(
+                          value: 2500,
+                          child: Text('Lente · 2,5 s'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          _testBots?.delay = Duration(milliseconds: value);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+        if (_room?['test_mode'] == true)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              'PARTIE DE TEST · Statistiques publiques désactivées',
+              style: TextStyle(
+                color: GameTheme.gold,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         if (started && _role != null)
           OutlinedButton.icon(
             onPressed: () => _showRole(
@@ -1738,7 +1924,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                     : Icons.person_outline,
               ),
               title: Text(
-                '${player['nickname']}${player['id'] == _client?.id ? ' (toi)' : ''}',
+                '${player['nickname']}${player['is_bot'] == true ? ' · Virtuel' : ''}${player['id'] == _client?.id ? ' (toi)' : ''}',
               ),
               subtitle: Text(
                 player['connected'] != true

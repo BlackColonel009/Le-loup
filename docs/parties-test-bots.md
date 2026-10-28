@@ -1,0 +1,11 @@
+# Joueurs virtuels réservés à l’administrateur
+
+Dans un salon **local créé comme MDJ**, « Ajouter des joueurs virtuels » apparaît après vérification du rôle administrateur par `/community/me`. Se connecter à la communauté avant d’ouvrir le salon. Aucun droit administrateur n’est conservé dans les préférences : une session absente, expirée ou invérifiable masque la commande. L’ajout vérifie à nouveau la session avant et après la boîte de dialogue.
+
+Choisir le nombre de bots, puis adapter la composition pour avoir exactement une carte par joueur (4 à 20 joueurs, hors MDJ). Les bots arrivent prêts et portent le badge « Virtuel ». Le bouton de retrait habituel les retire du salon. L’administrateur conserve les appels nocturnes, les votes, la roue et la progression du jeu ; les bots exécutent les décisions individuelles. Pause et trois vitesses disponibles.
+
+Les bots utilisent des connexions WebSocket distinctes vers le téléphone hôte, sur son interface de boucle locale. Leurs décisions utilisent uniquement les messages publics et leur propre état privé ; aucune distribution complète du MDJ ne leur est transmise. La meute se coordonne avec ses bulletins privés. Les pouvoirs de sélection et leurs variantes utilisent les cibles et limites autorisées par le moteur. Des messages courts préparés accompagnent les votes ; ce ne sont pas des conversations générées par un service IA. Les comportements restent simples, destinés à exercer les règles, sans garantir un niveau stratégique humain.
+
+Ces salons restent locaux et affichent « Partie de test ». Aucun compte communautaire n’est créé pour les bots, aucun appel de statistique, d’invitation, d’email ou de récompense n’est effectué. Le mode en ligne ne propose pas cette commande. Les actions acceptées restent disponibles dans l’historique final normal. Fermer le salon détruit les connexions et minuteurs des bots. Aucun moteur IA payant ni dépendance supplémentaire.
+
+Validation : tests de décisions à travers les appels des trois éditions, ciblage privé des loups, pause/révision et mémoire de la Voyante ; script `packages/local_host/tool/test_bots_smoke.dart` pour les connexions réelles, préparation, pause, pouvoirs, élection et votes. Les essais sur téléphone restent à effectuer.
