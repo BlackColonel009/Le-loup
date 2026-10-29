@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../community/community_screen.dart';
 import 'social_api.dart';
 import 'private_chat_screen.dart';
+import 'presence_badge.dart';
 import 'social_service.dart';
 import 'social_notifications.dart';
 import 'online_navigation.dart';
+import '../services/game_notification_sound.dart';
 
 const _gold = Color(0xFFE1BA78);
 String _date(dynamic value) {
@@ -28,6 +30,7 @@ class _SocialActionBarState extends State<SocialActionBar> {
   void initState() {
     super.initState();
     SocialService.instance.start();
+    SocialService.instance.addListener(_presenceNotice);
     pendingSocialNotification.addListener(_notificationTap);
     initializeSocialNotificationUi();
   }
@@ -36,7 +39,28 @@ class _SocialActionBarState extends State<SocialActionBar> {
   void dispose() {
     pendingSocialNotification.removeListener(_notificationTap);
     SocialService.instance.release();
+    SocialService.instance.removeListener(_presenceNotice);
     super.dispose();
+  }
+
+  void _presenceNotice() {
+    if (!mounted) return;
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) return;
+    final message = SocialService.instance.takePresenceAnnouncement();
+    if (message == null) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.circle, size: 12, color: Color(0xFF7BC995)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
   }
 
   Future<void> _open(int tab) async {
@@ -50,8 +74,10 @@ class _SocialActionBarState extends State<SocialActionBar> {
     final kind = pendingSocialNotification.value;
     if (kind == null) return;
     pendingSocialNotification.value = null;
+    // Android brings the existing game activity back; do not open social tabs.
+    if (kind.startsWith('game-start:')) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _open(kind == 'friend' ? 0 : 2);
+      if (mounted) _open(kind == 'invitation' ? 2 : 0);
     });
   }
 
@@ -231,13 +257,13 @@ class _SocialHubScreenState extends State<SocialHubScreen> {
                   ? p['incoming'] == true
                         ? 'Souhaite rejoindre ton cercle'
                         : 'Demande envoyée'
-                  : p['online'] == true
-                  ? 'Dans les parages'
                   : 'Ami du village',
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _visit(p['id'] as int),
           ),
+          if (!recent && p['status'] == 'accepted')
+            FriendPresenceBadge(person: p),
           if (recent && p['is_friend'] != true)
             Align(
               alignment: Alignment.centerRight,
@@ -642,6 +668,10 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
             ? '/social/me'
             : '/social/profiles/${widget.userId}',
       );
+      if (data['is_self'] == true) {
+        final sound = (data['preferences'] as Map?)?['game_notification_sound'];
+        if (sound is String) await saveGameNotificationSound(sound);
+      }
       if (mounted) {
         setState(() {
           _data = data;
@@ -679,6 +709,7 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
         'invite_emails': _yes(pref['invite_emails']),
         'phone_notifications': _yes(pref['phone_notifications']),
         'auto_invite': _yes(pref['auto_invite']),
+        'game_notification_sound': pref['game_notification_sound'] ?? 'game',
         key: value,
       };
       await SocialApi.instance.request(
@@ -686,6 +717,9 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
         method: 'PUT',
         body: body,
       );
+      if (key == 'game_notification_sound') {
+        await saveGameNotificationSound(value as String);
+      }
       if (key == 'phone_notifications' && value == false) {
         await disablePhoneNotifications();
       }
@@ -779,6 +813,8 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            if (p['presence'] != null && p['is_friend'] == true)
+              FriendPresenceBadge(person: p),
             if (p['verified'] == true)
               const Center(
                 child: Chip(
@@ -831,6 +867,7 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
+                key: const ValueKey('profile-stats-visibility'),
                 initialValue: pref['stats_visibility'] as String,
                 decoration: const InputDecoration(
                   labelText: 'Qui peut voir mes statistiques ?',
@@ -877,6 +914,46 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
                     ? null
                     : (v) => _save('phone_notifications', v),
               ),
+              const SizedBox(height: 18),
+              DropdownButtonFormField<String>(
+                key: ValueKey(
+                  'game-sound-${pref['game_notification_sound'] ?? 'game'}-$_busy',
+                ),
+                initialValue:
+                    pref['game_notification_sound'] as String? ?? 'game',
+                isExpanded: true,
+                decoration: const InputDecoration(
+                  labelText: 'Son de début de partie',
+                  helperText:
+                      'L’alerte qui t’invite à revenir quand le MDJ lance la partie.',
+                  helperMaxLines: 2,
+                  border: OutlineInputBorder(),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'game',
+                    child: Text(
+                      'Mordeviel · Voix et suspense',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 'phone',
+                    child: Text(
+                      'Son standard du téléphone',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+                onChanged: _busy
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          _save('game_notification_sound', value);
+                        }
+                      },
+              ),
+              const SizedBox(height: 18),
               FilledButton.icon(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(

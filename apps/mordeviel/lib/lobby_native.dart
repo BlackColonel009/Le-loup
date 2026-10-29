@@ -8,6 +8,8 @@ import 'joining/scan_invitation_screen.dart';
 import 'joining/online_invitation.dart';
 import 'room_compatibility.dart';
 import 'services/server_config.dart';
+import 'services/game_background_session.dart';
+import 'social/social_notifications.dart';
 import 'content/prepare_room_content.dart';
 import 'social/social_api.dart';
 import 'night_panel.dart';
@@ -47,7 +49,37 @@ class LocalLobbyScreen extends StatefulWidget {
   State<LocalLobbyScreen> createState() => _LocalLobbyScreenState();
 }
 
-class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
+class _LocalLobbyScreenState extends State<LocalLobbyScreen>
+    with WidgetsBindingObserver {
+  bool _appForeground = true;
+  bool _backgroundSessionStarted = false;
+  final _gameStartAlert = GameStartAlertTracker();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _appForeground = state == AppLifecycleState.resumed;
+    _client?.setBackground(!_appForeground);
+    if (_appForeground) {
+      unawaited(cancelGameStartedNotification());
+      if (!_connected && _client != null) {
+        unawaited(_client!.reconnect().catchError((_) {}));
+      }
+    }
+  }
+
+  Future<void> _startBackgroundSession(String code) async {
+    final available = await GameBackgroundSession.start(code);
+    if (!available && mounted && _room != null && _appForeground) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Les alertes en arrière-plan sont indisponibles. Vérifie les notifications de Mordeviel dans les réglages Android.',
+          ),
+        ),
+      );
+    }
+  }
+
   CardAmbience _styleFor(String? id, {String? edition}) {
     final style = edition ?? (_room?['card_styles'] as Map?)?[id];
     return CardAmbience.values.firstWhere(
@@ -475,6 +507,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     if (!widget.online) unawaited(_checkBotAdmin());
     _name.text = widget.initialNickname ?? '';
     _code.text = widget.initialCode ?? '';
@@ -550,6 +583,22 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   Map<String, dynamic>? _pendingEnding;
 
   void _refreshVillage() {
+    if (_room != null && _connected && !_backgroundSessionStarted) {
+      _backgroundSessionStarted = true;
+      unawaited(_startBackgroundSession(_room!['code'] as String));
+    }
+    final phase = _room?['phase'] as String?;
+    if (_gameStartAlert.update(phase, background: !_appForeground) &&
+        _client != null) {
+      unawaited(
+        showGameStartedNotification(
+          _room!['code'] as String,
+        ).catchError((_) {}),
+      );
+    }
+    if ((_room?['game'] as Map?)?['phase'] == 'ended') {
+      unawaited(GameBackgroundSession.stop());
+    }
     ClassicAudio.instance.room(
       _room,
       isHost: (_host != null || widget.online) && _connected,
@@ -893,6 +942,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(GameBackgroundSession.stop());
+    unawaited(cancelGameStartedNotification());
     ClassicAudio.instance.room(null, isHost: false);
     _joinTimeout?.cancel();
     _subscription?.cancel();
@@ -910,6 +962,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   }
 
   Future<void> _reset() async {
+    await GameBackgroundSession.stop();
+    await cancelGameStartedNotification();
+    _backgroundSessionStarted = false;
+    _gameStartAlert.reset();
     _joinTimeout?.cancel();
     await _subscription?.cancel();
     _subscription = null;
@@ -1061,6 +1117,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                   _connected = false;
                   _role = null;
                   _nightPrivate = null;
+                  if (event['terminal'] == true) {
+                    unawaited(GameBackgroundSession.stop());
+                  }
                 }
               });
               _refreshVillage();
@@ -1295,7 +1354,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       enabled: !_busy,
       maxLength: 24,
       decoration: const InputDecoration(
-        labelText: 'Ton pseudo',
+        labelText: 'Pseudo de partie',
+        helperText:
+            'Visible dans ce salon uniquement. Ton compte reste inchangé.',
+        helperMaxLines: 2,
         border: OutlineInputBorder(),
       ),
     ),
@@ -2076,7 +2138,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           Card(
             child: ListTile(
               leading: Icon(
-                player['connected'] != true
+                player['background'] == true && player['ready'] == true
+                    ? Icons.check_circle
+                    : player['connected'] != true
                     ? Icons.wifi_off
                     : player['ready'] == true
                     ? Icons.check_circle
@@ -2086,7 +2150,11 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                 '${player['nickname']}${player['is_bot'] == true ? ' · Virtuel' : ''}${player['id'] == _client?.id ? ' (toi)' : ''}',
               ),
               subtitle: Text(
-                player['connected'] != true
+                !started &&
+                        player['background'] == true &&
+                        player['ready'] == true
+                    ? 'Prêt · En arrière-plan'
+                    : player['connected'] != true
                     ? 'Déconnecté'
                     : started &&
                           (_room!['game'] as Map?)?['alive_ids'] is List &&
@@ -2122,7 +2190,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
           SwitchListTile(
             title: const Text('Je suis prêt'),
             subtitle: const Text(
-              'Je confirme la composition et les règles du Codex.',
+              'Je confirme les règles. Je reste prêt en arrière-plan et une alerte m’avertira au lancement si les notifications sont autorisées.',
             ),
             value: self['ready'] as bool,
             onChanged: _connected

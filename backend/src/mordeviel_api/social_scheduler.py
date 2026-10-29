@@ -103,6 +103,7 @@ def tick(db, rooms):
             (old,),
         )
         c.execute("DELETE FROM social_notifications WHERE created<?", (old,))
+        c.execute("DELETE FROM social_inapp_receipts WHERE notification_id NOT IN (SELECT id FROM social_notifications)")
         c.execute(
             "DELETE FROM social_invitations WHERE created<? AND status!='active'",
             (old,),

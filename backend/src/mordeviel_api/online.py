@@ -259,7 +259,7 @@ async def create_room(data: CreateRoom, request: Request):
         try:
             # A six-digit code is chosen by the engine; never reuse a live code.
             for _ in range(5):
-                engine = await Engine.create(account['nickname'] if account else data.nickname.strip())
+                engine = await Engine.create(data.nickname.strip())
                 code = engine.snapshot["code"]
                 if code not in rooms.engines:
                     break
@@ -381,7 +381,7 @@ async def player_socket(socket: WebSocket, code: str):
                             from .social import blocked
                             with socket.app.state.community.db() as connection:
                                 if blocked(connection,account_id,engine.owner_id): raise ValueError('Ce salon est indisponible pour ce compte.')
-                        if account and event.get('type')=='room.join': event['nickname']=account['nickname']
+                        # Account ownership remains private; the room has its own display alias.
                         authenticated_join=True
                     if (
                         event.get("type") in {"room.join", "room.resume"}

@@ -1,0 +1,14 @@
+{
+  "text": "Le village t’attend…",
+  "profile": "intense_male",
+  "voice_generated_locally": true,
+  "reference_approved_by_user": true,
+  "background": "Original procedural suspense bed",
+  "seed": 29102026,
+  "seconds": 2.49,
+  "sample_rate": 24000,
+  "channels": 1,
+  "format": "WAV PCM 16-bit",
+  "sha256": "3fc03dfae546131f9e9dce7b073b81abb6475a273b4171467851b24ab56d0231",
+  "bundled_android_resource": "raw/mordeviel_game_start.wav"
+}

@@ -9,7 +9,14 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
-from . import collection, community_mail, private_chat, social, social_scheduler
+from . import (
+    collection,
+    community_mail,
+    presence,
+    private_chat,
+    social,
+    social_scheduler,
+)
 from .account_deletion import router as deletion_router
 from .administration import router as admin_router
 from .community import Store
@@ -37,6 +44,7 @@ async def lifespan(app):
     )
     initialize_gallery(app.state.community)
     social.initialize(app.state.community)
+    presence.initialize(app.state.community)
     private_chat.initialize(app.state.community)
     collection.initialize(app.state.community)
     app.state.rooms.db = app.state.community
@@ -63,6 +71,7 @@ app = FastAPI(title="Mordeviel API", version="0.2.0", lifespan=lifespan)
 app.include_router(router)
 app.include_router(community_router)
 app.include_router(community_mail.router)
+app.include_router(presence.router)
 app.include_router(content_router)
 app.include_router(social.router)
 app.include_router(private_chat.router)

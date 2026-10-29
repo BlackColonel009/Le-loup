@@ -87,6 +87,8 @@ def confirm_deletion(
                     (user_id, str(user_id)),
                 )
                 connection.execute('DELETE FROM social_receipts WHERE notification_id IN (SELECT id FROM social_notifications WHERE user_id=? OR actor_id=?)',(user_id,user_id))
+                connection.execute('DELETE FROM social_inapp_receipts WHERE notification_id IN (SELECT id FROM social_notifications WHERE user_id=? OR actor_id=?)',(user_id,user_id))
+                connection.execute('DELETE FROM social_presence WHERE user_id=?',(user_id,))
                 for table, column in [('social_preferences','user_id'),('social_devices','user_id'),('social_match_stats','user_id'),('social_bot_match_stats','user_id'),('social_notifications','user_id')]:
                     connection.execute(f'DELETE FROM {table} WHERE {column}=?',(user_id,))
                 connection.execute('DELETE FROM social_notifications WHERE actor_id=?',(user_id,))

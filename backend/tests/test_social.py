@@ -100,6 +100,32 @@ def prefs(api, user, **changes):
     assert response.status_code == 200, response.text
 
 
+def test_game_notification_sound_is_account_bound_and_survives_older_clients(api):
+    a, b = account(api, "Alice"), account(api, "Bob")
+    assert api.get("/social/me", headers=a[1]).json()["preferences"]["game_notification_sound"] == "game"
+    prefs(api, a, game_notification_sound="phone")
+    assert api.get("/social/me", headers=a[1]).json()["preferences"]["game_notification_sound"] == "phone"
+    assert api.get("/social/summary", headers=a[1]).json()["game_notification_sound"] == "phone"
+    assert api.get("/social/me", headers=b[1]).json()["preferences"]["game_notification_sound"] == "game"
+    prefs(api, a, stats_visibility="friends")
+    assert api.get("/social/me", headers=a[1]).json()["preferences"]["game_notification_sound"] == "phone"
+    assert api.put("/social/preferences", headers=a[1], json={"game_notification_sound": "invalid"}).status_code == 422
+    assert "preferences" not in api.get(f"/social/profiles/{a[0]}", headers=b[1]).json()
+
+
+def test_game_notification_sound_migrates_existing_preferences(api):
+    a = account(api, "Alice")
+    prefs(api, a, stats_visibility="friends", invite_emails=False)
+    db = api.app.state.community
+    with db.db() as c:
+        c.execute("ALTER TABLE social_preferences DROP COLUMN game_notification_sound")
+    social.initialize(db)
+    social.initialize(db)
+    result = api.get("/social/me", headers=a[1]).json()["preferences"]
+    assert result["game_notification_sound"] == "game"
+    assert result["stats_visibility"] == "friends" and not result["invite_emails"]
+
+
 def test_friend_requests_badges_acceptance_privacy_and_removal(api):
     a, b, c = account(api, "Alice"), account(api, "Bob"), account(api, "Chloe")
     assert api.get(f"/social/profiles/{a[0]}").status_code == 401
@@ -410,7 +436,7 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
         "/rooms",
         headers=owner[1],
         json={
-            "nickname": "Forged host",
+            "nickname": "Hote Masque",
             "title": "Le village mixte",
             "public": True,
             "theme": "mixed",
@@ -421,7 +447,7 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
     rooms = api.get("/social/rooms", headers=player[1]).json()["rooms"]
     listing = next(r for r in rooms if r["code"] == room_data["code"])
     assert listing["theme"] == "mixed"
-    assert listing["host"] == "HostSocial"
+    assert listing["host"] == "Hote Masque"
     assert "assignments" not in listing and "host_token" not in listing
     assert api.get("/social/summary", headers=player[1]).json()["invitations"] == 1
     with ExitStack() as stack:
@@ -434,14 +460,16 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
                 "version": 1,
                 "type": "room.join",
                 "code": room_data["code"],
-                "nickname": "Forged player",
+                "nickname": "Joueur Masque",
                 "account_token": player[2],
             }
         )
         joined = receive(socket, "room.joined")
         snapshot = receive(socket, "room.snapshot")
         assert snapshot["pack_label"] == "mixed"
-        assert snapshot["players"][0]["nickname"] == "PlayerSocial"
+        assert snapshot["players"][0]["nickname"] == "Joueur Masque"
+        assert api.get("/social/me", headers=player[1]).json()["nickname"] == "PlayerSocial"
+        assert api.get("/social/me", headers=owner[1]).json()["nickname"] == "HostSocial"
         assert "assignments" not in snapshot and "account_token" not in str(snapshot)
         assert api.get("/social/summary", headers=player[1]).json()["invitations"] == 0
         engine = api.app.state.rooms.engines[room_data["code"]]

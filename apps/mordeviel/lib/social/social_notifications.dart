@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'social_api.dart';
 import '../services/server_config.dart';
+import '../services/game_notification_sound.dart';
 
 const _workerName = 'mordeviel-social-notifications';
 final _notifications = FlutterLocalNotificationsPlugin();
@@ -17,6 +18,78 @@ String get _deviceUserKey => 'social_background_user_v1:$apiBaseUrl';
 final pendingSocialNotification = ValueNotifier<String?>(null);
 bool _launchRead = false;
 bool _workerStarted = false;
+
+/// Separate from social opt-in: local/LAN players need no community account.
+Future<bool> prepareGameNotifications() async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return false;
+  await _initializeNotifications();
+  return await _notifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.requestNotificationsPermission() ??
+      false;
+}
+
+Future<void> showGameStartedNotification(String code) async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  await _initializeNotifications();
+  final sound = await readGameNotificationSound();
+  await _notifications.show(
+    id: 940002,
+    title: 'Le MDJ a lancé la partie !',
+    body: 'Le village t’attend… La partie commence. Reviens dans Mordeviel.',
+    notificationDetails: NotificationDetails(
+      android: gameStartSoundDetails(sound),
+    ),
+    payload: 'game-start:$code',
+  );
+}
+
+/// Distinct channels keep Android from retaining the previous sound choice.
+AndroidNotificationDetails gameStartSoundDetails(String sound) =>
+    sound == 'phone'
+    ? const AndroidNotificationDetails(
+        'mordeviel_game_start_phone_v1',
+        'Début de partie · Son du téléphone',
+        channelDescription:
+            'Alerte de lancement avec la sonnerie standard du téléphone',
+        icon: 'ic_social_wolf',
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+        autoCancel: true,
+        category: AndroidNotificationCategory.event,
+      )
+    : const AndroidNotificationDetails(
+        'mordeviel_game_start_v2',
+        'Début de partie · Son Mordeviel',
+        channelDescription: 'Alerte sonore lorsque le MDJ distribue les cartes',
+        icon: 'ic_social_wolf',
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('mordeviel_game_start'),
+        enableVibration: true,
+        autoCancel: true,
+        category: AndroidNotificationCategory.event,
+      );
+
+Future<void> cancelGameStartedNotification() async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  try {
+    await _notifications.cancel(id: 940002);
+  } catch (_) {}
+}
+
+Future<void> _cancelSocialNotifications() async {
+  final prefs = await SharedPreferences.getInstance();
+  for (final id in prefs.getStringList('social_shown_ids') ?? <String>[]) {
+    final number = int.tryParse(id);
+    if (number != null) await _notifications.cancel(id: number);
+  }
+}
 
 @pragma('vm:entry-point')
 void socialNotificationDispatcher() {
@@ -167,7 +240,7 @@ Future<void> disablePhoneNotifications({bool revoke = true}) async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     try {
       await Workmanager().cancelByUniqueName(_workerName);
-      await _notifications.cancelAll();
+      await _cancelSocialNotifications();
     } catch (_) {
       /* Plugin may not have been initialized. */
     }
@@ -202,7 +275,7 @@ Future<void> fetchPhoneNotifications() async {
     shown.remove('$id');
   }
   if (data['enabled'] != true) {
-    await _notifications.cancelAll();
+    await _cancelSocialNotifications();
     return;
   }
   for (final raw in data['notifications'] as List) {
@@ -217,7 +290,8 @@ Future<void> fetchPhoneNotifications() async {
           android: AndroidNotificationDetails(
             'mordeviel_social',
             'Invitations et amis',
-            channelDescription: 'Nouvelles invitations et demandes d’amitié',
+            channelDescription:
+                'Invitations, demandes d’amitié et connexions des amis',
             importance: Importance.high,
             priority: Priority.high,
             icon: 'ic_social_wolf',

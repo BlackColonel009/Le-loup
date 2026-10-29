@@ -15,21 +15,43 @@ class LobbyClient {
   String? _accountToken;
   bool _closed = false;
   bool _inGame = false;
+  bool _background = false;
+  bool _manualDisconnect = false;
+  bool _reconnecting = false;
+  Timer? _retry;
+  int _retryCount = 0;
 
   Future<void> reconnect() async {
+    if (_closed || _reconnecting) return;
     if (_address == null || (_inGame && _token == null))
       throw StateError('Aucune session à reprendre.');
-    if (!_inGame) {
-      _token = null;
-      id = null;
+    _retry?.cancel();
+    _manualDisconnect = false;
+    _reconnecting = true;
+    try {
+      await connect(
+        _address!,
+        _code!,
+        _nickname!,
+        appearance: _appearance,
+        communityToken: _accountToken,
+      );
+    } finally {
+      _reconnecting = false;
     }
-    await connect(
-      _address!,
-      _code!,
-      _nickname!,
-      appearance: _appearance,
-      communityToken: _accountToken,
-    );
+  }
+
+  void _retryConnection() {
+    if (_closed || _manualDisconnect || _retryCount >= 12) return;
+    _retry?.cancel();
+    final delay = Duration(seconds: (++_retryCount * 2).clamp(2, 10));
+    _retry = Timer(delay, () async {
+      try {
+        await reconnect();
+      } catch (_) {
+        _retryConnection();
+      }
+    });
   }
 
   Future<void> connect(
@@ -85,6 +107,10 @@ class LobbyClient {
       disconnectReported = true;
       final reason = socket.closeReason;
       final status = socket.closeCode;
+      final terminal =
+          status == 1008 ||
+          status == 4001 ||
+          (reason?.contains('fermé') ?? false);
       final message = reason != null && reason.isNotEmpty
           ? reason
           : error != null
@@ -96,8 +122,12 @@ class LobbyClient {
         'type': 'disconnected',
         'message': message,
         'close_code': status,
+        'terminal': terminal,
         if (error != null) 'detail': error.toString(),
       });
+      if (!terminal) {
+        _retryConnection();
+      }
     }
 
     socket.listen(
@@ -105,9 +135,22 @@ class LobbyClient {
         if (_closed || !identical(_socket, socket)) return;
         try {
           final data = jsonDecode(raw as String) as Map<String, dynamic>;
+          if (data['type'] == 'error' && data['code'] == 'resume_busy') {
+            // The previous transport may still be completing its close handshake.
+            socket.close(1000, 'Reprise différée');
+          }
+          if (data['type'] == 'error' && data['code'] == 'resume_missing') {
+            socket.close(
+              1008,
+              'La place réservée a expiré. Rejoins de nouveau le salon.',
+            );
+          }
           if (data['type'] == 'room.joined') {
             id = data['id'] as String;
             _token = data['token'] as String?;
+            _retry?.cancel();
+            _retryCount = 0;
+            setBackground(_background);
           }
           if (data['type'] == 'room.snapshot') {
             _inGame = data['phase'] != 'lobby';
@@ -144,6 +187,20 @@ class LobbyClient {
     jsonEncode({'version': 1, 'type': 'player.ready', 'ready': ready}),
   );
 
+  void setBackground(bool background) {
+    _background = background;
+    final socket = _socket;
+    if (id != null && socket?.readyState == WebSocket.open) {
+      socket!.add(
+        jsonEncode({
+          'version': 1,
+          'type': 'player.background',
+          'background': background,
+        }),
+      );
+    }
+  }
+
   void gameAction(
     String action,
     int revision, {
@@ -168,12 +225,25 @@ class LobbyClient {
 
   /// Ferme le transport sans effacer la session, pour une reprise ultérieure.
   Future<void> disconnect() async {
+    _manualDisconnect = true;
+    _retry?.cancel();
     await _socket?.close();
   }
 
   Future<void> dispose() async {
+    if (_closed) return;
     _closed = true;
-    await _socket?.close();
+    _retry?.cancel();
+    final socket = _socket;
+    _socket = null;
+    if (socket?.readyState == WebSocket.open && id != null) {
+      try {
+        socket!.add(jsonEncode({'version': 1, 'type': 'room.leave'}));
+      } catch (_) {
+        // A lost transport will be removed after the server grace period.
+      }
+    }
+    await socket?.close();
     await _events.close();
   }
 }

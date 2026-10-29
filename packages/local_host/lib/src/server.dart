@@ -9,9 +9,14 @@ import 'role_rules.dart';
 import 'game_host.dart';
 
 class LocalHost implements GameHost {
-  LocalHost({this.heartbeatInterval = const Duration(seconds: 30)});
+  LocalHost({
+    this.heartbeatInterval = const Duration(seconds: 30),
+    this.reconnectGrace = const Duration(minutes: 2),
+  });
   // Laisse davantage de marge aux émulateurs et aux appareils momentanément chargés.
   final Duration heartbeatInterval;
+  final Duration reconnectGrace;
+  final _reconnectExpiry = <String, Timer>{};
   HttpServer? _server;
   final _peers = HashMap<WebSocket, Map<String, dynamic>>.identity();
   final _pending = HashSet<WebSocket>.identity();
@@ -261,7 +266,9 @@ class LocalHost implements GameHost {
     if (predators < 1 || predators * 2 >= _players.length)
       return 'Il faut au moins un loup et une majorité de villageois.';
     if (_players.values.any(
-          (p) => p['connected'] != true || p['ready'] != true,
+          (p) =>
+              p['ready'] != true ||
+              (p['connected'] != true && p['background'] != true),
         ) ||
         _peers.keys.any((socket) => socket.readyState != WebSocket.open))
       return 'Tous les joueurs doivent être connectés et prêts.';
@@ -305,6 +312,10 @@ class LocalHost implements GameHost {
       editions[id] = card.$2;
     }
     started = true;
+    for (final timer in _reconnectExpiry.values) {
+      timer.cancel();
+    }
+    _reconnectExpiry.clear();
     _game = NightGame(
       _roles,
       electMayor: true,
@@ -346,8 +357,18 @@ class LocalHost implements GameHost {
     if (started) {
       player['connected'] = false;
     } else {
-      _players.remove(id);
-      _tokens.removeWhere((_, value) => value == id);
+      // A transport interruption is not a deliberate departure. Preserve the
+      // seat, alias, ready confirmation and resume token for a short grace.
+      player['connected'] = false;
+      _reconnectExpiry.remove(id)?.cancel();
+      _reconnectExpiry[id] = Timer(reconnectGrace, () {
+        _reconnectExpiry.remove(id);
+        if (!started && player['connected'] != true) {
+          _players.remove(id);
+          _tokens.removeWhere((_, value) => value == id);
+          _publish();
+        }
+      });
     }
     _publish();
   }
@@ -488,8 +509,13 @@ class LocalHost implements GameHost {
   }
 
   void _receive(WebSocket socket, dynamic raw) {
-    void error(String message) =>
-        socket.add(jsonEncode({'type': 'error', 'message': message}));
+    void error(String message, {String? code}) => socket.add(
+      jsonEncode({
+        'type': 'error',
+        'message': message,
+        if (code != null) 'code': code,
+      }),
+    );
     try {
       if (raw is! String || raw.length > 4096) {
         socket.close(1009, 'Message trop volumineux');
@@ -503,17 +529,22 @@ class LocalHost implements GameHost {
       if (data['type'] == 'room.resume' && !_peers.containsKey(socket)) {
         final id = _tokens[data['token']];
         if (data['code'] != code || id == null || !_players.containsKey(id)) {
-          error('Session inconnue. Le salon a peut-être été fermé.');
+          error(
+            'Session inconnue. Le salon a peut-être été fermé.',
+            code: 'resume_missing',
+          );
           return;
         }
         final player = _players[id]!;
         if (player['connected'] == true) {
           error(
             'Cette session est encore connectée. Réessaie dans quelques secondes.',
+            code: 'resume_busy',
           );
           return;
         }
         _pending.remove(socket);
+        _reconnectExpiry.remove(id)?.cancel();
         player['connected'] = true;
         _peers[socket] = player;
         _trace('Reconnexion de ${player['nickname']}');
@@ -543,14 +574,14 @@ class LocalHost implements GameHost {
           return;
         }
         if (name.toLowerCase() == nickname.toLowerCase() ||
-            _peers.values.any(
+            _players.values.any(
               (p) =>
                   (p['nickname'] as String).toLowerCase() == name.toLowerCase(),
             )) {
           error('Ce pseudo est déjà utilisé.');
           return;
         }
-        if (_peers.length >= 20) {
+        if (_players.length >= 20) {
           error('Le salon est complet.');
           return;
         }
@@ -565,6 +596,7 @@ class LocalHost implements GameHost {
           'appearance': appearance,
           'ready': false,
           'connected': true,
+          'background': false,
           'house_slot': List.generate(20, (index) => index).firstWhere(
             (slot) =>
                 !_players.values.any((player) => player['house_slot'] == slot),
@@ -579,6 +611,24 @@ class LocalHost implements GameHost {
           jsonEncode({'type': 'room.joined', 'id': id, 'token': token}),
         );
         _publish();
+      } else if (data['type'] == 'player.background' &&
+          _peers.containsKey(socket) &&
+          data['background'] is bool) {
+        _peers[socket]!['background'] = data['background'];
+        _publish();
+      } else if (data['type'] == 'room.leave' && _peers.containsKey(socket)) {
+        final player = _peers.remove(socket)!;
+        final id = player['id'] as String;
+        if (started) {
+          player['connected'] = false;
+          player['background'] = false;
+        } else {
+          _players.remove(id);
+          _tokens.removeWhere((_, value) => value == id);
+          _reconnectExpiry.remove(id)?.cancel();
+        }
+        _publish();
+        socket.close(1000, 'Vous avez quitté le salon.');
       } else if (data['type'] == 'player.ready' &&
           _peers.containsKey(socket) &&
           !started &&
@@ -617,6 +667,7 @@ class LocalHost implements GameHost {
         'Impossible de retirer un joueur après la distribution.',
       );
     _players.remove(id);
+    _reconnectExpiry.remove(id)?.cancel();
     _tokens.removeWhere((_, value) => value == id);
     final sockets = _peers.keys.where((s) => _peers[s]!['id'] == id).toList();
     for (final socket in sockets) {
@@ -649,6 +700,10 @@ class LocalHost implements GameHost {
     _pending.clear();
     _peers.clear();
     _players.clear();
+    for (final timer in _reconnectExpiry.values) {
+      timer.cancel();
+    }
+    _reconnectExpiry.clear();
     _tokens.clear();
     _roles.clear();
     _phaseTimer?.cancel();

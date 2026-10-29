@@ -320,6 +320,10 @@ def logout(
             "DELETE FROM sessions WHERE digest=?",
             (hashlib.sha256(authorization[7:].encode()).hexdigest(),),
         )
+        connection.execute(
+            "UPDATE social_presence SET state='offline',changed=?,heartbeat=? WHERE user_id=? AND session_digest=?",
+            (time.time(), time.time(), user['id'], hashlib.sha256(authorization[7:].encode()).hexdigest()),
+        )
     return {"ok": True}
 
 

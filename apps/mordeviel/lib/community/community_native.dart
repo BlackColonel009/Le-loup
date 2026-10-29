@@ -402,7 +402,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   ? null
                   : () => _run(() async {
                       try {
-                        unawaited(SocialService.instance.logout());
+                        await SocialService.instance.logout();
                         await _request('logout', method: 'POST');
                       } finally {
                         _backToLogin();

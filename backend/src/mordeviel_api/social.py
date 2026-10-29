@@ -22,6 +22,7 @@ def initialize(db):
             user_id INTEGER PRIMARY KEY, stats_visibility TEXT NOT NULL DEFAULT 'public',
             invite_emails INTEGER NOT NULL DEFAULT 1, phone_notifications INTEGER NOT NULL DEFAULT 0,
             auto_invite INTEGER NOT NULL DEFAULT 1, last_seen REAL NOT NULL DEFAULT 0,
+            game_notification_sound TEXT NOT NULL DEFAULT 'game',
             optout TEXT NOT NULL UNIQUE);
         CREATE TABLE IF NOT EXISTS social_friends (
             low_id INTEGER NOT NULL, high_id INTEGER NOT NULL, sender_id INTEGER NOT NULL,
@@ -63,6 +64,9 @@ def initialize(db):
         CREATE INDEX IF NOT EXISTS social_notification_target ON social_notifications(user_id,seen);
         """)
         # Game engines live only in this process. Old invitations cannot survive restart.
+        columns = {r["name"] for r in c.execute("PRAGMA table_info(social_preferences)")}
+        if "game_notification_sound" not in columns:
+            c.execute("ALTER TABLE social_preferences ADD COLUMN game_notification_sound TEXT NOT NULL DEFAULT 'game'")
         c.execute("UPDATE social_invitations SET status='closed' WHERE status='active'")
         c.execute(
             "UPDATE social_notifications SET mail_state='cancelled' WHERE mail_state='pending'"
@@ -143,6 +147,9 @@ def profile_data(c, viewer, target):
         ),
     }
     if visible:
+        if is_friend:
+            from .presence import status
+            result.update(status(c, target))
         result["stats"] = dict(
             c.execute(
                 """SELECT COUNT(*) AS games,COALESCE(SUM(wins),0) AS wins,
@@ -163,6 +170,7 @@ def profile_data(c, viewer, target):
                 "invite_emails",
                 "phone_notifications",
                 "auto_invite",
+                "game_notification_sound",
             ]
         }
     return result
@@ -185,19 +193,21 @@ class Preferences(BaseModel):
     invite_emails: bool = True
     phone_notifications: bool = False
     auto_invite: bool = True
+    game_notification_sound: Literal["game", "phone"] | None = None
 
 
 @router.put("/preferences")
 def preferences(data: Preferences, *, user: User, db: Database):
     with db.db() as c:
-        preference(c, user["id"])
+        previous = preference(c, user["id"])
         c.execute(
-            "UPDATE social_preferences SET stats_visibility=?,invite_emails=?,phone_notifications=?,auto_invite=? WHERE user_id=?",
+            "UPDATE social_preferences SET stats_visibility=?,invite_emails=?,phone_notifications=?,auto_invite=?,game_notification_sound=? WHERE user_id=?",
             (
                 data.stats_visibility,
                 int(data.invite_emails),
                 int(data.phone_notifications),
                 int(data.auto_invite),
+                data.game_notification_sound or previous["game_notification_sound"],
                 user["id"],
             ),
         )
@@ -209,10 +219,6 @@ def summary(request: Request, *, user: User, db: Database):
     expire_invitations(db, request.app.state.rooms)
     with db.db() as c:
         preference(c, user["id"])
-        c.execute(
-            "UPDATE social_preferences SET last_seen=? WHERE user_id=?",
-            (time.time(), user["id"]),
-        )
         pending = sum(
             1
             for r in c.execute(
@@ -233,11 +239,13 @@ def summary(request: Request, *, user: User, db: Database):
             "phone_notifications": bool(
                 preference(c, user["id"])["phone_notifications"]
             ),
+            "game_notification_sound": preference(c, user["id"])["game_notification_sound"],
         }
 
 
 @router.get("/friends")
 def friend_list(*, user: User, db: Database):
+    from .presence import status
     with db.db() as c:
         rows = c.execute(
             """SELECT f.*,u.id,u.nickname,u.role,p.last_seen FROM social_friends f
@@ -254,8 +262,7 @@ def friend_list(*, user: User, db: Database):
                     "verified": r["role"] == "admin",
                     "status": r["status"],
                     "incoming": r["sender_id"] != user["id"],
-                    "online": r["status"] == "accepted"
-                    and (r["last_seen"] or 0) > time.time() - 90,
+                    **(status(c, r["id"]) if r["status"] == "accepted" else {}),
                 }
                 for r in rows
                 if not blocked(c, user["id"], r["id"])
@@ -585,6 +592,9 @@ def notification_active(c, n):
                 (n["source_id"], n["user_id"], time.time()),
             ).fetchone()
         )
+    if n["kind"] == "presence":
+        from .presence import alert_active
+        return alert_active(c, n)
     return bool(
         c.execute(
             "SELECT 1 FROM social_friends WHERE low_id=? AND high_id=? AND status='pending' AND sender_id=?",
@@ -625,12 +635,14 @@ def notifications(request: Request, device_id: str, *, user: User, db: Database)
                     {
                         "id": n["id"],
                         "kind": n["kind"],
-                        "title": "Le village vous attend"
-                        if n["kind"] == "invitation"
-                        else "Une nouvelle amitié ?",
-                        "body": f"{n['nickname']} vous invite à jouer."
-                        if n["kind"] == "invitation"
-                        else f"{n['nickname']} souhaite devenir votre ami.",
+                        "title": {
+                            "presence": "Un ami a rejoint le village",
+                            "invitation": "Le village vous attend",
+                        }.get(n["kind"], "Une nouvelle amitié ?"),
+                        "body": {
+                            "presence": f"{n['nickname']} s’est connecté à Mordeviel.",
+                            "invitation": f"{n['nickname']} vous invite à jouer.",
+                        }.get(n["kind"], f"{n['nickname']} souhaite devenir votre ami."),
                     }
                 )
         return {

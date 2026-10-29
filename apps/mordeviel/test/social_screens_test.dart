@@ -5,6 +5,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mordeviel/services/game_notification_sound.dart';
+import 'package:mordeviel/social/social_notifications.dart';
 import 'package:mordeviel/community/community_session.dart';
 import 'package:mordeviel/design/game_theme.dart';
 import 'package:mordeviel/social/online_hub.dart';
@@ -17,11 +20,13 @@ class FakeSocialApi extends SocialApi {
       friendStatus = 'pending';
   final actions = <String>[];
   bool privateVisitor = true;
+  String notificationSound = 'game';
   Map<String, dynamic> get preferences => {
     'stats_visibility': visibility,
     'invite_emails': true,
     'phone_notifications': false,
     'auto_invite': true,
+    'game_notification_sound': notificationSound,
   };
   Map<String, dynamic> get stats => {
     'games': 12,
@@ -104,6 +109,8 @@ class FakeSocialApi extends SocialApi {
       };
     if (path == '/social/preferences') {
       visibility = body!['stats_visibility'] as String;
+      notificationSound =
+          body['game_notification_sound'] as String? ?? notificationSound;
       actions.add('preferences');
       return {'ok': true};
     }
@@ -177,6 +184,7 @@ void main() {
     }
   });
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     FlutterSecureStorage.setMockInitialValues({});
     original = SocialApi.instance;
     api = FakeSocialApi();
@@ -193,6 +201,33 @@ void main() {
       ),
     ),
     home: child,
+  );
+  testWidgets(
+    'Le profil choisit le son du téléphone et garde ce choix pour le jeu local',
+    (tester) async {
+      await tester.pumpWidget(app(const SocialProfileScreen()));
+      await tester.pumpAndSettle();
+      final selector = find.byWidgetPredicate(
+        (w) =>
+            w is DropdownButtonFormField<String> &&
+            w.key.toString().contains('game-sound-'),
+      );
+      await tester.scrollUntilVisible(selector, 300);
+      await tester.tap(selector);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Son standard du téléphone').last);
+      await tester.pumpAndSettle();
+      expect(api.notificationSound, 'phone');
+      expect(await readGameNotificationSound(), 'phone');
+      expect(gameStartSoundDetails('phone').sound, isNull);
+      expect(gameStartSoundDetails('game').sound, isNotNull);
+      expect(
+        gameStartSoundDetails('phone').channelId,
+        isNot(gameStartSoundDetails('game').channelId),
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    },
   );
   for (final size in [const Size(360, 740), const Size(900, 420)]) {
     testWidgets(
@@ -251,7 +286,7 @@ void main() {
     await tester.pumpWidget(app(const SocialProfileScreen()));
     await tester.pumpAndSettle();
     expect(find.text('Victimes en loup'), findsOneWidget);
-    final dropdown = find.byType(DropdownButtonFormField<String>);
+    final dropdown = find.byKey(const ValueKey('profile-stats-visibility'));
     await tester.scrollUntilVisible(dropdown, 250);
     await tester.pumpAndSettle();
     await tester.tap(dropdown);
