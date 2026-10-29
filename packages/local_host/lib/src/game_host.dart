@@ -23,6 +23,7 @@ abstract interface class GameHost {
   Future<void> kick(String id);
   void startGame();
   void startNight({int seconds = 120});
+  void schedulePhase(String target, {int? seconds});
   void callNight(String action);
   void advanceNight();
   void finishNight();

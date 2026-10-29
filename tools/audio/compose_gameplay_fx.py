@@ -18,16 +18,7 @@ def save(name, values):
 
 def main():
     rng = random.Random(29102026)
-    volley = []
-    for i in range(int(SR * 1.15)):
-        time = i / SR
-        value = 0
-        for start in (0, .3276, .6552):
-            t = time - start
-            if t >= 0:
-                value += rng.uniform(-1, 1) * math.exp(-t * 38) + .8 * math.sin(2 * math.pi * 75 * t) * math.exp(-t * 15)
-        volley.append(value)
-    save('hunter_volley.wav', volley)
+    # Hunter uses the real CC0 recording installed by fetch_hunter_media.py.
     electric = [rng.uniform(-1, 1) * (.35 + .65 * abs(math.sin(i / SR * 107))) * math.exp(-i / SR * 2) for i in range(int(SR * 1.2))]
     save('sentence_electric.wav', electric)
     cry, phase = [], 0
@@ -38,7 +29,7 @@ def main():
         envelope = min(1, t * 28) * math.exp(-t * 2.3) * min(1, (1.7-t)*8)
         cry.append(envelope * (math.sin(phase) + .43 * math.sin(phase * 2) + .24 * math.sin(phase * 3) + rng.uniform(-.2, .2)))
     save('wolf_fall.wav', cry)
-    print('Three gameplay effects generated.')
+    print('Electricity and wolf effects generated; real hunter recording preserved.')
 
 
 if __name__ == '__main__':

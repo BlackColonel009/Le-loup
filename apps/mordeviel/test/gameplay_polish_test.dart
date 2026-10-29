@@ -86,6 +86,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       final input = find.byKey(const ValueKey('private-chat-input'));
+      expect(find.byTooltip('Stickers'), findsOneWidget);
       await tester.enterText(input, 'Salut mon ami');
       await tester.tap(find.byTooltip('Envoyer'));
       await tester.pumpAndSettle();

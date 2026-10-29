@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'electricity.dart';
 
 class SentenceSeparation extends StatelessWidget {
   const SentenceSeparation({
@@ -147,36 +148,38 @@ class _SentenceEffects extends CustomPainter {
       }
     } else {
       for (final axis in [if (vertical) true, if (horizontal) false]) {
-        final path = Path();
-        for (var i = 0; i <= 28; i++) {
-          final along = i / 28;
-          final jitter = reduced
-              ? 0
-              : math.sin(i * 7.3 + p * 47 + seed) * size.width * .025 * p;
-          final point = axis
-              ? Offset(size.width * .5 + jitter, size.height * along)
-              : Offset(size.width * along, size.height * .5 + jitter);
-          if (i == 0) {
-            path.moveTo(point.dx, point.dy);
-          } else {
-            path.lineTo(point.dx, point.dy);
-          }
+        final energy = reduced
+            ? .18
+            : (1 - (p - .92).clamp(0.0, .08) / .08) *
+                  (.72 + .28 * math.sin(p * 77).abs());
+        drawLightning(
+          canvas,
+          axis ? Offset(size.width * .5, 0) : Offset(0, size.height * .5),
+          axis
+              ? Offset(size.width * .5, size.height)
+              : Offset(size.width, size.height * .5),
+          seed: seed + (reduced ? 0 : (p * 46).floor()),
+          energy: energy,
+          width: 2.1,
+          travel: (p * 7).clamp(0.0, 1.0),
+        );
+        for (final along in [.22, .48, .76]) {
+          final center = axis
+              ? Offset(size.width * .5, size.height * along)
+              : Offset(size.width * along, size.height * .5);
+          final gap = Offset(
+            axis ? size.width * .045 * p : 0,
+            axis ? 0 : size.height * .03 * p,
+          );
+          drawLightning(
+            canvas,
+            center - gap,
+            center + gap,
+            seed: seed + (along * 100).round() + (p * 60).floor(),
+            energy: energy,
+            width: 1.4,
+          );
         }
-        canvas.drawPath(
-          path,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 8
-            ..color = const Color(0x993DBDFB)
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 9),
-        );
-        canvas.drawPath(
-          path,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1.8
-            ..color = const Color(0xFFDAF9FF),
-        );
       }
     }
   }

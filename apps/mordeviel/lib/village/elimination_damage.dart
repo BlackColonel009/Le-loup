@@ -22,20 +22,47 @@ class EliminationDamage extends StatelessWidget {
       label: cause == 'hunter'
           ? 'Trois impacts du Chasseur'
           : 'Carte rongée par le poison de la Sorcière',
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipPath(clipper: _DamageClipper(cause, p), child: child),
-          Positioned.fill(
-            child: IgnorePointer(
-              child: CustomPaint(
-                painter: cause == 'hunter'
-                    ? BulletDamagePainter(p, reduced: reduced)
-                    : PoisonDamagePainter(p, reduced: reduced),
+      child: LayoutBuilder(
+        builder: (context, box) => Stack(
+          fit: StackFit.expand,
+          children: [
+            ClipPath(clipper: _DamageClipper(cause, p), child: child),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: cause == 'hunter'
+                      ? BulletDamagePainter(p, reduced: reduced)
+                      : PoisonDamagePainter(p, reduced: reduced),
+                ),
               ),
             ),
-          ),
-        ],
+            if (cause == 'hunter')
+              for (var i = 0; i < 3; i++)
+                if (_hit(p, i) > 0)
+                  Positioned(
+                    left: box.maxWidth * (bulletPositions[i].dx - .16),
+                    top:
+                        box.maxHeight * bulletPositions[i].dy -
+                        box.maxWidth * .16,
+                    width: box.maxWidth * .32,
+                    height: box.maxWidth * .32,
+                    child: IgnorePointer(
+                      child: Transform.rotate(
+                        angle: i * .73,
+                        child: Transform.scale(
+                          scale:
+                              .75 +
+                              .25 * Curves.easeOutCubic.transform(_hit(p, i)),
+                          child: Image.asset(
+                            'assets/effects/bullet_hole.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

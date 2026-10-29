@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../stickers/chat_stickers.dart';
 import 'social_api.dart';
+import 'package:local_host/local_host.dart' show stickerMessage;
 
 class PrivateChatScreen extends StatefulWidget {
   const PrivateChatScreen({
@@ -57,9 +58,9 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     }
   }
 
-  Future<void> _send() async {
-    if (_sending || _text.text.trim().isEmpty) return;
-    final text = _text.text.trim();
+  Future<void> _send([String? sticker]) async {
+    if (_sending || (sticker ?? _text.text).trim().isEmpty) return;
+    final text = (sticker ?? _text.text).trim();
     setState(() => _sending = true);
     try {
       await SocialApi.instance.request(
@@ -67,7 +68,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
         method: 'POST',
         body: {'text': text},
       );
-      if (_text.text.trim() == text) _text.clear();
+      if (sticker == null && _text.text.trim() == text) _text.clear();
       await _load();
     } catch (error) {
       if (mounted) setState(() => _error = '$error');
@@ -159,6 +160,19 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                 decoration: InputDecoration(
                   labelText: 'Ton message privé',
                   border: const OutlineInputBorder(),
+                  prefixIcon: IconButton(
+                    tooltip: 'Stickers',
+                    icon: const Icon(Icons.emoji_emotions_outlined),
+                    onPressed: _sending
+                        ? null
+                        : () async {
+                            _focus.unfocus();
+                            final selected = await showStickerPicker(context);
+                            if (selected != null && mounted) {
+                              await _send(stickerMessage(selected));
+                            }
+                          },
+                  ),
                   suffixIcon: IconButton(
                     onPressed: _sending ? null : _send,
                     icon: const Icon(Icons.send),

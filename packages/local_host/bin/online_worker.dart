@@ -62,6 +62,11 @@ Future<void> main() async {
             host.startGame();
           case 'night.start':
             host.startNight(seconds: command['seconds'] as int? ?? 120);
+          case 'phase.schedule':
+            host.schedulePhase(
+              command['target'] as String,
+              seconds: command['seconds'] as int?,
+            );
           case 'night.call':
             host.callNight(command['call'] as String);
           case 'night.advance':

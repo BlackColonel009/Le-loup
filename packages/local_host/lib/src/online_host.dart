@@ -231,6 +231,11 @@ class OnlineHost implements GameHost {
   void startNight({int seconds = 120}) =>
       _send('night.start', {'seconds': seconds});
   @override
+  void schedulePhase(String target, {int? seconds}) => _send('phase.schedule', {
+    'target': target,
+    if (seconds != null) 'seconds': seconds,
+  });
+  @override
   void callNight(String action) => _send('night.call', {'call': action});
   @override
   void advanceNight() => _send('night.advance');

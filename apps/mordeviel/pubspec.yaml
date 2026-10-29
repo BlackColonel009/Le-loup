@@ -177,6 +177,7 @@ flutter:
     - assets/audio/classic/neural/ghost/preview.wav
     - assets/audio/classic/neural/cold_killer/preview.wav
     - assets/branding/
+    - assets/effects/
   fonts:
     - family: VillageSans
       fonts:

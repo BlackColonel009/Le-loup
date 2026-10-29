@@ -1,4 +1,5 @@
 import os
+import time
 from contextlib import ExitStack
 
 import pytest
@@ -101,8 +102,21 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect(close_via
             "intense",
         ]
         assert [edition for role, edition in dealt if role == "werewolf"] == ["horror"]
-        mdj.send_json({"action": "night.start", "seconds": 120})
-        receive(mdj, "command.ok")
+        if close_via_http:
+            before = time.monotonic()
+            mdj.send_json({"action": "phase.schedule", "target": "night", "seconds": 120})
+            receive(mdj, "command.ok")
+            transition = receive(players[0], "room.snapshot")
+            while not transition.get("transition"):
+                transition = receive(players[0], "room.snapshot")
+            assert transition["phase"] == "role_reveal"
+            assert 0 < transition["transition"]["remaining_ms"] <= 5000
+            while receive(mdj, "host.snapshot")["room"]["phase"] != "sleep":
+                pass
+            assert time.monotonic() - before >= 4.5
+        else:
+            mdj.send_json({"action": "night.start", "seconds": 120})
+            receive(mdj, "command.ok")
         mdj.send_json({"action": "night.call", "call": "wolves"})
         receive(mdj, "command.ok")
         mdj.send_json(

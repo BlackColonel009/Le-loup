@@ -57,6 +57,11 @@ void main() {
     g.finishNight();
     g.advance();
     expect(g.phase, 'mayor_succession');
+    final mayorDeath = (g.publicState['death_events'] as List)
+        .where((e) => e['player'] == 'a')
+        .single;
+    expect(mayorDeath['was_mayor'], isTrue);
+    expect(g.roles['a'], 'villager');
     expect((g.privateState('a')['ability'] as Map)['action'], 'mayor.succeed');
     expect(g.privateState('e')['ability'], isNull);
     expect(

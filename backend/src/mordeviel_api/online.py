@@ -42,6 +42,7 @@ HOST_ACTIONS = {
     "bots.configure",
     "start",
     "night.start",
+    "phase.schedule",
     "night.call",
     "night.advance",
     "night.finish",

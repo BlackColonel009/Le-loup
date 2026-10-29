@@ -17,6 +17,7 @@ import 'village/village_map.dart';
 import 'village/village_navigation.dart';
 import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
+import 'village/phase_transition_banner.dart';
 import 'village/revival_scene.dart';
 import 'village/victory_scene.dart';
 import 'village/ending_data.dart';
@@ -54,6 +55,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   bool _appForeground = true;
   bool _backgroundSessionStarted = false;
   final _gameStartAlert = GameStartAlertTracker();
+  final _phaseNotice = PhaseTransitionNotice();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -539,7 +541,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
           viewport.localToGlobal(Offset.zero).dy;
     }
     if (nextNight) {
-      _nightCommand(() => _host!.continueAfterSentence());
+      _nightCommand(() => _host!.schedulePhase('night'));
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -583,6 +585,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   Map<String, dynamic>? _pendingEnding;
 
   void _refreshVillage() {
+    _phaseNotice.update(context, _room?['transition'] as Map?, _ambience.asset);
     if (_room != null && _connected && !_backgroundSessionStarted) {
       _backgroundSessionStarted = true;
       unawaited(_startBackgroundSession(_room!['code'] as String));
@@ -725,6 +728,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             name: player?['nickname'] as String? ?? 'Joueur',
             role: role,
             cause: event['cause'] as String,
+            wasMayor: event['was_mayor'] == true,
+            mayorAmbience: _styleFor('mayor'),
             feminine: _femaleFor(event['player']),
             ambience: _styleFor(role, edition: event['edition'] as String?),
             cursed: event['elder_curse'] == true,
@@ -942,6 +947,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   @override
   void dispose() {
+    _phaseNotice.dispose();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(GameBackgroundSession.stop());
     unawaited(cancelGameStartedNotification());
@@ -1801,12 +1807,14 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             privateState: _nightPrivate,
             isHost: _host != null,
             connected: _connected,
-            onStart: (seconds) =>
-                _narratedCommand(() => _host!.startNight(seconds: seconds)),
+            onStart: (seconds) => _narratedCommand(
+              () => _host!.schedulePhase('night', seconds: seconds),
+            ),
             onAdvance: () => _narratedCommand(() => _host!.advanceNight()),
             onCallNight: (action) =>
                 _narratedCommand(() => _host!.callNight(action)),
-            onFinishNight: () => _narratedCommand(() => _host!.finishNight()),
+            onFinishNight: () =>
+                _narratedCommand(() => _host!.schedulePhase('day')),
             onPause: () => _nightCommand(() => _host!.pauseNight()),
             onResume: () => _nightCommand(() => _host!.resumeNight()),
             onVote: (seconds) =>

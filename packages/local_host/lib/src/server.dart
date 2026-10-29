@@ -12,10 +12,55 @@ class LocalHost implements GameHost {
   LocalHost({
     this.heartbeatInterval = const Duration(seconds: 30),
     this.reconnectGrace = const Duration(minutes: 2),
+    this.transitionDelay = const Duration(seconds: 5),
   });
   // Laisse davantage de marge aux émulateurs et aux appareils momentanément chargés.
   final Duration heartbeatInterval;
   final Duration reconnectGrace;
+  final Duration transitionDelay;
+  Timer? _transitionTimer;
+  DateTime? _transitionEnd;
+  String? _transitionTarget;
+  void _ensureNoTransition() {
+    if (_transitionTarget != null)
+      throw StateError('Le changement de jour ou de nuit est déjà en cours.');
+  }
+
+  @override
+  void schedulePhase(String target, {int? seconds}) {
+    _ensureNoTransition();
+    final game = _game;
+    if (game == null || game.closed) throw StateError('Aucune partie active.');
+    final duration = seconds ?? game.durationSeconds;
+    if (target == 'night') {
+      game.validateStartNight(seconds: duration);
+    } else if (target == 'day') {
+      if (game.phase != 'sleep')
+        throw StateError('Terminez l’appel en cours avant le lever du jour.');
+    } else {
+      throw ArgumentError('Transition jour ou nuit attendue.');
+    }
+    final revision = game.revision;
+    _phaseTimer?.cancel();
+    _transitionTarget = target;
+    _transitionEnd = DateTime.now().add(transitionDelay);
+    _transitionTimer = Timer(transitionDelay, () {
+      _transitionTarget = null;
+      _transitionEnd = null;
+      _transitionTimer = null;
+      if (identical(_game, game) && !game.closed && game.revision == revision) {
+        if (target == 'night') {
+          startNight(seconds: duration);
+        } else {
+          finishNight();
+        }
+      } else {
+        _publish();
+      }
+    });
+    _publish();
+  }
+
   final _reconnectExpiry = <String, Timer>{};
   HttpServer? _server;
   final _peers = HashMap<WebSocket, Map<String, dynamic>>.identity();
@@ -37,12 +82,14 @@ class LocalHost implements GameHost {
   Timer? _sentenceTimer;
 
   void startNight({int seconds = 120}) {
+    _ensureNoTransition();
     if (_game == null) throw StateError('Distribuez les rôles d’abord.');
     _game!.startNight(seconds: seconds);
     _gameChanged();
   }
 
   void startVote({int seconds = 120}) {
+    _ensureNoTransition();
     _game!.startVote(seconds: seconds);
     _gameChanged();
   }
@@ -53,26 +100,31 @@ class LocalHost implements GameHost {
   }
 
   void advanceNight() {
+    _ensureNoTransition();
     _game!.advance();
     _gameChanged();
   }
 
   void callNight(String action) {
+    _ensureNoTransition();
     _game!.callNight(action);
     _gameChanged();
   }
 
   void finishNight() {
+    _ensureNoTransition();
     _game!.finishNight();
     _gameChanged();
   }
 
   void pauseNight() {
+    _ensureNoTransition();
     _game!.pause();
     _gameChanged();
   }
 
   void resumeNight() {
+    _ensureNoTransition();
     _game!.resume();
     _gameChanged();
   }
@@ -399,6 +451,14 @@ class LocalHost implements GameHost {
     'sentence_options': List.of(sentenceOptions),
     'locked': locked,
     'phase': _game?.phase ?? (started ? 'role_reveal' : 'lobby'),
+    if (_transitionTarget != null)
+      'transition': {
+        'target': _transitionTarget,
+        'remaining_ms': _transitionEnd!
+            .difference(DateTime.now())
+            .inMilliseconds
+            .clamp(0, 5000),
+      },
     if (_game != null)
       'game': {
         ..._game!.publicState,
@@ -694,6 +754,10 @@ class LocalHost implements GameHost {
   }
 
   Future<void> stop() async {
+    _transitionTimer?.cancel();
+    _transitionTimer = null;
+    _transitionTarget = null;
+    _transitionEnd = null;
     final server = _server;
     _server = null;
     final sockets = {..._pending, ..._peers.keys};

@@ -138,6 +138,7 @@ class NightGame {
       'player': id,
       'cause': cause,
       'night': night,
+      'was_mayor': _pendingMayor == id || _mayor == id,
     });
   }
 
@@ -473,12 +474,20 @@ class NightGame {
   };
 
   void startNight({int seconds = 120}) {
+    validateStartNight(seconds: seconds);
+    _startNightUnchecked(seconds);
+  }
+
+  void validateStartNight({int seconds = 120}) {
     if (sentenceRemaining > 0)
       throw StateError('Patientez pendant la roue des sentences.');
     if (phase != 'role_reveal' && !(phase == 'vote_result' && _dayComplete))
       throw StateError('La nuit ne peut pas commencer ici.');
     if (seconds < 15 || seconds > 600)
       throw ArgumentError('Durée entre 15 et 600 secondes.');
+  }
+
+  void _startNightUnchecked(int seconds) {
     durationSeconds = seconds;
     night++;
     _startExtraNight();

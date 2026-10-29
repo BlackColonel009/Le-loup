@@ -43,3 +43,13 @@ def test_conversation_is_physically_erased_after_24_hours_and_next_message_start
     assert api.post(f'/social/chats/{a[0]}', headers=b[1], json={'text':'Nouvelle journée'}).status_code == 201
     new = api.get(f'/social/chats/{b[0]}', headers=a[1]).json()
     assert len(new['messages']) == 1 and new['reset_at'] > initial['reset_at']
+
+
+def test_private_chat_accepts_shared_stickers_and_rejects_unknown_ones(api):
+    a, b = account(api, 'Alice'), account(api, 'Bob')
+    befriend(api, a, b)
+    token = '[[sticker:classic_villager_joy]]'
+    assert api.post(f'/social/chats/{b[0]}', headers=a[1], json={'text':token}).status_code == 201
+    history = api.get(f'/social/chats/{a[0]}', headers=b[1]).json()
+    assert history['messages'][0]['text'] == token
+    assert api.post(f'/social/chats/{b[0]}', headers=a[1], json={'text':'[[sticker:not-a-sticker]]'}).status_code == 422
