@@ -4,6 +4,7 @@ import '../cards/classic_role.dart';
 import '../content/content_image.dart';
 import '../cards/card_gallery.dart';
 import 'elimination_damage.dart';
+import 'sentence_separation.dart';
 
 const sentenceIllustrations = [
   'assets/village/intense/sentences/guillotine.jpg',
@@ -405,12 +406,20 @@ class _DeathCard extends StatefulWidget {
 
 class _DeathCardState extends State<_DeathCard>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  Widget _sentenceCard(Widget child) => widget.cause != 'vote'
+      ? child
+      : SentenceSeparation(
+          progress: ((_animation.value - .55) / .45).clamp(0.0, 1.0),
+          edition: widget.ambience.asset,
+          seed: widget.name.codeUnits.fold<int>(0, (n, c) => n + c),
+          child: child,
+        );
   late final _animation = AnimationController(
     vsync: this,
     duration: Duration(
       milliseconds: widget.cause == 'poison'
           ? 4000
-          : widget.cause == 'hunter'
+          : widget.cause == 'hunter' || widget.cause == 'vote'
           ? 2600
           : widget.cursed
           ? 2800
@@ -537,59 +546,62 @@ class _DeathCardState extends State<_DeathCard>
                                 cause: widget.cause,
                                 progress: ((_animation.value - .55) / .45)
                                     .clamp(0.0, 1.0),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    if (front)
-                                      RoleCardFront(
-                                        role: configuredRole(
-                                          widget.role!,
-                                          feminine: widget.feminine,
-                                          edition: widget.ambience.asset,
+                                child: _sentenceCard(
+                                  Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      if (front)
+                                        RoleCardFront(
+                                          role: configuredRole(
+                                            widget.role!,
+                                            feminine: widget.feminine,
+                                            edition: widget.ambience.asset,
+                                          ),
+                                          ambience: widget.ambience,
+                                        )
+                                      else
+                                        ContentImage(
+                                          widget.ambience == CardAmbience.horror
+                                              ? 'assets/village/horror/card_back.png'
+                                              : widget.ambience ==
+                                                    CardAmbience.intense
+                                              ? (widget.cause == 'night'
+                                                    ? 'assets/village/intense/card_clawed.png'
+                                                    : 'assets/village/intense/card_back.png')
+                                              : 'assets/village/card_back.png',
+                                          fit: BoxFit.contain,
                                         ),
-                                        ambience: widget.ambience,
-                                      )
-                                    else
-                                      ContentImage(
-                                        widget.ambience == CardAmbience.horror
-                                            ? 'assets/village/horror/card_back.png'
-                                            : widget.ambience ==
-                                                  CardAmbience.intense
-                                            ? (widget.cause == 'night'
-                                                  ? 'assets/village/intense/card_clawed.png'
-                                                  : 'assets/village/intense/card_back.png')
-                                            : 'assets/village/card_back.png',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    if (![
-                                      'curse',
-                                      'hunter',
-                                      'poison',
-                                    ].contains(widget.cause))
-                                      ClipRect(
-                                        clipper: _ScratchClipper(
-                                          ((_animation.value - .55) / .35)
-                                              .clamp(0.0, 1.0),
+                                      if (![
+                                        'curse',
+                                        'hunter',
+                                        'poison',
+                                        'vote',
+                                      ].contains(widget.cause))
+                                        ClipRect(
+                                          clipper: _ScratchClipper(
+                                            ((_animation.value - .55) / .35)
+                                                .clamp(0.0, 1.0),
+                                          ),
+                                          child: Image.asset(
+                                            'assets/village/claws.png',
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-                                        child: Image.asset(
-                                          'assets/village/claws.png',
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    if (widget.cursed)
-                                      Positioned.fill(
-                                        child: IgnorePointer(
-                                          child: CustomPaint(
-                                            painter: _ElderLightning(
-                                              _animation.value,
-                                              MediaQuery.disableAnimationsOf(
-                                                context,
+                                      if (widget.cursed)
+                                        Positioned.fill(
+                                          child: IgnorePointer(
+                                            child: CustomPaint(
+                                              painter: _ElderLightning(
+                                                _animation.value,
+                                                MediaQuery.disableAnimationsOf(
+                                                  context,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

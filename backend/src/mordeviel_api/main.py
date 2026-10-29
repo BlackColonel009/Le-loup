@@ -9,15 +9,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from . import collection, community_mail, private_chat, social, social_scheduler
 from .account_deletion import router as deletion_router
 from .administration import router as admin_router
 from .community import Store
 from .community import router as community_router
-from . import community_mail
-from .content_packs import router as content_router
 from .content_packs import initialize as initialize_content
-from . import social, social_scheduler
-from . import collection
+from .content_packs import router as content_router
 from .gallery import initialize as initialize_gallery
 from .gallery import router as gallery_router
 from .online import Rooms, router
@@ -39,6 +37,7 @@ async def lifespan(app):
     )
     initialize_gallery(app.state.community)
     social.initialize(app.state.community)
+    private_chat.initialize(app.state.community)
     collection.initialize(app.state.community)
     app.state.rooms.db = app.state.community
     social_task = asyncio.create_task(social_scheduler.run(app.state.community, app.state.rooms))
@@ -66,6 +65,7 @@ app.include_router(community_router)
 app.include_router(community_mail.router)
 app.include_router(content_router)
 app.include_router(social.router)
+app.include_router(private_chat.router)
 app.include_router(collection.router)
 app.include_router(social_scheduler.router)
 app.include_router(shop_router)

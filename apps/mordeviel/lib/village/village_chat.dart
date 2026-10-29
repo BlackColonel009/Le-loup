@@ -24,6 +24,7 @@ class VillageChat extends StatefulWidget {
 
 class _VillageChatState extends State<VillageChat> {
   final _text = TextEditingController();
+  final _focus = FocusNode();
   bool get _day => [
     'day',
     'mayor_election',
@@ -61,6 +62,7 @@ class _VillageChatState extends State<VillageChat> {
   @override
   void dispose() {
     _text.dispose();
+    _focus.dispose();
     super.dispose();
   }
 
@@ -151,6 +153,8 @@ class _VillageChatState extends State<VillageChat> {
     final composer = <Widget>[
       if (writable) ...[
         TextField(
+          key: const ValueKey('village-chat-input'),
+          focusNode: _focus,
           controller: _text,
           maxLength: 300,
           decoration: InputDecoration(
@@ -187,19 +191,22 @@ class _VillageChatState extends State<VillageChat> {
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
       child: LayoutBuilder(
         builder: (context, size) {
-          if (size.maxHeight < 320) {
-            return ListView(
-              children: [
-                ...heading,
-                ...composer,
-                for (var i = messages.length - 1; i >= 0; i--) messageRow(i),
-              ],
-            );
-          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...heading,
+              SizedBox(
+                child: size.maxHeight < 360
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          day ? 'Conseil du village' : 'Discussion de la meute',
+                        ),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: heading,
+                      ),
+              ),
               Expanded(
                 child: messages.isEmpty
                     ? Center(
@@ -225,7 +232,11 @@ class _VillageChatState extends State<VillageChat> {
                             messageRow(messages.length - 1 - i),
                       ),
               ),
-              ...composer,
+              Column(
+                key: const ValueKey('village-chat-composer'),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: composer,
+              ),
             ],
           );
         },

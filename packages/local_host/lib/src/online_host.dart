@@ -194,6 +194,7 @@ class OnlineHost implements GameHost {
     Map<String, int> deck, {
     required bool campOnly,
     bool? revealOnDeath,
+    bool? revealRescuer,
     String? pack,
     List<String>? sentences,
     Map<String, String>? cardStyles,
@@ -201,6 +202,7 @@ class OnlineHost implements GameHost {
     'deck': deck,
     'camp_only': campOnly,
     if (revealOnDeath != null) 'reveal_on_death': revealOnDeath,
+    if (revealRescuer != null) 'reveal_rescuer': revealRescuer,
     if (pack != null) 'pack': pack,
     if (sentences != null) 'sentences': sentences,
     if (cardStyles != null) 'card_styles': cardStyles,

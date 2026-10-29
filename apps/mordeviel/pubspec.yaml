@@ -82,6 +82,9 @@ flutter:
     - assets/audio/classic/moonlit_village.wav
     - assets/audio/classic/ending_bright.wav
     - assets/audio/classic/ending_dark.wav
+    - assets/audio/classic/hunter_volley.wav
+    - assets/audio/classic/wolf_fall.wav
+    - assets/audio/classic/sentence_electric.wav
     - assets/audio/classic/wolf_howl.mp3
     - assets/audio/classic/claw_1.wav
     - assets/audio/classic/claw_2.wav

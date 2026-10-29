@@ -14,6 +14,7 @@ class NightGame {
     Map<String, String> roles, {
     this.campOnly = false,
     this.revealOnDeath = true,
+    this.revealRescuer = false,
     this.electMayor = false,
     Map<String, String> editions = const {},
     DateTime Function()? clock,
@@ -58,6 +59,9 @@ class NightGame {
   final Set<String> alive;
   final bool campOnly;
   final bool revealOnDeath;
+  final bool revealRescuer;
+  final List<Map<String, dynamic>> _rescues = [];
+  String? _rescuer;
   final bool electMayor;
   final List<Map<String, dynamic>> _deathEvents = [];
   final List<Map<String, dynamic>> _history = [];
@@ -382,6 +386,15 @@ class NightGame {
       if (_latestSelection(id) != null)
         'confirmed_selection': _latestSelection(id),
       'id': id,
+      'rescues': [
+        for (final rescue in _rescues)
+          if (rescue['player'] == id)
+            {
+              'id': rescue['id'],
+              'night': rescue['night'],
+              if (revealRescuer) 'rescuer': rescue['rescuer'],
+            },
+      ],
       'role': role,
       'phase_revision': revision,
       'alive': alive.contains(id),
@@ -876,6 +889,7 @@ class NightGame {
       if (kill != null && _deathSpent.contains(id))
         throw StateError('Potion de mort indisponible.');
       if (save) {
+        _rescuer = id;
         _lifeSpent.add(id);
         _saved = true;
       }

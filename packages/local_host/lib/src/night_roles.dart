@@ -79,7 +79,13 @@ extension _AdditionalRoles on NightGame {
     if (role == 'pack') return alive.any(_isWolf);
     if (!_hasLivingRole(role)) return false;
     return switch (action) {
-      'metamorph' => !_extra.metamorphUsed && alive.any((id) => roles[id] == 'metamorph' && (night == 1 || editionOf(id) == 'horror')),
+      'metamorph' =>
+        !_extra.metamorphUsed &&
+            alive.any(
+              (id) =>
+                  roles[id] == 'metamorph' &&
+                  (night == 1 || editionOf(id) == 'horror'),
+            ),
       'cupid' => night == 1 && !_extra.cupidUsed,
       'sisters' => night == 1 && _recognizedSisters.isEmpty,
       'alpha' => !_extra.packBroken,
@@ -346,6 +352,18 @@ extension _AdditionalRoles on NightGame {
     if (_poison != null) victims[_poison!] = 'poison';
     _resolveVariantProtection(victims);
     _kill(victims);
+    if (_saved &&
+        _extra.infectTarget != _attack &&
+        _attack != null &&
+        alive.contains(_attack) &&
+        _rescuer != null) {
+      _rescues.add({
+        'id': 'rescue-$night',
+        'player': _attack,
+        'rescuer': _rescuer,
+        'night': night,
+      });
+    }
     _extra.infections.removeWhere((id, _) => !alive.contains(id));
   }
 
@@ -386,8 +404,24 @@ extension _AdditionalRoles on NightGame {
     if (!alive.contains(id) || !_powerEnabled(id) || _done(id)) return null;
     final all = alive.toList();
     if (phase == 'metamorph' && role == 'metamorph') {
-      if (_metaPeek.containsKey(id)) return choice('metamorph.swap','Échanger les deux cartes consultées',_metaPeek[id]!,2,2);
-      if (!_extra.metamorphUsed && (night == 1 || editionOf(id) == 'horror')) return choice(editionOf(id) == 'intense' ? 'metamorph.peek' : 'metamorph.swap',editionOf(id) == 'intense' ? 'Consulter deux camps avant l’échange' : 'Échanger deux rôles',all,2,2);
+      if (_metaPeek.containsKey(id))
+        return choice(
+          'metamorph.swap',
+          'Échanger les deux cartes consultées',
+          _metaPeek[id]!,
+          2,
+          2,
+        );
+      if (!_extra.metamorphUsed && (night == 1 || editionOf(id) == 'horror'))
+        return choice(
+          editionOf(id) == 'intense' ? 'metamorph.peek' : 'metamorph.swap',
+          editionOf(id) == 'intense'
+              ? 'Consulter deux camps avant l’échange'
+              : 'Échanger deux rôles',
+          all,
+          2,
+          2,
+        );
     }
     if (phase == 'cupid' && role == 'cupid' && !_extra.cupidUsed)
       return choice('cupid.link', 'Lier deux amoureux', all, 2, 2);
@@ -472,7 +506,8 @@ extension _AdditionalRoles on NightGame {
     return {
       'camp': _camp(id),
       'edition': editionOf(id),
-      if (cardVariant(roles[id] ?? '',editionOf(id)) != null) 'variant': cardVariant(roles[id]!,editionOf(id)),
+      if (cardVariant(roles[id] ?? '', editionOf(id)) != null)
+        'variant': cardVariant(roles[id]!, editionOf(id)),
       'variant_abilities': _variantAbilities(id),
       if (_variantInfo[id] != null) 'variant_result': _variantInfo[id],
       'veil_requested': _veilRequests.contains(id),
@@ -507,7 +542,9 @@ extension _AdditionalRoles on NightGame {
 
   Map<String, dynamic> get _additionalHost => {
     'editions': Map.of(_editions),
-    'variant_results': {for(final entry in _variantInfo.entries) entry.key: entry.value},
+    'variant_results': {
+      for (final entry in _variantInfo.entries) entry.key: entry.value,
+    },
     'protected': _extra.protected,
     'extra_attack': _extra.extraAttack,
     'white_attack': _extra.whiteAttack,
@@ -546,7 +583,7 @@ extension _AdditionalRoles on NightGame {
         final a = chosen[0], b = chosen[1], original = _roles[chosen[0]]!;
         _roles[a] = _roles[b]!;
         _roles[b] = original;
-        _swapCardMemory(a,b);
+        _swapCardMemory(a, b);
         _extra.metamorphUsed = true;
         for (final player in chosen) {
           _notice(

@@ -97,7 +97,7 @@ class _DamageClipper extends CustomClipper<Path> {
               bulletPositions[i].dx * size.width,
               bulletPositions[i].dy * size.height,
             ),
-            size.width * .048 * Curves.easeOutCubic.transform(hit),
+            size.width * .078 * Curves.easeOutCubic.transform(hit),
             i,
           ),
         );
@@ -126,7 +126,7 @@ class BulletDamagePainter extends CustomPainter {
         bulletPositions[i].dx * size.width,
         bulletPositions[i].dy * size.height,
       );
-      final r = size.width * .048 * Curves.easeOutCubic.transform(hit);
+      final r = size.width * .078 * Curves.easeOutCubic.transform(hit);
       // A burnt paper rim, exposed pale fibres and fine tears surround a real cutout.
       canvas.drawPath(
         _hole(center, r * 1.16, i),

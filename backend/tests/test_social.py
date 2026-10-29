@@ -309,6 +309,9 @@ def test_matches_with_bots_keep_recents_but_never_award_public_stats(api):
         ]}})
     social.sync_match(db, r)
     assert api.get("/social/me", headers=a[1]).json()["stats"]["games"] == 0
+    assert api.get("/social/me", headers=a[1]).json()["practice_stats"]["games"] == 1
+    assert api.get("/social/me", headers=a[1]).json()["practice_stats"]["wins"] == 1
+    assert 'practice_stats' not in api.get(f'/social/profiles/{a[0]}', headers=b[1]).json()
     assert len(api.get("/social/recent", headers=host[1]).json()["players"]) == 2
 
 

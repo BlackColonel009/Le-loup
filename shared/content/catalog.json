@@ -1205,224 +1205,230 @@
       "title": "Voix · Vieille sorcière",
       "kind": "audio",
       "theme": null,
-      "version": "d7430429ab8a24f5",
-      "size": 7370544,
+      "version": "cd234845e37285d7",
+      "size": 7585628,
       "files": [
         {
           "asset": "assets/audio/classic/neural/old_witch/death_witch.wav",
           "size": 180524,
           "sha256": "da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/da72165ba0d2b5577daca7fd752e49a96820be32f1ffc68dcabbb3bdb2560ed4"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/horror_laugh.wav",
           "size": 153644,
           "sha256": "b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/b681adc025ccc8e821d4b5f5ca27d1eebdc6ab96dcef768b9884d363fe299fe0"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_alpha.wav",
           "size": 268844,
           "sha256": "a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/a2fa801e89b34f15acb5b3c0e6ed1421a57b38b09ebbca59b995601ee5ae5da2"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_alpha.wav",
           "size": 199724,
           "sha256": "8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/8f463e7e40909888a7440061883a3ad889f03332133c2c63a23c12251b3809d7"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_cupid.wav",
           "size": 161324,
           "sha256": "92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/92679b09fbc3b9c03d511edb1a1db46fa5156e34d94fdbff669357e11a6c3581"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_guardian.wav",
           "size": 153644,
           "sha256": "f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/f30ed85163f7ef88081f55628086a79bcc4734daf30f2fb26241d373927e6194"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_infection.wav",
           "size": 207404,
           "sha256": "bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/bff5f01c439581d338dc78c0d10c301043cacf0709e23b383951bf65d398dd66"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_metamorph.wav",
           "size": 169004,
           "sha256": "cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/cdc39c24bedb112d269d19df93f7728336f9ce95afaadaced64d2ba0d219c797"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_piper.wav",
           "size": 172844,
           "sha256": "bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/bae4b78720ac49bf2294aed83cc9ac2c4e33c85494cbab9b62ec3c627228552a"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_seer.wav",
           "size": 176684,
           "sha256": "6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/6ca5975440e52bbaaf84740ae745d42a43356ff0d8493f092a6e10b162b5a97b"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_sisters.wav",
           "size": 207404,
           "sha256": "8753fc832d78121010b739c5f52002643f29f80e303003f918823083768a59ec",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/8753fc832d78121010b739c5f52002643f29f80e303003f918823083768a59ec"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/8753fc832d78121010b739c5f52002643f29f80e303003f918823083768a59ec"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_white_wolf.wav",
           "size": 172844,
           "sha256": "5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/5bc9ef186810892f9b751286a3ad990fd41d9c024738f6504b53acbe6ba5299b"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_witch.wav",
           "size": 207404,
           "sha256": "972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/972aa3fbd2bc4f0907afc736759e202092e6e835ae8aa0dc3dc6a491f29a4160"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_close_wolves.wav",
           "size": 169004,
           "sha256": "08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/08c8d100b4e8ec6be728fe3a880a2ad060d2d72f4daa9bcc8e2ec5b0ad6492a9"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_cupid.wav",
           "size": 234284,
           "sha256": "d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/d0e4bcecce898107fafb444d52ba22ded18faa4bd85ebb773c0d7529fc52732a"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_dawn.wav",
           "size": 199724,
           "sha256": "02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/02dcfe7a8d35d89e3f6239d3cea83217a7c4a388d5f02ec522e0a250f5307541"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_day.wav",
           "size": 142124,
           "sha256": "957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/957ca815e0ba39f810e62323cc11c28dfc53196bc986e788c402230e5bef070d"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_guardian.wav",
           "size": 222764,
           "sha256": "c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/c24ccbfe979a0b70402f736ca5d71a156584427ca545e85e2e2affff482496aa"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_hunter.wav",
           "size": 188204,
           "sha256": "fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/fce2811611d5f5c27ba78d961ebcb391c1f9853df523e55be0c0e4a59c04ae48"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_infection.wav",
           "size": 203564,
           "sha256": "3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/3e1e59003180972491959212d7424b872fe93395ac2179110250851820fce7a2"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_mayor_election.wav",
           "size": 222764,
           "sha256": "e222a2ee0e86cb6765051eb3b50085331bd865a00164de25196a81d886939bdf",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/e222a2ee0e86cb6765051eb3b50085331bd865a00164de25196a81d886939bdf"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/e222a2ee0e86cb6765051eb3b50085331bd865a00164de25196a81d886939bdf"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_mayor_succession.wav",
           "size": 195884,
           "sha256": "40924ac74932b4c575c54ad50f95e17a623844cff82371b572cba30a9112a6c8",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/40924ac74932b4c575c54ad50f95e17a623844cff82371b572cba30a9112a6c8"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/40924ac74932b4c575c54ad50f95e17a623844cff82371b572cba30a9112a6c8"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_metamorph.wav",
           "size": 211244,
           "sha256": "0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/0fe5c963df9bbaa0c5fb66b871ced979c96eeeac76b0680b68c77e65b27165c5"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_piper.wav",
           "size": 180524,
           "sha256": "5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/5d39e32467cb3cebf188c328a273fc89722456b771c0a2cd49e8aab8d1e96712"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_role_reveal.wav",
           "size": 149804,
           "sha256": "d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/d0ad7f3b4a8165f24b82809d66ffca34a06ce1c5fcaad9429d283b82caf803b0"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_scapegoat.wav",
           "size": 203564,
           "sha256": "6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/6e433d91cc24268ec127d1374bd3d32ac44db1a0c618dee087d1529dade82744"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_seer.wav",
           "size": 245804,
           "sha256": "b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/b4cec6f50402fc1dc2444202af57ea70353038309de459a3c317b16e71de6d33"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_sisters.wav",
           "size": 180524,
           "sha256": "f08a98aa3b0c930aa40cc8b5c2bb3b8c3e78961123e1a8f6b7e5df5387054794",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/f08a98aa3b0c930aa40cc8b5c2bb3b8c3e78961123e1a8f6b7e5df5387054794"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/f08a98aa3b0c930aa40cc8b5c2bb3b8c3e78961123e1a8f6b7e5df5387054794"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_sleep.wav",
           "size": 199724,
           "sha256": "bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/bee087c3d5ae64051e7ffcc0dc0a2ddc72d948e4286f5f98db33904df3983826"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_vote_result.wav",
           "size": 222764,
           "sha256": "1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/1bfc6bf8c384db6a3cf9ca8e8cd263a1fce3a3fcbb9f97df0296eb0469ec54ca"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_voting.wav",
           "size": 215084,
           "sha256": "bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/bef70afc51f9e9cc0d56fbedd7d1364013f005f7b44bd00055203153fd851dac"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_white_wolf.wav",
           "size": 192044,
           "sha256": "141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/141bcbb39b21cc96686104740b756b1762944a062ba06df95b6887186f6bc056"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_witch.wav",
           "size": 195884,
           "sha256": "2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/2e4a7f9e31124c8c3c508642b0381803a6f595bd2af0fc21a75b2d1c6d588734"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/mdj_wolves.wav",
           "size": 215084,
           "sha256": "b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/b415243aedcd8de2793c44c2cecf3e064c9f1b408b9e29a2c603cd87c2801afb"
+        },
+        {
+          "asset": "assets/audio/classic/neural/old_witch/revival.wav",
+          "size": 215084,
+          "sha256": "83ec286272ade4a82068755b11efb3a9f1b028b17ae02982927eeb63163e83f0",
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/83ec286272ade4a82068755b11efb3a9f1b028b17ae02982927eeb63163e83f0"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/witch_potion.wav",
           "size": 368684,
           "sha256": "ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/ce2057fc3213d9a3cb175b32dc4b87140bec529e3e69b593f6d806ccd10cc7b7"
         },
         {
           "asset": "assets/audio/classic/neural/old_witch/wolves.wav",
           "size": 380204,
           "sha256": "c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5",
-          "url": "/content/packs/voice-old-witch/d7430429ab8a24f5/c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5"
+          "url": "/content/packs/voice-old-witch/cd234845e37285d7/c0f331e6eb1ba8af9e9c0ec9677653ce817040d191e5bd62a815601535e1aab5"
         }
       ]
     },

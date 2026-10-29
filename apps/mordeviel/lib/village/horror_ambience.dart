@@ -44,14 +44,13 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController _clock = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 180),
+    duration: const Duration(seconds: 120),
   )..addListener(_sound);
   AudioPlayer? _player;
   String? _lastSound;
   bool _foreground = true;
   bool get _allowed =>
       _foreground &&
-      widget.night &&
       !widget.paused &&
       HorrorPreferences.instance.scares &&
       !MediaQuery.disableAnimationsOf(context);
@@ -72,8 +71,12 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
   @override
   void didUpdateWidget(covariant HorrorAmbience oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.night && !widget.night) {
+      _player?.stop();
+      _lastSound = null;
+    }
     if (oldWidget.seed != widget.seed) {
-      _clock.value = (widget.seed % 37) / 180;
+      _clock.value = (widget.seed % 7) / 120;
       _lastSound = null;
     }
     _sync();
@@ -104,10 +107,11 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
   }
 
   void _sound() {
-    final seconds = _clock.value * 180;
-    final cue = seconds >= 148 && seconds < 151
+    if (!widget.night) return;
+    final seconds = _clock.value * 120;
+    final cue = seconds >= 33 && seconds < 36
         ? 'owl.wav'
-        : seconds >= 80 && seconds < 83
+        : seconds >= 72 && seconds < 75
         ? 'witch_laugh.wav'
         : null;
     if (cue == null) {
@@ -146,27 +150,33 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
         child: AnimatedBuilder(
           animation: _clock,
           builder: (context, _) {
-            final seconds = _clock.value * 180;
-            final owl = ((seconds - 147) / 6).clamp(0.0, 1.0);
+            final seconds = _clock.value * 120;
+            final owl = ((seconds - 32) / 6).clamp(0.0, 1.0);
             return Stack(
               fit: StackFit.expand,
               children: [
-                CustomPaint(painter: _BatsAndFog(seconds, widget.seed)),
-                if (seconds >= 139 && seconds < 147)
+                CustomPaint(
+                  painter: _BatsAndFog(seconds, widget.seed, widget.night),
+                ),
+                if (widget.night && (seconds < 32 || seconds > 38))
                   Positioned(
                     right: 12,
                     top: 18,
                     child: Opacity(
-                      opacity: ((seconds - 139) / 2).clamp(0.0, 1.0),
+                      opacity: seconds > 38 && seconds < 41
+                          ? ((seconds - 38) / 3).clamp(0.0, 1.0)
+                          : 1,
                       child: Transform.translate(
                         offset: Offset(
                           0,
-                          -math.sin(
-                                ((seconds - 145) / 2).clamp(0.0, 1.0) *
-                                    math.pi /
-                                    2,
-                              ) *
-                              12,
+                          seconds < 32
+                              ? -math.sin(
+                                      ((seconds - 30) / 2).clamp(0.0, 1.0) *
+                                          math.pi /
+                                          2,
+                                    ) *
+                                    12
+                              : 0,
                         ),
                         child: const ContentImage(
                           'assets/village/horror/owl_perched.png',
@@ -176,11 +186,13 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
                       ),
                     ),
                   ),
-                if (seconds >= 147 && seconds <= 153)
+                if (widget.night && seconds >= 32 && seconds <= 38)
                   LayoutBuilder(
                     builder: (context, box) {
                       final scale = Curves.easeInCubic.transform(owl);
-                      final size = 38 + scale * box.maxWidth * 1.5;
+                      final size =
+                          38 +
+                          scale * math.max(box.maxWidth, box.maxHeight) * 2;
                       return OverflowBox(
                         maxWidth: double.infinity,
                         maxHeight: double.infinity,
@@ -215,10 +227,18 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
   }
 }
 
+double horrorBatProgress(double seconds, {required bool night}) {
+  final first = night ? 12 : 40, second = night ? 54 : 100;
+  if (seconds >= first && seconds < first + 8) return (seconds - first) / 8;
+  if (seconds >= second && seconds < second + 8) return (seconds - second) / 8;
+  return -1;
+}
+
 class _BatsAndFog extends CustomPainter {
-  const _BatsAndFog(this.seconds, this.seed);
+  const _BatsAndFog(this.seconds, this.seed, this.night);
   final double seconds;
   final int seed;
+  final bool night;
   @override
   void paint(Canvas canvas, Size size) {
     final fog = Paint()
@@ -229,7 +249,7 @@ class _BatsAndFog extends CustomPainter {
           const Color(0x004DA8A0),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < (night ? 3 : 0); i++) {
       final y = size.height * (.3 + i * .23) + math.sin(seconds / 9 + i) * 15;
       canvas.drawOval(
         Rect.fromCenter(
@@ -240,11 +260,7 @@ class _BatsAndFog extends CustomPainter {
         fog,
       );
     }
-    final passage = seconds >= 20 && seconds < 29
-        ? (seconds - 20) / 9
-        : seconds >= 95 && seconds < 104
-        ? (seconds - 95) / 9
-        : -1.0;
+    final passage = horrorBatProgress(seconds, night: night);
     if (passage < 0) return;
     final paint = Paint()..color = const Color(0xE50A1019);
     for (var i = 0; i < 9; i++) {

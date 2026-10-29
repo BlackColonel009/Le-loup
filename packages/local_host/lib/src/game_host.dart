@@ -13,6 +13,7 @@ abstract interface class GameHost {
     Map<String, int> deck, {
     required bool campOnly,
     bool? revealOnDeath,
+    bool? revealRescuer,
     String? pack,
     List<String>? sentences,
     Map<String, String>? cardStyles,

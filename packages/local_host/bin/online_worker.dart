@@ -29,6 +29,7 @@ Future<void> main() async {
               Map<String, int>.from(command['deck'] as Map),
               campOnly: command['camp_only'] as bool,
               revealOnDeath: command['reveal_on_death'] as bool?,
+              revealRescuer: command['reveal_rescuer'] as bool?,
               pack: command['pack'] as String?,
               sentences: (command['sentences'] as List?)?.cast<String>(),
               cardStyles: (command['card_styles'] as Map?)

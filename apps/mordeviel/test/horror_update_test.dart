@@ -57,14 +57,14 @@ void main() {
       expect(find.byType(CustomPaint), findsWidgets);
       await tester.tap(find.text('Maison'));
       expect(taps, 1);
-      await tester.pump(const Duration(seconds: 118));
+      await tester.pump(const Duration(seconds: 6));
       expect(
         tester
             .widgetList<ContentImage>(find.byType(ContentImage))
             .any((i) => i.asset.endsWith('owl_perched.png')),
         true,
       );
-      await tester.pump(const Duration(seconds: 8));
+      await tester.pump(const Duration(seconds: 6));
       expect(
         tester
             .widgetList<ContentImage>(find.byType(ContentImage))
@@ -72,8 +72,8 @@ void main() {
         true,
       );
       expect(tester.takeException(), isNull);
-      await tester.pump(const Duration(seconds: 7));
-      expect(find.byType(ContentImage), findsNothing);
+      await tester.pump(const Duration(seconds: 8));
+      expect(tester.widgetList<ContentImage>(find.byType(ContentImage)).any((i)=>i.asset.endsWith('owl_perched.png')),true);
       await tester.pumpWidget(
         const MaterialApp(
           home: HorrorAmbience(night: true, seed: 0, paused: true),

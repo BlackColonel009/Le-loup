@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../community/community_screen.dart';
 import 'social_api.dart';
+import 'private_chat_screen.dart';
 import 'social_service.dart';
 import 'social_notifications.dart';
 import 'online_navigation.dart';
@@ -270,6 +271,19 @@ class _SocialHubScreenState extends State<SocialHubScreen> {
                   child: Text(p['incoming'] == true ? 'Refuser' : 'Annuler'),
                 ),
               ],
+            ),
+          if (p['is_friend'] == true || (!recent && p['status'] == 'accepted'))
+            OutlinedButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => PrivateChatScreen(
+                    friendId: p['id'] as int,
+                    nickname: p['nickname'] as String,
+                  ),
+                ),
+              ),
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: const Text('Message privé · 24 h'),
             ),
         ],
       ),
@@ -600,6 +614,7 @@ class SocialProfileScreen extends StatefulWidget {
 }
 
 class _SocialProfileScreenState extends State<SocialProfileScreen> {
+  Timer? _statsPoll;
   Map<String, dynamic>? _data;
   bool _busy = true;
   String? _error;
@@ -607,6 +622,17 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
   void initState() {
     super.initState();
     _load();
+    _statsPoll = Timer.periodic(const Duration(seconds: 10), (_) {
+      if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+        _load();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _statsPoll?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -616,7 +642,12 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
             ? '/social/me'
             : '/social/profiles/${widget.userId}',
       );
-      if (mounted) setState(() => _data = data);
+      if (mounted) {
+        setState(() {
+          _data = data;
+          _error = null;
+        });
+      }
     } catch (e) {
       if (mounted) setState(() => _error = '$e');
     } finally {
@@ -758,11 +789,24 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
             const SizedBox(height: 24),
             if (p['stats_visible'] == true) ...[
               StatsGrid(stats: p['stats'] as Map),
+              const Text(
+                'Statistiques des parties en ligne entre joueurs humains.',
+              ),
+              if (p['practice_stats'] is Map &&
+                  ((p['practice_stats'] as Map)['games'] as num? ?? 0) > 0) ...[
+                const SizedBox(height: 16),
+                const Text('Mes parties avec bots · Résultats personnels'),
+                StatsGrid(stats: p['practice_stats'] as Map),
+              ],
               const SizedBox(height: 12),
               const Text(
                 'Résultats de parties en ligne terminées. Les victimes de la meute sont des éliminations collectives confirmées.',
                 style: TextStyle(fontSize: 12, color: Colors.white60),
               ),
+              if (p['is_self'] == true)
+                const Text(
+                  'Connecte ton compte et joue un rôle pour enregistrer tes résultats. Le MDJ n’appartient à aucun camp et ne reçoit pas de victoire personnelle.',
+                ),
             ] else
               const Card(
                 child: Padding(
@@ -909,11 +953,23 @@ class ProfileSocialCard extends StatefulWidget {
 }
 
 class _ProfileSocialCardState extends State<ProfileSocialCard> {
+  Timer? _statsPoll;
   Map? _data;
   @override
   void initState() {
     super.initState();
     _load();
+    _statsPoll = Timer.periodic(const Duration(seconds: 10), (_) {
+      if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+        _load();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _statsPoll?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -928,6 +984,11 @@ class _ProfileSocialCardState extends State<ProfileSocialCard> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       if (_data?['stats'] is Map) StatsGrid(stats: _data!['stats'] as Map),
+      if (_data?['practice_stats'] is Map &&
+          ((_data!['practice_stats'] as Map)['games'] as num? ?? 0) > 0) ...[
+        const Text('Mes parties avec bots'),
+        StatsGrid(stats: _data!['practice_stats'] as Map),
+      ],
       ListTile(
         leading: const Icon(Icons.shield_moon_outlined, color: _gold),
         title: const Text('Statistiques, amis et confidentialité'),

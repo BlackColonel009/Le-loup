@@ -15,6 +15,7 @@ import 'village/village_map.dart';
 import 'village/village_navigation.dart';
 import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
+import 'village/revival_scene.dart';
 import 'village/victory_scene.dart';
 import 'village/ending_data.dart';
 import 'cards/classic_role.dart';
@@ -540,6 +541,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
   final _villageFeed = ValueNotifier<Map<String, dynamic>>({});
   final _seenDeaths = <String>{};
   final _deathQueue = <Map<String, dynamic>>[];
+  final _rescueQueue = <Map<String, dynamic>>[];
+  final _seenRescues = <String>{};
   bool _deathFeedInitialized = false;
   bool _showingDeaths = false;
   bool _elderCursed = false, _anonymousCurse = false;
@@ -596,7 +599,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
         _pendingEnding = Map<String, dynamic>.from(game!);
       }
     }
-    if ((_deathQueue.isEmpty && !_anonymousCurse && _pendingEnding == null) ||
+    if ((_deathQueue.isEmpty &&
+            _rescueQueue.isEmpty &&
+            !_anonymousCurse &&
+            _pendingEnding == null) ||
         _showingDeaths) {
       return;
     }
@@ -605,8 +611,29 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       try {
         while (mounted &&
             (_deathQueue.isNotEmpty ||
+                _rescueQueue.isNotEmpty ||
                 _anonymousCurse ||
                 _pendingEnding != null)) {
+          if (_rescueQueue.isNotEmpty) {
+            if (!mounted) break;
+            final rescue = _rescueQueue.removeAt(0);
+            final witch = (_room?['players'] as List? ?? [])
+                .where((p) => p['id'] == rescue['rescuer'])
+                .firstOrNull;
+            await showRevival(
+              context,
+              role: _role ?? 'villager',
+              feminine: _femaleFor(_client?.id),
+              ambience: _styleFor(
+                _role,
+                edition: _nightPrivate?['edition'] as String?,
+              ),
+              rescuer: witch?['nickname'] as String?,
+              onReveal: ClassicAudio.instance.revival,
+              onClose: ClassicAudio.instance.stopDeathSpeech,
+            );
+            continue;
+          }
           if (_deathQueue.isEmpty && _anonymousCurse) {
             if (!mounted) break;
             _anonymousCurse = false;
@@ -661,6 +688,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               event['role'] as String?,
               feminine: _femaleFor(event['player']),
               cursed: event['elder_curse'] == true,
+              cause: event['cause'] as String?,
+              edition: event['edition'] as String? ?? _ambience.asset,
             ),
             onDismissed: ClassicAudio.instance.stopDeathSpeech,
             hasNext:
@@ -903,6 +932,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
       });
       _seenDeaths.clear();
       _deathQueue.clear();
+      _rescueQueue.clear();
+      _seenRescues.clear();
       _deathFeedInitialized = false;
       _elderCursed = false;
       _anonymousCurse = false;
@@ -1005,6 +1036,15 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
               _nightPrivate = event;
               _role = event['role'] as String? ?? _role;
             });
+            for (final rescue
+                in (event['rescues'] as List? ?? []).whereType<Map>()) {
+              if (event['alive'] == true &&
+                  rescue['night'] == (_room?['game'] as Map?)?['night'] &&
+                  _seenRescues.add(rescue['id'] as String)) {
+                _rescueQueue.add(Map<String, dynamic>.from(rescue));
+              }
+            }
+            if (_room != null) _receiveDeaths(_room!);
             _refreshVillage();
           } else if (event['type'] == 'error' ||
               event['type'] == 'disconnected') {
@@ -1898,6 +1938,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen> {
                 deck,
                 campOnly: _room!['seer_camp_only'] == true,
                 revealOnDeath: value,
+              ),
+            ),
+            SwitchListTile(
+              title: const Text('Révéler la Sorcière au joueur sauvé'),
+              subtitle: const Text(
+                'Son pseudo est montré uniquement à la personne sauvée par sa potion de vie.',
+              ),
+              value: _room!['reveal_rescuer'] == true,
+              onChanged: (value) => _host!.configure(
+                deck,
+                campOnly: _room!['seer_camp_only'] == true,
+                revealRescuer: value,
               ),
             ),
             if (_room!['launch_error'] != null)

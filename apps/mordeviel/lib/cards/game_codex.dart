@@ -44,6 +44,11 @@ Future<void> showGameCodex(
                       ),
                     ],
                   ),
+                  Text(
+                    room['reveal_rescuer'] == true
+                        ? 'Potion de vie : le joueur sauvé apprend en privé le pseudo de la Sorcière.'
+                        : 'Potion de vie : le joueur sauvé reçoit une seconde chance ; le pseudo de la Sorcière reste secret.',
+                  ),
                   for (final role in classicRoles)
                     if (((room['deck'] as Map)[role.id] as int? ?? 0) > 0)
                       ExpansionTile(

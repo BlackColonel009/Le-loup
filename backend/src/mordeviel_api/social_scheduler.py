@@ -20,6 +20,8 @@ log = logging.getLogger(__name__)
 
 
 def tick(db, rooms):
+    from .private_chat import purge
+    purge(db)
     expire_invitations(db, rooms)
     now = time.time()
     with db.db() as c:

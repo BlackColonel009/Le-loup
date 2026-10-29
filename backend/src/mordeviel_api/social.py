@@ -39,6 +39,10 @@ def initialize(db):
             match_id TEXT NOT NULL, user_id INTEGER NOT NULL, wins INTEGER NOT NULL,
             wolf_victims INTEGER NOT NULL, devoured INTEGER NOT NULL, executed INTEGER NOT NULL,
             PRIMARY KEY(match_id,user_id));
+        CREATE TABLE IF NOT EXISTS social_bot_match_stats (
+            match_id TEXT NOT NULL, user_id INTEGER NOT NULL, wins INTEGER NOT NULL,
+            wolf_victims INTEGER NOT NULL, devoured INTEGER NOT NULL, executed INTEGER NOT NULL,
+            PRIMARY KEY(match_id,user_id));
         CREATE TABLE IF NOT EXISTS social_invitations (
             id INTEGER PRIMARY KEY AUTOINCREMENT, room_id TEXT NOT NULL, code TEXT NOT NULL,
             sender_id INTEGER NOT NULL, target_id INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'active',
@@ -148,6 +152,10 @@ def profile_data(c, viewer, target):
             ).fetchone()
         )
     if mine:
+        result["practice_stats"] = dict(c.execute(
+            "SELECT COUNT(*) AS games,COALESCE(SUM(wins),0) AS wins,COALESCE(SUM(wolf_victims),0) AS wolf_victims,COALESCE(SUM(devoured),0) AS devoured,COALESCE(SUM(executed),0) AS executed FROM social_bot_match_stats WHERE user_id=?",
+            (target,),
+        ).fetchone())
         result["preferences"] = {
             k: pref[k]
             for k in [
@@ -792,9 +800,7 @@ def sync_match(db, engine):
                         (uid, other, time.time()),
                     )
             engine.recent_saved = True
-        if engine.snapshot.get("has_bots") or engine.snapshot.get("test_mode"):
-            # Keep human recent players, but prevent statistics farming on bots.
-            return
+        practice = engine.snapshot.get("has_bots") or engine.snapshot.get("test_mode")
         if game.get("phase") != "ended" or not game.get("history"):
             return
         c.execute("BEGIN IMMEDIATE" if not c.in_transaction else "SELECT 1")
@@ -843,8 +849,9 @@ def sync_match(db, engine):
                     for a in last.values()
                 ):
                     kills.add((death.get("night"), death["target"]))
+            table = "social_bot_match_stats" if practice else "social_match_stats"
             c.execute(
-                "INSERT INTO social_match_stats VALUES(?,?,?,?,?,?)",
+                f"INSERT INTO {table} VALUES(?,?,?,?,?,?)",
                 (
                     engine.social_id,
                     uid,

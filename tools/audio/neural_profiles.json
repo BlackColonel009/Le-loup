@@ -65,7 +65,8 @@
     "old_witch": {
       "witch_potion": "Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé !",
       "death_witch": "Mes potions sont mortes avec moi… débrouillez-vous !",
-      "horror_laugh": "Ha ha ha ! Hi hi hi…"
+      "horror_laugh": "Ha ha ha ! Hi hi hi…",
+      "revival": "La Sorcière vous a donné une chance. À vous de choisir votre destin."
     },
     "werewolf": {
       "death_werewolf": "Vous m’avez trouvé… mais combien en reste-t-il ?",

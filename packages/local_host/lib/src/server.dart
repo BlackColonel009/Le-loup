@@ -106,6 +106,7 @@ class LocalHost implements GameHost {
   bool started = false;
   bool seerCampOnly = false;
   bool revealRolesOnDeath = true;
+  bool revealRescuer = false;
   String narrationProfile = 'classic_male';
   bool automaticNarration = true;
   @override
@@ -180,6 +181,7 @@ class LocalHost implements GameHost {
     Map<String, int> deck, {
     required bool campOnly,
     bool? revealOnDeath,
+    bool? revealRescuer,
     String? pack,
     List<String>? sentences,
     Map<String, String>? cardStyles,
@@ -242,6 +244,7 @@ class LocalHost implements GameHost {
     if (sentences != null)
       _sentenceOptions = sentences.map((s) => s.trim()).toList();
     if (revealOnDeath != null) revealRolesOnDeath = revealOnDeath;
+    if (revealRescuer != null) this.revealRescuer = revealRescuer;
     // Une modification nécessite une nouvelle confirmation des joueurs.
     for (final player in _players.values) {
       player['ready'] = player['is_bot'] == true;
@@ -308,6 +311,7 @@ class LocalHost implements GameHost {
       editions: editions,
       campOnly: seerCampOnly,
       revealOnDeath: revealRolesOnDeath,
+      revealRescuer: revealRescuer,
       sentenceOptions: sentenceOptions,
     );
     locked = true;
@@ -387,6 +391,7 @@ class LocalHost implements GameHost {
     'deck': Map.of(_deck),
     'seer_camp_only': seerCampOnly,
     'reveal_roles_on_death': revealRolesOnDeath,
+    'reveal_rescuer': revealRescuer,
     'players': [for (final p in _players.values) Map<String, dynamic>.of(p)],
   };
 

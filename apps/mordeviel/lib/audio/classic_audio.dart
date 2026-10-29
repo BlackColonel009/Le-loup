@@ -539,6 +539,8 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
 
   void deathSpeech(
     String? publicRole, {
+    String? cause,
+    String? edition,
     bool cursed = false,
     bool feminine = false,
   }) {
@@ -547,12 +549,32 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       cursed: cursed,
       feminine: feminine,
     );
-    if (speech == null || !_audible || scene != AudioScene.host) return;
+    if (!_audible || scene != AudioScene.host) return;
+    if (speech == null &&
+        cause != 'hunter' &&
+        !(cause == 'vote' && edition == 'intense')) {
+      return;
+    }
     stopDeathSpeech();
     final ticket = _deathTicket;
     _story([
-      (asset: speech.cue, profile: speech.profile),
+      if (cause == 'hunter') (asset: 'hunter_volley.wav', profile: null),
+      if (cause == 'hunter' && wolfRoleIds.contains(publicRole))
+        (asset: 'wolf_fall.wav', profile: null),
+      if (cause == 'vote' && edition == 'intense')
+        (asset: 'sentence_electric.wav', profile: null),
+      if (speech != null) (asset: speech.cue, profile: speech.profile),
     ], isCurrent: () => ticket == _deathTicket);
+  }
+
+  void revival() {
+    stopDeathSpeech();
+    final ticket = _deathTicket;
+    _story(
+      [(asset: 'revival.wav', profile: 'old_witch')],
+      privateCue: true,
+      isCurrent: () => ticket == _deathTicket,
+    );
   }
 
   void ending(String? winner) {
@@ -570,11 +592,12 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     List<({String asset, String? profile})> cues, {
     bool Function()? isCurrent,
     bool automatic = false,
+    bool privateCue = false,
   }) {
     if (_backend == null ||
         _disposed ||
-        !_audible ||
-        scene != AudioScene.host) {
+        (!(_audible && scene == AudioScene.host) &&
+            !(privateCue && !muted && _foreground))) {
       return;
     }
     final epoch = _epoch;
@@ -586,7 +609,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       try {
         for (final cue in cues) {
           if (epoch != _epoch ||
-              !_audible ||
+              (!_audible && !(privateCue && !muted && _foreground)) ||
               cancel.isCompleted ||
               (automatic && !roomAutomatic) ||
               isCurrent?.call() == false) {

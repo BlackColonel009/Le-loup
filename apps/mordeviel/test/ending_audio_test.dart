@@ -13,6 +13,51 @@ Future<void> flush() async {
 }
 
 void main() {
+  test(
+    'Trois tirs puis cri seulement pour un loup publiquement révélé',
+    () async {
+      for (final role in ['werewolf', 'villager']) {
+        final backend = FakeAudio();
+        final audio = ClassicAudio(
+          backend: backend,
+          fadeDuration: Duration.zero,
+        );
+        audio.room(state('ended', 10), isHost: true);
+        await audio.settled;
+        backend.calls.clear();
+        audio.deathSpeech(role, cause: 'hunter');
+        await flush();
+        expect(backend.calls.last, 'hunter_volley.wav');
+        backend.completed.add(null);
+        await flush();
+        if (role == 'werewolf') {
+          expect(backend.calls.last, 'wolf_fall.wav');
+          backend.completed.add(null);
+          await flush();
+        } else {
+          expect(backend.calls, isNot(contains('wolf_fall.wav')));
+        }
+        audio.stopDeathSpeech();
+        await audio.settled;
+        audio.dispose();
+      }
+    },
+  );
+  test(
+    'La réplique de sauvetage peut être écoutée en privé sur un téléphone local',
+    () async {
+      final backend = FakeAudio();
+      final audio = ClassicAudio(backend: backend, fadeDuration: Duration.zero);
+      audio.room(state('dawn', 1), isHost: false);
+      await audio.settled;
+      audio.revival();
+      await flush();
+      expect(backend.calls.last, 'neural/old_witch/revival.wav');
+      backend.completed.add(null);
+      await audio.settled;
+      audio.dispose();
+    },
+  );
   TestWidgetsFlutterBinding.ensureInitialized();
   test('Tous les rôles et la Villageoise disposent de dernières paroles', () {
     expect(deathSpeeches.keys.toSet(), classicRoles.map((r) => r.id).toSet());
