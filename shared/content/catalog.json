@@ -117,128 +117,134 @@
       "title": "Visages du village · Classique",
       "kind": "avatars",
       "theme": "classic",
-      "version": "6899f9f8935df22f",
-      "size": 36180826,
+      "version": "09ce1e7b904883b8",
+      "size": 36447902,
       "files": [
         {
           "asset": "assets/avatars/classic/alpha_wolf.png",
           "size": 2425745,
           "sha256": "1a6cf66c94210b52cb7a349ccf6b5bd2785cfc261300dda3e064a59d176e41f3",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/1a6cf66c94210b52cb7a349ccf6b5bd2785cfc261300dda3e064a59d176e41f3"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/1a6cf66c94210b52cb7a349ccf6b5bd2785cfc261300dda3e064a59d176e41f3"
         },
         {
           "asset": "assets/avatars/classic/angel.png",
           "size": 2429885,
           "sha256": "07045e6fc12a245a78aa3228e486308ee5c57b4540db021f952a2037195e76ff",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/07045e6fc12a245a78aa3228e486308ee5c57b4540db021f952a2037195e76ff"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/07045e6fc12a245a78aa3228e486308ee5c57b4540db021f952a2037195e76ff"
         },
         {
           "asset": "assets/avatars/classic/cupid.png",
           "size": 2378485,
           "sha256": "37da25de9a1320867dbad0d704a03705ea71f74e52fafab34d72722a21a00ead",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/37da25de9a1320867dbad0d704a03705ea71f74e52fafab34d72722a21a00ead"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/37da25de9a1320867dbad0d704a03705ea71f74e52fafab34d72722a21a00ead"
         },
         {
           "asset": "assets/avatars/classic/elder.png",
           "size": 2477161,
           "sha256": "d29d67aeee01c3476e1b3cae9d8249dc0aea9cce78bcb25e01cab47a01e97e85",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/d29d67aeee01c3476e1b3cae9d8249dc0aea9cce78bcb25e01cab47a01e97e85"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/d29d67aeee01c3476e1b3cae9d8249dc0aea9cce78bcb25e01cab47a01e97e85"
         },
         {
           "asset": "assets/avatars/classic/guardian.png",
           "size": 2341229,
           "sha256": "cb4f99105d3e597eb50d7bb8e7040bf78e331952d546bdfb5fc966dda406b21b",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/cb4f99105d3e597eb50d7bb8e7040bf78e331952d546bdfb5fc966dda406b21b"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/cb4f99105d3e597eb50d7bb8e7040bf78e331952d546bdfb5fc966dda406b21b"
         },
         {
           "asset": "assets/avatars/classic/hunter.jpg",
           "size": 68154,
           "sha256": "120777c49de7ffd97d1689c46c7ec75b6b664df7a6d4eb241aa85cc958065051",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/120777c49de7ffd97d1689c46c7ec75b6b664df7a6d4eb241aa85cc958065051"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/120777c49de7ffd97d1689c46c7ec75b6b664df7a6d4eb241aa85cc958065051"
         },
         {
           "asset": "assets/avatars/classic/idiot.png",
           "size": 2540118,
           "sha256": "5f25c7724aabc9386024e0a00bf22604063680ef941c8022601df473922a2225",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/5f25c7724aabc9386024e0a00bf22604063680ef941c8022601df473922a2225"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/5f25c7724aabc9386024e0a00bf22604063680ef941c8022601df473922a2225"
         },
         {
           "asset": "assets/avatars/classic/little_girl.png",
           "size": 2347312,
           "sha256": "84ae8eab9fd314adfa2750982a1eadeea77e4931fe7d6ac731cb5ed544cc0437",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/84ae8eab9fd314adfa2750982a1eadeea77e4931fe7d6ac731cb5ed544cc0437"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/84ae8eab9fd314adfa2750982a1eadeea77e4931fe7d6ac731cb5ed544cc0437"
         },
         {
           "asset": "assets/avatars/classic/mayor.png",
           "size": 2259081,
           "sha256": "f9165c7aa789f6537ccc09615cfaaed6b2e6c54cd6dd633b726cd996de59597a",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/f9165c7aa789f6537ccc09615cfaaed6b2e6c54cd6dd633b726cd996de59597a"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/f9165c7aa789f6537ccc09615cfaaed6b2e6c54cd6dd633b726cd996de59597a"
         },
         {
           "asset": "assets/avatars/classic/metamorph.png",
           "size": 2332389,
           "sha256": "0850e43d99367bf1ca5c041bd3d6d320e4a7c0b3ab7219c5fefef902b2170e92",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/0850e43d99367bf1ca5c041bd3d6d320e4a7c0b3ab7219c5fefef902b2170e92"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/0850e43d99367bf1ca5c041bd3d6d320e4a7c0b3ab7219c5fefef902b2170e92"
         },
         {
           "asset": "assets/avatars/classic/piper.png",
           "size": 2323521,
           "sha256": "35cc80ae6bbcb5be0c2bedc9b73e35b6498b4b566c39287f3474c2db7164a06c",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/35cc80ae6bbcb5be0c2bedc9b73e35b6498b4b566c39287f3474c2db7164a06c"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/35cc80ae6bbcb5be0c2bedc9b73e35b6498b4b566c39287f3474c2db7164a06c"
         },
         {
           "asset": "assets/avatars/classic/scapegoat.png",
           "size": 2320853,
           "sha256": "51f0a8486a6737ebae2eba68e5d2a9176b82826867b9675178c11d4d0717891f",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/51f0a8486a6737ebae2eba68e5d2a9176b82826867b9675178c11d4d0717891f"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/51f0a8486a6737ebae2eba68e5d2a9176b82826867b9675178c11d4d0717891f"
         },
         {
           "asset": "assets/avatars/classic/seer.jpg",
           "size": 65967,
           "sha256": "2ef5cc5cff6c5f04332cf337722d3c09f1f94f133bd3b66e51501f3dd1164502",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/2ef5cc5cff6c5f04332cf337722d3c09f1f94f133bd3b66e51501f3dd1164502"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/2ef5cc5cff6c5f04332cf337722d3c09f1f94f133bd3b66e51501f3dd1164502"
         },
         {
           "asset": "assets/avatars/classic/sisters.png",
           "size": 2679927,
           "sha256": "cb3b383505136113e170e85482486890bb64bbda6140c54e33b5e042add94817",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/cb3b383505136113e170e85482486890bb64bbda6140c54e33b5e042add94817"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/cb3b383505136113e170e85482486890bb64bbda6140c54e33b5e042add94817"
         },
         {
           "asset": "assets/avatars/classic/villager.jpg",
           "size": 69369,
           "sha256": "6eb093524186c67ca4194279e2c8c6a09caf564a72005069028b42869d2fffbb",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/6eb093524186c67ca4194279e2c8c6a09caf564a72005069028b42869d2fffbb"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/6eb093524186c67ca4194279e2c8c6a09caf564a72005069028b42869d2fffbb"
         },
         {
           "asset": "assets/avatars/classic/villager_female.png",
           "size": 2197251,
           "sha256": "26ef53a4bdfbd56fcc0864886aeeee71a356dba5d3b6571542993eaf50b80383",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/26ef53a4bdfbd56fcc0864886aeeee71a356dba5d3b6571542993eaf50b80383"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/26ef53a4bdfbd56fcc0864886aeeee71a356dba5d3b6571542993eaf50b80383"
         },
         {
           "asset": "assets/avatars/classic/werewolf.jpg",
           "size": 61643,
           "sha256": "526eaa7f937ee746e3b7bcaf2d75841ded3c01ffeb8a6aa7105efa190d53dda1",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/526eaa7f937ee746e3b7bcaf2d75841ded3c01ffeb8a6aa7105efa190d53dda1"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/526eaa7f937ee746e3b7bcaf2d75841ded3c01ffeb8a6aa7105efa190d53dda1"
         },
         {
           "asset": "assets/avatars/classic/white_wolf.png",
           "size": 2363151,
           "sha256": "bc43be45233ced9bdebb248978afe4d58e5eb8be430c146fdff48546b15cd052",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/bc43be45233ced9bdebb248978afe4d58e5eb8be430c146fdff48546b15cd052"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/bc43be45233ced9bdebb248978afe4d58e5eb8be430c146fdff48546b15cd052"
         },
         {
           "asset": "assets/avatars/classic/witch.jpg",
           "size": 70661,
           "sha256": "39c30d2f2a2f8ad88f38c657aa92187a525c710e92752c2771d3042eadcbcc04",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/39c30d2f2a2f8ad88f38c657aa92187a525c710e92752c2771d3042eadcbcc04"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/39c30d2f2a2f8ad88f38c657aa92187a525c710e92752c2771d3042eadcbcc04"
         },
         {
           "asset": "assets/avatars/classic/wolf_father.png",
           "size": 2428924,
           "sha256": "672aaa81948e7f17a07507ad51304e24eeb26d0c1bafb522d5cdcbadb2b35943",
-          "url": "/content/packs/avatars-classic/6899f9f8935df22f/672aaa81948e7f17a07507ad51304e24eeb26d0c1bafb522d5cdcbadb2b35943"
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/672aaa81948e7f17a07507ad51304e24eeb26d0c1bafb522d5cdcbadb2b35943"
+        },
+        {
+          "asset": "assets/avatars/classic/creator-wolf.jpg",
+          "size": 267076,
+          "sha256": "a3a4eb79447fd7ba96b855726f06977e7fc1f72895a0dd5fde36d1e2b5665b71",
+          "url": "/content/packs/avatars-classic/09ce1e7b904883b8/a3a4eb79447fd7ba96b855726f06977e7fc1f72895a0dd5fde36d1e2b5665b71"
         }
       ]
     },

@@ -7,6 +7,10 @@ de partie dans le navigateur.
 
 ## Pages
 
+La section `/#annonces` présente les annonces publiées dans la communauté du jeu
+(mises à jour, événements à venir et nouveautés). Elle utilise `/community/info`,
+avec aperçu, lecture complète et actualisation. Voir [publications et emails](publications-annonces.md).
+
 - `/` : présentation, captures de l'interface dans des cadres de téléphone,
   éditions Classique / Intense Premium / Horreur et galerie dynamique.
 - `/confidentialite` : politique de confidentialité.

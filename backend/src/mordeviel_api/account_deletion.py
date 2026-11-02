@@ -83,6 +83,8 @@ def confirm_deletion(
                     "community_mail_deliveries",
                     "player_avatars",
                     "avatar_unlocks",
+                    "player_avatar_styles",
+                    "border_unlocks",
                 ):
                     connection.execute(
                         f"DELETE FROM {table} WHERE user_id=?", (user_id,)
@@ -101,6 +103,8 @@ def confirm_deletion(
                     connection.execute(f'DELETE FROM {table} WHERE {first}=? OR {second}=?',(user_id,user_id))
                 connection.execute('DELETE FROM collection_owned WHERE user_id=?', (user_id,))
                 connection.execute('DELETE FROM collection_visits WHERE user_id=?', (user_id,))
+                # Keep a tombstone so ID reuse never inherits the creator badge.
+                connection.execute("UPDATE settings SET value='retired' WHERE key='avatar_creator_user_id' AND value=?", (str(user_id),))
                 connection.execute("DELETE FROM users WHERE id=?", (user_id,))
     # Keep failed-attempt counters committed even when returning an error.
     if error:

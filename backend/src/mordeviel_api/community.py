@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/community", tags=["community"])
@@ -101,6 +101,8 @@ class Store:
                 if name not in columns:
                     db.execute(f"ALTER TABLE users ADD COLUMN {name} {definition}")
             db.execute("CREATE UNIQUE INDEX IF NOT EXISTS user_email ON users(email)")
+            from .avatar_styles import initialize as initialize_avatar_styles
+            initialize_avatar_styles(db)
             from .shop import PRODUCTS
 
             for item in PRODUCTS:
@@ -561,7 +563,8 @@ def hide_message(*, message_id: int, db: Annotated[Store, Depends(store)]):
 
 
 @router.get("/info")
-def public_info(*, db: Annotated[Store, Depends(store)]):
+def public_info(response: Response, *, db: Annotated[Store, Depends(store)]):
+    response.headers['Cache-Control'] = 'no-store'
     with db.db() as connection:
         rows = [
             dict(row)

@@ -427,7 +427,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
               icon: const Icon(Icons.admin_panel_settings),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => AdminDashboard(request: _request),
+                  builder: (_) => AdminDashboard(
+                    request: _request,
+                    draftScope: '${_base.toString()}:$_userId',
+                  ),
                 ),
               ),
             ),

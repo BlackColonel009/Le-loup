@@ -18,8 +18,9 @@ from . import (
     social_scheduler,
 )
 from .account_deletion import router as deletion_router
-from .avatars import router as avatar_router
 from .administration import router as admin_router
+from .announcement_mail import router as announcement_mail_router
+from .avatars import router as avatar_router
 from .community import Store
 from .community import router as community_router
 from .content_packs import initialize as initialize_content
@@ -82,6 +83,7 @@ app.include_router(router)
 app.include_router(voice_router)
 app.include_router(community_router)
 app.include_router(community_mail.router)
+app.include_router(announcement_mail_router)
 app.include_router(presence.router)
 app.include_router(content_router)
 app.include_router(social.router)

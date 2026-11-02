@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../profile/player_avatar.dart';
+import '../profile/avatar_border.dart';
 import '../profile/avatar_gallery.dart';
 import '../community/community_screen.dart';
 import 'social_api.dart';
@@ -805,6 +806,7 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
           if (p != null) ...[
             const SizedBox(height: 12),
             PlayerAvatar(
+              size: (p['avatar'] as Map?)?['is_creator'] == true ? 152 : 84,
               avatar: p['avatar'] as Map?,
               nickname: p['nickname'] as String,
             ),
@@ -832,7 +834,15 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
             ),
             if (p['presence'] != null && p['is_friend'] == true)
               FriendPresenceBadge(person: p),
-            if (p['verified'] == true)
+            if ((p['avatar'] as Map?)?['is_creator'] == true) ...[
+              const Center(child: CreatorBadge()),
+              const SizedBox(height: 8),
+              const Text(
+                'Fondateur de Mordeviel · by Logan R.D',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFFD6AE70)),
+              ),
+            ] else if (p['verified'] == true)
               const Center(
                 child: Chip(
                   avatar: Icon(Icons.verified, size: 18),

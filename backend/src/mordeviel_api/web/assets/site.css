@@ -210,3 +210,13 @@ textarea{min-height:100px;resize:vertical}
 
 
 .download-area{margin:0 auto 24px;max-width:550px}.download-area .small{margin-top:14px;color:#bfc9be}.download-settings{margin-bottom:38px}.download-settings form{max-width:760px}
+.announcements-section{background:linear-gradient(160deg,#14221b,#101916);border-top:1px solid #d1b47526}
+.announcements-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.announcement-card{padding:28px;background:#0c1712;border:1px solid #d9b57840;border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.announcement-card time{display:block;font-size:12px;letter-spacing:1px;color:#d9b578;margin-bottom:18px}
+.announcement-card h3{font-size:28px;line-height:1.2;margin-bottom:16px}
+.announcement-card p{white-space:pre-wrap;color:#d5d6cb;font-size:16px;line-height:1.7}
+.announcement-card summary{cursor:pointer;color:#e6c58a;padding:8px 0}
+.announcement-actions{display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:28px}
+@media(max-width:1000px){.announcements-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.announcements-grid{grid-template-columns:1fr}.announcement-card{padding:22px}}

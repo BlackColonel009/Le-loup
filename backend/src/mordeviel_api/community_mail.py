@@ -39,6 +39,8 @@ class MailSettings(BaseModel):
 
 
 def initialize(db):
+    from . import announcement_mail
+    announcement_mail.initialize(db)
     with db.db() as connection:
         connection.executescript("""
             CREATE TABLE IF NOT EXISTS community_mail_schedule (
@@ -138,12 +140,12 @@ def tick(db):
             message['To'] = normalize_email(delivery['address'])
             message['Subject'] = delivery['subject']
             message['List-Unsubscribe'] = f'<{unsubscribe}>'
-            message.set_content(f"Bonjour,\n\n{delivery['body']}\n\nRetrouvez le jeu et la communauté : {base}\n\nMordeviel · by Logan R.D\n\nNe plus recevoir ces rappels : {unsubscribe}")
+            message.set_content(f"Bonjour,\n\n{delivery['body']}\n\nRetrouvez le jeu et la communauté : {base}\n\nMordeviel · by Logan R.D\n\nNe plus recevoir les emails de la communauté : {unsubscribe}")
             from .mail_template import reminder_html
             message.add_alternative(reminder_html(delivery['body'], base, unsubscribe), subtype='html')
             send_message(message)
             outcome = 'sent'
-        except Exception:
+        except Exception:  # noqa: BLE001 -- worker boundary; never expose SMTP secrets in logs.
             # Never log addresses, credentials, unsubscribe tokens or message bodies.
             log.warning('Community reminder delivery failed; see dashboard counters.')
             outcome = 'failed'
@@ -154,8 +156,13 @@ def tick(db):
 async def run(db):
     while True:
         try:
+            from . import announcement_mail
+            await asyncio.to_thread(announcement_mail.tick, db)
+        except Exception:  # noqa: BLE001 -- worker boundary; never expose SMTP secrets in logs.
+            log.warning('Announcement email queue unavailable; retrying in 60 seconds.')
+        try:
             await asyncio.to_thread(tick, db)
-        except Exception:
+        except Exception:  # noqa: BLE001 -- worker boundary; never expose SMTP secrets in logs.
             log.warning('Community mail scheduler unavailable; retrying in 60 seconds.')
         await asyncio.sleep(60)
 
@@ -165,7 +172,7 @@ def unsubscribe_page(token: str, db: Annotated[Store, Depends(store)]):
     with db.db() as connection:
         if not connection.execute('SELECT 1 FROM community_mail_preferences WHERE token=?', (token,)).fetchone():
             raise HTTPException(404, 'Lien introuvable.')
-    return '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Rappels du village</title><body><h1>Mordeviel</h1><p>Ne plus recevoir les rappels de la communauté ?</p><form method="post"><button>Me désinscrire des rappels</button></form></body></html>'
+    return '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Rappels du village</title><body><h1>Mordeviel</h1><p>Ne plus recevoir les emails de la communauté ?</p><form method="post"><button>Me désinscrire des rappels</button></form></body></html>'
 
 
 @router.post('/community/mail/unsubscribe/{token}', response_class=HTMLResponse)
@@ -174,4 +181,4 @@ def unsubscribe(token: str, db: Annotated[Store, Depends(store)]):
         result = connection.execute('UPDATE community_mail_preferences SET subscribed=0 WHERE token=?', (token,))
         if not result.rowcount:
             raise HTTPException(404, 'Lien introuvable.')
-    return '<!doctype html><html lang="fr"><meta charset="utf-8"><title>Désinscription</title><h1>Vous ne recevrez plus les rappels de la communauté.</h1><p>Votre compte reste actif.</p></html>'
+    return '<!doctype html><html lang="fr"><meta charset="utf-8"><title>Désinscription</title><h1>Vous ne recevrez plus les emails de la communauté.</h1><p>Votre compte reste actif.</p></html>'

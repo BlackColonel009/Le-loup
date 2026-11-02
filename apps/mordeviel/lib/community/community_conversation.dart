@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../profile/player_avatar.dart';
+import '../profile/avatar_border.dart';
 import '../stickers/chat_stickers.dart';
 
 class CommunityConversation extends StatefulWidget {
@@ -305,6 +306,8 @@ class _CommunityConversationState extends State<CommunityConversation> {
                           onTap: uid == null ? null : profile,
                           child: Text(
                             mine ? 'Toi' : message['nickname'] as String,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
@@ -313,7 +316,12 @@ class _CommunityConversationState extends State<CommunityConversation> {
                           ),
                         ),
                       ),
-                      if (message['role'] == 'admin')
+                      if ((message['avatar'] as Map?)?['is_creator'] == true)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: CreatorBadge(compact: true),
+                        )
+                      else if (message['role'] == 'admin')
                         const Padding(
                           padding: EdgeInsets.only(left: 5),
                           child: Tooltip(

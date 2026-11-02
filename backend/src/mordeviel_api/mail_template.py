@@ -2,9 +2,15 @@
 from html import escape
 
 
-def reminder_html(text, base, unsubscribe):
+def reminder_html(text, base, unsubscribe, *, announcement_title=None):
     body = escape(text).replace('\n', '<br>')
     site, optout = escape(base, quote=True), escape(unsubscribe, quote=True)
+    destination = site + '/#annonces' if announcement_title is not None else site
+    button_label = 'Lire les annonces du village' if announcement_title is not None else 'Retrouver le village'
+    heading = (f'<h2 style="margin:0 0 16px;color:#fff3d9;font-family:Georgia,serif;font-size:25px;">{escape(announcement_title)}</h2>'
+               if announcement_title is not None else '')
+    followup = ('Cette annonce est également visible dans la partie Annonces de la communauté du jeu.'
+                if announcement_title is not None else 'Retrouvez vos compagnons, partagez vos soupçons et préparez votre prochaine partie. Une nouvelle histoire vous attend.')
     return f'''<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Le village vous attend</title></head>
 <body style="margin:0;padding:0;background-color:#0b111a;color:#f2eadc;font-family:Arial,Helvetica,sans-serif;">
@@ -19,17 +25,18 @@ def reminder_html(text, base, unsubscribe):
 </td></tr>
 <tr><td style="padding:32px 28px 16px;color:#f2eadc;font-size:16px;line-height:1.7;">
 <p style="margin:0 0 20px;color:#d8e0e9;">Bonsoir, âme du village,</p>
+{heading}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#1c2e40" style="background-color:#1c2e40;border-left:3px solid #d7ae6b;"><tr><td style="padding:20px;color:#fff3d9;font-family:Georgia,serif;font-size:21px;line-height:1.6;">{body}</td></tr></table>
-<p style="margin:24px 0 0;color:#d8e0e9;">Retrouvez vos compagnons, partagez vos soupçons et préparez votre prochaine partie. Une nouvelle histoire vous attend.</p>
+<p style="margin:24px 0 0;color:#d8e0e9;">{followup}</p>
 </td></tr>
 <tr><td align="center" style="padding:16px 28px 32px;">
-<table role="presentation" cellpadding="0" cellspacing="0"><tr><td bgcolor="#e0b978" style="background-color:#e0b978;border-radius:8px;"><a href="{site}" style="display:inline-block;padding:16px 26px;color:#101b29;font-weight:bold;font-size:16px;text-decoration:none;">Retrouver le village</a></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0"><tr><td bgcolor="#e0b978" style="background-color:#e0b978;border-radius:8px;"><a href="{destination}" style="display:inline-block;padding:16px 26px;color:#101b29;font-weight:bold;font-size:16px;text-decoration:none;">{button_label}</a></td></tr></table>
 <p style="margin:20px 0 0;color:#bac8d8;font-size:13px;line-height:1.6;">Gardez vos amis près de vous… et vos soupçons encore plus près.</p>
 </td></tr>
 <tr><td align="center" bgcolor="#101b29" style="padding:24px;border-top:1px solid #675336;background-color:#101b29;color:#bac8d8;font-size:12px;line-height:1.8;">
 <p style="margin:0;color:#e4bd7a;font-size:15px;font-weight:bold;">Mordeviel · by Logan R.D</p>
-<p style="margin:8px 0 14px;">Vous recevez ce rappel en tant que membre de la communauté.</p>
-<a href="{optout}" style="color:#e4bd7a;text-decoration:underline;">Ne plus recevoir ces rappels</a>
+<p style="margin:8px 0 14px;">Vous recevez cet email en tant que membre de la communauté.</p>
+<a href="{optout}" style="color:#e4bd7a;text-decoration:underline;">Ne plus recevoir les emails de la communauté</a>
 <p style="margin:12px 0 0;">Votre compte restera actif après la désinscription.</p>
 </td></tr></table>
 <p style="margin:18px 0 0;color:#bac8d8;font-size:12px;"><a href="{site}/confidentialite" style="color:#bac8d8;">Confidentialité</a></p>

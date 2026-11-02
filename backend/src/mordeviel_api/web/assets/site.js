@@ -52,3 +52,54 @@ function renderGallery(edition='classic'){
 }
 if($('#gallery-cards')) fetch('/gallery/cards').then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{gallery=data.cards;renderGallery();}).catch(()=>{$('#gallery-cards').textContent='La galerie est momentanément indisponible. Réessayez plus tard.';});
 document.querySelectorAll('[data-edition]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-edition]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));renderGallery(button.dataset.edition);}));
+
+// Same visible publications as the game. All announcement text stays plain text.
+let announcements = [], announcementsLimit = 3, announcementsLoading = false;
+function renderAnnouncements() {
+  const list = $('#announcements-list'); if (!list) return;
+  list.replaceChildren();
+  if (!announcements.length) {
+    const empty = document.createElement('p'); empty.textContent = 'Le conseil n’a pas encore publié d’annonce. Revenez bientôt !'; list.append(empty);
+  }
+  for (const item of announcements.slice(0, announcementsLimit)) {
+    const article = document.createElement('article'); article.className = 'announcement-card'; article.id = 'annonce-' + Number(item.id);
+    const date = new Date(Number(item.published) * 1000);
+    if (Number.isFinite(date.getTime())) {
+      const time = document.createElement('time'); time.dateTime = date.toISOString();
+      time.textContent = 'Publié le ' + new Intl.DateTimeFormat('fr-FR', {day:'numeric',month:'long',year:'numeric'}).format(date); article.append(time);
+    }
+    const title = document.createElement('h3'); title.textContent = item.title;
+    const body = item.body; const preview = document.createElement('p');
+    preview.textContent = body.length > 280 ? body.slice(0,280) + '…' : body; article.append(title, preview);
+    if (body.length > 280) {
+      const details = document.createElement('details'); const summary = document.createElement('summary'); summary.textContent = 'Lire l’annonce complète';
+      const full = document.createElement('p'); full.textContent = body; details.append(summary, full); article.append(details);
+    }
+    list.append(article);
+  }
+  $('#announcements-more').hidden = announcements.length <= announcementsLimit;
+}
+async function loadAnnouncements({quiet=false}={}) {
+  const list = $('#announcements-list'); if (!list || announcementsLoading) return;
+  announcementsLoading = true; list.setAttribute('aria-busy','true'); $('#announcements-refresh').disabled = true;
+  try {
+    const response = await fetch('/community/info', {cache:'no-store', signal:AbortSignal.timeout(15000)});
+    if (!response.ok) throw Error('Announcements unavailable');
+    const data = await response.json(); if (!Array.isArray(data.announcements)) throw Error('Invalid announcements');
+    announcements = data.announcements.filter(item => item.kind === 'announcement' && typeof item.title === 'string' && typeof item.body === 'string')
+      .sort((a,b) => Number(b.published)-Number(a.published) || Number(b.id)-Number(a.id));
+    renderAnnouncements();
+  } catch {
+    if (!quiet || !list.querySelector('.announcement-card')) {
+      list.replaceChildren(); const error = document.createElement('p'); error.textContent = 'Les annonces sont momentanément indisponibles. Utilisez « Actualiser les annonces » pour réessayer.'; list.append(error);
+    }
+  } finally {
+    announcementsLoading = false; list.setAttribute('aria-busy','false'); $('#announcements-refresh').disabled = false;
+  }
+}
+if ($('#announcements-list')) {
+  loadAnnouncements();
+  $('#announcements-refresh').addEventListener('click', () => loadAnnouncements());
+  $('#announcements-more').addEventListener('click', () => {announcementsLimit += 3; renderAnnouncements();});
+  setInterval(() => {if (!document.hidden) loadAnnouncements({quiet:true});}, 60000);
+}

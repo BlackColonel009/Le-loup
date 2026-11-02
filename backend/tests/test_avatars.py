@@ -81,6 +81,67 @@ def test_personal_photo_is_private_normalized_and_deleted_on_replacement(api, tm
     assert api.put('/community/avatar/photo', headers=headers, json={'image_base64': 'A' * 30}).status_code == 422
 
 
+def test_premium_borders_and_creator_cannot_be_claimed_by_players(api):
+    uid, headers, _ = account(api, 'Alice')
+    data = api.get('/community/avatars', headers=headers).json()
+    assert sum(b['locked'] for b in data['borders']) == 8
+    assert not any(b['id'] == 'creator-gold' for b in data['borders'])
+    for border in ['ruby', 'rainbow', 'creator-gold', 'unknown']:
+        assert api.put('/community/avatar/border', headers=headers, json={'border_id': border, 'locked': False}).status_code == 403
+    with api.app.state.community.db() as c:
+        c.execute('INSERT INTO avatar_unlocks VALUES(?,?,?)', (uid, 'creator-wolf', 'forged-ownership'))
+        c.execute('INSERT INTO border_unlocks VALUES(?,?,?)', (uid, 'creator-gold', 'forged-ownership'))
+    assert api.put('/community/avatar', headers=headers, json={'avatar_id': 'creator-wolf'}).status_code == 403
+    assert api.put('/community/avatar/border', headers=headers, json={'border_id': 'creator-gold'}).status_code == 403
+    assert api.put('/community/avatar/border', headers=headers, json={'border_id': 'none'}).status_code == 200
+    assert api.put('/community/avatar/border', json={'border_id': 'none'}).status_code == 401
+
+
+def test_creator_is_unique_survives_alias_and_preserves_selected_style(api):
+    uid, owner, _ = account(api, 'Logan')
+    with api.app.state.community.db() as c:
+        c.execute("UPDATE users SET role='admin' WHERE id=?", (uid,))
+    profile = api.get('/community/profile', headers=owner).json()
+    assert profile['avatar']['is_creator'] is True
+    assert profile['avatar']['id'] == 'creator-wolf'
+    assert profile['avatar']['border_id'] == 'creator-gold'
+    other_id, other, _ = account(api, 'Moderator')
+    with api.app.state.community.db() as c:
+        c.execute("UPDATE users SET role='admin' WHERE id=?", (other_id,))
+        c.execute("UPDATE users SET nickname='NouvelAlias' WHERE id=?", (uid,))
+    assert api.get('/community/profile', headers=other).json()['avatar']['is_creator'] is False
+    assert api.put('/community/avatar/border', headers=other, json={'border_id': 'creator-gold'}).status_code == 403
+    assert api.put('/community/avatar', headers=owner, json={'avatar_id': 'classic-seer'}).status_code == 200
+    assert api.put('/community/avatar/border', headers=owner, json={'border_id': 'none'}).status_code == 200
+    after = api.get('/community/profile', headers=owner).json()['avatar']
+    assert after['is_creator'] and after['id'] == 'classic-seer' and after['border_id'] == 'none'
+    assert api.put('/community/avatar', headers=owner, json={'avatar_id': 'creator-wolf'}).status_code == 200
+
+
+def test_real_border_unlock_is_shared_on_profiles_and_messages(api):
+    uid, owner, _ = account(api, 'Alice')
+    _, visitor, _ = account(api, 'Bob')
+    with api.app.state.community.db() as c:
+        c.execute('INSERT INTO border_unlocks VALUES(?,?,?)', (uid, 'rainbow', 'test-challenge'))
+    assert api.put('/community/avatar/border', headers=owner, json={'border_id': 'rainbow'}).status_code == 200
+    assert api.post('/community/messages', headers=owner, json={'text': 'Bonjour'}).status_code == 201
+    assert api.get(f'/social/profiles/{uid}', headers=visitor).json()['avatar']['border_id'] == 'rainbow'
+    assert api.get('/community/messages', headers=visitor).json()['messages'][0]['avatar']['border_id'] == 'rainbow'
+    data = api.get('/community/avatars', headers=owner).json()
+    assert next(b for b in data['borders'] if b['id'] == 'rainbow')['locked'] is False
+    assert api.get('/community/profile', headers=visitor).json()['avatar']['border_id'] == 'none'
+
+
+def test_creator_artwork_is_a_published_download_not_an_app_asset(api):
+    import hashlib
+    catalog = api.get('/content/packs').json()['packs']
+    pack = next(p for p in catalog if p['id'] == 'avatars-classic')
+    entry = next(f for f in pack['files'] if f['asset'].endswith('/creator-wolf.jpg'))
+    response = api.get(entry['url'])
+    assert response.status_code == 200
+    assert hashlib.sha256(response.content).hexdigest() == entry['sha256']
+
+
 def test_blocked_profiles_do_not_expose_the_photo(api):
     uid, owner, _ = account(api, 'Alice')
     other_id, other, _ = account(api, 'Bob')
@@ -101,6 +162,8 @@ def test_account_deletion_removes_portrait_and_ownership(api, tmp_path):
     assert confirmed.status_code == 200, confirmed.text
     with api.app.state.community.db() as c:
         assert c.execute('SELECT * FROM player_avatars WHERE user_id=?', (uid,)).fetchone() is None
+        assert c.execute('SELECT * FROM player_avatar_styles WHERE user_id=?', (uid,)).fetchone() is None
+        assert c.execute('SELECT * FROM border_unlocks WHERE user_id=?', (uid,)).fetchone() is None
     assert not list((tmp_path / 'player-photos').glob('*'))
 
 

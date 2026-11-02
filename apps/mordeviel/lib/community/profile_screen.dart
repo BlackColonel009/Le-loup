@@ -3,6 +3,7 @@ import 'password_reset_screen.dart';
 import '../social/social_screens.dart';
 import '../store/collection_screen.dart';
 import '../profile/player_avatar.dart';
+import '../profile/avatar_border.dart';
 import '../profile/avatar_gallery.dart';
 
 typedef ProfileRequest =
@@ -121,6 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         if (_profile != null) ...[
           PlayerAvatar(
+            size: (_profile!['avatar'] as Map?)?['is_creator'] == true
+                ? 152
+                : 84,
             avatar: _profile!['avatar'] as Map?,
             nickname: _profile!['nickname'] as String,
           ),
@@ -146,7 +150,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
-          if (_profile!['verified'] == true)
+          if ((_profile!['avatar'] as Map?)?['is_creator'] == true) ...[
+            const Center(child: CreatorBadge()),
+            const SizedBox(height: 8),
+            const Text(
+              'Fondateur de Mordeviel · by Logan R.D',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Color(0xFFD6AE70)),
+            ),
+          ] else if (_profile!['verified'] == true)
             const Center(
               child: Chip(
                 avatar: Icon(Icons.verified, size: 18),

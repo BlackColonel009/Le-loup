@@ -1,0 +1,10 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "approved_preview": "2026-11-02",
+  "original_file": "exec-c79cf5e4-331b-4441-9b87-be9f30462911.png",
+  "output": "shared/avatars/artwork/creator-wolf.jpg",
+  "encoding": "JPEG quality 76, same composition as the approved preview",
+  "prompt": "Use case: stylized-concept. Asset type: exclusive creator profile avatar for the French dark fantasy social deduction game MORDEVIEL. Generate a single square premium portrait illustration, no text, no UI, no watermark, no border (the border will be animated separately). Subject: a majestic charcoal-black and silver wolf, facing forward, head and upper chest, symmetrical elegant composition, intelligent living amber-gold eyes, closed mouth, calm formidable expression, subtly pointed silver fur, richly detailed realistic painted fur. A very restrained aged gold medieval gorget around lower chest, original design. Background: deep nearly black blue-green mist and a suggestion of moonlit pine forest, soft focus, dark enough for gold framing. Lighting: warm amber rim light around the fur with cool moonlight on forehead, refined realistic dark-fantasy game concept art. Tight centered headshot that remains unmistakable inside a small circular avatar. Keep both ears and full face safely inside the middle 78 percent of the square. Elegant and mature, not cartoon or generic esports logo, no crown, no human face, no excessive armor, no blood, no flames, no neon.",
+  "sha256": "a3a4eb79447fd7ba96b855726f06977e7fc1f72895a0dd5fde36d1e2b5665b71"
+}

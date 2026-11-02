@@ -7,6 +7,8 @@ import '../content/require_packs.dart';
 import '../social/social_api.dart';
 import 'player_avatar.dart';
 import 'profile_photo.dart';
+import 'avatar_border.dart';
+import 'border_gallery.dart';
 
 typedef AvatarRequest =
     Future<Map<String, dynamic>> Function(
@@ -24,7 +26,12 @@ class AvatarGalleryScreen extends StatefulWidget {
 
 class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
   List<Map<String, dynamic>> _avatars = [
-    for (final a in avatarCatalog) {...a, 'locked': a['starter'] != true},
+    for (final a in avatarCatalog)
+      if (a['creator_only'] != true) {...a, 'locked': a['starter'] != true},
+  ];
+  List<Map<String, dynamic>> _borders = [
+    for (final b in avatarBorderCatalog)
+      if (b['creator_only'] != true) {...b, 'locked': b['free'] != true},
   ];
   Map? _current;
   bool _loading = true, _saving = false, _canEdit = false;
@@ -48,7 +55,12 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
 
   Future<void> _load() async {
     try {
-      unawaited(PackStore.instance.initialize().catchError((Object _) {}));
+      unawaited(
+        PackStore.instance
+            .initialize()
+            .then((_) => PackStore.instance.refresh())
+            .catchError((Object _) {}),
+      );
       final loggedIn =
           widget.request != null || await SocialApi.instance.session() != null;
       if (loggedIn) {
@@ -59,6 +71,11 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
                 .map((v) => Map<String, dynamic>.from(v as Map))
                 .toList();
             _current = data['avatar'] as Map?;
+            if (data['borders'] is List) {
+              _borders = (data['borders'] as List)
+                  .map((v) => Map<String, dynamic>.from(v as Map))
+                  .toList();
+            }
             _canEdit = true;
           });
         }
@@ -89,6 +106,24 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
         'Connecte-toi à la communauté puis ouvre ton profil pour choisir ce portrait.',
       );
       return;
+    }
+    final definition = avatarCatalog
+        .where((a) => a['id'] == avatar['id'])
+        .firstOrNull;
+    if (definition != null &&
+        PackStore.instance.pathFor(definition['asset'] as String) == null) {
+      try {
+        await PackStore.instance.refresh();
+      } catch (_) {
+        if (mounted) {
+          _message(
+            PackStore.instance.error ??
+                'Actualise les téléchargements avec Internet pour récupérer ce portrait.',
+          );
+        }
+        return;
+      }
+      if (!mounted) return;
     }
     if (!await ensurePacksAvailable(
       context,
@@ -181,7 +216,39 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
     }
   }
 
+  Future<void> _selectBorder(Map<String, dynamic> border) async {
+    if (!_canEdit) {
+      _message('Connecte-toi à la communauté pour personnaliser ta bordure.');
+      return;
+    }
+    setState(() => _saving = true);
+    try {
+      await _request(
+        'avatar/border',
+        method: 'PUT',
+        body: {'border_id': border['id']},
+      );
+      if (mounted) Navigator.pop(context, true);
+    } catch (e) {
+      if (mounted) _message('$e');
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
   Future<void> _download() async {
+    try {
+      await PackStore.instance.refresh();
+    } catch (_) {
+      if (mounted) {
+        _message(
+          PackStore.instance.error ??
+              'Le catalogue est inaccessible. Vérifie Internet puis réessaie.',
+        );
+      }
+      return;
+    }
+    if (!mounted) return;
     await ensurePacksAvailable(
       context,
       ['avatars-classic'],
@@ -210,6 +277,10 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
           ),
           const SizedBox(height: 14),
           if (_current != null) PlayerAvatar(avatar: _current, size: 88),
+          if (_current?['is_creator'] == true) ...[
+            const SizedBox(height: 10),
+            const Center(child: CreatorBadge()),
+          ],
           Wrap(
             spacing: 12,
             runSpacing: 10,
@@ -240,6 +311,13 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
               child: Text(_error!),
             ),
           const SizedBox(height: 22),
+          AvatarBorderGallery(
+            borders: _borders,
+            current: _current,
+            canEdit: _canEdit,
+            onSelect: _selectBorder,
+          ),
+          const SizedBox(height: 24),
           const Text(
             'Disponibles au départ',
             style: TextStyle(fontFamily: 'Cormorant', fontSize: 26),

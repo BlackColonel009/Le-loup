@@ -5,6 +5,7 @@ import '../content/pack_store.dart';
 import '../social/social_api.dart';
 import '../services/server_config.dart';
 import 'avatar_catalog.g.dart';
+import 'avatar_border.dart';
 export 'avatar_catalog.g.dart';
 
 class PlayerAvatar extends StatefulWidget {
@@ -61,27 +62,39 @@ class _PlayerAvatarState extends State<PlayerAvatar> {
     ),
   );
   @override
-  Widget build(BuildContext context) => Semantics(
-    label:
-        'Portrait de ${widget.nickname.isEmpty ? 'joueur' : widget.nickname}',
-    image: true,
-    child: Center(
-      child: SizedBox.square(
-        dimension: widget.size,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFC9A66C), width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 9)],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(3),
-            child: ClipOval(child: _portrait()),
-          ),
+  Widget build(BuildContext context) {
+    final border = avatarBorder(widget.avatar?['border_id'] as String?);
+    final portrait = Padding(
+      padding: EdgeInsets.all(border == null ? 3 : widget.size * .09),
+      child: ClipOval(child: _portrait()),
+    );
+    return Semantics(
+      label:
+          'Portrait de ${widget.nickname.isEmpty ? 'joueur' : widget.nickname}',
+      image: true,
+      child: Center(
+        child: SizedBox.square(
+          dimension: widget.size,
+          child: border != null
+              ? AnimatedAvatarBorder(border: border, child: portrait)
+              : DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xFFC9A66C),
+                      width: 2,
+                    ),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black38, blurRadius: 9),
+                    ],
+                  ),
+                  child: portrait,
+                ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
   Widget _portrait() {
     final photo = widget.avatar?['photo_url'];
     if (widget.avatar?['kind'] == 'photo' &&

@@ -30,7 +30,9 @@ void main() {
     for (final a in avatarCatalog) {
       final asset = a['asset'] as String;
       final bytes = await File(
-        'assets/cards/${asset.split('/').last}',
+        a['creator_only'] == true
+            ? '../../shared/avatars/artwork/${asset.split('/').last}'
+            : 'assets/cards/${asset.split('/').last}',
       ).readAsBytes();
       final hash = sha256.convert(bytes).toString();
       await File('${folder.path}/$hash').writeAsBytes(bytes);
@@ -67,9 +69,9 @@ void main() {
     }
   });
   test(
-    '20 visages téléchargeables, quatre disponibles, zones cadrées valides',
+    '21 visages téléchargeables dont le Créateur, quatre portraits de départ',
     () {
-      expect(avatarCatalog.length, 20);
+      expect(avatarCatalog.length, 21);
       expect(avatarCatalog.where((a) => a['starter'] == true).length, 4);
       expect(PackStore.instance.installed('avatars-classic'), isTrue);
       for (final avatar in avatarCatalog) {

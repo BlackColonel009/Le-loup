@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'admin_drafts.dart';
+import 'publication_dialog.dart';
 import '../stickers/chat_stickers.dart';
 import 'community_mail_settings.dart';
 import '../store/collection_admin.dart';
@@ -11,8 +14,13 @@ typedef AdminRequest =
     });
 
 class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({super.key, required this.request});
+  const AdminDashboard({
+    super.key,
+    required this.request,
+    this.draftScope = 'local-admin',
+  });
   final AdminRequest request;
+  final String draftScope;
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
@@ -112,22 +120,51 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ) ??
       false;
 
+  AdminDrafts get _drafts => AdminDrafts(widget.draftScope);
+
   Future<void> _offer([Map? offer]) async {
-    final id = TextEditingController(text: offer?['id'] as String? ?? '');
-    final title = TextEditingController(text: offer?['title'] as String? ?? '');
+    final drafts = _drafts;
+    final slot = 'offer-${offer?['id'] ?? 'new'}';
+    final draft = await drafts.read(slot);
+    if (!mounted) return;
+    final source = draft ?? offer;
+    final id = TextEditingController(text: source?['id'] as String? ?? '');
+    final title = TextEditingController(
+      text: source?['title'] as String? ?? '',
+    );
     final category = TextEditingController(
-      text: offer?['category'] as String? ?? 'Thèmes complets',
+      text: source?['category'] as String? ?? 'Thèmes complets',
     );
     final description = TextEditingController(
-      text: offer?['description'] as String? ?? '',
+      text: source?['description'] as String? ?? '',
     );
-    var currency = offer?['currency'] as String? ?? 'EUR';
+    var currency = source?['currency'] as String? ?? 'EUR';
     final price = TextEditingController(
       text:
-          ((offer?['price_minor'] as num? ?? 0) / (currency == 'XOF' ? 1 : 100))
+          draft?['price'] as String? ??
+          ((source?['price_minor'] as num? ?? 0) /
+                  (currency == 'XOF' ? 1 : 100))
               .toStringAsFixed(currency == 'XOF' ? 0 : 2),
     );
-    var visible = offer?['visible'] != 0, onSale = offer?['on_sale'] == 1;
+    var visible = source?['visible'] != 0, onSale = source?['on_sale'] == 1;
+    void saveDraft() {
+      unawaited(
+        drafts.save(slot, {
+          'id': id.text,
+          'title': title.text,
+          'category': category.text,
+          'description': description.text,
+          'price': price.text,
+          'currency': currency,
+          'visible': visible ? 1 : 0,
+          'on_sale': onSale ? 1 : 0,
+        }),
+      );
+    }
+
+    for (final controller in [id, title, category, description, price]) {
+      controller.addListener(saveDraft);
+    }
     String? error;
     final value = await showDialog<Map<String, dynamic>>(
       context: context,
@@ -167,7 +204,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       for (final c in ['EUR', 'USD', 'XOF'])
                         DropdownMenuItem(value: c, child: Text(c)),
                     ],
-                    onChanged: (v) => update(() => currency = v ?? 'EUR'),
+                    onChanged: (v) {
+                      update(() => currency = v ?? 'EUR');
+                      saveDraft();
+                    },
                   ),
                   TextField(
                     controller: price,
@@ -179,13 +219,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   SwitchListTile(
                     title: const Text('Visible dans la boutique'),
                     value: visible,
-                    onChanged: (v) => update(() => visible = v),
+                    onChanged: (v) {
+                      update(() => visible = v);
+                      saveDraft();
+                    },
                   ),
                   SwitchListTile(
                     title: const Text('Afficher l’offre et son prix'),
                     subtitle: const Text('Les paiements restent désactivés.'),
                     value: onSale,
-                    onChanged: (v) => update(() => onSale = v),
+                    onChanged: (v) {
+                      update(() => onSale = v);
+                      saveDraft();
+                    },
                   ),
                   if (error != null) Text(error!),
                 ],
@@ -195,7 +241,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Annuler'),
+              child: const Text('Fermer · garder le brouillon'),
             ),
             FilledButton(
               onPressed: () {
@@ -236,93 +282,51 @@ class _AdminDashboardState extends State<AdminDashboard> {
       await _run(
         () => widget
             .request('admin/offers/${value['id']}', method: 'PUT', body: value)
-            .then((_) {}),
+            .then((_) async {
+              await drafts.clear(slot);
+            }),
       );
     }
   }
 
   Future<void> _publication([Map? item]) async {
-    final title = TextEditingController(text: item?['title'] as String? ?? '');
-    final body = TextEditingController(text: item?['body'] as String? ?? '');
-    var kind = item?['kind'] as String? ?? 'announcement';
-    final data = await showDialog<Map<String, dynamic>>(
+    final published = await showDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, update) => AlertDialog(
-          title: const Text('Publication officielle'),
-          content: SizedBox(
-            width: 480,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButtonFormField<String>(
-                    initialValue: kind,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'announcement',
-                        child: Text('Annonce'),
-                      ),
-                      DropdownMenuItem(value: 'faq', child: Text('FAQ')),
-                    ],
-                    onChanged: (v) => update(() => kind = v ?? 'announcement'),
-                  ),
-                  TextField(
-                    controller: title,
-                    maxLength: 160,
-                    decoration: const InputDecoration(
-                      labelText: 'Titre ou question',
-                    ),
-                  ),
-                  TextField(
-                    controller: body,
-                    minLines: 3,
-                    maxLines: 10,
-                    maxLength: 6000,
-                    decoration: const InputDecoration(
-                      labelText: 'Texte ou réponse',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () {
-                if (title.text.trim().isNotEmpty &&
-                    body.text.trim().isNotEmpty) {
-                  Navigator.pop(context, {
-                    'kind': kind,
-                    'title': title.text.trim(),
-                    'body': body.text.trim(),
-                  });
-                }
-              },
-              child: const Text('Publier'),
-            ),
-          ],
-        ),
+      builder: (_) => PublicationDialog(
+        request: widget.request,
+        drafts: _drafts,
+        item: item,
       ),
     );
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    title.dispose();
-    body.dispose();
-    if (data != null && mounted) {
-      await _run(
-        () => widget
-            .request(
-              item == null ? 'admin/content' : 'admin/content/${item['id']}',
-              method: item == null ? 'POST' : 'PUT',
-              body: data,
-            )
-            .then((_) {}),
+    if (published == true && mounted) await _load();
+  }
+
+  Future<void> _emailPublication(Map item) async {
+    await _run(() async {
+      final state = await widget.request('admin/content/${item['id']}/email');
+      if (!mounted) return;
+      final counts = state['deliveries'] as Map? ?? {};
+      final confirmed = await _confirm(
+        'Envoyer par email l’annonce publiée « ${item['title']} » aux membres abonnés dont l’adresse est vérifiée ?\n\n'
+        'Envoyés : ${counts['sent'] ?? 0} · En attente : ${counts['pending'] ?? 0} · Échecs : ${counts['failed'] ?? 0}.\n'
+        'Une même version ne sera pas envoyée deux fois. Les échecs ne sont pas relancés automatiquement.',
       );
-    }
+      if (!confirmed || !mounted) return;
+      final result = await widget.request(
+        'admin/content/${item['id']}/email',
+        method: 'POST',
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result['already_queued'] == true
+                ? 'Cette version a déjà été programmée. Aucun nouvel envoi ajouté.'
+                : '${result['queued'] ?? 0} email(s) mis en file. Envoi en arrière-plan.',
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -636,24 +640,42 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     item['kind'] == 'faq' ? 'FAQ' : 'Annonce',
                                   ),
                                   onTap: () => _publication(item as Map),
-                                  trailing: IconButton(
-                                    icon: const Icon(Icons.delete_outline),
-                                    tooltip: 'Masquer la publication',
-                                    onPressed: () async {
-                                      if (await _confirm(
-                                            'Masquer cette publication ?',
-                                          ) &&
-                                          mounted) {
-                                        await _run(
-                                          () => widget
-                                              .request(
-                                                'admin/content/${item['id']}',
-                                                method: 'DELETE',
-                                              )
-                                              .then((_) {}),
-                                        );
-                                      }
-                                    },
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (item['kind'] == 'announcement')
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.forward_to_inbox_outlined,
+                                          ),
+                                          tooltip:
+                                              'Envoyer ou suivre les emails de cette annonce',
+                                          onPressed: _busy
+                                              ? null
+                                              : () => _emailPublication(
+                                                  item as Map,
+                                                ),
+                                        ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline),
+                                        tooltip: 'Masquer la publication',
+                                        onPressed: () async {
+                                          if (await _confirm(
+                                                'Masquer cette publication ?',
+                                              ) &&
+                                              mounted) {
+                                            await _run(
+                                              () => widget
+                                                  .request(
+                                                    'admin/content/${item['id']}',
+                                                    method: 'DELETE',
+                                                  )
+                                                  .then((_) {}),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

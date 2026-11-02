@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 from PIL import Image, ImageOps, UnidentifiedImageError
 from pydantic import BaseModel, Field
 
+from . import avatar_styles
 from .community import Store, authenticated, store
 
 router = APIRouter(prefix='/community', tags=['avatars'])
@@ -27,7 +28,12 @@ def avatar_in(c, uid):
     if row is None:
         c.execute('INSERT OR IGNORE INTO player_avatars(user_id,avatar_id) VALUES(?,?)', (uid, secrets.choice(STARTERS)))
         row = c.execute('SELECT * FROM player_avatars WHERE user_id=?', (uid,)).fetchone()
-    return {'id': row['avatar_id'], 'kind': 'photo' if row['photo'] else 'game',
+    style = avatar_styles.style_in(c, uid)
+    row = c.execute('SELECT * FROM player_avatars WHERE user_id=?', (uid,)).fetchone()
+    avatar_id = row['avatar_id']
+    if avatar_id == 'creator-wolf' and not style['is_creator']:
+        avatar_id = STARTERS[0]
+    return {'id': avatar_id, 'kind': 'photo' if row['photo'] else 'game', **style,
             'pack_id': 'avatars-classic',
             'photo_url': f"/community/avatars/photo/{uid}/{row['photo']}" if row['photo'] else None}
 
@@ -40,11 +46,13 @@ def directory(db):
 def catalogue(*, user: User, db: DB):
     with db.db() as c:
         unlocked = {r['avatar_id'] for r in c.execute('SELECT avatar_id FROM avatar_unlocks WHERE user_id=?', (user['id'],))}
+        creator = avatar_styles.is_creator(c, user['id'])
         return {'avatar': avatar_in(c, user['id']), 'avatars': [
-            {k: v for k, v in a.items() if k != 'source'} | {
-                'locked': not a['starter'] and a['id'] not in unlocked,
-                'unlock': 'starter' if a['starter'] else 'challenge',
-            } for a in CATALOG]}
+            {k: v for k, v in a.items() if k not in {'source', 'source_root'}} | {
+                'locked': not (creator if a.get('creator_only') else a['starter'] or a['id'] in unlocked),
+                'unlock': 'creator' if a.get('creator_only') else 'starter' if a['starter'] else 'challenge',
+            } for a in CATALOG if not a.get('creator_only') or creator],
+            'borders': avatar_styles.catalogue_in(c, user['id'])}
 
 
 class Choice(BaseModel):
@@ -57,7 +65,9 @@ def choose(*, data: Choice, user: User, db: DB):
     entry = next((a for a in CATALOG if a['id'] == data.avatar_id), None)
     with db.db() as c:
         unlocked = c.execute('SELECT 1 FROM avatar_unlocks WHERE user_id=? AND avatar_id=?', (user['id'], data.avatar_id)).fetchone()
-        if not entry or not (entry['starter'] or unlocked):
+        eligible = (avatar_styles.is_creator(c, user['id']) if entry and entry.get('creator_only')
+                    else entry is not None and (entry['starter'] or unlocked))
+        if not eligible:
             raise HTTPException(403, 'Cet avatar est verrouillé. Les défis permettant de le débloquer seront annoncés prochainement.')
         avatar_in(c, user['id'])
         old = c.execute('SELECT photo FROM player_avatars WHERE user_id=?', (user['id'],)).fetchone()['photo']
@@ -66,6 +76,22 @@ def choose(*, data: Choice, user: User, db: DB):
     if old:
         (directory(db) / old).unlink(missing_ok=True)
     return {'avatar': result}
+
+
+class BorderChoice(BaseModel):
+    border_id: str = Field(min_length=3, max_length=60)
+
+
+@router.put('/avatar/border')
+def choose_border(*, data: BorderChoice, user: User, db: DB):
+    db.limit(('avatar_border', user['id']), 60, 300)
+    entry = next((b for b in avatar_styles.BORDERS if b['id'] == data.border_id), None)
+    with db.db() as c:
+        if not avatar_styles.allowed(c, user['id'], entry):
+            raise HTTPException(403, 'Bordure prémium verrouillée. Défis ou achat à venir.')
+        avatar_in(c, user['id'])
+        c.execute('UPDATE player_avatar_styles SET border_id=? WHERE user_id=?', (data.border_id, user['id']))
+        return {'avatar': avatar_in(c, user['id'])}
 
 
 class Photo(BaseModel):

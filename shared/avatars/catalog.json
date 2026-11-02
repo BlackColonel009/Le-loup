@@ -1,6 +1,19 @@
 {
   "avatars": [
     {
+      "id": "creator-wolf",
+      "role_id": "creator",
+      "title": "Loup du Créateur",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/creator-wolf.jpg",
+      "source": "creator-wolf.jpg",
+      "source_root": "avatars",
+      "creator_only": true,
+      "starter": false,
+      "crop": [0, 0, 1, 1]
+    },
+    {
       "id": "classic-villager",
       "role_id": "villager",
       "title": "Villageois",
