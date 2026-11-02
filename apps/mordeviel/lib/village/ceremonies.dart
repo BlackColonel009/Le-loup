@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../services/immersion_preferences.dart';
 import 'package:flutter/material.dart';
 import '../cards/classic_role.dart';
 import '../content/content_image.dart';
@@ -479,6 +480,7 @@ class _DeathCardState extends State<_DeathCard>
   void _revealSpeech() {
     if (_deathProgress >= .55 && !_spoken && !_concealed && !_leaving) {
       _spoken = true;
+      ImmersionPreferences.instance.touch(strong: true);
       widget.onRevealed?.call();
     }
   }

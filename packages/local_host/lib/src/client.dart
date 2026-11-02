@@ -8,6 +8,7 @@ class LobbyClient {
   Stream<Map<String, dynamic>> get events => _events.stream;
   String? id;
   String? _token;
+  String? get roomToken => _token;
   String? _address;
   String? _code;
   String? _nickname;

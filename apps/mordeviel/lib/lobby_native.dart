@@ -29,6 +29,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_host/local_host.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'stickers/chat_stickers.dart';
+import 'voice/game_voice.dart';
+import 'voice/voice_bar.dart';
+import 'voice/voice_settings.dart';
 
 class LocalLobbyScreen extends StatefulWidget {
   const LocalLobbyScreen({
@@ -56,6 +60,34 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   bool _backgroundSessionStarted = false;
   final _gameStartAlert = GameStartAlertTracker();
   final _phaseNotice = PhaseTransitionNotice();
+  GameVoice? _voice;
+  bool _supportsFeature(String feature) =>
+      (_room?['features'] as List? ?? const []).contains(feature);
+  Widget? get _voiceControls {
+    if (_voice == null) return null;
+    if (!_supportsFeature('voice')) {
+      return _host == null
+          ? null
+          : const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'Le vocal nécessite une mise à jour du service de jeu.',
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+    }
+    if (_host == null && _room?['voice_enabled'] != true) return null;
+    return VoiceBar(
+      voice: _voice!,
+      onSettings: _host is OnlineHost
+          ? () => showVoiceSettings(context, _host as OnlineHost)
+          : null,
+    );
+  }
+
+  void _voiceChanged() {
+    if (mounted) setState(() {});
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -335,6 +367,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   bool _speakerReminderDismissed = false;
   VillageDestination _destination = VillageDestination.village;
+  bool _mapPointerActive = false;
   final _name = TextEditingController();
   String _appearance = 'male';
   bool _femaleFor(dynamic id) => (_room?['players'] as List? ?? const []).any(
@@ -509,6 +542,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   @override
   void initState() {
     super.initState();
+    if (widget.online) _voice = GameVoice()..addListener(_voiceChanged);
     WidgetsBinding.instance.addObserver(this);
     if (!widget.online) unawaited(_checkBotAdmin());
     _name.text = widget.initialNickname ?? '';
@@ -605,6 +639,17 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     ClassicAudio.instance.room(
       _room,
       isHost: (_host != null || widget.online) && _connected,
+    );
+    final game = _room?['game'] as Map?;
+    _voice?.updateContext(
+      code: _room?['code'] as String?,
+      credential: _host is OnlineHost
+          ? (_host as OnlineHost).roomToken
+          : _client?.roomToken,
+      contextKey:
+          '${_room?['phase']}:${game?['phase_revision']}:${game?['chat_open']}:${game?['paused']}:${game?['alive_ids']}:${_room?['voice_open']}:${_room?['transition']?['target']}',
+      enabled: _room?['voice_enabled'] == true,
+      gameConnected: _connected,
     );
     _villageFeed.value = {
       'room': _room,
@@ -758,12 +803,24 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     });
   }
 
-  void _openChat() => setState(() => _destination = VillageDestination.chat);
+  void _openChat() => setState(() {
+    _mapPointerActive = false;
+    _destination = VillageDestination.chat;
+  });
+
+  void _mapPointerActivity(bool active) {
+    if (mounted && _mapPointerActive != active) {
+      setState(() => _mapPointerActive = active);
+    }
+  }
 
   Widget _section(VillageDestination section) => LayoutBuilder(
     builder: (context, size) => ListView(
       key: section == VillageDestination.actions ? _listKey : ValueKey(section),
       controller: section == VillageDestination.actions ? _lobbyScroll : null,
+      physics: section == VillageDestination.village && _mapPointerActive
+          ? const NeverScrollableScrollPhysics()
+          : null,
       padding: const EdgeInsets.all(20),
       children: spaceGameActions([
         if (_error != null)
@@ -784,9 +841,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         ..._lobby(
           section,
           mapHeight: section == VillageDestination.village
-              ? (size.maxHeight *
-                        (_ambience == CardAmbience.intense ? .80 : .68))
-                    .clamp(290, _ambience == CardAmbience.intense ? 760 : 650)
+              ? (size.maxWidth > size.maxHeight
+                        ? size.maxHeight - 104
+                        : size.maxHeight * .74)
+                    .clamp(110, 760)
               : null,
         ),
       ]),
@@ -794,6 +852,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   );
 
   Widget _villagePage() => VillageNavigation(
+    voiceControl: _voiceControls,
     banner: _host != null && !widget.online && !_speakerReminderDismissed
         ? Material(
             color: GameTheme.panel,
@@ -826,7 +885,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     isHost: _host != null,
     code: _room!['code'] as String,
     onSelect: (value) {
-      setState(() => _destination = value);
+      setState(() {
+        _mapPointerActive = false;
+        _destination = value;
+      });
       if (_host is LocalHost) unawaited(_checkBotAdmin());
     },
     onCodex: () => showGameCodex(context, _room!),
@@ -947,6 +1009,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   @override
   void dispose() {
+    _voice?.removeListener(_voiceChanged);
+    _voice?.dispose();
     _phaseNotice.dispose();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(GameBackgroundSession.stop());
@@ -968,6 +1032,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   }
 
   Future<void> _reset() async {
+    await _voice?.leave();
     await GameBackgroundSession.stop();
     await cancelGameStartedNotification();
     _backgroundSessionStarted = false;
@@ -1599,6 +1664,20 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     final bubbleAuthors = messages
         .map((message) => message['author'] as String)
         .toSet();
+    dynamic rawReactions;
+    if (day) {
+      rawReactions = game?['reactions'];
+    } else if (pack) {
+      if (_host != null) {
+        final hostGame = _room?['game_host'] as Map?;
+        rawReactions = hostGame?['wolf_reactions'];
+      } else {
+        rawReactions = _nightPrivate?['reactions'];
+      }
+    }
+    final mapReactions = (rawReactions as List? ?? const [])
+        .whereType<Map>()
+        .toList();
     return [
       if (section == VillageDestination.preparation) ...[
         Text(
@@ -1629,6 +1708,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
       ],
       if (section == VillageDestination.village) ...[
         VillageMap(
+          speakers: _voice?.speakers ?? const {},
+          reactions: mapReactions,
+          onPointerActivity: _mapPointerActivity,
           protectedPlayerId: _protectedPlayerId(game),
           displayHeight: mapHeight,
           room: _room!,
@@ -1637,6 +1719,24 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
           onHouse: _openHouse,
           onChat: _openChat,
         ),
+        if (_client != null &&
+            _supportsFeature('house_reactions') &&
+            _nightPrivate?['alive'] == true &&
+            (day && game?['chat_open'] == true ||
+                pack && _nightPrivate?['can_act'] == true))
+          TextButton.icon(
+            icon: const Icon(Icons.add_reaction_outlined),
+            label: const Text('Réagir sur ma maison'),
+            onPressed: () async {
+              final sticker = await showStickerPicker(context);
+              if (!mounted || sticker == null || _room == null) return;
+              _client?.gameAction(
+                'reaction.send',
+                (_room!['game'] as Map)['phase_revision'] as int,
+                text: stickerMessage(sticker),
+              );
+            },
+          ),
         const SizedBox(height: 20),
         Text(
           started

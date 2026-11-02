@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../audio/classic_audio.dart';
-import '../content/content_image.dart';
 import '../content/pack_store.dart';
+import '../services/immersion_preferences.dart';
+import 'owl_flight.dart';
 
 class HorrorPreferences extends ChangeNotifier {
   static final instance = HorrorPreferences();
@@ -33,9 +34,13 @@ class HorrorAmbience extends StatefulWidget {
     required this.night,
     required this.seed,
     this.paused = false,
+    this.camera,
+    this.world = const Size(3072, 2048),
   });
   final bool night, paused;
   final int seed;
+  final TransformationController? camera;
+  final Size world;
   @override
   State<HorrorAmbience> createState() => _HorrorAmbienceState();
 }
@@ -53,12 +58,14 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
       _foreground &&
       !widget.paused &&
       HorrorPreferences.instance.scares &&
-      !MediaQuery.disableAnimationsOf(context);
+      !ImmersionPreferences.instance.reduced(context) &&
+      TickerMode.valuesOf(context).enabled;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     HorrorPreferences.instance.addListener(_sync);
+    ImmersionPreferences.instance.addListener(_sync);
     ClassicAudio.instance.addListener(_audioLevels);
   }
 
@@ -136,6 +143,7 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     HorrorPreferences.instance.removeListener(_sync);
+    ImmersionPreferences.instance.removeListener(_sync);
     ClassicAudio.instance.removeListener(_audioLevels);
     _clock.dispose();
     _player?.dispose();
@@ -148,75 +156,25 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
     return IgnorePointer(
       child: ExcludeSemantics(
         child: AnimatedBuilder(
-          animation: _clock,
+          animation: Listenable.merge([
+            _clock,
+            if (widget.camera != null) widget.camera!,
+          ]),
           builder: (context, _) {
             final seconds = _clock.value * 120;
-            final owl = ((seconds - 32) / 6).clamp(0.0, 1.0);
             return Stack(
               fit: StackFit.expand,
               children: [
                 CustomPaint(
                   painter: _BatsAndFog(seconds, widget.seed, widget.night),
                 ),
-                if (widget.night && (seconds < 32 || seconds > 38))
-                  Positioned(
-                    right: 12,
-                    top: 18,
-                    child: Opacity(
-                      opacity: seconds > 38 && seconds < 41
-                          ? ((seconds - 38) / 3).clamp(0.0, 1.0)
-                          : 1,
-                      child: Transform.translate(
-                        offset: Offset(
-                          0,
-                          seconds < 32
-                              ? -math.sin(
-                                      ((seconds - 30) / 2).clamp(0.0, 1.0) *
-                                          math.pi /
-                                          2,
-                                    ) *
-                                    12
-                              : 0,
-                        ),
-                        child: const ContentImage(
-                          'assets/village/horror/owl_perched.png',
-                          width: 76,
-                          height: 86,
-                        ),
-                      ),
+                if (widget.night)
+                  Positioned.fill(
+                    child: OwlFlight(
+                      seconds: seconds,
+                      camera: widget.camera,
+                      world: widget.world,
                     ),
-                  ),
-                if (widget.night && seconds >= 32 && seconds <= 38)
-                  LayoutBuilder(
-                    builder: (context, box) {
-                      final scale = Curves.easeInCubic.transform(owl);
-                      final size =
-                          38 +
-                          scale * math.max(box.maxWidth, box.maxHeight) * 2;
-                      return OverflowBox(
-                        maxWidth: double.infinity,
-                        maxHeight: double.infinity,
-                        child: Transform.translate(
-                          offset: Offset(
-                            (1 - owl) * box.maxWidth * .35,
-                            (1 - owl) * -box.maxHeight * .30,
-                          ),
-                          child: Opacity(
-                            opacity: owl > .88
-                                ? ((1 - owl) / .12).clamp(0.0, 1.0)
-                                : 1,
-                            child: Transform.scale(
-                              scaleY: .94 + .06 * math.sin(seconds * 11),
-                              child: ContentImage(
-                                'assets/village/horror/owl.png',
-                                width: size,
-                                height: size,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                   ),
               ],
             );

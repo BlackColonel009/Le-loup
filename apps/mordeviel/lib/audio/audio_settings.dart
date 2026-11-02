@@ -3,6 +3,7 @@ import 'classic_audio.dart';
 import 'voice_settings.dart';
 import '../content/downloads_screen.dart';
 import '../village/horror_ambience.dart';
+import '../services/immersion_preferences.dart';
 
 void showAudioSettings(
   BuildContext context, {
@@ -37,13 +38,11 @@ void showAudioSettings(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Ambiance sonore',
+                'Ambiance et immersion',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Musique, effets d’ambiance et narration du maître du jeu.',
-              ),
+              const Text('Musique, narration, mouvements et vibrations.'),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: const Text('Couper tous les sons'),
@@ -51,6 +50,37 @@ void showAudioSettings(
                 onChanged: (value) => audio.levels(mute: value),
               ),
               VoiceSettings(audio: audio, onNarrationChange: onNarrationChange),
+              ListenableBuilder(
+                listenable: ImmersionPreferences.instance,
+                builder: (context, _) {
+                  final prefs = ImmersionPreferences.instance;
+                  return Column(
+                    children: [
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Vibrations des interactions'),
+                        value: prefs.vibrations,
+                        onChanged: (v) => prefs.configure(haptics: v),
+                      ),
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Bruitages des cartes'),
+                        value: prefs.cardSounds,
+                        onChanged: (v) => prefs.configure(sounds: v),
+                      ),
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Effets visuels légers'),
+                        subtitle: const Text(
+                          'Moins de mouvements et de particules',
+                        ),
+                        value: prefs.lightEffects,
+                        onChanged: (v) => prefs.configure(light: v),
+                      ),
+                    ],
+                  );
+                },
+              ),
               ListenableBuilder(
                 listenable: HorrorPreferences.instance,
                 builder: (context, _) => SwitchListTile(

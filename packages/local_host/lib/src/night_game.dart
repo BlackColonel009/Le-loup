@@ -65,6 +65,48 @@ class NightGame {
   final bool electMayor;
   final List<Map<String, dynamic>> _deathEvents = [];
   final List<Map<String, dynamic>> _history = [];
+  final _reactions = <String, Map<String, dynamic>>{};
+  final _lastReaction = <String, DateTime>{};
+  int _reactionSequence = 0;
+  List<Map<String, dynamic>> _visibleReactions(String channel) => [
+    for (final r in _reactions.values)
+      if (r['channel'] == channel &&
+          r['revision'] == revision &&
+          (_clock().difference(r['at'] as DateTime).inMilliseconds < 4000))
+        {
+          'id': r['id'],
+          'author': r['author'],
+          'sticker': r['sticker'],
+          'remaining_ms':
+              (4000 - _clock().difference(r['at'] as DateTime).inMilliseconds)
+                  .clamp(0, 4000),
+        },
+  ];
+
+  /// Authoritative media access; infection and metamorphosis use current camps.
+  Map<String, dynamic> voiceAccess(String id, {bool host = false}) {
+    if (closed || paused) return {'channel': null, 'publish': false};
+    final day = [
+      'day',
+      'mayor_election',
+      'voting',
+      'vote_result',
+    ].contains(phase);
+    if (phase == 'wolves') {
+      if (host || alive.contains(id) && _isWolf(id)) {
+        return {
+          'channel': 'wolves',
+          'publish': host || remainingMilliseconds > 0,
+        };
+      }
+      return {'channel': null, 'publish': false};
+    }
+    return {
+      'channel': day ? 'village' : 'narrator',
+      'publish': host || day && chatOpen && alive.contains(id),
+    };
+  }
+
   void _log(String kind, Map<String, dynamic> details) {
     _history.add({
       'kind': kind,
@@ -333,6 +375,8 @@ class NightGame {
     'chat_open': chatOpen,
     if (['day', 'mayor_election', 'voting', 'vote_result'].contains(phase))
       'day_messages': [for (final message in _dayMessages) Map.of(message)],
+    if (['day', 'mayor_election', 'voting', 'vote_result'].contains(phase))
+      'reactions': _visibleReactions('day'),
     if (phase == 'voting') 'votes_received': _votes.length,
     'vote_eligible_count': _eligibleVoters.length,
     if (_voteSummary != null) 'vote_result': Map.of(_voteSummary!),
@@ -437,6 +481,7 @@ class NightGame {
         if (phase == 'wolves') 'choices': Map.of(_wolfChoices),
         if (phase == 'wolves')
           'messages': [for (final message in _wolfMessages) Map.of(message)],
+        if (phase == 'wolves') 'reactions': _visibleReactions('wolves'),
       },
       if (role == 'witch') ...{
         'life_available': !_lifeSpent.contains(id),
@@ -458,6 +503,7 @@ class NightGame {
     ..._additionalHost,
     if (_atNight) 'night_actions': nightActions,
     'wolf_messages': [for (final message in _wolfMessages) Map.of(message)],
+    'wolf_reactions': _visibleReactions('wolves'),
     'wolf_choices': Map.of(_wolfChoices),
     'victim': _attack,
     'visions': {
@@ -763,7 +809,8 @@ class NightGame {
         ].contains(action['action']))
       event['result'] = _copyHistory(_variantInfo[id]);
     // Record only accepted commands, never chat contents or failed attempts.
-    if (!(action['action'] as String).endsWith('.chat')) {
+    if (!(action['action'] as String).endsWith('.chat') &&
+        action['action'] != 'reaction.send') {
       if (action['action'] == 'seer.inspect')
         event['vision'] = Map.of(_visions[id]!);
       if (action['action'] == 'metamorph.swap') {
@@ -800,6 +847,41 @@ class NightGame {
 
   void _act(String id, Map<String, dynamic> action) {
     expire();
+    if (action['action'] == 'reaction.send') {
+      final day = [
+        'day',
+        'mayor_election',
+        'voting',
+        'vote_result',
+      ].contains(phase);
+      if (action['phase_revision'] != revision ||
+          closed ||
+          paused ||
+          !alive.contains(id) ||
+          !(day && chatOpen ||
+              phase == 'wolves' && _isWolf(id) && remainingMilliseconds > 0)) {
+        throw StateError('Les réactions sont fermées pour vous.');
+      }
+      final sticker = action['text'];
+      if (sticker is! String || stickerFromMessage(sticker) == null) {
+        throw ArgumentError('Choisissez un sticker du village.');
+      }
+      final now = _clock();
+      if (_lastReaction[id] != null &&
+          now.difference(_lastReaction[id]!).inSeconds < 5) {
+        throw StateError('Patientez cinq secondes entre deux réactions.');
+      }
+      _lastReaction[id] = now;
+      _reactions[id] = {
+        'id': 'reaction-${++_reactionSequence}',
+        'author': id,
+        'sticker': stickerFromMessage(sticker)!.id,
+        'at': now,
+        'revision': revision,
+        'channel': day ? 'day' : 'wolves',
+      };
+      return;
+    }
     if (action['action'] == 'day.chat') {
       if (action['phase_revision'] != revision ||
           !alive.contains(id) ||

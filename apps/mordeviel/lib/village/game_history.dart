@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../cards/classic_role.dart';
+import 'narrative_journal.dart';
 
 Future<void> showGameHistory(BuildContext context, Map game, List players) =>
     Navigator.of(context).push<void>(
@@ -152,53 +153,7 @@ class GameHistoryScreen extends StatelessWidget {
                 ),
               ),
             )
-          : ListView.builder(
-              padding: const EdgeInsets.all(20),
-              itemCount: events.length,
-              itemBuilder: (context, i) {
-                final event = events[i] as Map;
-                final previous = i == 0 ? null : events[i - 1] as Map;
-                final night = event['night'] ?? 0;
-                final phase = event['phase'];
-                final daytime = [
-                  'dawn',
-                  'hunter',
-                  'scapegoat',
-                  'day',
-                  'voting',
-                  'mayor_election',
-                  'mayor_succession',
-                  'vote_result',
-                  'ended',
-                ].contains(phase);
-                final heading =
-                    previous == null ||
-                    previous['night'] != night ||
-                    ['dawn', 'sleep'].contains(phase) &&
-                        previous['phase'] != phase;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (heading)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Text(
-                          night == 0
-                              ? 'Préparation'
-                              : '${daytime ? 'Jour' : 'Nuit'} $night',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: SelectableText(describe(event)),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+          : NarrativeJournal(events: events, describe: describe),
     );
   }
 }

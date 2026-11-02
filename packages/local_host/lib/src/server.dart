@@ -166,6 +166,45 @@ class LocalHost implements GameHost {
   bool revealRescuer = false;
   String narrationProfile = 'classic_male';
   bool automaticNarration = true;
+  bool voiceEnabled = false, voiceOpen = true;
+  final _voiceMuted = <String>{};
+  void configureVoice({
+    required bool enabled,
+    required bool open,
+    required List<String> muted,
+  }) {
+    if (muted.any((id) => !_players.containsKey(id))) {
+      throw ArgumentError('Joueur vocal inconnu.');
+    }
+    voiceEnabled = enabled;
+    voiceOpen = open;
+    _voiceMuted
+      ..clear()
+      ..addAll(muted);
+    _publish();
+  }
+
+  Map<String, dynamic> _voiceAccess(String id, {bool host = false}) {
+    final player = _players[id];
+    if (!voiceEnabled ||
+        _transitionTarget != null ||
+        !host &&
+            (player == null ||
+                player['connected'] != true ||
+                player['is_bot'] == true)) {
+      return {'channel': null, 'publish': false};
+    }
+    final access =
+        _game?.voiceAccess(id, host: host) ??
+        {'channel': 'village', 'publish': true};
+    return {
+      ...access,
+      'publish':
+          access['publish'] == true &&
+          (host || voiceOpen && !_voiceMuted.contains(id)),
+    };
+  }
+
   @override
   void setNarration({required String profile, required bool automatic}) {
     if (![
@@ -434,6 +473,7 @@ class LocalHost implements GameHost {
   Stream<Map<String, dynamic>> get updates => _updates.stream;
 
   Map<String, dynamic> get publicSnapshot => {
+    'features': ['house_reactions', 'voice'],
     'test_mode': _testMode,
     'has_bots': _players.values.any((p) => p['is_bot'] == true),
     'bot_count': _players.values.where((p) => p['is_bot'] == true).length,
@@ -448,6 +488,8 @@ class LocalHost implements GameHost {
         : visualPack,
     'narration_profile': narrationProfile,
     'automatic_narration': automaticNarration,
+    'voice_enabled': voiceEnabled,
+    'voice_open': voiceOpen,
     'sentence_options': List.of(sentenceOptions),
     'locked': locked,
     'phase': _game?.phase ?? (started ? 'role_reveal' : 'lobby'),
@@ -478,6 +520,11 @@ class LocalHost implements GameHost {
 
   // Réservé au MDJ, jamais diffusé sur les sockets des joueurs.
   Map<String, dynamic> get snapshot => {
+    'voice_muted': _voiceMuted.where(_players.containsKey).toList(),
+    'voice_access': {
+      'host': _voiceAccess('host', host: true),
+      for (final id in _players.keys) id: _voiceAccess(id),
+    },
     'bots_paused': _botsPaused,
     'bot_delay_ms': _botDelay,
     ...publicSnapshot,

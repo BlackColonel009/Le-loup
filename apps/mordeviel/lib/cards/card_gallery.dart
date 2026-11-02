@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'classic_role.dart';
 import '../design/drifting_backdrop.dart';
 import '../content/content_image.dart';
+import 'package:flutter/physics.dart';
+import 'card_motion.dart';
+import '../services/immersion_preferences.dart';
+import '../audio/card_foley.dart';
 
 enum CardAmbience {
   classic('Classique', 'classic'),
@@ -242,6 +246,7 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   );
   bool _closing = false;
   bool _concealed = false;
+  bool _peeking = false;
   late bool _covered;
 
   @override
@@ -254,7 +259,10 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed && mounted && !_concealed) {
-      setState(() => _concealed = true);
+      setState(() {
+        _concealed = true;
+        _peeking = false;
+      });
       // Cache immédiatement la carte quand l'application perd le premier plan.
     }
   }
@@ -269,8 +277,12 @@ class _RoleCardViewerState extends State<RoleCardViewer>
 
   Future<void> _dismiss() async {
     if (_closing) return;
-    setState(() => _closing = true);
-    if (!MediaQuery.disableAnimationsOf(context)) {
+    setState(() {
+      _closing = true;
+      _peeking = false;
+    });
+    CardFoley.play();
+    if (!ImmersionPreferences.instance.reduced(context)) {
       await _hide.forward();
     }
     if (mounted) Navigator.of(context).pop();
@@ -278,8 +290,13 @@ class _RoleCardViewerState extends State<RoleCardViewer>
 
   Future<void> _turn() async {
     if (_closing || _flip.isAnimating) return;
+    _peek(false);
+    ImmersionPreferences.instance.touch();
+    CardFoley.play();
     if (_covered) {
-      if (!MediaQuery.disableAnimationsOf(context)) await _flip.forward();
+      if (!ImmersionPreferences.instance.reduced(context)) {
+        await _flip.forward();
+      }
       if (mounted) {
         setState(() {
           _covered = false;
@@ -289,13 +306,22 @@ class _RoleCardViewerState extends State<RoleCardViewer>
       return;
     }
     final back = _flip.value > 0.5;
-    if (MediaQuery.disableAnimationsOf(context)) {
+    if (ImmersionPreferences.instance.reduced(context)) {
       _flip.value = back ? 0 : 1;
-    } else if (back) {
-      _flip.reverse();
     } else {
-      _flip.forward();
+      _flip.animateWith(
+        SpringSimulation(cardSpring, _flip.value, back ? 0 : 1, 0),
+      );
     }
+  }
+
+  void _peek(bool value) {
+    if (!mounted ||
+        value == _peeking ||
+        value && (!_covered || _concealed || _closing)) {
+      return;
+    }
+    setState(() => _peeking = value);
   }
 
   Widget _card() => LayoutBuilder(
@@ -323,46 +349,70 @@ class _RoleCardViewerState extends State<RoleCardViewer>
                   transform: Matrix4.identity()
                     ..setEntry(3, 2, .001)
                     ..rotateY(back ? angle - math.pi : angle),
-                  child: SizedBox(
-                    width: width,
-                    height: width / .7,
-                    child: _concealed
-                        ? const Card(
-                            child: Center(
-                              child: Icon(Icons.visibility_off, size: 64),
-                            ),
-                          )
-                        : _covered && !back
-                        ? ContentImage(
-                            widget.ambience == CardAmbience.horror
-                                ? 'assets/village/horror/card_back.png'
-                                : widget.ambience == CardAmbience.intense
-                                ? 'assets/village/intense/card_back.png'
-                                : 'assets/village/card_back.png',
-                            fit: BoxFit.contain,
-                            fallbackAsset: 'assets/village/card_back.png',
-                          )
-                        : back && !_covered
-                        ? _CardBack(
-                            role: widget.role,
-                            ambience: widget.ambience,
-                          )
-                        : GestureDetector(
-                            onVerticalDragEnd: (details) {
-                              if ((details.primaryVelocity ?? 0) > 250) {
-                                _dismiss();
-                              }
-                            },
-                            child: Semantics(
+                  child: CardMotion(
+                    canPeek: _covered && !_concealed && !_closing,
+                    onPeek: _peek,
+                    onDismiss: _dismiss,
+                    child: SizedBox(
+                      width: width,
+                      height: width / .7,
+                      child: _concealed
+                          ? const Card(
+                              child: Center(
+                                child: Icon(Icons.visibility_off, size: 64),
+                              ),
+                            )
+                          : _covered && !back
+                          ? Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                ContentImage(
+                                  widget.ambience == CardAmbience.horror
+                                      ? 'assets/village/horror/card_back.png'
+                                      : widget.ambience == CardAmbience.intense
+                                      ? 'assets/village/intense/card_back.png'
+                                      : 'assets/village/card_back.png',
+                                  fit: BoxFit.contain,
+                                  fallbackAsset: 'assets/village/card_back.png',
+                                ),
+                                if (_peeking)
+                                  ClipPath(
+                                    key: const ValueKey('secret-card-peek'),
+                                    clipper: PeekCornerClip(),
+                                    child: ExcludeSemantics(
+                                      child: RoleCardFront(
+                                        role: widget.role,
+                                        ambience: widget.ambience,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            )
+                          : back && !_covered
+                          ? _CardBack(
+                              role: widget.role,
+                              ambience: widget.ambience,
+                            )
+                          : Semantics(
                               label:
                                   'Recto illustré de ${widget.role.name}. Retournez pour lire les règles.',
                               image: true,
-                              child: RoleCardFront(
-                                role: widget.role,
-                                ambience: widget.ambience,
-                              ),
+                              child: widget.ambience == CardAmbience.classic
+                                  ? RoleCardFront(
+                                      role: widget.role,
+                                      ambience: widget.ambience,
+                                    )
+                                  : CardFinish(
+                                      horror:
+                                          widget.ambience ==
+                                          CardAmbience.horror,
+                                      child: RoleCardFront(
+                                        role: widget.role,
+                                        ambience: widget.ambience,
+                                      ),
+                                    ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
               ),
@@ -374,6 +424,15 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   );
 
   List<Widget> _buttons() => [
+    if (_covered && !_concealed)
+      const Padding(
+        padding: EdgeInsets.only(bottom: 8),
+        child: Text(
+          'Maintiens un coin de la carte pour un coup d’œil. Relâche pour masquer.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12),
+        ),
+      ),
     if (!_concealed)
       AnimatedBuilder(
         animation: _flip,

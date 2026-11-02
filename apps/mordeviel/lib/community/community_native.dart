@@ -11,6 +11,7 @@ import '../social/social_screens.dart';
 import '../social/social_service.dart';
 import 'password_reset_screen.dart';
 import 'community_session.dart';
+import 'community_failure.dart';
 import '../stickers/chat_stickers.dart';
 import '../design/action_spacing.dart';
 
@@ -36,6 +37,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
   bool _isAdmin = false;
   double _mutedUntil = 0;
   bool _register = true, _busy = false, _refreshing = false;
+  bool _loadError = false;
   List<Map<String, dynamic>> _messages = [], _tickets = [];
   Timer? _poll;
 
@@ -57,12 +59,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
       _scheduleSession();
       try {
         await _refresh();
-      } catch (_) {
+      } catch (error) {
         if (mounted && _token != null) {
-          setState(
-            () => _error =
-                'Connexion au service momentanément indisponible. Ta session est conservée ; tu peux actualiser.',
-          );
+          setState(() {
+            _loadError = true;
+            _error = 'Ta session est conservée. ${_failureMessage(error)}';
+          });
         }
       }
       if (mounted && _token != null) _startPolling();
@@ -101,53 +103,63 @@ class _CommunityScreenState extends State<CommunityScreen> {
       throw StateError('Ta session a expiré. Reconnecte-toi.');
     }
     final sentToken = _token;
-    final request = await _http
-        .openUrl(method, _base.resolve('community/$path'))
-        .timeout(const Duration(seconds: 10));
-    request.headers.contentType = ContentType.json;
-    if (sentToken != null) {
-      request.headers.set('Authorization', 'Bearer $sentToken');
-    }
-    if (body != null) request.write(jsonEncode(body));
-    final response = await request.close().timeout(const Duration(seconds: 12));
-    final text = await response
-        .transform(utf8.decoder)
-        .join()
-        .timeout(const Duration(seconds: 12));
-    final data = jsonDecode(text) as Map<String, dynamic>;
-    if (response.statusCode >= 400) {
-      if ((response.statusCode == 401 ||
-              response.statusCode == 403 &&
-                  ('${data['detail']}'.startsWith('Compte banni') ||
-                      '${data['detail']}'.startsWith('Vérifie ton adresse'))) &&
+    try {
+      final request = await _http
+          .openUrl(method, _base.resolve('community/$path'))
+          .timeout(const Duration(seconds: 10));
+      request.followRedirects = false;
+      request.headers.contentType = ContentType.json;
+      if (sentToken != null) {
+        request.headers.set('Authorization', 'Bearer $sentToken');
+      }
+      if (body != null) request.write(jsonEncode(body));
+      final response = await request.close().timeout(
+        const Duration(seconds: 12),
+      );
+      final text = await response
+          .transform(utf8.decoder)
+          .join()
+          .timeout(const Duration(seconds: 12));
+      return decodeCommunityResponse(response.statusCode, text);
+    } on CommunityFailure catch (error) {
+      if ((error.status == 401 ||
+              error.status == 403 &&
+                  (error.message.startsWith('Compte banni') ||
+                      error.message.startsWith('Vérifie ton adresse'))) &&
           sentToken != null &&
           sentToken == _token) {
         _backToLogin();
       }
-      throw StateError(
-        data['detail'] is String
-            ? data['detail'] as String
-            : 'Vérifie les champs du formulaire.',
+      debugPrint(
+        'Communauté $method $path : ${error.code}, HTTP ${error.status}',
       );
+      rethrow;
+    } on IOException catch (error) {
+      final failure = communityTransportFailure(error);
+      debugPrint('Communauté $method $path : ${failure.code}');
+      throw failure;
+    } on TimeoutException catch (error) {
+      debugPrint('Communauté $method $path : timeout');
+      throw communityTransportFailure(error);
     }
-    return data;
   }
+
+  String _failureMessage(Object error) => error is StateError
+      ? error.message
+      : communityTransportFailure(error).message;
 
   Future<void> _run(Future<void> Function() action) async {
     if (_busy) return;
     setState(() {
       _busy = true;
       _error = null;
+      _loadError = false;
     });
     try {
       await action();
     } catch (error) {
       if (mounted) {
-        setState(
-          () => _error = error is StateError
-              ? error.message
-              : 'Communauté momentanément inaccessible. Réessaie dans un instant.',
-        );
+        setState(() => _error = _failureMessage(error));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -172,6 +184,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
       },
     );
     if (!mounted) return;
+    if (data['user'] is! Map ||
+        (data['user'] as Map)['nickname'] is! String ||
+        data['token'] is! String) {
+      throw CommunityFailure(
+        'La connexion a reçu une réponse incomplète. Vérifie que l’application et le serveur sont à jour.',
+        code: 'invalid_session',
+      );
+    }
     _password.clear();
     final maxExpiry = DateTime.now().add(
       (data['user'] as Map)['role'] == 'admin'
@@ -216,8 +236,20 @@ class _CommunityScreenState extends State<CommunityScreen> {
     );
     if (!mounted) return;
     _scheduleSession();
-    await _refresh();
     if (_token != null) _startPolling();
+    try {
+      await _refresh();
+    } catch (error) {
+      if (mounted && _token != null) {
+        setState(() {
+          _loadError = true;
+          _error =
+              'Connexion réussie, mais le chargement de la communauté a échoué. ${_failureMessage(error)}';
+        });
+      } else {
+        rethrow;
+      }
+    }
   });
 
   void _backToLogin() {
@@ -227,6 +259,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     if (mounted) {
       setState(() {
         _token = null;
+        _loadError = false;
         _expiresAt = null;
         _nickname = null;
         _isAdmin = false;
@@ -261,6 +294,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
       if (mounted && _token == refreshingToken) {
         setState(() {
           final user = profile['user'] as Map;
+          if (_loadError) {
+            _error = null;
+            _loadError = false;
+          }
           _nickname = user['nickname'] as String;
           _isAdmin = user['role'] == 'admin';
           _mutedUntil = (user['muted_until'] as num? ?? 0).toDouble();

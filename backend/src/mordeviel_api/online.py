@@ -50,6 +50,7 @@ HOST_ACTIONS = {
     "resume",
     "vote.start",
     "day.chat",
+    "voice.configure",
     "sentence.spin",
     "sentence.continue",
     "snapshot",
@@ -88,6 +89,7 @@ class Engine:
         self.close_task = None
         self.reader = asyncio.create_task(self._read())
         self.token_hash = b""
+        self.voice = None
 
     @classmethod
     async def create(cls, nickname):
@@ -116,6 +118,8 @@ class Engine:
                 event = json.loads(line)
                 if "room" in event:
                     self.snapshot = event["room"]
+                    if self.voice:
+                        self.voice.state_changed(self)
                     if self.snapshot.get('phase')=='lobby':
                         active={p['id'] for p in self.snapshot.get('players',[])}
                         self.accounts={p:uid for p,uid in self.accounts.items() if p in active}
@@ -189,6 +193,7 @@ class Engine:
 class Rooms:
     def __init__(self):
         self.db = None
+        self.voice = None
         self.engines = {}
         self.lock = asyncio.Lock()
 
@@ -262,6 +267,7 @@ async def create_room(data: CreateRoom, request: Request):
             for _ in range(5):
                 engine = await Engine.create(data.nickname.strip())
                 code = engine.snapshot["code"]
+                engine.voice = rooms.voice
                 if code not in rooms.engines:
                     break
                 await engine.close()
@@ -469,6 +475,8 @@ async def host_socket(socket: WebSocket, code: str):
                 )
                 continue
             try:
+                if action == 'voice.configure' and command.get('enabled') and not rooms.voice.configured:
+                    raise ValueError('Le vocal doit d’abord être activé sur le serveur. Le chat écrit reste disponible.')
                 if action in {'configure', 'narration.configure', 'start'}:
                     from .collection import require_room_access
                     require_room_access(socket.app.state.community, engine.owner_id,

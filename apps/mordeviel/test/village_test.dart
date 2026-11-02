@@ -57,6 +57,10 @@ void main() {
         key: boundary,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(disableAnimations: true),
+            child: child!,
+          ),
           theme: ThemeData(
             brightness: Brightness.dark,
             colorSchemeSeed: const Color(0xFFC79752),

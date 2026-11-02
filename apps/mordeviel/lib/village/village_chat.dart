@@ -25,6 +25,9 @@ class VillageChat extends StatefulWidget {
 class _VillageChatState extends State<VillageChat> {
   final _text = TextEditingController();
   final _focus = FocusNode();
+  bool get _canReact => (widget.room['features'] as List? ?? const []).contains(
+    'house_reactions',
+  );
   bool get _day => [
     'day',
     'mayor_election',
@@ -48,6 +51,16 @@ class _VillageChatState extends State<VillageChat> {
     if (!mounted || sticker == null || !_writable) return;
     widget.onSend(
       _day ? 'day.chat' : 'wolves.chat',
+      (widget.room['game'] as Map)['phase_revision'] as int,
+      stickerMessage(sticker),
+    );
+  }
+
+  Future<void> _react() async {
+    final sticker = await showStickerPicker(context);
+    if (!mounted || sticker == null || !_writable) return;
+    widget.onSend(
+      'reaction.send',
       (widget.room['game'] as Map)['phase_revision'] as int,
       stickerMessage(sticker),
     );
@@ -150,47 +163,63 @@ class _VillageChatState extends State<VillageChat> {
       ),
       const SizedBox(height: 12),
     ];
-    final composer = <Widget>[
-      if (writable) ...[
-        TextField(
-          key: const ValueKey('village-chat-input'),
-          focusNode: _focus,
-          controller: _text,
-          maxLength: 300,
-          decoration: InputDecoration(
-            labelText: 'Ton message',
-            border: const OutlineInputBorder(),
-            prefixIcon: const Icon(Icons.chat_bubble_outline),
-            suffixIcon: IconButton(
-              tooltip: 'Stickers',
-              onPressed: _selectSticker,
-              icon: const Icon(Icons.emoji_emotions_outlined),
-            ),
-          ),
-        ),
-        FilledButton(
-          onPressed: () {
-            if (_text.text.trim().isEmpty) return;
-            widget.onSend(
-              day ? 'day.chat' : 'wolves.chat',
-              game!['phase_revision'] as int,
-              _text.text.trim(),
-            );
-            _text.clear();
-          },
-          child: const Text('Envoyer'),
-        ),
-      ] else
-        Text(
-          widget.isHost
-              ? 'Vue du MDJ : lecture des échanges autorisés.'
-              : 'Tu peux lire les échanges autorisés, mais pas envoyer ici.',
-        ),
-    ];
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
       child: LayoutBuilder(
         builder: (context, size) {
+          final compact = size.maxHeight < 240;
+          final composer = <Widget>[
+            if (writable) ...[
+              TextField(
+                key: const ValueKey('village-chat-input'),
+                focusNode: _focus,
+                controller: _text,
+                maxLength: 300,
+                decoration: InputDecoration(
+                  labelText: 'Ton message',
+                  counterText: compact ? '' : null,
+                  isDense: compact,
+                  border: const OutlineInputBorder(),
+                  prefixIcon: !_canReact
+                      ? const Icon(Icons.chat_bubble_outline)
+                      : IconButton(
+                          tooltip: 'Réagir sur ma maison',
+                          onPressed: _react,
+                          icon: const Icon(Icons.add_reaction_outlined),
+                        ),
+                  suffixIcon: IconButton(
+                    tooltip: 'Stickers',
+                    onPressed: _selectSticker,
+                    icon: const Icon(Icons.emoji_emotions_outlined),
+                  ),
+                ),
+              ),
+              FilledButton(
+                style: compact
+                    ? FilledButton.styleFrom(
+                        minimumSize: const Size(0, 36),
+                        visualDensity: VisualDensity.compact,
+                      )
+                    : null,
+                onPressed: () {
+                  if (_text.text.trim().isEmpty) return;
+                  widget.onSend(
+                    day ? 'day.chat' : 'wolves.chat',
+                    game!['phase_revision'] as int,
+                    _text.text.trim(),
+                  );
+                  _text.clear();
+                },
+                child: const Text('Envoyer'),
+              ),
+            ] else
+              Text(
+                widget.isHost
+                    ? 'Vue du MDJ : lecture des échanges autorisés.'
+                    : 'Tu peux lire les échanges autorisés, mais pas envoyer ici.',
+              ),
+          ];
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -209,20 +238,25 @@ class _VillageChatState extends State<VillageChat> {
               ),
               Expanded(
                 child: messages.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              day
-                                  ? Icons.forum_outlined
-                                  : Icons.nights_stay_outlined,
-                              size: 44,
-                              color: const Color(0xFFE1BB80),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text('Aucun message pour le moment.'),
-                          ],
+                    ? LayoutBuilder(
+                        builder: (context, box) => Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (box.maxHeight >= 100)
+                                Icon(
+                                  day
+                                      ? Icons.forum_outlined
+                                      : Icons.nights_stay_outlined,
+                                  size: 44,
+                                  color: const Color(0xFFE1BB80),
+                                ),
+                              if (box.maxHeight >= 100)
+                                const SizedBox(height: 16),
+                              if (box.maxHeight >= 24)
+                                const Text('Aucun message pour le moment.'),
+                            ],
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -232,10 +266,16 @@ class _VillageChatState extends State<VillageChat> {
                             messageRow(messages.length - 1 - i),
                       ),
               ),
-              Column(
-                key: const ValueKey('village-chat-composer'),
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: composer,
+              ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: size.maxHeight * .65),
+                child: SingleChildScrollView(
+                  primary: false,
+                  child: Column(
+                    key: const ValueKey('village-chat-composer'),
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: composer,
+                  ),
+                ),
               ),
             ],
           );

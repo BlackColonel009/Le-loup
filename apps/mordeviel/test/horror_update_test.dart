@@ -11,7 +11,10 @@ import 'package:mordeviel/content/content_image.dart';
 
 void main() {
   test('Chaque carte possède ses trois illustrations, sans rôle manquant', () {
-    final cards = [...collectionCards, configuredRole('villager', feminine: true)];
+    final cards = [
+      ...collectionCards,
+      configuredRole('villager', feminine: true),
+    ];
     expect(cards.length, 20);
     for (final role in cards) {
       final id = role.feminine ? 'villager_female' : role.id;
@@ -73,7 +76,12 @@ void main() {
       );
       expect(tester.takeException(), isNull);
       await tester.pump(const Duration(seconds: 8));
-      expect(tester.widgetList<ContentImage>(find.byType(ContentImage)).any((i)=>i.asset.endsWith('owl_perched.png')),true);
+      expect(
+        tester
+            .widgetList<ContentImage>(find.byType(ContentImage))
+            .any((i) => i.asset.endsWith('owl_perched.png')),
+        true,
+      );
       await tester.pumpWidget(
         const MaterialApp(
           home: HorrorAmbience(night: true, seed: 0, paused: true),
@@ -169,6 +177,10 @@ void main() {
         ];
         await tester.pumpWidget(
           MaterialApp(
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(disableAnimations: true),
+              child: child!,
+            ),
             home: Scaffold(
               body: SingleChildScrollView(
                 child: VillageMap(

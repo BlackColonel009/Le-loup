@@ -28,6 +28,8 @@ from .gallery import router as gallery_router
 from .online import Rooms, router
 from .profile import router as profile_router
 from .shop import router as shop_router
+from .voice import VoiceHub
+from .voice import router as voice_router
 from .website import install as install_website
 
 
@@ -36,6 +38,9 @@ async def lifespan(app):
     load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
     initialize_content()
     app.state.rooms = Rooms()
+    app.state.voice = VoiceHub()
+    app.state.rooms.voice = app.state.voice
+    voice_task = asyncio.create_task(app.state.voice.run(app.state.rooms))
     app.state.community = Store(
         os.getenv(
             "MORDEVIEL_COMMUNITY_DB",
@@ -55,6 +60,9 @@ async def lifespan(app):
     try:
         yield
     finally:
+        voice_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await voice_task
         social_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             await social_task
@@ -65,10 +73,12 @@ async def lifespan(app):
         with contextlib.suppress(asyncio.CancelledError):
             await reaper
         await app.state.rooms.close()
+        await app.state.voice.close()
 
 
 app = FastAPI(title="Mordeviel API", version="0.2.0", lifespan=lifespan)
 app.include_router(router)
+app.include_router(voice_router)
 app.include_router(community_router)
 app.include_router(community_mail.router)
 app.include_router(presence.router)

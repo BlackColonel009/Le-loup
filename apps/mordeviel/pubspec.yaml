@@ -46,6 +46,7 @@ dependencies:
   path_provider: ^2.1.5
   workmanager: ^0.10.10
   flutter_local_notifications: ^22.3.3
+  livekit_client: ^2.12.0
 
 dev_dependencies:
   integration_test:
@@ -83,6 +84,7 @@ flutter:
     - assets/audio/classic/ending_bright.wav
     - assets/audio/classic/ending_dark.wav
     - assets/audio/classic/hunter_volley.wav
+    - assets/audio/classic/card_flick.wav
     - assets/audio/classic/wolf_fall.wav
     - assets/audio/classic/sentence_electric.wav
     - assets/audio/classic/wolf_howl.mp3

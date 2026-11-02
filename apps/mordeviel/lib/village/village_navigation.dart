@@ -18,6 +18,7 @@ class VillageNavigation extends StatelessWidget {
     required this.preparation,
     this.banner,
     this.audioControl,
+    this.voiceControl,
   });
   final VillageDestination destination;
   final String phase, code;
@@ -26,6 +27,7 @@ class VillageNavigation extends StatelessWidget {
   final VoidCallback onCodex;
   final Widget village, chat, actions, preparation;
   final Widget? banner, audioControl;
+  final Widget? voiceControl;
 
   static const titles = {
     VillageDestination.village: 'Le village',
@@ -235,6 +237,7 @@ class VillageNavigation extends StatelessWidget {
                   )
                 : content,
           ),
+          ?voiceControl,
         ],
       ),
     );

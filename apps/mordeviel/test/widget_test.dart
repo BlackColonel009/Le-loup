@@ -28,12 +28,14 @@ void main() {
       await tester.tap(find.text('Jouer en local'));
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Scanner pour rejoindre'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Scanner pour rejoindre'));
       await tester.pumpAndSettle();
       expect(find.byType(ScanInvitationScreen), findsNothing);
       final pseudo = find.byWidgetPredicate(
         (widget) =>
-            widget is TextField && widget.decoration?.labelText == 'Ton pseudo',
+            widget is TextField &&
+            widget.decoration?.labelText == 'Pseudo de partie',
       );
       await tester.scrollUntilVisible(
         pseudo,
@@ -47,6 +49,7 @@ void main() {
       );
       await tester.enterText(pseudo, 'Alice');
       await tester.ensureVisible(find.text('Scanner pour rejoindre'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Scanner pour rejoindre'));
       await tester.pumpAndSettle();
       expect(find.byType(ScanInvitationScreen), findsOneWidget);

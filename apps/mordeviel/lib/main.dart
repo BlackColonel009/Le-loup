@@ -14,9 +14,11 @@ import 'social/online_hub.dart';
 import 'social/social_screens.dart';
 import 'social/admin_bot_launcher.dart';
 import 'store/collector_welcome.dart';
+import 'services/immersion_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ImmersionPreferences.instance.initialize().catchError((Object _) {});
   await HorrorPreferences.instance.initialize().catchError((Object _) {});
   final ready = ClassicAudio.instance.initialize().catchError((Object _) {
     ClassicAudio.instance.error = 'Le son est indisponible sur cet appareil.';
@@ -34,6 +36,17 @@ class MordevielApp extends StatelessWidget {
     title: 'Mordeviel',
     debugShowCheckedModeBanner: false,
     theme: GameTheme.classic,
+    builder: (context, child) => ListenableBuilder(
+      listenable: ImmersionPreferences.instance,
+      builder: (context, _) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          disableAnimations:
+              MediaQuery.disableAnimationsOf(context) ||
+              ImmersionPreferences.instance.lightEffects,
+        ),
+        child: child!,
+      ),
+    ),
     home: _Entrance(ready: ready, checkMaintenance: checkMaintenance),
   );
 }

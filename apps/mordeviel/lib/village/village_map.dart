@@ -7,6 +7,10 @@ import 'guardian_aura.dart';
 import '../content/content_image.dart';
 import '../content/pack_store.dart';
 import 'horror_ambience.dart';
+import 'village_camera.dart';
+import 'village_life.dart';
+import '../services/immersion_preferences.dart';
+import 'house_reaction.dart';
 
 /// The Intense terrain has more room than the classic canvas. House sprites
 /// keep their readable size while the distance between plots increases.
@@ -179,6 +183,9 @@ class VillageMap extends StatefulWidget {
     this.displayHeight,
     this.animateGhosts = true,
     this.protectedPlayerId,
+    this.onPointerActivity,
+    this.reactions = const [],
+    this.speakers = const {},
   });
   final Map<String, dynamic> room;
   final String? selfId;
@@ -188,11 +195,16 @@ class VillageMap extends StatefulWidget {
   final double? displayHeight;
   final bool animateGhosts;
   final String? protectedPlayerId;
+
+  /// Suspend the enclosing page's scroll while fingers manipulate the map.
+  final ValueChanged<bool>? onPointerActivity;
+  final List<Map> reactions;
+  final Set<String> speakers;
   @override
   State<VillageMap> createState() => _VillageMapState();
 }
 
-class _VillageMapState extends State<VillageMap> {
+class _VillageMapState extends State<VillageMap> with WidgetsBindingObserver {
   double get _spriteExtent => horror
       ? 190
       : intense
@@ -214,65 +226,75 @@ class _VillageMapState extends State<VillageMap> {
       : intense
       ? intenseVillagePlots
       : villagePlots;
-  final _transform = TransformationController();
-  double _fit = 1;
+  VillageCameraController? _camera;
   Size? _size;
-  Size? _viewWorld;
-  void _overview(Size size) {
-    _fit = (size.width / _world.width).clamp(.01, 1);
-    final heightScale = size.height / _world.height;
-    if (heightScale < _fit) _fit = heightScale;
-    _transform.value = Matrix4.identity()
-      ..translateByDouble(
-        (size.width - _world.width * _fit) / 2,
-        (size.height - _world.height * _fit) / 2,
-        0,
-        1,
-      )
-      ..scaleByDouble(_fit, _fit, 1, 1);
+  String? _viewIdentity;
+  int _cameraRevision = 0;
+  final _pointers = <int>{};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  void _initialView(Size size) {
-    _overview(size);
-    if (size.width / size.height < 1.3) {
-      final scale =
-          (intense
-                  ? math.min(
-                      size.height / 768,
-                      size.width / (_world.width * .28 + 280),
-                    )
-                  : size.height / 768)
-              .clamp(_fit, 2.0);
-      _transform.value = Matrix4.identity()
-        ..translateByDouble(
-          (size.width - _world.width * scale) / 2,
-          (size.height - _world.height * scale) / 2,
-          0,
-          1,
-        )
-        ..scaleByDouble(scale, scale, 1, 1);
+  void _pointer(int pointer, bool down) {
+    final wasActive = _pointers.isNotEmpty;
+    down ? _pointers.add(pointer) : _pointers.remove(pointer);
+    if (wasActive != _pointers.isNotEmpty) {
+      widget.onPointerActivity?.call(_pointers.isNotEmpty);
     }
   }
 
-  void _zoom(double factor) {
-    final current = _transform.value.getMaxScaleOnAxis();
-    if (current * factor < _fit || current * factor > 2) return;
-    final center = Offset(_size!.width / 2, _size!.height / 2);
-    final point = _transform.toScene(center);
-    final scale = current * factor;
-    _transform.value = Matrix4.identity()
-      ..translateByDouble(
-        center.dx - point.dx * scale,
-        center.dy - point.dy * scale,
-        0,
-        1,
-      )
-      ..scaleByDouble(scale, scale, 1, 1);
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed && _pointers.isNotEmpty) {
+      _pointers.clear();
+      widget.onPointerActivity?.call(false);
+    }
+  }
+
+  void _layoutCamera(Size size) {
+    final identity = '${widget.room['code']}:${widget.room['visual_pack']}';
+    if (_camera != null && _size == size && _viewIdentity == identity) return;
+    final old = _camera;
+    _camera = old != null && _viewIdentity == identity
+        ? old.forViewport(size)
+        : VillageCameraController(
+            world: _world,
+            viewport: size,
+            initialScale: math.max(
+              math.max(size.width / _world.width, size.height / _world.height),
+              50 / _spriteExtent,
+            ),
+          );
+    _size = size;
+    _viewIdentity = identity;
+    _cameraRevision++;
+    old?.dispose();
+  }
+
+  void _moveCamera(VoidCallback command) {
+    setState(() {
+      // Recreate the gesture state to stop any previous inertial movement.
+      _cameraRevision++;
+      command();
+    });
+  }
+
+  void _selectHouse(Map<String, dynamic> player) {
+    ImmersionPreferences.instance.touch();
+    widget.onHouse(player);
   }
 
   @override
   void dispose() {
-    _transform.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _camera?.dispose();
+    if (_pointers.isNotEmpty) {
+      final release = widget.onPointerActivity;
+      WidgetsBinding.instance.addPostFrameCallback((_) => release?.call(false));
+    }
     super.dispose();
   }
 
@@ -350,197 +372,300 @@ class _VillageMapState extends State<VillageMap> {
                     constraints.maxWidth,
                     constraints.maxHeight,
                   );
-                  if (_size != size || _viewWorld != _world) {
-                    _size = size;
-                    _viewWorld = _world;
-                    _initialView(size);
+                  if (size.isEmpty || !size.isFinite) {
+                    return const SizedBox.shrink();
                   }
-                  return Stack(
-                    children: [
-                      InteractiveViewer(
-                        transformationController: _transform,
-                        constrained: false,
-                        minScale: _fit,
-                        maxScale: 2,
-                        boundaryMargin: const EdgeInsets.all(250),
-                        child: SizedBox(
-                          width: _world.width,
-                          height: _world.height,
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: ContentImage(
-                                  horror
-                                      ? 'assets/village/horror/map.png'
-                                      : intense
-                                      ? 'assets/village/intense/map_v3.png'
-                                      : 'assets/village/map.jpg',
-                                  fallbackAsset: intense
-                                      ? 'assets/village/intense/map_v3.png'
-                                      : 'assets/village/map.jpg',
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              Positioned.fill(
-                                child: IgnorePointer(
-                                  child: AnimatedContainer(
-                                    duration:
-                                        MediaQuery.disableAnimationsOf(context)
-                                        ? Duration.zero
-                                        : const Duration(milliseconds: 1200),
-                                    color: night
-                                        ? horror
-                                              ? const Color(0x552C1D40)
-                                              : const Color(0x99334279)
-                                        : Colors.transparent,
-                                  ),
-                                ),
-                              ),
-                              for (final placement in placed)
-                                Positioned(
-                                  key: ValueKey<String>(
-                                    placement.player['id'] as String,
-                                  ),
-                                  left:
-                                      plots[placement.slot].dx * _world.width -
-                                      _houseWidth / 2,
-                                  top:
-                                      plots[placement.slot].dy * _world.height -
-                                      _spriteExtent,
-                                  width: _houseWidth,
-                                  height: _spriteExtent + 28,
-                                  child: _House(
-                                    spriteExtent: _spriteExtent,
-                                    ready:
-                                        game == null &&
-                                        widget.room['phase'] == 'lobby' &&
-                                        placement.player['ready'] == true,
-                                    protected:
-                                        placement.player['id'] ==
-                                        widget.protectedPlayerId,
-                                    intense: intense,
-                                    horror: horror,
-                                    player: placement.player,
-                                    state:
-                                        alive != null &&
-                                            !alive.contains(
-                                              placement.player['id'],
-                                            )
-                                        ? 'eliminated'
-                                        : night
-                                        ? 'night'
-                                        : 'day',
-                                    own:
-                                        placement.player['id'] == widget.selfId,
-                                    bubble: widget.bubbleAuthors.contains(
-                                      placement.player['id'],
+                  _layoutCamera(size);
+                  return Listener(
+                    onPointerDown: (event) => _pointer(event.pointer, true),
+                    onPointerUp: (event) => _pointer(event.pointer, false),
+                    onPointerCancel: (event) => _pointer(event.pointer, false),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        InteractiveViewer(
+                          key: ValueKey(_cameraRevision),
+                          transformationController: _camera,
+                          constrained: false,
+                          minScale: _camera!.minScale,
+                          maxScale: _camera!.maxScale,
+                          // The controller bounds translation per axis, including
+                          // letterboxed overview, without forcing a minimum cover.
+                          boundaryMargin: const EdgeInsets.all(double.infinity),
+                          child: SizedBox(
+                            width: _world.width,
+                            height: _world.height,
+                            child: RepaintBoundary(
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: ContentImage(
+                                      horror
+                                          ? 'assets/village/horror/map.png'
+                                          : intense
+                                          ? 'assets/village/intense/map_v3.png'
+                                          : 'assets/village/map.jpg',
+                                      fallbackAsset: intense
+                                          ? 'assets/village/intense/map_v3.png'
+                                          : 'assets/village/map.jpg',
+                                      fit: BoxFit.fill,
                                     ),
-                                    onTap: () =>
-                                        widget.onHouse(placement.player),
-                                    onChat: widget.onChat,
                                   ),
-                                ),
-                              for (final placement in placed)
-                                Positioned(
-                                  left:
-                                      plots[placement.slot].dx * _world.width -
-                                      _labelWidth / 2,
-                                  top:
-                                      plots[placement.slot].dy * _world.height +
-                                      4,
-                                  width: _labelWidth,
-                                  child: _HouseLabel(
-                                    intense: intense,
-                                    player: placement.player,
-                                    own:
-                                        placement.player['id'] == widget.selfId,
-                                    eliminated:
-                                        alive != null &&
-                                        !alive.contains(placement.player['id']),
-                                    onTap: () =>
-                                        widget.onHouse(placement.player),
+                                  Positioned.fill(
+                                    child: IgnorePointer(
+                                      child: AnimatedContainer(
+                                        duration:
+                                            MediaQuery.disableAnimationsOf(
+                                              context,
+                                            )
+                                            ? Duration.zero
+                                            : const Duration(
+                                                milliseconds: 1200,
+                                              ),
+                                        color: night
+                                            ? horror
+                                                  ? const Color(0x552C1D40)
+                                                  : const Color(0x99334279)
+                                            : Colors.transparent,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              if (alive != null)
-                                for (final placement in placed)
-                                  if (!alive.contains(placement.player['id']))
+                                  for (final placement in placed)
+                                    Positioned(
+                                      key: ValueKey<String>(
+                                        placement.player['id'] as String,
+                                      ),
+                                      left:
+                                          plots[placement.slot].dx *
+                                              _world.width -
+                                          _houseWidth / 2,
+                                      top:
+                                          plots[placement.slot].dy *
+                                              _world.height -
+                                          _spriteExtent,
+                                      width: _houseWidth,
+                                      height: _spriteExtent + 28,
+                                      child: _House(
+                                        spriteExtent: _spriteExtent,
+                                        ready:
+                                            game == null &&
+                                            widget.room['phase'] == 'lobby' &&
+                                            placement.player['ready'] == true,
+                                        protected:
+                                            placement.player['id'] ==
+                                            widget.protectedPlayerId,
+                                        intense: intense,
+                                        horror: horror,
+                                        player: placement.player,
+                                        state:
+                                            alive != null &&
+                                                !alive.contains(
+                                                  placement.player['id'],
+                                                )
+                                            ? 'eliminated'
+                                            : night
+                                            ? 'night'
+                                            : 'day',
+                                        own:
+                                            placement.player['id'] ==
+                                            widget.selfId,
+                                        bubble: widget.bubbleAuthors.contains(
+                                          placement.player['id'],
+                                        ),
+                                        onTap: () =>
+                                            _selectHouse(placement.player),
+                                        onChat: widget.onChat,
+                                      ),
+                                    ),
+                                  for (final placement in placed)
                                     Positioned(
                                       left:
                                           plots[placement.slot].dx *
                                               _world.width -
-                                          (intense ? 40 : 28),
+                                          _labelWidth / 2,
                                       top:
                                           plots[placement.slot].dy *
-                                              _world.height -
-                                          _spriteExtent * .78,
-                                      width: intense ? 80 : 56,
-                                      height: intense ? 100 : 70,
-                                      child: SpectatorGhost(
-                                        key: ValueKey(
-                                          'ghost-${placement.player['id']}',
-                                        ),
-                                        slot: placement.slot,
-                                        name:
-                                            placement.player['nickname']
-                                                as String,
-                                        animate: widget.animateGhosts,
+                                              _world.height +
+                                          4,
+                                      width: _labelWidth,
+                                      child: _HouseLabel(
+                                        intense: intense,
+                                        player: placement.player,
+                                        own:
+                                            placement.player['id'] ==
+                                            widget.selfId,
+                                        eliminated:
+                                            alive != null &&
+                                            !alive.contains(
+                                              placement.player['id'],
+                                            ),
+                                        onTap: () =>
+                                            _selectHouse(placement.player),
                                       ),
                                     ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(child: WeatherOverlay(weather: weather)),
-                      if (horror)
-                        Positioned.fill(
-                          child: HorrorAmbience(
-                            night: night,
-                            seed: game?['night'] as int? ?? 0,
-                            paused: game?['paused'] == true,
-                          ),
-                        ),
-                      Positioned(
-                        right: 8,
-                        bottom: 8,
-                        child: Material(
-                          color: const Color(0xE61A2029),
-                          borderRadius: BorderRadius.circular(24),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                tooltip: 'Vue d’ensemble',
-                                onPressed: () => _overview(size),
-                                icon: const Icon(Icons.fit_screen),
-                              ),
-                              IconButton(
-                                tooltip: 'Agrandir le village',
-                                onPressed: () => _zoom(1.5),
-                                icon: const Icon(Icons.add),
-                              ),
-                              IconButton(
-                                tooltip: 'Réduire le village',
-                                onPressed: () => _zoom(1 / 1.5),
-                                icon: const Icon(Icons.remove),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (players.isEmpty)
-                        const Positioned(
-                          left: 12,
-                          top: 12,
-                          child: Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                'Les maisons apparaîtront à l’arrivée des joueurs.',
+                                  Positioned.fill(
+                                    child: VillageLife(
+                                      night: night,
+                                      paused: game?['paused'] == true,
+                                      plots: [
+                                        for (final p in placed)
+                                          if (alive == null ||
+                                              alive.contains(p.player['id']))
+                                            (plots[p.slot], _spriteExtent),
+                                      ],
+                                    ),
+                                  ),
+                                  if (alive != null)
+                                    for (final placement in placed)
+                                      if (!alive.contains(
+                                        placement.player['id'],
+                                      ))
+                                        Positioned(
+                                          left:
+                                              plots[placement.slot].dx *
+                                                  _world.width -
+                                              (intense ? 40 : 28),
+                                          top:
+                                              plots[placement.slot].dy *
+                                                  _world.height -
+                                              _spriteExtent * .78,
+                                          width: intense ? 80 : 56,
+                                          height: intense ? 100 : 70,
+                                          child: SpectatorGhost(
+                                            key: ValueKey(
+                                              'ghost-${placement.player['id']}',
+                                            ),
+                                            slot: placement.slot,
+                                            name:
+                                                placement.player['nickname']
+                                                    as String,
+                                            animate: widget.animateGhosts,
+                                          ),
+                                        ),
+                                  for (final placement in placed)
+                                    if (widget.speakers.contains(
+                                      placement.player['id'],
+                                    ))
+                                      Positioned(
+                                        left:
+                                            plots[placement.slot].dx *
+                                                _world.width -
+                                            16,
+                                        top:
+                                            plots[placement.slot].dy *
+                                                _world.height -
+                                            _spriteExtent -
+                                            40,
+                                        child: const Icon(
+                                          Icons.graphic_eq,
+                                          color: Color(0xFF68E7B3),
+                                          size: 32,
+                                        ),
+                                      ),
+                                  for (final reaction in widget.reactions)
+                                    if (placed.any(
+                                      (p) =>
+                                          p.player['id'] == reaction['author'],
+                                    ))
+                                      Positioned(
+                                        left:
+                                            plots[placed
+                                                        .firstWhere(
+                                                          (p) =>
+                                                              p.player['id'] ==
+                                                              reaction['author'],
+                                                        )
+                                                        .slot]
+                                                    .dx *
+                                                _world.width -
+                                            _spriteExtent * .35,
+                                        top:
+                                            plots[placed
+                                                        .firstWhere(
+                                                          (p) =>
+                                                              p.player['id'] ==
+                                                              reaction['author'],
+                                                        )
+                                                        .slot]
+                                                    .dy *
+                                                _world.height -
+                                            _spriteExtent * 1.45,
+                                        width: _spriteExtent * .7,
+                                        height: _spriteExtent * .7,
+                                        child: HouseReaction(
+                                          key: ValueKey(reaction['id']),
+                                          reaction: reaction,
+                                        ),
+                                      ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                    ],
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: WeatherOverlay(weather: weather),
+                          ),
+                        ),
+                        if (horror)
+                          Positioned.fill(
+                            child: RepaintBoundary(
+                              child: HorrorAmbience(
+                                camera: _camera,
+                                world: _world,
+                                night: night,
+                                seed: game?['night'] as int? ?? 0,
+                                paused: game?['paused'] == true,
+                              ),
+                            ),
+                          ),
+                        Positioned(
+                          right: 8,
+                          bottom: 8,
+                          child: Material(
+                            color: const Color(0xE61A2029),
+                            borderRadius: BorderRadius.circular(24),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  tooltip: 'Vue d’ensemble',
+                                  onPressed: () =>
+                                      _moveCamera(_camera!.overview),
+                                  icon: const Icon(Icons.fit_screen),
+                                ),
+                                IconButton(
+                                  tooltip: 'Agrandir le village',
+                                  onPressed: () =>
+                                      _moveCamera(() => _camera!.zoomBy(1.5)),
+                                  icon: const Icon(Icons.add),
+                                ),
+                                IconButton(
+                                  tooltip: 'Réduire le village',
+                                  onPressed: () => _moveCamera(
+                                    () => _camera!.zoomBy(1 / 1.5),
+                                  ),
+                                  icon: const Icon(Icons.remove),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (players.isEmpty)
+                          const Positioned(
+                            left: 12,
+                            top: 12,
+                            child: Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  'Les maisons apparaîtront à l’arrivée des joueurs.',
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   );
                 },
               ),

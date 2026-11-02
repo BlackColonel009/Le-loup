@@ -81,6 +81,12 @@ Future<void> main() async {
             host.startVote(seconds: command['seconds'] as int? ?? 120);
           case 'day.chat':
             host.setDayChat(command['open'] as bool);
+          case 'voice.configure':
+            host.configureVoice(
+              enabled: command['enabled'] as bool,
+              open: command['open'] as bool,
+              muted: (command['muted'] as List).cast<String>(),
+            );
           case 'sentence.spin':
             host.spinSentence();
           case 'sentence.continue':

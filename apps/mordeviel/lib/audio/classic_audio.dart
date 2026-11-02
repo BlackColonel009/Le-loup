@@ -159,6 +159,15 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   bool narrationEnabled = true;
   bool _foreground = true, _howled = false, _ducked = false, _disposed = false;
   bool _cueIsVoice = false;
+  bool _conversation = false;
+  bool get narrationPlaying =>
+      _ducked && _cueIsVoice && !muted && narrationEnabled;
+  void conversation(bool active) {
+    if (_conversation == active || _disposed) return;
+    _conversation = active;
+    _queue((backend) => backend.musicVolume(_bedVolume));
+  }
+
   bool _opening = false;
   Completer<void>? _welcomeHowl;
   bool _welcomeHowlActive = false;
@@ -240,7 +249,14 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   bool get _audible => !muted && _foreground && scene != AudioScene.silent;
-  double get _bedVolume => _audible ? musicLevel * (_ducked ? .2 : 1) : 0;
+  double get _bedVolume => _audible
+      ? musicLevel *
+            (_ducked
+                ? .2
+                : _conversation
+                ? .5
+                : 1)
+      : 0;
 
   void _queue(Future<void> Function(AudioBackend) action) {
     final backend = _backend;
@@ -642,6 +658,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
           }
           _ducked = true;
           _cueIsVoice = voice;
+          notifyListeners();
           _fade++;
           await backend.musicVolume(_bedVolume);
           await _applyWeather(backend);
@@ -704,6 +721,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
       }
       _ducked = true;
       _cueIsVoice = voice;
+      notifyListeners();
       _fade++;
       await backend.musicVolume(_bedVolume);
       if (scene == AudioScene.host) await _applyWeather(backend);
@@ -729,6 +747,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     }
     if (_stories > 0) return;
     _ducked = false;
+    if (!_disposed) notifyListeners();
     _fadeIn(_epoch, from: musicLevel * .2);
     _queue(_applyWeather);
   }

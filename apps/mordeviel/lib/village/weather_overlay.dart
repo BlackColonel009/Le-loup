@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:local_host/local_host.dart';
+import '../services/immersion_preferences.dart';
 
 class WeatherOverlay extends StatefulWidget {
   const WeatherOverlay({super.key, required this.weather});
@@ -24,6 +25,7 @@ class _WeatherOverlayState extends State<WeatherOverlay>
       duration: const Duration(seconds: 30),
     );
     WidgetsBinding.instance.addObserver(this);
+    ImmersionPreferences.instance.addListener(_preferencesChanged);
   }
 
   @override
@@ -40,11 +42,16 @@ class _WeatherOverlayState extends State<WeatherOverlay>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _reduced =
-        MediaQuery.disableAnimationsOf(context) ||
-        MediaQuery.accessibleNavigationOf(context);
+    _reduced = ImmersionPreferences.instance.reduced(context);
     _visible = TickerMode.valuesOf(context).enabled;
     _sync();
+  }
+
+  void _preferencesChanged() {
+    if (!mounted) return;
+    _reduced = ImmersionPreferences.instance.reduced(context);
+    _sync();
+    setState(() {});
   }
 
   void _sync() {
@@ -69,6 +76,7 @@ class _WeatherOverlayState extends State<WeatherOverlay>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    ImmersionPreferences.instance.removeListener(_preferencesChanged);
     _frames.dispose();
     _elapsed.stop();
     super.dispose();

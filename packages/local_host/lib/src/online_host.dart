@@ -22,6 +22,7 @@ class OnlineHost implements GameHost {
   WebSocket? _socket;
   StreamSubscription? _subscription;
   String? _token;
+  String? get roomToken => _token;
   String? _code;
   bool _disposed = false;
   bool _roomClosed = false;
