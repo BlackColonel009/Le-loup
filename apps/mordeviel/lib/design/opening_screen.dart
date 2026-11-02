@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'game_theme.dart';
 import 'opening_curtain.dart';
 
 /// Une ouverture finie, sans pourcentage fictif : l'accueil attend aussi [ready].
@@ -22,6 +24,8 @@ class OpeningScreen extends StatefulWidget {
 
 class _OpeningScreenState extends State<OpeningScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  static const _curtainMilliseconds = 3800;
+  static const _totalMilliseconds = 5600;
   late final AnimationController _time;
   bool _ready = false, _started = false, _finished = false;
   bool _reduced = false, _paused = false, _skip = false;
@@ -34,7 +38,7 @@ class _OpeningScreenState extends State<OpeningScreen>
     _time =
         AnimationController(
             vsync: this,
-            duration: const Duration(milliseconds: 3800),
+            duration: const Duration(milliseconds: _totalMilliseconds),
           )
           ..addListener(_tick)
           ..addStatusListener((status) {
@@ -88,7 +92,7 @@ class _OpeningScreenState extends State<OpeningScreen>
   void _tick() {
     if (_reduced || _finished) return;
     for (final (strike, threshold) in [(1, .1), (2, .29)]) {
-      if (_time.value >= threshold && _struck.add(strike)) {
+      if (_curtainProgress >= threshold && _struck.add(strike)) {
         widget.onScratch(strike);
       }
     }
@@ -96,8 +100,11 @@ class _OpeningScreenState extends State<OpeningScreen>
   }
 
   void _tear() {
-    if (_time.value >= .44 && _struck.add(3)) widget.onTear?.call();
+    if (_curtainProgress >= .44 && _struck.add(3)) widget.onTear?.call();
   }
+
+  double get _curtainProgress =>
+      (_time.value * _totalMilliseconds / _curtainMilliseconds).clamp(0, 1);
 
   void _finish() {
     if (_finished || !_ready) return;
@@ -139,26 +146,21 @@ class _OpeningScreenState extends State<OpeningScreen>
       builder: (context, _) => Stack(
         fit: StackFit.expand,
         children: [
-          if (_reduced)
-            Center(
-              child: Semantics(
-                label: 'Logo de Mordeviel Legendary',
-                image: true,
-                child: ExcludeSemantics(
-                  child: Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: Image.asset(
-                      'assets/branding/logo.png',
-                      width: 230,
-                      height: 230,
-                      fit: BoxFit.contain,
+          // Le rideau découvre le chargement ; l'accueil vient après le reflet.
+          ExcludeSemantics(
+            excluding: !_reduced && _curtainProgress < .95,
+            child: _LogoLoading(
+              progress: _reduced
+                  ? 1
+                  : ((_time.value * _totalMilliseconds - 3600) / 2000).clamp(
+                      0,
+                      1,
                     ),
-                  ),
-                ),
-              ),
-            )
-          else
-            IgnorePointer(child: OpeningCurtain(progress: _time.value)),
+              reduced: _reduced,
+            ),
+          ),
+          if (!_reduced && _curtainProgress < 1)
+            IgnorePointer(child: OpeningCurtain(progress: _curtainProgress)),
           SafeArea(
             child: Align(
               alignment: Alignment.bottomRight,
@@ -175,4 +177,110 @@ class _OpeningScreenState extends State<OpeningScreen>
       ),
     ),
   );
+}
+
+/// L'ancien écran de chargement, révélé sous les pans déchirés.
+class _LogoLoading extends StatelessWidget {
+  const _LogoLoading({required this.progress, required this.reduced});
+  final double progress;
+  final bool reduced;
+
+  @override
+  Widget build(BuildContext context) {
+    final sweep = ((progress - .08) / .7).clamp(0, 1);
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: RadialGradient(
+          colors: [Color(0xFF29342D), GameTheme.ink],
+          radius: .8,
+        ),
+      ),
+      child: Center(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Semantics(
+                    label: 'Logo de Mordeviel Legendary',
+                    image: true,
+                    child: ExcludeSemantics(
+                      child: Container(
+                        constraints: const BoxConstraints(
+                          maxWidth: 330,
+                          maxHeight: 330,
+                        ),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: GameTheme.gold.withValues(
+                                alpha: reduced
+                                    ? .07
+                                    : .06 + .04 * math.sin(progress * math.pi),
+                              ),
+                              blurRadius: 70,
+                              spreadRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: ShaderMask(
+                          blendMode: BlendMode.srcATop,
+                          shaderCallback: (bounds) =>
+                              LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  reduced
+                                      ? Colors.transparent
+                                      : const Color(0xDFFFF4D9),
+                                  Colors.transparent,
+                                ],
+                                stops: const [0, .5, 1],
+                              ).createShader(
+                                Rect.fromLTWH(
+                                  bounds.width * (-.8 + sweep * 2),
+                                  0,
+                                  bounds.width * .65,
+                                  bounds.height,
+                                ),
+                              ),
+                          child: Image.asset(
+                            'assets/branding/logo.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Le village s’éveille…',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: GameTheme.ivory),
+                ),
+                const SizedBox(height: 16),
+                Semantics(
+                  label: 'Ouverture du village',
+                  child: SizedBox(
+                    width: 110,
+                    height: 2,
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      color: GameTheme.gold,
+                      backgroundColor: GameTheme.gold.withValues(alpha: .15),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

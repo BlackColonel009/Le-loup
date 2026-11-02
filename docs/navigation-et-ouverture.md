@@ -20,7 +20,7 @@ L’ouverture est remplacée par une animation Flutter avec **textures photoréa
 2. Vers 0,38 seconde : première main, trois griffures diagonales et une projection de poussière et de fibres.
 3. Vers 1,10 seconde : seconde main dans le sens opposé, trois nouvelles griffures et une seconde projection.
 4. Après le second coup, vers 1,67 seconde : le tissu se déchire et les deux pans s’écartent. Les marques restent attachées à chaque pan pendant son déplacement. Les bords centraux sont irréguliers et effilochés.
-5. L’ouverture se termine après 3,8 secondes, puis l’accueil reprend son hurlement et sa musique habituels. Le bouton Passer, la pause en arrière-plan et les mouvements réduits restent disponibles.
+5. Le rideau découvre l’ancien écran de chargement : fond sombre vert, logo auréolé d’or, reflet de gauche à droite, « Le village s’éveille… » et petite barre dorée. Après la disparition des pans à 3,8 secondes, le logo reste visible jusqu’à 5,6 secondes pour terminer son reflet avant l’accueil et son hurlement. Le bouton Passer, la pause en arrière-plan et les mouvements réduits restent disponibles.
 
 Les panneaux réagissent aux coups et conservent leurs dégâts ; ils ne sont pas remplacés par des rideaux intacts lors de l’ouverture. Les particules sont calculées localement, sans nouvelle image ni téléchargement pour chaque impact.
 
@@ -39,7 +39,7 @@ Les **prompts exacts**, les empreintes des fichiers et la provenance/licence du 
 
 ### Aperçus et vérifications
 
-Un aperçu H.264 avec son, exporté depuis l’animation réelle, se trouve dans `media/opening/mordeviel-opening-preview.mp4` (540 × 960, 30 images/s, 3,8 s). Il sert à la revue ; l’application joue les textures et les effets nativement. Le MP4 n’est pas embarqué dans l’APK.
+Un aperçu H.264 avec son du rideau seul, avant le rétablissement du chargement avec logo, se trouve dans `media/opening/mordeviel-opening-preview.mp4` (540 × 960, 30 images/s, 3,8 s). La capture `apps/mordeviel/build/previews/opening_logo.png` montre le chargement restauré. L’application joue les textures et les effets nativement ; le MP4 n’est pas embarqué dans l’APK.
 
 Les tests ciblés vérifient l’ordre des deux coups et du déchirement, la fin unique, le bouton Passer, les mouvements réduits, la sélection du bon son, la navigation, les votes attendus, les messages non lus, les canaux privés et la conservation du clavier. Des captures des écrans réels Village, Conseil, Vote et Meute sont disponibles sous `apps/mordeviel/build/previews/navigation-*.png`.
 

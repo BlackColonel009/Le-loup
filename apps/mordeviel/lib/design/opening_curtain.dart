@@ -21,59 +21,56 @@ class OpeningCurtain extends StatelessWidget {
 
       final tension = shock(.10, .27) + shock(.29, .46);
       final size = box.biggest;
-      return ColoredBox(
-        color: Colors.black,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            for (final left in [true, false])
-              Transform(
-                alignment: left ? Alignment.topLeft : Alignment.topRight,
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, .0007)
-                  ..translateByDouble(
-                    (left ? -1 : 1) *
-                        (opening * size.width * .56 +
-                            tension * size.width * .004),
-                    math.sin(opening * math.pi) * size.height * .025,
-                    0,
-                    1,
-                  )
-                  ..rotateZ((left ? -1 : 1) * opening * .045)
-                  ..scaleByDouble(
-                    1 - opening * .06,
-                    1 + math.sin(opening * math.pi) * .025,
-                    1,
-                    1,
-                  ),
-                child: ClipPath(
-                  clipper: _CurtainHalf(left),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.asset(
-                        'assets/branding/opening/black_curtain.png',
-                        fit: BoxFit.fill,
-                        cacheWidth: 1280,
-                        filterQuality: FilterQuality.medium,
-                        excludeFromSemantics: true,
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          for (final left in [true, false])
+            Transform(
+              alignment: left ? Alignment.topLeft : Alignment.topRight,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, .0007)
+                ..translateByDouble(
+                  (left ? -1 : 1) *
+                      (opening * size.width * .56 +
+                          tension * size.width * .004),
+                  math.sin(opening * math.pi) * size.height * .025,
+                  0,
+                  1,
+                )
+                ..rotateZ((left ? -1 : 1) * opening * .045)
+                ..scaleByDouble(
+                  1 - opening * .06,
+                  1 + math.sin(opening * math.pi) * .025,
+                  1,
+                  1,
+                ),
+              child: ClipPath(
+                clipper: _CurtainHalf(left),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      'assets/branding/opening/black_curtain.png',
+                      fit: BoxFit.fill,
+                      cacheWidth: 1280,
+                      filterQuality: FilterQuality.medium,
+                      excludeFromSemantics: true,
+                    ),
+                    ColoredBox(
+                      color: Colors.black.withValues(
+                        alpha: 1 - stage(.03, .10),
                       ),
-                      ColoredBox(
-                        color: Colors.black.withValues(
-                          alpha: 1 - stage(.03, .10),
-                        ),
-                      ),
-                      _slash(size, first, false),
-                      _slash(size, second, true),
-                      if (opening > 0)
-                        CustomPaint(painter: _FrayedSeam(left, opening)),
-                    ],
-                  ),
+                    ),
+                    _slash(size, first, false),
+                    _slash(size, second, true),
+                    if (opening > 0)
+                      CustomPaint(painter: _FrayedSeam(left, opening)),
+                  ],
                 ),
               ),
-            CustomPaint(painter: _ClothDust(progress)),
-          ],
-        ),
+            ),
+          CustomPaint(painter: _ClothDust(progress)),
+        ],
       );
     },
   );

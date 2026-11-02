@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mordeviel/design/opening_screen.dart';
+import 'package:mordeviel/design/opening_curtain.dart';
 import 'package:mordeviel/design/drifting_backdrop.dart';
 import 'package:mordeviel/design/game_theme.dart';
 
@@ -45,16 +46,26 @@ void main() {
         ),
       );
       await tester.runAsync(() async {
+        final context = tester.element(find.byType(OpeningScreen));
         await precacheImage(
           const AssetImage('assets/branding/logo.png'),
-          tester.element(find.byType(OpeningScreen)),
+          context,
         );
+        for (final name in ['black_curtain', 'claw_tears']) {
+          await precacheImage(
+            ResizeImage(
+              AssetImage('assets/branding/opening/$name.png'),
+              width: 1280,
+            ),
+            context,
+          );
+        }
       });
       await tester.pump();
       for (final (name, delay) in [
         ('claws', 800),
         ('tear', 900),
-        ('logo', 1100),
+        ('logo', 2700),
       ]) {
         await tester.pump(Duration(milliseconds: delay));
         expect(tester.takeException(), isNull);
@@ -104,6 +115,20 @@ void main() {
       expect(completed, 0);
       await tester.pump(const Duration(milliseconds: 1100));
       expect(started, 1);
+      // Le rideau a disparu, mais le logo termine son reflet avant l'accueil.
+      expect(completed, 0);
+      expect(find.byType(OpeningCurtain), findsNothing);
+      expect(find.text('Le village s’éveille…'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel('Logo de Mordeviel Legendary'),
+        findsOneWidget,
+      );
+      final loading = tester.widget<LinearProgressIndicator>(
+        find.byType(LinearProgressIndicator),
+      );
+      expect(loading.value, greaterThan(0));
+      expect(loading.value, lessThan(1));
+      await tester.pump(const Duration(milliseconds: 1800));
       expect(completed, 1);
       await tester.pump(const Duration(seconds: 2));
       expect(strikes, [1, 2]);
