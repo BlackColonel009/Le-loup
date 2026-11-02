@@ -1,0 +1,43 @@
+{
+  "created": "2026-11-02",
+  "generator": "Built-in image_gen.imagegen",
+  "type": "Local Flutter animation, not filmed footage",
+  "images": [
+    {
+      "asset": "assets/branding/opening/black_curtain.png",
+      "prompt": "Production-ready photorealistic game VFX texture asset, square canvas. EXTREME CLOSE frontal view of a completely closed heavy BLACK theater curtain made of dense matte velvet / black woven fabric. Covers edge to edge, no surrounding scene visible, no stage, no openings, no tears, no border or rod, no text, no logo, no animal, no pattern. Dense physical cloth with broad subtle vertical heavy folds, tactile fibers and fine weave visible in the highlights, almost-black charcoal grayscale only (#030405 to #17191c), restrained cool neutral sidelight. Should look like real filmed cloth in a dark theater, not a painted fantasy image. The complete curtain is dark yet real fabric, no gold, no red, no glow, no lens flare. Uniform frontal camera, no perspective of a room. Intended to be animated into left and right panels that rip apart. High material realism, grounded practical effect.",
+      "sha256": "166c37335940753910cecbe59b72fdd6dd805231c940833f98d932165c8e032f"
+    },
+    {
+      "asset": "assets/branding/opening/claw_tears.png",
+      "transparent_background": true,
+      "prompt": "A photorealistic practical film VFX sprite on a truly TRANSPARENT background, square canvas. Exactly THREE parallel long WOLF CLAW SLASH TEARS sloping diagonally from upper left toward lower right, occupying about 80 percent of the canvas in a tight cluster. These are three real incisions ripped through heavy matte BLACK velvet / black woven curtain fabric. Show only the narrow irregular rims around the tears: ragged folded black cloth lips, frayed grayish-black fine threads and fibers, stressed weave, small lifted scraps of dense dark textile, realistic soft contact shadows and subtle silver-gray light catching a few torn fibers. The holes inside the slashes are completely transparent and the background outside the cluster is completely transparent. The rims may include narrow strips of black fabric (not a rectangular cloth sheet). Very tactile aggressive shredded curtain effect, not three illustrated lines. Each long tear has a tapered start and an uneven widening center. Neutral grayscale, no colored glow, no gold, no neon, no blood, no skin, no flesh, no animal or paw, no lettering, no logo, no frame, no additional objects. It must look like the edges of actual torn fabric photographed with macro realism, not drawn scratch marks. Isolated transparent VFX overlay for compositing onto a black curtain in a game opening.",
+      "sha256": "fdacaf1ecb0c2f7192314147f8129e97c08333cb281a64a1d097fb1e779af958"
+    }
+  ],
+  "audio": {
+    "title": "Cloth / Tissu",
+    "author": "Joseph SARDIN",
+    "license": "CC0",
+    "license_verified": "2026-11-02",
+    "page": "https://bigsoundbank.com/cloth-s0013.html",
+    "download": "https://bigsoundbank.com/UPLOAD/mp3/0013.mp3?v=d",
+    "source": "tools/audio/sources/cloth_0013.mp3",
+    "sha256": "93ce221ab889ca535e21b948efe1646a58ef0e9d28ae2974a418cd455f647a63",
+    "processing": "Stereo positioning, soft compression, normalization and short fades, real recording only",
+    "cuts": {
+      "claw_1.wav": [
+        0.47,
+        1.1
+      ],
+      "claw_2.wav": [
+        2.11,
+        2.65
+      ],
+      "curtain_tear.wav": [
+        3.3,
+        5.35
+      ]
+    }
+  }
+}

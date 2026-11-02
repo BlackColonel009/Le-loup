@@ -56,7 +56,7 @@ void main() {
         ),
       );
       await tester.pump();
-      await tester.pump(const Duration(seconds: 22));
+      await tester.pump(const Duration(seconds: 2));
       expect(find.byType(CustomPaint), findsWidgets);
       await tester.tap(find.text('Maison'));
       expect(taps, 1);
@@ -146,12 +146,13 @@ void main() {
               )
               as Map;
       final packs = data['packs'] as List;
-      expect(packs.length, 12);
+      expect(packs.length, 13);
       for (final id in [
         'horror-cards',
         'horror-village',
         'horror-ambience',
         'stickers-classic',
+        'avatars-classic',
       ]) {
         expect(packs.any((p) => p['id'] == id), true);
       }

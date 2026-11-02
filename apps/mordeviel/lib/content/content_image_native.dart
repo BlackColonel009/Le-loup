@@ -98,7 +98,8 @@ class _ContentImageState extends State<ContentImage> {
           errorBuilder: placeholder,
         );
       }
-      if (widget.asset.contains('/stickers/') ||
+      if (widget.asset.contains('/avatars/') ||
+          widget.asset.contains('/stickers/') ||
           widget.asset.contains('/horror/')) {
         return SizedBox(
           width: widget.width,

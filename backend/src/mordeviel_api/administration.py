@@ -36,8 +36,11 @@ def public_status(*, db: Annotated[Store, Depends(store)]):
 
 
 @router.get("/community/me")
-def me(*, user: Annotated[dict, Depends(authenticated)]):
-    return {"user": {**user, "verified": user["role"] == "admin"}}
+def me(*, user: Annotated[dict, Depends(authenticated)], db: Annotated[Store, Depends(store)]):
+    from .avatars import avatar_in
+    with db.db() as c:
+        avatar = avatar_in(c, user['id'])
+    return {"user": {**user, "verified": user["role"] == "admin", "avatar": avatar}}
 
 
 @router.get("/community/admin/dashboard")

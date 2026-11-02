@@ -169,7 +169,12 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
     invitations = 0;
     notifyListeners();
     try {
-      await offline;
+      // Presence is advisory: a slow heartbeat must not hold the account open.
+      await offline.timeout(const Duration(seconds: 2));
+    } catch (_) {
+      /* The server's presence lease will expire if the offline write is lost. */
+    }
+    try {
       await _phoneSync;
     } catch (_) {
       /* Revoke only after an in-flight registration finishes. */

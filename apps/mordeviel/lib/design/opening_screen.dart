@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'game_theme.dart';
+import 'opening_curtain.dart';
 
 /// Une ouverture finie, sans pourcentage fictif : l'accueil attend aussi [ready].
 class OpeningScreen extends StatefulWidget {
@@ -11,7 +10,9 @@ class OpeningScreen extends StatefulWidget {
     required this.onStart,
     required this.onScratch,
     required this.onComplete,
+    this.onTear,
   });
+  final VoidCallback? onTear;
   final Future<void>? ready;
   final VoidCallback onStart, onComplete;
   final ValueChanged<int> onScratch;
@@ -91,6 +92,11 @@ class _OpeningScreenState extends State<OpeningScreen>
         widget.onScratch(strike);
       }
     }
+    _tear();
+  }
+
+  void _tear() {
+    if (_time.value >= .44 && _struck.add(3)) widget.onTear?.call();
   }
 
   void _finish() {
@@ -127,273 +133,46 @@ class _OpeningScreenState extends State<OpeningScreen>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: GameTheme.ink,
+    backgroundColor: Colors.black,
     body: AnimatedBuilder(
       animation: _time,
-      builder: (context, _) {
-        final t = _time.value;
-        double stage(double a, double b) => ((t - a) / (b - a)).clamp(0, 1);
-        final open = _reduced
-            ? 1.0
-            : Curves.easeInOutCubic.transform(stage(.38, .68));
-        final sweep = _reduced ? 0.0 : stage(.56, .9);
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: [Color(0xFF29342D), GameTheme.ink],
-                  radius: .8,
-                ),
-              ),
-            ),
+      builder: (context, _) => Stack(
+        fit: StackFit.expand,
+        children: [
+          if (_reduced)
             Center(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Semantics(
-                          label: 'Logo de Mordeviel Legendary',
-                          image: true,
-                          child: ExcludeSemantics(
-                            child: Container(
-                              constraints: const BoxConstraints(
-                                maxWidth: 330,
-                                maxHeight: 330,
-                              ),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: GameTheme.gold.withValues(
-                                      alpha: _reduced
-                                          ? .07
-                                          : .06 + .04 * math.sin(t * math.pi),
-                                    ),
-                                    blurRadius: 70,
-                                    spreadRadius: 10,
-                                  ),
-                                ],
-                              ),
-                              child: ShaderMask(
-                                blendMode: BlendMode.srcATop,
-                                shaderCallback: (bounds) =>
-                                    LinearGradient(
-                                      colors: [
-                                        Colors.transparent,
-                                        const Color(0xDFFFF4D9),
-                                        Colors.transparent,
-                                      ],
-                                      stops: const [0, .5, 1],
-                                    ).createShader(
-                                      Rect.fromLTWH(
-                                        bounds.width * (-.8 + sweep * 2),
-                                        0,
-                                        bounds.width * .65,
-                                        bounds.height,
-                                      ),
-                                    ),
-                                child: Image.asset(
-                                  'assets/branding/logo.png',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        'Le village s’éveille…',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: GameTheme.ivory,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Semantics(
-                        label: 'Ouverture du village',
-                        child: SizedBox(
-                          width: 110,
-                          height: 2,
-                          child: LinearProgressIndicator(
-                            value: t,
-                            color: GameTheme.gold,
-                            backgroundColor: GameTheme.gold.withValues(
-                              alpha: .15,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              child: Semantics(
+                label: 'Logo de Mordeviel Legendary',
+                image: true,
+                child: ExcludeSemantics(
+                  child: Padding(
+                    padding: const EdgeInsets.all(40),
+                    child: Image.asset(
+                      'assets/branding/logo.png',
+                      width: 230,
+                      height: 230,
+                      fit: BoxFit.contain,
+                    ),
                   ),
+                ),
+              ),
+            )
+          else
+            IgnorePointer(child: OpeningCurtain(progress: _time.value)),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextButton(
+                  onPressed: _skipOpening,
+                  child: const Text('Passer'),
                 ),
               ),
             ),
-            if (!_reduced)
-              IgnorePointer(
-                child: CustomPaint(
-                  painter: _TornCoverPainter(
-                    first: stage(.1, .23),
-                    second: stage(.29, .46),
-                    opening: open,
-                  ),
-                ),
-              ),
-            SafeArea(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextButton(
-                    onPressed: _skipOpening,
-                    child: const Text('Passer'),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     ),
   );
-}
-
-class _TornCoverPainter extends CustomPainter {
-  const _TornCoverPainter({
-    required this.first,
-    required this.second,
-    required this.opening,
-  });
-  final double first, second, opening;
-
-  Path _half(Size size, bool left) {
-    final path = Path()..moveTo(left ? 0 : size.width, 0);
-    for (var i = 0; i <= 28; i++) {
-      final y = size.height * i / 28;
-      final x =
-          size.width *
-          (.5 + .035 * math.sin(i * 2.3) + .018 * math.sin(i * 5.1));
-      path.lineTo(x, y);
-    }
-    path.lineTo(left ? 0 : size.width, size.height);
-    return path..close();
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (opening == 1) return;
-    for (final left in [true, false]) {
-      final path = _half(size, left);
-      canvas.save();
-      canvas.translate((left ? -1 : 1) * opening * (size.width * .7), 0);
-      if (opening > 0) {
-        canvas.drawPath(
-          path,
-          Paint()
-            ..color = const Color(0xFF060A0E)
-            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18),
-        );
-      }
-      canvas.save();
-      canvas.clipPath(path);
-      canvas.drawRect(
-        Offset.zero & size,
-        Paint()
-          ..shader = const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF172127), Color(0xFF080D12), Color(0xFF202521)],
-          ).createShader(Offset.zero & size),
-      );
-      // Grain et fibres fixes : aucun bruit visuel aléatoire entre deux frames.
-      final grain = Paint()
-        ..color = GameTheme.gold.withValues(alpha: .045)
-        ..strokeWidth = .7;
-      for (var i = 0; i < 70; i++) {
-        final y = i * size.height / 70;
-        canvas.drawLine(
-          Offset(0, y),
-          Offset(size.width, y + math.sin(i) * 12),
-          grain,
-        );
-      }
-      _scratch(canvas, size, first, false);
-      _scratch(canvas, size, second, true);
-      canvas.restore();
-      if (opening > 0) {
-        canvas.drawPath(
-          path,
-          Paint()
-            ..color = GameTheme.gold.withValues(alpha: .3)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1.2,
-        );
-      }
-      canvas.restore();
-    }
-  }
-
-  void _scratch(Canvas canvas, Size size, double progress, bool reverse) {
-    if (progress == 0) return;
-    final start = Offset(
-      size.width * (reverse ? .86 : .14),
-      size.height * (reverse ? .31 : .24),
-    );
-    final end = Offset(
-      size.width * (reverse ? .16 : .86),
-      size.height * (reverse ? .76 : .58),
-    );
-    final direction = end - start;
-    final normal = Offset(-direction.dy, direction.dx) / direction.distance;
-    for (var claw = -1; claw <= 1; claw++) {
-      final path = Path()
-        ..moveTo(
-          start.dx + normal.dx * claw * 17,
-          start.dy + normal.dy * claw * 17,
-        );
-      for (var i = 1; i <= 24; i++) {
-        final p =
-            start +
-            direction * (i / 24) +
-            normal * (claw * 17 + math.sin(i * 2.6 + claw) * 2.5);
-        path.lineTo(p.dx, p.dy);
-      }
-      final metric = path.computeMetrics().first;
-      final cut = metric.extractPath(0, metric.length * progress);
-      canvas.drawPath(
-        cut,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 9
-          ..strokeCap = StrokeCap.round
-          ..color = const Color(0xFF020405),
-      );
-      canvas.drawPath(
-        cut,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..color = const Color(0xFFC8A36A).withValues(alpha: .8),
-      );
-      canvas.save();
-      canvas.translate(normal.dx * 3, normal.dy * 3);
-      canvas.drawPath(
-        cut,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1
-          ..color = const Color(0xFFE0D4BA).withValues(alpha: .6),
-      );
-      canvas.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(_TornCoverPainter old) =>
-      first != old.first || second != old.second || opening != old.opening;
 }

@@ -1,6 +1,6 @@
 # Premières variantes jouables — Voyante, Métamorphe, Salvateur et Loup-Garou
 
-Cette mise à jour rend jouables les huit propositions Intense/Horreur de ces quatre rôles. Les autres rôles conservent leurs pouvoirs actuels. L’équilibrage reste à valider en parties avec Logan ; les tests ci-dessous valident le fonctionnement, pas un taux de victoire équilibré.
+Ce document décrit le premier lot historique de huit variantes. La [refonte complète](refonte-cartes-editions.md) étend désormais les pouvoirs à toutes les familles et au titre de Maire. L’équilibrage reste à valider en parties avec Logan ; les tests ci-dessous valident le fonctionnement, pas un taux de victoire équilibré.
 
 ## Composition et partie mixte
 

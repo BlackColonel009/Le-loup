@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'password_reset_screen.dart';
 import '../social/social_screens.dart';
 import '../store/collection_screen.dart';
+import '../profile/player_avatar.dart';
+import '../profile/avatar_gallery.dart';
 
 typedef ProfileRequest =
     Future<Map<String, dynamic>> Function(
@@ -118,7 +120,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         if (_profile != null) ...[
-          const Icon(Icons.account_circle_outlined, size: 72),
+          PlayerAvatar(
+            avatar: _profile!['avatar'] as Map?,
+            nickname: _profile!['nickname'] as String,
+          ),
+          Center(
+            child: TextButton.icon(
+              onPressed: () async {
+                final changed = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        AvatarGalleryScreen(request: widget.request),
+                  ),
+                );
+                if (changed == true && mounted) await _load();
+              },
+              icon: const Icon(Icons.edit_outlined),
+              label: const Text('Changer mon portrait'),
+            ),
+          ),
           const SizedBox(height: 12),
           Text(
             _profile!['nickname'] as String,

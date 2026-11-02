@@ -1,0 +1,324 @@
+{
+  "avatars": [
+    {
+      "id": "classic-villager",
+      "role_id": "villager",
+      "title": "Villageois",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/villager.jpg",
+      "source": "villager.jpg",
+      "starter": true,
+      "crop": [
+        0.3,
+        0.13000000000000003,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-villager-female",
+      "role_id": "villager_female",
+      "title": "Villageoise",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/villager_female.png",
+      "source": "villager_female.png",
+      "starter": true,
+      "crop": [
+        0.3,
+        0.11500000000000002,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-werewolf",
+      "role_id": "werewolf",
+      "title": "Loup-Garou",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/werewolf.jpg",
+      "source": "werewolf.jpg",
+      "starter": true,
+      "crop": [
+        0.3,
+        0.19000000000000003,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-seer",
+      "role_id": "seer",
+      "title": "Voyante",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/seer.jpg",
+      "source": "seer.jpg",
+      "starter": true,
+      "crop": [
+        0.3,
+        0.11500000000000002,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-witch",
+      "role_id": "witch",
+      "title": "Sorcière",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/witch.jpg",
+      "source": "witch.jpg",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-hunter",
+      "role_id": "hunter",
+      "title": "Chasseur",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/hunter.jpg",
+      "source": "hunter.jpg",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-little-girl",
+      "role_id": "little_girl",
+      "title": "Petite Fille",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/little_girl.png",
+      "source": "little_girl.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-metamorph",
+      "role_id": "metamorph",
+      "title": "Métamorphe",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/metamorph.png",
+      "source": "metamorph.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-cupid",
+      "role_id": "cupid",
+      "title": "Cupidon",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/cupid.png",
+      "source": "cupid.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-guardian",
+      "role_id": "guardian",
+      "title": "Salvateur",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/guardian.png",
+      "source": "guardian.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-elder",
+      "role_id": "elder",
+      "title": "Ancien",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/elder.png",
+      "source": "elder.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-scapegoat",
+      "role_id": "scapegoat",
+      "title": "Bouc émissaire",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/scapegoat.png",
+      "source": "scapegoat.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-alpha-wolf",
+      "role_id": "alpha_wolf",
+      "title": "Grand Méchant Loup",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/alpha_wolf.png",
+      "source": "alpha_wolf.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-white-wolf",
+      "role_id": "white_wolf",
+      "title": "Loup Blanc",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/white_wolf.png",
+      "source": "white_wolf.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-wolf-father",
+      "role_id": "wolf_father",
+      "title": "Père des Loups",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/wolf_father.png",
+      "source": "wolf_father.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-idiot",
+      "role_id": "idiot",
+      "title": "Idiot du Village",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/idiot.png",
+      "source": "idiot.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-piper",
+      "role_id": "piper",
+      "title": "Joueur de Flûte",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/piper.png",
+      "source": "piper.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-angel",
+      "role_id": "angel",
+      "title": "Ange",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/angel.png",
+      "source": "angel.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    },
+    {
+      "id": "classic-sisters",
+      "role_id": "sisters",
+      "title": "Deux Sœurs",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/sisters.png",
+      "source": "sisters.png",
+      "starter": false,
+      "crop": [
+        0.28,
+        0.086,
+        0.44,
+        0.308
+      ]
+    },
+    {
+      "id": "classic-mayor",
+      "role_id": "mayor",
+      "title": "Maire",
+      "theme": "classic",
+      "pack_id": "avatars-classic",
+      "asset": "assets/avatars/classic/mayor.png",
+      "source": "mayor.png",
+      "starter": false,
+      "crop": [
+        0.3,
+        0.11000000000000001,
+        0.4,
+        0.27999999999999997
+      ]
+    }
+  ]
+}

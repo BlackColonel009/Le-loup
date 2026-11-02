@@ -26,7 +26,7 @@ void main() {
       'alpha_wolf',
       'witch',
     ]) {
-      final role = configuredRole(id);
+      final role = configuredRole(id, edition: 'intense');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -39,7 +39,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Camp : ${role.camp}\n${role.summary}'), findsOneWidget);
+      expect(find.text('Camp : ${role.camp}'), findsOneWidget);
+      expect(find.text(role.summary), findsOneWidget);
+      expect(find.text(role.name.split(' · ').last), findsOneWidget);
       expect(tester.takeException(), isNull);
     }
   });

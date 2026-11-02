@@ -81,12 +81,14 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       final strikes = <int>[];
       var started = 0, completed = 0;
+      var tears = 0;
       await tester.pumpWidget(
         MaterialApp(
           theme: GameTheme.classic,
           home: OpeningScreen(
             onStart: () => started++,
             onScratch: strikes.add,
+            onTear: () => tears++,
             onComplete: () => completed++,
           ),
         ),
@@ -96,7 +98,9 @@ void main() {
       expect(strikes, [1]);
       await tester.pump(const Duration(milliseconds: 750));
       expect(strikes, [1, 2]);
+      expect(tears, 0);
       await tester.pump(const Duration(milliseconds: 1600));
+      expect(tears, 1);
       expect(completed, 0);
       await tester.pump(const Duration(milliseconds: 1100));
       expect(started, 1);
@@ -155,7 +159,10 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(completed, 1);
     expect(strikes, isEmpty);
-    expect(find.bySemanticsLabel('Logo de Mordeviel Legendary'), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('Logo de Mordeviel Legendary'),
+      findsOneWidget,
+    );
   });
   testWidgets(
     'Le décor bouge, les commandes restent fixes ; pause en arrière-plan',

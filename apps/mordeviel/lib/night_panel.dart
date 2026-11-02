@@ -62,7 +62,8 @@ class _NightPanelState extends State<NightPanel> {
   int _seconds = 120;
   int _voteSeconds = 120;
   String? _voteChoice;
-  final Set<String> _chosenTargets = {};
+  final _chosenTargets = <String, Set<String>>{};
+  final _abilityTexts = <String, String>{};
   Map<String, dynamic>? get game =>
       (widget.room['game'] as Map?)?.cast<String, dynamic>();
   @override
@@ -87,6 +88,7 @@ class _NightPanelState extends State<NightPanel> {
       _message.clear();
       _voteChoice = null;
       _chosenTargets.clear();
+      _abilityTexts.clear();
     }
   }
 
@@ -169,10 +171,13 @@ class _NightPanelState extends State<NightPanel> {
   );
 
   Widget abilityPanel(Map ability) {
+    final command = ability['action'] as String;
+    final chosen = _chosenTargets.putIfAbsent(command, () => <String>{});
+    final textInput = ability['text_input'] == true;
     final ids = (ability['targets'] as List).cast<String>();
     final minimum = ability['min'] as int;
     final maximum = ability['max'] as int;
-    final selected = _chosenTargets.where(ids.contains).toList();
+    final selected = chosen.where(ids.contains).toList();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(16),
@@ -211,9 +216,9 @@ class _NightPanelState extends State<NightPanel> {
                         ? null
                         : (value) => setState(() {
                             if (value) {
-                              _chosenTargets.add(id);
+                              chosen.add(id);
                             } else {
-                              _chosenTargets.remove(id);
+                              chosen.remove(id);
                             }
                           }),
                   ),
@@ -223,9 +228,30 @@ class _NightPanelState extends State<NightPanel> {
             if (selected.isNotEmpty)
               selection(actorLabel, selected.map(name).join(', ')),
           ],
+          if (textInput)
+            TextField(
+              key: ValueKey('ability-text-$command'),
+              maxLength: 260,
+              minLines: 1,
+              maxLines: 3,
+              decoration: const InputDecoration(
+                labelText: 'Murmure anonyme',
+                hintText: 'Une présence inconnue s’adresse à la meute…',
+              ),
+              onChanged: (value) =>
+                  setState(() => _abilityTexts[command] = value),
+            ),
           FilledButton(
-            onPressed: selected.length >= minimum && selected.length <= maximum
-                ? () => send(ability['action'] as String, targets: selected)
+            onPressed:
+                selected.length >= minimum &&
+                    selected.length <= maximum &&
+                    (!textInput ||
+                        (_abilityTexts[command] ?? '').trim().isNotEmpty)
+                ? () => send(
+                    command,
+                    targets: selected,
+                    text: textInput ? _abilityTexts[command] : null,
+                  )
                 : null,
             child: Text(
               ability['label'] as String,
@@ -264,6 +290,16 @@ class _NightPanelState extends State<NightPanel> {
             .join('\n'),
       'scent' =>
         '${name(result['target'])} : ${result['protected'] == true ? 'protection détectée' : 'aucune protection détectée'} au moment du flair.',
+      'watch' =>
+        '${name(result['target'])} : ${result['detailed'] == true
+            ? switch (result['count']) {
+                0 => 'aucune action nocturne',
+                1 => 'une action nocturne',
+                _ => 'plusieurs actions nocturnes',
+              }
+            : result['watched'] == true
+            ? 'au moins un pouvoir nocturne a visé cette maison'
+            : 'aucun pouvoir nocturne n’a visé cette maison'}.',
       _ => '',
     };
     return Padding(
@@ -384,6 +420,7 @@ class _NightPanelState extends State<NightPanel> {
       'voting' => 'Clore et révéler le scrutin',
       'mayor_election' => 'Clore l’élection du Maire',
       'mayor_succession' => 'Poursuivre après la succession',
+      'mediation' => 'Terminer la médiation · sacrifice si aucun choix',
       _ => 'Continuer',
     };
     return AnimatedContainer(
@@ -427,11 +464,47 @@ class _NightPanelState extends State<NightPanel> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
+          if (state['second_ballot'] == true)
+            const Text('Second scrutin · aucun troisième tour ne sera ajouté.'),
+          for (final prediction in state['presages'] as List? ?? [])
+            Text(
+              'Présage public de ${name(prediction['actor'])} : ${name(prediction['target'])} sera la victime de la meute.',
+            ),
+          if (state['mayor_strategy_active'] == true)
+            const Text(
+              'Le Maire a annoncé sa stratégie : son bulletin vaut une voix et une égalité déclenchera un second scrutin.',
+            ),
+          for (final id in state['contagion_targets'] as List? ?? [])
+            Text(
+              'Désignation publique du Fou contagieux : ${name(id)} perd le scrutin de condamnation prévu.',
+            ),
+          for (final entry in (state['revealed_camps'] as Map? ?? {}).entries)
+            Text(
+              'Camp révélé de ${name(entry.key)} : ${switch (entry.value) {
+                'wolves' => 'Loups-Garous',
+                'village' => 'Village',
+                _ => 'Solitaire',
+              }} au moment de son choix.',
+            ),
+          if (state['mayor_testament'] is Map)
+            Text(
+              (state['mayor_testament'] as Map)['valid'] == true
+                  ? 'Testament dévoilé : ${name(state['mayor_testament']['actor'])} transmet son titre à ${name(state['mayor_testament']['target'])}.'
+                  : 'Le successeur du testament est déjà mort. Une nouvelle élection sera proposée.',
+            ),
           if (state['mayor'] != null)
             TextButton.icon(
               onPressed: () => showRoleCard(
                 context,
-                mayorOffice,
+                configuredRole(
+                  'mayor',
+                  edition:
+                      state['mayor_edition'] as String? ??
+                      ((widget.room['card_styles'] as Map?)?['mayor'] ??
+                              widget.room['visual_pack'] ??
+                              'classic')
+                          as String,
+                ),
                 ambience: CardAmbience.values.firstWhere(
                   (a) =>
                       a.asset ==
@@ -711,6 +784,10 @@ class _NightPanelState extends State<NightPanel> {
                 Text(
                   'Sorcière : ${(host['witch_done'] as List? ?? []).isEmpty ? 'en attente' : 'choix confirmés'} · Victime de la meute : ${name(host['victim'])}',
                 ),
+              for (final poison in host['delayed_poisons'] as List? ?? [])
+                Text(
+                  '${poison['curse'] == true ? 'Malédiction au crépuscule' : 'Poison au réveil'} : ${name(poison['target'])} · nuit ${poison['due_night']}.',
+                ),
               if (phase == 'hunter')
                 Text(
                   host['hunter_done'] == true
@@ -846,6 +923,10 @@ class _NightPanelState extends State<NightPanel> {
                 ),
               if (private?['role_notice'] != null)
                 Text(private!['role_notice'] as String),
+              if (private?['bond_chat'] is Map)
+                const Text(
+                  'Un échange privé est disponible dans « Discussions ». Il est temporaire et sera effacé à sa fermeture.',
+                ),
               if (private?['camp_label'] != null)
                 Text('Ton camp actuel : ${private!['camp_label']}'),
               if (private?['lover'] != null)
@@ -1029,6 +1110,7 @@ class _NightPanelState extends State<NightPanel> {
                 value: _save,
                 onChanged:
                     private['life_available'] == true &&
+                        private['save_blocked'] != true &&
                         private['victim'] != null
                     ? (value) => setState(() => _save = value)
                     : null,

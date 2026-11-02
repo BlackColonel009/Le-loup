@@ -7,6 +7,8 @@ import 'package:flutter/physics.dart';
 import 'card_motion.dart';
 import '../services/immersion_preferences.dart';
 import '../audio/card_foley.dart';
+import 'package:local_host/card_variants.dart' show cardVariant;
+import '../profile/avatar_gallery.dart';
 
 enum CardAmbience {
   classic('Classique', 'classic'),
@@ -86,6 +88,23 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.face_retouching_natural),
+                      title: const Text('Découvrir les avatars des joueurs'),
+                      subtitle: const Text(
+                        '4 portraits Classiques disponibles · défis à venir',
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (_) => const AvatarGalleryScreen(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     'Les cartes du village',
                     style: Theme.of(context).textTheme.headlineMedium,
@@ -97,11 +116,11 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Les 17 rôles sont disponibles en partie. Consulte leurs pouvoirs et leurs conditions de victoire au verso.',
+                    'Les 18 rôles et le titre public de Maire possèdent leurs fiches. Consulte les pouvoirs et les conditions de victoire au verso.',
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    'Chaque collection possède ses illustrations. La Voyante, le Métamorphe, le Salvateur et le Loup-Garou ont désormais des variantes Intense/Horreur. Consulte le dos des cartes et le Codex avant la partie. Les autres rôles conservent leurs pouvoirs actuels.',
+                    'Chaque rôle possède une variante Intense et une variante Horreur. En partie mixte, le pouvoir suit chaque carte et son édition. Consulte le dos des cartes et le Codex avant la partie.',
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -236,10 +255,7 @@ class RoleCardViewer extends StatefulWidget {
 
 class _RoleCardViewerState extends State<RoleCardViewer>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  late final _flip = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 600),
-  );
+  late final _flip = AnimationController.unbounded(vsync: this);
   late final _hide = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 400),
@@ -247,6 +263,8 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   bool _closing = false;
   bool _concealed = false;
   bool _peeking = false;
+  bool _dragging = false;
+  int _turnGeneration = 0;
   late bool _covered;
 
   @override
@@ -259,9 +277,12 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed && mounted && !_concealed) {
+      _turnGeneration++;
+      _flip.stop();
       setState(() {
         _concealed = true;
         _peeking = false;
+        _dragging = false;
       });
       // Cache immédiatement la carte quand l'application perd le premier plan.
     }
@@ -277,6 +298,8 @@ class _RoleCardViewerState extends State<RoleCardViewer>
 
   Future<void> _dismiss() async {
     if (_closing) return;
+    _turnGeneration++;
+    _flip.stop();
     setState(() {
       _closing = true;
       _peeking = false;
@@ -289,29 +312,68 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   }
 
   Future<void> _turn() async {
-    if (_closing || _flip.isAnimating) return;
+    if (_closing || _concealed || _dragging || _flip.isAnimating) return;
     _peek(false);
     ImmersionPreferences.instance.touch();
     CardFoley.play();
-    if (_covered) {
-      if (!ImmersionPreferences.instance.reduced(context)) {
-        await _flip.forward();
+    await _settleTurn(_flip.value.roundToDouble() + 1, 0);
+  }
+
+  void _startTurn() {
+    if (_closing || _concealed) return;
+    _turnGeneration++;
+    _flip.stop();
+    _peek(false);
+    setState(() => _dragging = true);
+    ImmersionPreferences.instance.touch();
+    CardFoley.play();
+  }
+
+  void _dragTurn(double delta) {
+    if (!_dragging || _closing || _concealed) return;
+    final next = _flip.value + delta;
+    _flip.value = _covered ? next.clamp(-1.0, 1.0) : next;
+  }
+
+  void _releaseTurn(double velocity) {
+    if (!_dragging || _closing || _concealed) return;
+    var target = cardTurnTarget(_flip.value, velocity);
+    if (_covered) target = target.clamp(-1.0, 1.0);
+    _settleTurn(target, velocity);
+  }
+
+  void _cancelTurn() {
+    if (!_dragging || _closing || _concealed) return;
+    _settleTurn(_covered ? 0 : _flip.value.roundToDouble(), 0);
+  }
+
+  Future<void> _settleTurn(double target, double velocity) async {
+    final generation = ++_turnGeneration;
+    setState(() => _dragging = false);
+    if (ImmersionPreferences.instance.reduced(context)) {
+      _flip.value = target;
+    } else {
+      try {
+        await _flip
+            .animateWith(
+              SpringSimulation(cardTurnSpring, _flip.value, target, velocity),
+            )
+            .orCancel;
+      } on TickerCanceled {
+        return;
       }
-      if (mounted) {
-        setState(() {
-          _covered = false;
-          _flip.value = 0;
-        });
-      }
+    }
+    if (!mounted || generation != _turnGeneration || _concealed || _closing) {
       return;
     }
-    final back = _flip.value > 0.5;
-    if (ImmersionPreferences.instance.reduced(context)) {
-      _flip.value = back ? 0 : 1;
+    if (_covered && target.round().isOdd) {
+      setState(() {
+        _covered = false;
+        _flip.value = 0;
+      });
     } else {
-      _flip.animateWith(
-        SpringSimulation(cardSpring, _flip.value, back ? 0 : 1, 0),
-      );
+      // Equivalent physical pose, without accumulating huge angle values.
+      _flip.value = (target.round() % 2).toDouble();
     }
   }
 
@@ -330,12 +392,26 @@ class _RoleCardViewerState extends State<RoleCardViewer>
         440.0,
         math.min(size.maxWidth, size.maxHeight * .7),
       );
+      final front = Semantics(
+        label:
+            'Recto illustré de ${widget.role.name}. Retournez pour lire les règles.',
+        image: true,
+        child: widget.ambience == CardAmbience.classic
+            ? RoleCardFront(role: widget.role, ambience: widget.ambience)
+            : CardFinish(
+                horror: widget.ambience == CardAmbience.horror,
+                child: RoleCardFront(
+                  role: widget.role,
+                  ambience: widget.ambience,
+                ),
+              ),
+      );
+      final rules = _CardBack(role: widget.role, ambience: widget.ambience);
       return Center(
         child: AnimatedBuilder(
           animation: Listenable.merge([_flip, _hide]),
           builder: (context, child) {
-            final back = _flip.value > .5;
-            final angle = Curves.easeInOut.transform(_flip.value) * math.pi;
+            final back = cardFaceIsBack(_flip.value);
             return Transform.translate(
               offset: Offset(
                 0,
@@ -344,75 +420,54 @@ class _RoleCardViewerState extends State<RoleCardViewer>
               ),
               child: Opacity(
                 opacity: 1 - _hide.value,
-                child: Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, .001)
-                    ..rotateY(back ? angle - math.pi : angle),
-                  child: CardMotion(
-                    canPeek: _covered && !_concealed && !_closing,
-                    onPeek: _peek,
-                    onDismiss: _dismiss,
-                    child: SizedBox(
-                      width: width,
-                      height: width / .7,
-                      child: _concealed
-                          ? const Card(
-                              child: Center(
-                                child: Icon(Icons.visibility_off, size: 64),
+                child: CardMotion(
+                  enabled: !_closing && !_concealed,
+                  halfTurns: _flip.value,
+                  onTurnStart: _startTurn,
+                  onTurnUpdate: _dragTurn,
+                  onTurnEnd: _releaseTurn,
+                  onTurnCancel: _cancelTurn,
+                  canPeek: _covered && !_concealed && !_closing,
+                  onPeek: _peek,
+                  onDismiss: _dismiss,
+                  child: SizedBox(
+                    width: width,
+                    height: width / .7,
+                    child: _concealed
+                        ? const Card(
+                            child: Center(
+                              child: Icon(Icons.visibility_off, size: 64),
+                            ),
+                          )
+                        : _covered && !back
+                        ? Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ContentImage(
+                                widget.ambience == CardAmbience.horror
+                                    ? 'assets/village/horror/card_back.png'
+                                    : widget.ambience == CardAmbience.intense
+                                    ? 'assets/village/intense/card_back.png'
+                                    : 'assets/village/card_back.png',
+                                fit: BoxFit.contain,
+                                fallbackAsset: 'assets/village/card_back.png',
                               ),
-                            )
-                          : _covered && !back
-                          ? Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                ContentImage(
-                                  widget.ambience == CardAmbience.horror
-                                      ? 'assets/village/horror/card_back.png'
-                                      : widget.ambience == CardAmbience.intense
-                                      ? 'assets/village/intense/card_back.png'
-                                      : 'assets/village/card_back.png',
-                                  fit: BoxFit.contain,
-                                  fallbackAsset: 'assets/village/card_back.png',
-                                ),
-                                if (_peeking)
-                                  ClipPath(
-                                    key: const ValueKey('secret-card-peek'),
-                                    clipper: PeekCornerClip(),
-                                    child: ExcludeSemantics(
-                                      child: RoleCardFront(
-                                        role: widget.role,
-                                        ambience: widget.ambience,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            )
-                          : back && !_covered
-                          ? _CardBack(
-                              role: widget.role,
-                              ambience: widget.ambience,
-                            )
-                          : Semantics(
-                              label:
-                                  'Recto illustré de ${widget.role.name}. Retournez pour lire les règles.',
-                              image: true,
-                              child: widget.ambience == CardAmbience.classic
-                                  ? RoleCardFront(
+                              if (_peeking)
+                                ClipPath(
+                                  key: const ValueKey('secret-card-peek'),
+                                  clipper: PeekCornerClip(),
+                                  child: ExcludeSemantics(
+                                    child: RoleCardFront(
                                       role: widget.role,
                                       ambience: widget.ambience,
-                                    )
-                                  : CardFinish(
-                                      horror:
-                                          widget.ambience ==
-                                          CardAmbience.horror,
-                                      child: RoleCardFront(
-                                        role: widget.role,
-                                        ambience: widget.ambience,
-                                      ),
                                     ),
-                            ),
-                    ),
+                                  ),
+                                ),
+                            ],
+                          )
+                        : back && !_covered
+                        ? rules
+                        : front,
                   ),
                 ),
               ),
@@ -434,15 +489,24 @@ class _RoleCardViewerState extends State<RoleCardViewer>
         ),
       ),
     if (!_concealed)
+      const Padding(
+        padding: EdgeInsets.only(bottom: 8),
+        child: Text(
+          'Glisse sur les côtés pour retourner la carte. Un geste vif la fait tournoyer.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12),
+        ),
+      ),
+    if (!_concealed)
       AnimatedBuilder(
         animation: _flip,
         builder: (context, child) => FilledButton.icon(
-          onPressed: _closing || _flip.isAnimating ? null : _turn,
+          onPressed: _closing || _dragging || _flip.isAnimating ? null : _turn,
           icon: const Icon(Icons.flip),
           label: Text(
             _covered
                 ? 'Découvrir ma carte'
-                : _flip.value > .5
+                : cardFaceIsBack(_flip.value)
                 ? 'Voir l’illustration'
                 : 'Retourner la carte',
           ),
@@ -515,8 +579,7 @@ class _RoleCardViewerState extends State<RoleCardViewer>
   );
 }
 
-/// Text is rendered from the same role definition for every cosmetic edition.
-/// The imported JPGs are kept intact; their outdated rules are covered here.
+/// Edition-specific rules cover the old caption without changing the artwork.
 class RoleCardFront extends StatelessWidget {
   const RoleCardFront({super.key, required this.role, required this.ambience});
   final ClassicRole role;
@@ -527,6 +590,50 @@ class RoleCardFront extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final variant = cardVariant(role.id, ambience.asset);
+    if (variant != null) {
+      final horror = ambience == CardAmbience.horror;
+      final asset = horror
+          ? 'assets/cards/horror/${role.id == 'villager' && role.feminine ? 'villager_female' : role.id}.png'
+          : role.id == 'villager' && role.feminine
+          ? 'assets/cards/intense/villager_female.png'
+          : 'assets/cards/intense/${role.id}_intense.${['sisters', 'mayor', 'scapegoat'].contains(role.id) ? 'png' : 'jpg'}';
+      return Center(
+        child: AspectRatio(
+          aspectRatio: horror ? 2 / 3 : 864 / 1238,
+          child: LayoutBuilder(
+            builder: (context, size) => Stack(
+              fit: StackFit.expand,
+              children: [
+                ContentImage(
+                  asset,
+                  fallbackAsset: role.asset,
+                  fit: BoxFit.fill,
+                  cacheWidth: 864,
+                ),
+                Positioned(
+                  left: size.maxWidth * .14,
+                  right: size.maxWidth * .14,
+                  top:
+                      size.maxHeight *
+                      (horror
+                          ? .66
+                          : role.id == 'metamorph'
+                          ? .54
+                          : .625),
+                  bottom: size.maxHeight * (horror ? .105 : .135),
+                  child: _VariantPlate(
+                    variant: variant,
+                    camp: role.camp,
+                    horror: horror,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     if (ambience == CardAmbience.horror) {
       return ContentImage(
         'assets/cards/horror/${role.id == 'villager' && role.feminine ? 'villager_female' : role.id}.png',
@@ -600,6 +707,83 @@ class RoleCardFront extends StatelessWidget {
       ),
     );
   }
+}
+
+class _VariantPlate extends StatelessWidget {
+  const _VariantPlate({
+    required this.variant,
+    required this.camp,
+    required this.horror,
+  });
+  final Map<String, String> variant;
+  final String camp;
+  final bool horror;
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(
+        color: horror ? const Color(0xFF563322) : const Color(0xFFAA7E42),
+        width: 1.5,
+      ),
+      gradient: LinearGradient(
+        colors: horror
+            ? const [Color(0xFFDEC5A3), Color(0xFFECD9B9), Color(0xFFCCAD86)]
+            : const [Color(0xFFDBC08C), Color(0xFFF0DFB8), Color(0xFFC6A36B)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(7),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: SizedBox(
+          width: 620,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              fontFamily: 'VillageSans',
+              color: Color(0xFF2B1B12),
+              fontSize: 36,
+              height: 1.16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  variant['name']!,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: TextStyle(
+                    fontFamily: 'Cormorant',
+                    fontSize: 56,
+                    height: 1,
+                    fontWeight: FontWeight.bold,
+                    color: horror
+                        ? const Color(0xFF661B1B)
+                        : const Color(0xFF493016),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Camp : $camp',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 28),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  variant['summary']!,
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class _CardBack extends StatelessWidget {

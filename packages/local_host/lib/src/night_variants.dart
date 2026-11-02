@@ -13,7 +13,10 @@ extension _CardVariants on NightGame {
       _veiledUntil.containsKey(id) &&
       (night < _veiledUntil[id]! || night == _veiledUntil[id]! && _atNight);
   bool _guardBlocksPack(String? id) =>
-      id != null && id == _extra.protected && _guardMode != 'sacrifice';
+      id != null &&
+      !_cannotProtect(id) &&
+      id == _extra.protected &&
+      _guardMode != 'sacrifice';
   List<String> _variantTargets(
     Map<String, dynamic> action,
     List<String> allowed,
@@ -32,6 +35,10 @@ extension _CardVariants on NightGame {
   }
 
   List<Map<String, dynamic>> _variantAbilities(String id) {
+    return [..._expandedAbilities(id), ..._initialVariantAbilities(id)];
+  }
+
+  List<Map<String, dynamic>> _initialVariantAbilities(String id) {
     if (!alive.contains(id) || !_powerEnabled(id)) return [];
     Map<String, dynamic> ability(
       String action,
@@ -71,8 +78,9 @@ extension _CardVariants on NightGame {
       final targets = others
           .where(
             (p) =>
-                _extra.guardNight[id] != night - 1 ||
-                _extra.guardPrevious[id] != p,
+                !_cannotProtect(p) &&
+                (_extra.guardNight[id] != night - 1 ||
+                    _extra.guardPrevious[id] != p),
           )
           .toList();
       if (_variant(id, 'guardian', 'intense') && !_spent(id, 'ward'))
@@ -115,6 +123,7 @@ extension _CardVariants on NightGame {
   }
 
   bool _actVariants(String id, Map<String, dynamic> action) {
+    if (_actExpanded(id, action)) return true;
     if (!_powerEnabled(id)) return false;
     if (phase == 'metamorph' &&
         _variant(id, 'metamorph', 'intense') &&
@@ -186,11 +195,7 @@ extension _CardVariants on NightGame {
       case 'wolves.scent':
         _spend(id, 'scent');
         final p = chosen.single;
-        final protected =
-            p == _extra.protected ||
-            roles[p] == 'elder' &&
-                _powerEnabled(p) &&
-                !_extra.elderHit.contains(p);
+        final protected = _hasNightProtection(p);
         _variantInfo[id] = {
           'kind': 'scent',
           'target': p,
@@ -213,7 +218,10 @@ extension _CardVariants on NightGame {
 
   void _resolveVariantProtection(Map<String, String> victims) {
     final target = _extra.protected;
-    if (_guardMode == 'ward' && target != null && victims[target] == 'poison') {
+    if (_guardMode == 'ward' &&
+        target != null &&
+        !_cannotProtect(target) &&
+        victims[target] == 'poison') {
       victims.remove(target);
       _log('effect', {
         'effect': 'poison_blocked',
@@ -223,6 +231,7 @@ extension _CardVariants on NightGame {
     }
     if (_guardMode == 'sacrifice' &&
         target != null &&
+        !_cannotProtect(target) &&
         _guardActor != null &&
         alive.contains(_guardActor) &&
         victims.containsKey(target)) {
@@ -286,5 +295,6 @@ extension _CardVariants on NightGame {
     }
     swapMap(_extra.guardPrevious);
     swapMap(_extra.guardNight);
+    swapMap(_expanded.whiteDeferred);
   }
 }

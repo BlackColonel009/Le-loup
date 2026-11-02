@@ -49,6 +49,7 @@ def confirm_deletion(
     db: Annotated[Store, Depends(store)],
 ):
     db.limit(("delete_attempt", request.client.host), 30, 300)
+    avatar_photo = None
     with db.db() as connection:
         connection.execute("BEGIN IMMEDIATE")
         row, error = email_security.check(
@@ -62,6 +63,8 @@ def confirm_deletion(
             if user is None or user["email"] != row["email"]:
                 error = "Code invalide ou expiré. Demande un nouveau code."
             else:
+                portrait = connection.execute('SELECT photo FROM player_avatars WHERE user_id=?', (user_id,)).fetchone()
+                avatar_photo = portrait['photo'] if portrait else None
                 connection.execute(
                     "DELETE FROM reports WHERE user_id=? OR message_id IN (SELECT id FROM messages WHERE user_id=?)",
                     (user_id, user_id),
@@ -78,6 +81,8 @@ def confirm_deletion(
                     "email_challenges",
                     "community_mail_preferences",
                     "community_mail_deliveries",
+                    "player_avatars",
+                    "avatar_unlocks",
                 ):
                     connection.execute(
                         f"DELETE FROM {table} WHERE user_id=?", (user_id,)
@@ -100,6 +105,9 @@ def confirm_deletion(
     # Keep failed-attempt counters committed even when returning an error.
     if error:
         raise HTTPException(400, error)
+    if avatar_photo:
+        from .avatars import directory
+        (directory(db) / avatar_photo).unlink(missing_ok=True)
     return {
         "ok": True,
         "message": "Ton compte et ses données associées ont été supprimés de la base active. Tes sessions sont fermées.",

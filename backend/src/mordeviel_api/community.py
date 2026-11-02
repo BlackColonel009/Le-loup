@@ -51,6 +51,11 @@ class Store:
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY, nickname TEXT NOT NULL,
                     name_key TEXT NOT NULL UNIQUE, salt TEXT NOT NULL, password TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS player_avatars (
+                    user_id INTEGER PRIMARY KEY, avatar_id TEXT NOT NULL, photo TEXT);
+                CREATE TABLE IF NOT EXISTS avatar_unlocks (
+                    user_id INTEGER NOT NULL, avatar_id TEXT NOT NULL, source TEXT NOT NULL,
+                    PRIMARY KEY(user_id,avatar_id));
                 CREATE TABLE IF NOT EXISTS sessions (
                     digest TEXT PRIMARY KEY, user_id INTEGER NOT NULL, expires REAL NOT NULL);
                 CREATE TABLE IF NOT EXISTS messages (
@@ -113,7 +118,7 @@ class Store:
                     (
                         "faq",
                         "Les thèmes changent-ils les pouvoirs ?",
-                        "Non. Classique, Intense et Horreur utilisent les mêmes rôles et règles. Seul leur habillage change.",
+                        "L’environnement choisit l’ambiance. Les pouvoirs dépendent de l’édition de chaque carte : Classique, Intense ou Horreur. Une partie mixte conserve les pouvoirs propres à chaque carte. Consulte le Codex du salon avant de jouer.",
                     ),
                     (
                         "faq",
@@ -135,6 +140,15 @@ class Store:
                         "INSERT INTO official_content(kind,title,body,published) VALUES(?,?,?,?)",
                         (kind, title, body, time.time()),
                     )
+            # Update only our old seed, preserving administrator-written FAQs.
+            db.execute(
+                "UPDATE official_content SET body=? WHERE kind='faq' AND title=? AND body=?",
+                (
+                    "L’environnement choisit l’ambiance. Les pouvoirs dépendent de l’édition de chaque carte : Classique, Intense ou Horreur. Une partie mixte conserve les pouvoirs propres à chaque carte. Consulte le Codex du salon avant de jouer.",
+                    "Les thèmes changent-ils les pouvoirs ?",
+                    "Non. Classique, Intense et Horreur utilisent les mêmes rôles et règles. Seul leur habillage change.",
+                ),
+            )
 
     @contextmanager
     def db(self):
@@ -213,6 +227,7 @@ def administrator(
 
 
 def session(db, user):
+    from .avatars import avatar_in
     token = secrets.token_urlsafe(32)
     with db.db() as connection:
         profile = connection.execute(
@@ -221,6 +236,7 @@ def session(db, user):
         ).fetchone()
         if profile["banned"]:
             raise HTTPException(403, "Compte banni de la communauté.")
+        avatar = avatar_in(connection, user['id'])
         expires_at = time.time() + (86400 if profile['role'] == 'admin' else 14 * 86400)
         connection.execute("DELETE FROM sessions WHERE expires<?", (time.time(),))
         connection.execute(
@@ -241,6 +257,7 @@ def session(db, user):
             "verified": profile["role"] == "admin",
             "email": profile["email"],
             "email_verified": bool(profile["email_verified"]),
+            "avatar": avatar,
         },
     }
 
@@ -334,6 +351,8 @@ def messages(
     user: Annotated[dict, Depends(authenticated)],
     db: Annotated[Store, Depends(store)],
 ):
+    from .avatars import avatar_in
+    from .social import blocked
     with db.db() as connection:
         # Latest page for the first visit, chronological incremental pages afterwards.
         if after <= 0:
@@ -348,7 +367,8 @@ def messages(
                 ORDER BY messages.id LIMIT 50""",
                 (after,),
             ).fetchall()
-    return {"messages": [dict(row) for row in rows]}
+        portraits = {uid: None if blocked(connection, user['id'], uid) else avatar_in(connection, uid) for uid in {r['user_id'] for r in rows}}
+        return {"messages": [dict(row) | {'avatar': portraits[row['user_id']]} for row in rows]}
 
 
 @router.post("/messages", status_code=201)

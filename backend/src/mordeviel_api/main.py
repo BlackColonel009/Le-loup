@@ -18,6 +18,7 @@ from . import (
     social_scheduler,
 )
 from .account_deletion import router as deletion_router
+from .avatars import router as avatar_router
 from .administration import router as admin_router
 from .community import Store
 from .community import router as community_router
@@ -90,6 +91,7 @@ app.include_router(social_scheduler.router)
 app.include_router(shop_router)
 app.include_router(admin_router)
 app.include_router(profile_router)
+app.include_router(avatar_router)
 app.include_router(deletion_router)
 app.include_router(gallery_router)
 install_website(app)

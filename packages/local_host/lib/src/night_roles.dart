@@ -12,6 +12,9 @@ const _nightCalls = {
   'witch': ('witch', 'la Sorcière'),
   'white_wolf': ('white_wolf', 'le Loup Blanc'),
   'piper': ('piper', 'le Joueur de Flûte'),
+  'village_watch': ('villager', 'les Veilleurs du village'),
+  'elder_watch': ('elder', 'les Anciens du village'),
+  'lovers': ('bond', 'les Amoureux'),
 };
 
 class _RoleState {
@@ -69,16 +72,33 @@ extension _AdditionalRoles on NightGame {
   Set<String> get _eligibleVoters => alive
       .where(
         (id) =>
-            !_extra.gracedIdiots.contains(id) &&
+            (!_extra.gracedIdiots.contains(id) ||
+                _expanded.idiotBallots[id] == night) &&
+            (phase == 'mayor_election' || _expanded.deniedVotes[id] != night) &&
+            _expanded.revoteExcluded != id &&
+            (phase == 'mayor_election' || _expanded.markBans[id] != night) &&
             (_extra.restrictedNight != night || _extra.voters!.contains(id)),
       )
       .toSet();
 
   bool _callExists(String action) {
+    if (action == 'lovers') return _loversCallExists;
     final role = _nightCalls[action]!.$1;
     if (role == 'pack') return alive.any(_isWolf);
     if (!_hasLivingRole(role)) return false;
     return switch (action) {
+      'elder_watch' => alive.any(
+        (id) =>
+            roles[id] == 'elder' &&
+            (editionOf(id) == 'intense' && !_extra.elderHit.contains(id) ||
+                editionOf(id) == 'horror' && !_spent(id, 'presage')),
+      ),
+      'village_watch' => alive.any(
+        (id) =>
+            roles[id] == 'villager' &&
+            editionOf(id) != 'classic' &&
+            !_spent(id, 'watch'),
+      ),
       'metamorph' =>
         !_extra.metamorphUsed &&
             alive.any(
@@ -87,13 +107,16 @@ extension _AdditionalRoles on NightGame {
                   (night == 1 || editionOf(id) == 'horror'),
             ),
       'cupid' => night == 1 && !_extra.cupidUsed,
-      'sisters' => night == 1 && _recognizedSisters.isEmpty,
-      'alpha' => !_extra.packBroken,
+      'sisters' =>
+        night == 1 && _recognizedSisters.isEmpty || _sisterVariantCallExists,
+      'alpha' => alive.any(_alphaCanAttack),
       'infection' => alive.any(
         (id) =>
-            roles[id] == 'wolf_father' && !_extra.infectionSpent.contains(id),
+            roles[id] == 'wolf_father' &&
+            (!_extra.infectionSpent.contains(id) ||
+                _dormantTargets(id).isNotEmpty),
       ),
-      'white_wolf' => night.isEven,
+      'white_wolf' => alive.any(_whiteCanAttack),
       _ => true,
     };
   }
@@ -108,6 +131,21 @@ extension _AdditionalRoles on NightGame {
         _callExists('cupid') &&
         !_nightCompleted.contains('cupid')) {
       return 'Terminez ou passez Cupidon avant les autres appels.';
+    }
+    if (action == 'wolves' &&
+        _loversCallExists &&
+        !_nightCompleted.contains('lovers')) {
+      return 'Appelez ou passez les Amoureux avant la chasse.';
+    }
+    if (action == 'wolves' &&
+        _sisterVariantCallExists &&
+        !_nightCompleted.contains('sisters')) {
+      return 'Appelez ou passez les Sœurs avant la chasse.';
+    }
+    if (action == 'wolves' &&
+        _callExists('elder_watch') &&
+        !_nightCompleted.contains('elder_watch')) {
+      return 'Appelez ou passez l’Ancien avant la chasse.';
     }
     if (action == 'wolves' &&
         _callExists('guardian') &&
@@ -128,7 +166,10 @@ extension _AdditionalRoles on NightGame {
         }
       }
     }
-    if (['alpha', 'infection'].contains(action) && _attack == null)
+    if (['alpha', 'infection'].contains(action) &&
+        _attack == null &&
+        !(action == 'infection' &&
+            alive.any((id) => _dormantTargets(id).isNotEmpty)))
       return 'Aucune victime de la meute cette nuit.';
     return null;
   }
@@ -157,6 +198,12 @@ extension _AdditionalRoles on NightGame {
       ? 'Deux Sœurs, ouvrez les yeux et reconnaissez-vous.'
       : phase == 'scapegoat'
       ? 'Bouc émissaire, désigne les joueurs qui pourront voter demain.'
+      : phase == 'lovers'
+      ? 'Amoureux, ouvrez les yeux. Votre rencontre commence.'
+      : phase == 'village_watch'
+      ? 'Éclaireurs et Veilleurs, ouvrez les yeux. Quelle maison souhaitez-vous observer ?'
+      : phase == 'elder_watch'
+      ? 'Ancien, ouvre les yeux. Souhaites-tu transmettre ta résistance ou annoncer ton présage ?'
       : _nightCalls.containsKey(phase)
       ? '${_nightCalls[phase]!.$2}, réveille-toi. Choisis ton action.'
       : '';
@@ -168,8 +215,7 @@ extension _AdditionalRoles on NightGame {
       'Le Loup Blanc est le dernier survivant et remporte la partie.',
     'piper' =>
       'Le Joueur de Flûte a charmé tous les autres survivants et remporte la partie.',
-    'angel' =>
-      'L’Ange a atteint son objectif au premier vote et remporte la partie.',
+    'angel' => 'L’Ange a atteint son objectif au vote et remporte la partie.',
     'lovers' => 'Les amoureux de camps opposés remportent ensemble la partie.',
     _ => '',
   };
@@ -225,19 +271,8 @@ extension _AdditionalRoles on NightGame {
 
   void _startExtraNight() {
     _resetVariantsNight();
-    for (final id in _extra.infections.keys.toList()) {
-      if (_extra.infections[id]! <= night) {
-        if (alive.contains(id)) {
-          _extra.infected.add(id);
-          _log('effect', {'effect': 'infection', 'target': id});
-          _notice(
-            id,
-            'Vous rejoignez la meute. Vous conservez votre rôle et ses pouvoirs ; votre camp est désormais Loups-Garous.',
-          );
-        }
-        _extra.infections.remove(id);
-      }
-    }
+    _resetExpandedNight();
+    _applyDueInfections();
     _extra.acted.clear();
     _extra.peek.clear();
     _extra.spotted.clear();
@@ -306,6 +341,7 @@ extension _AdditionalRoles on NightGame {
       _enter('hunter');
       return;
     }
+    _applyTestament();
     if (_pendingMayor != null) {
       _resolveVictory();
       if (winner == null && alive.isNotEmpty) {
@@ -321,10 +357,13 @@ extension _AdditionalRoles on NightGame {
     final victims = <String, String>{};
     void packAttack(String? id) {
       if (id == null || !alive.contains(id)) return;
+      id = _redirectSisterAttack(id)!;
+      if (_consumeHunterWard(id)) return;
       if (_guardBlocksPack(id)) {
         _log('effect', {'effect': 'protected', 'target': id});
         return;
       }
+      if (_blockByElderVariant(id)) return;
       if (roles[id] == 'elder' &&
           _powerEnabled(id) &&
           !_extra.elderHit.contains(id)) {
@@ -339,7 +378,8 @@ extension _AdditionalRoles on NightGame {
       if (_attack != null &&
           _extra.infectTarget == _attack &&
           !_guardBlocksPack(_attack)) {
-        _extra.infections[_attack!] = night + 1;
+        _extra.infections[_attack!] =
+            _expanded.infectionDue[_attack] ?? night + 1;
         _log('effect', {'effect': 'infection_pending', 'target': _attack});
       } else {
         packAttack(_attack);
@@ -350,8 +390,11 @@ extension _AdditionalRoles on NightGame {
     packAttack(_extra.extraAttack);
     if (_extra.whiteAttack != null) victims[_extra.whiteAttack!] = 'white_wolf';
     if (_poison != null) victims[_poison!] = 'poison';
+    _resolveDelayedPoisons(victims);
     _resolveVariantProtection(victims);
     _kill(victims);
+    _resolveWatches();
+    _applyDueInfections();
     if (_saved &&
         _extra.infectTarget != _attack &&
         _attack != null &&
@@ -432,8 +475,9 @@ extension _AdditionalRoles on NightGame {
         all
             .where(
               (target) =>
-                  _extra.guardNight[id] != night - 1 ||
-                  _extra.guardPrevious[id] != target,
+                  !_cannotProtect(target) &&
+                  (_extra.guardNight[id] != night - 1 ||
+                      _extra.guardPrevious[id] != target),
             )
             .toList(),
         1,
@@ -442,7 +486,7 @@ extension _AdditionalRoles on NightGame {
     }
     if (phase == 'alpha' &&
         role == 'alpha_wolf' &&
-        !_extra.packBroken &&
+        _alphaCanAttack(id) &&
         _attack != null) {
       return choice(
         'alpha.choose',
@@ -452,7 +496,7 @@ extension _AdditionalRoles on NightGame {
         1,
       );
     }
-    if (phase == 'white_wolf' && role == 'white_wolf' && night.isEven)
+    if (phase == 'white_wolf' && _whiteCanAttack(id))
       return choice(
         'white_wolf.choose',
         'Éliminer un autre loup',
@@ -537,6 +581,18 @@ extension _AdditionalRoles on NightGame {
       if (_isWolf(id) && phase == 'wolves')
         'spotted_girls': _extra.spotted.toList(),
       if (ability != null) ...{'ability': ability, 'can_act': ready},
+      if (_expandedAbilities(id).isNotEmpty) ...{
+        'can_act':
+            !closed &&
+            !paused &&
+            (!timed || remainingMilliseconds > 0) &&
+            (canAct ||
+                reaction ||
+                !timed && alive.contains(id) ||
+                phase == 'hunter' && _hunter == id),
+      },
+      ..._solitaryPrivate(id),
+      if (_bondPrivate(id) != null) 'bond_chat': _bondPrivate(id),
     };
   }
 
@@ -595,13 +651,18 @@ extension _AdditionalRoles on NightGame {
         _extra.lovers[chosen[0]] = chosen[1];
         _extra.lovers[chosen[1]] = chosen[0];
         _extra.cupidUsed = true;
+        _expanded.loversEdition = editionOf(id);
+        _expanded.loversSource = _cardTokens[id];
+        _expanded.loversMeetingNight = night;
       case 'guardian.protect':
         _extra.protected = chosen.single;
         _extra.guardPrevious[id] = chosen.single;
         _extra.guardNight[id] = night;
       case 'alpha.choose':
+        if (_extra.packBroken) _spend(id, 'last_hunt');
         _extra.extraAttack = chosen.single;
       case 'white_wolf.choose':
+        _expanded.whiteDeferred.remove(id);
         _extra.whiteAttack = chosen.single;
       case 'infection.convert':
         _extra.infectTarget = chosen.single;
@@ -616,9 +677,17 @@ extension _AdditionalRoles on NightGame {
         _extra.voters = chosen.toSet();
         _extra.restrictedNight = night + 1;
       case 'little_girl.peek':
-        _extra.peek[id] = _wolfMessages.isEmpty
+        final available = List<Map<String, String>>.from(_wolfMessages);
+        final snippets = <String>[];
+        final count = editionOf(id) == 'intense' ? 2 : 1;
+        for (var i = 0; i < count && available.isNotEmpty; i++) {
+          snippets.add(
+            available.removeAt(_chanceDraw(available.length))['text']!,
+          );
+        }
+        _extra.peek[id] = snippets.isEmpty
             ? 'Aucun murmure capté.'
-            : _wolfMessages[_chanceDraw(_wolfMessages.length)]['text']!;
+            : snippets.join('\n');
         if (_chanceDraw(3) == 0) _extra.spotted.add(id);
       default:
         return false;

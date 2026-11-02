@@ -213,6 +213,8 @@ void main() {
             w.key.toString().contains('game-sound-'),
       );
       await tester.scrollUntilVisible(selector, 300);
+      await Scrollable.ensureVisible(tester.element(selector), alignment: .45);
+      await tester.pumpAndSettle();
       await tester.tap(selector);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Son standard du téléphone').last);

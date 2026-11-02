@@ -19,6 +19,18 @@ voisines. Les états et les noms restent ancrés au même endroit pendant les ph
 jour/nuit. La protection du Salvateur et les fantômes suivent les nouveaux points.
 La neige continue d'être affichée quelle que soit la phase.
 
+Recalage du 2 novembre 2026 : chaque point au sol est mesuré en pixels sur
+l'illustration 1536 × 1024. Les colonnes suivent le décalage réel des parcelles
+entre les rangées ; les maisons et leurs noms remontent à l'intérieur des
+clairières pour libérer les allées. L'ordre des vingt places reste conservé.
+
+Un contour bleu pâle discret suit la silhouette de chaque maison, avec un court
+reflet chaud qui en parcourt le périmètre en six secondes. Les points du contour
+sont extraits du canal alpha des trois PNG par `tools/sync_house_contours.py` ;
+aucune image n'est retouchée. L'effet est plus visible la nuit et s'arrête en
+pause, en arrière-plan et lorsque les animations sont réduites. Il n'indique
+aucun rôle secret et reste distinct des lueurs au sol prêt/éliminé.
+
 Le panneau du village prend davantage de hauteur avec ce thème. En portrait,
 le cadrage initial garde les deux colonnes centrales accessibles. Le déplacement,
 le pincement et les boutons +/− permettent de parcourir le terrain ; « Vue

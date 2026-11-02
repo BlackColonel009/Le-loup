@@ -21,10 +21,14 @@ def profile(
     user: Annotated[dict, Depends(authenticated)],
     db: Annotated[Store, Depends(store)],
 ):
+    from .avatars import avatar_in
+    with db.db() as c:
+        avatar = avatar_in(c, user['id'])
     restricted = user["muted_until"] > time.time()
     return {
         "id": user["id"],
         "nickname": user["nickname"],
+        "avatar": avatar,
         "role": user["role"],
         "verified": user["role"] == "admin",
         "email": user["email"],

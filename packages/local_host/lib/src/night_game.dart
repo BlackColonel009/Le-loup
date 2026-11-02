@@ -7,6 +7,12 @@ import 'chat_stickers.g.dart';
 import 'card_variants.dart';
 part 'night_roles.dart';
 part 'night_variants.dart';
+part 'night_expanded_variants.dart';
+part 'night_predator_variants.dart';
+part 'night_solitary_variants.dart';
+part 'night_village_variants.dart';
+part 'night_voting_variants.dart';
+part 'night_bond_variants.dart';
 
 /// Moteur autoritaire, indépendant du transport et de Flutter.
 class NightGame {
@@ -16,6 +22,7 @@ class NightGame {
     this.revealOnDeath = true,
     this.revealRescuer = false,
     this.electMayor = false,
+    this.mayorEdition = 'classic',
     Map<String, String> editions = const {},
     DateTime Function()? clock,
     int Function(int)? weatherDraw,
@@ -36,6 +43,8 @@ class NightGame {
       _cardTokens[id] = 'card:$id';
     }
     final sisters = roles.values.where((r) => r == 'sisters').length;
+    if (!cardEditions.contains(mayorEdition))
+      throw ArgumentError('Édition du Maire inconnue.');
     if (sisters != 0 && sisters != 2)
       throw ArgumentError(
         'Les Deux Sœurs se jouent ensemble, avec exactement deux cartes.',
@@ -55,6 +64,7 @@ class NightGame {
   final List<String> sentenceOptions;
   Map<String, String> get roles => UnmodifiableMapView(_roles);
   final _RoleState _extra = _RoleState();
+  final _ExpandedVariantState _expanded = _ExpandedVariantState();
   final int Function(int) _chanceDraw;
   final Set<String> alive;
   final bool campOnly;
@@ -63,6 +73,7 @@ class NightGame {
   final List<Map<String, dynamic>> _rescues = [];
   String? _rescuer;
   final bool electMayor;
+  final String mayorEdition;
   final List<Map<String, dynamic>> _deathEvents = [];
   final List<Map<String, dynamic>> _history = [];
   final _reactions = <String, Map<String, dynamic>>{};
@@ -255,6 +266,7 @@ class NightGame {
         roles.keys.where((id) => roles[id] == 'sisters'),
       );
     _enter(action);
+    _openInitialLoversMeeting(action);
   }
 
   void finishNight() {
@@ -290,6 +302,7 @@ class NightGame {
     if (seconds < 15 || seconds > 600)
       throw ArgumentError('Durée entre 15 et 600 secondes.');
     _votes.clear();
+    _expanded.voteSeconds = seconds;
     _voteSummary = null;
     if (electMayor && _mayor == null && _mayorElectionNight != night) {
       _mayorElectionNight = night;
@@ -316,6 +329,7 @@ class NightGame {
         'voting',
         'mayor_election',
         'mayor_succession',
+        'mediation',
       ].contains(phase);
   int get remainingMilliseconds => paused
       ? _pausedMilliseconds!
@@ -340,6 +354,8 @@ class NightGame {
         'day' => 'Le village est réveillé. Place au débat.',
         'voting' =>
           'Le village vote. Désignez un joueur ou choisissez le vote blanc.',
+        'mediation' =>
+          'Le scrutin est à égalité. Le Médiateur choisit un second vote sans son bulletin ou accepte son sacrifice.',
         'vote_result' =>
           'Le scrutin est terminé. Le village découvre le résultat.',
         'ended' => _victoryAnnouncement(),
@@ -347,7 +363,9 @@ class NightGame {
       };
 
   Map<String, dynamic> get publicState => {
+    ..._expandedPublic,
     'mayor': _mayor,
+    'mayor_edition': mayorEdition,
     'mayor_election_needed':
         electMayor && _mayor == null && _mayorElectionNight != night,
     if (phase == 'mayor_election')
@@ -496,6 +514,7 @@ class NightGame {
   }
 
   Map<String, dynamic> get hostState => {
+    ..._expandedHost,
     'confirmed_selections': [
       for (final id in roles.keys)
         if (_latestSelection(id) != null) _latestSelection(id),
@@ -561,10 +580,13 @@ class NightGame {
     _votes.clear();
     _voteSummary = null;
     _sentence = null;
-    _enter('sleep');
+    if (!_resolveTwilightPoisons()) _enter('sleep');
   }
 
   void _enter(String value) {
+    if (value != phase && ['lovers', 'sisters'].contains(phase)) {
+      _expanded.bondChats.clear();
+    }
     final closing =
         value == 'sleep' && mdjNarrationLines.containsKey('close_$phase')
         ? 'close_$phase'
@@ -631,7 +653,10 @@ class NightGame {
             wolves.isNotEmpty && targets.length == 1 && targets.single != null
             ? targets.single
             : null;
+        _countNightTarget(_attack);
+        _attack = _redirectSisterAttack(_attack);
         if (_guardBlocksPack(_attack)) _attack = null;
+        if (_consumeHunterWard(_attack)) _attack = null;
         _nightCompleted.add('wolves');
         _wolfMessages.clear();
         _enter('sleep');
@@ -667,6 +692,8 @@ class NightGame {
       case 'mayor_succession':
         _pendingMayor = null;
         _beginReactions();
+      case 'mediation':
+        _acceptMediation();
       default:
         if (_nightCalls.containsKey(phase)) {
           _nightCompleted.add(phase);
@@ -702,7 +729,7 @@ class NightGame {
       if (target == null) {
         blank++;
       } else {
-        counts[target] = (counts[target] ?? 0) + (ballot.key == _mayor ? 2 : 1);
+        counts[target] = (counts[target] ?? 0) + _ballotWeight(ballot.key);
       }
     }
     final best = [blank, ...counts.values].reduce((a, b) => a > b ? a : b);
@@ -723,6 +750,7 @@ class NightGame {
     final goat = alive
         .where((id) => roles[id] == 'scapegoat' && _powerEnabled(id))
         .firstOrNull;
+    if (best > 0 && tie && _interceptTie(goat, counts, blank, eligible)) return;
     if (best > 0 && tie && goat != null) {
       eliminated = goat;
       reason = 'scapegoat';
@@ -756,29 +784,14 @@ class NightGame {
           .where((id) => !_votes.containsKey(id))
           .toList(),
     });
-    if (!_extra.firstVoteResolved) {
-      if (eliminated != null &&
-          roles[eliminated] == 'angel' &&
-          !_isWolf(eliminated))
-        _extra.angelWinner = eliminated;
-      _extra.firstVoteResolved = true;
-      for (final id
-          in alive
-              .where((id) => roles[id] == 'angel' && id != eliminated)
-              .toList()) {
-        _roles[id] = 'villager';
-        _log('effect', {'effect': 'angel_becomes_villager', 'target': id});
-        _notice(
-          id,
-          'Le premier vote est passé : vous devenez Simple Villageois.',
-        );
-      }
-    }
+    _resolveAngelVote(eliminated);
     deaths = [];
+    _cancelCursesAfterVote(eliminated);
     if (eliminated != null) _kill({eliminated: 'vote'});
     _hunterDone = false;
     _dayComplete = true;
     _afterReactions = 'vote_result';
+    _finishVoteVariants();
     _beginReactions();
   }
 
@@ -800,6 +813,7 @@ class NightGame {
     };
     final position = _history.length;
     _act(id, action);
+    _countAcceptedNightAction(id, action);
     if (_variantInfo[id] != null &&
         [
           'seer.compare',
@@ -892,6 +906,12 @@ class NightGame {
       _chat(id, action['text'], _dayMessages);
       return;
     }
+    if (!timed &&
+        action['phase_revision'] == revision &&
+        !paused &&
+        !closed &&
+        _actExpanded(id, action))
+      return;
     if (action['phase_revision'] != revision ||
         paused ||
         closed ||
@@ -923,13 +943,28 @@ class NightGame {
         action['action'] == 'hunter.shoot') {
       if (!validTarget())
         throw ArgumentError('Choisissez un autre joueur vivant.');
+      final extraShot =
+          _variant(id, 'hunter', 'horror') &&
+          (_expanded.hunterShots[id] ?? 0) == 0 &&
+          _isWolf(target as String);
+      _expanded.hunterShots[id] = (_expanded.hunterShots[id] ?? 0) + 1;
       _kill({target as String: 'hunter'});
-      _hunterDone = true;
+      _hunterDone = !extraShot || alive.isEmpty || !_powerEnabled(id);
+      if (!_hunterDone)
+        _notice(
+          id,
+          'Votre tir a éliminé un membre de la meute. Un second et dernier tir est disponible.',
+        );
       return;
     }
     if (!alive.contains(id)) {
+      if (_actExpanded(id, action)) return;
       if (_actExtra(id, action)) return;
       throw StateError('Un joueur éliminé ne peut plus agir.');
+    }
+    if (action['action'] == 'bond.chat') {
+      _sendBondMessage(id, action['text']);
+      return;
     }
     if (['voting', 'mayor_election'].contains(phase) &&
         action['action'] == 'vote.cast') {
@@ -977,6 +1012,10 @@ class NightGame {
         throw ArgumentError('Choix de potions invalide.');
       if (save && (_attack == null || _lifeSpent.contains(id)))
         throw StateError('Potion de vie indisponible.');
+      if (save && _cannotProtect(_attack))
+        throw StateError(
+          'L’Ange du sursis ne peut recevoir aucune protection nocturne pendant son épreuve.',
+        );
       if (kill != null && _deathSpent.contains(id))
         throw StateError('Potion de mort indisponible.');
       if (save) {

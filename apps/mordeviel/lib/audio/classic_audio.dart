@@ -334,6 +334,12 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  void openingTear() {
+    if (_opening && scene == AudioScene.welcome) {
+      _play('curtain_tear.wav', voice: false);
+    }
+  }
+
   void silence() {
     _opening = false;
     _setScene(AudioScene.silent);

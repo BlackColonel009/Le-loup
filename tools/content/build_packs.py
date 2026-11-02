@@ -12,14 +12,15 @@ packs = []
 voice_labels = {p['id']: p['label'] for p in json.loads((ROOT / 'tools/audio/neural_profiles.json').read_text(encoding='utf-8'))['profiles']}
 
 
-def pack(pack_id, title, files, kind, theme=None):
+def pack(pack_id, title, files, kind, theme=None, asset_prefix=None):
     files = sorted(files)
     if not files:
         return
     entries = []
     for path in files:
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        entries.append({'asset': 'assets/' + path.relative_to(ASSETS).as_posix(), 'size': path.stat().st_size, 'sha256': digest})
+        asset = asset_prefix + path.name if asset_prefix else 'assets/' + path.relative_to(ASSETS).as_posix()
+        entries.append({'asset': asset, 'size': path.stat().st_size, 'sha256': digest})
     version = hashlib.sha256(json.dumps(entries, sort_keys=True).encode()).hexdigest()[:16]
     target = OUT / pack_id / version
     target.mkdir(parents=True, exist_ok=True)
@@ -34,6 +35,9 @@ def pack(pack_id, title, files, kind, theme=None):
 
 
 pack('stickers-classic', 'Émotions du village', (ASSETS / 'stickers/classic').glob('*.png'), 'stickers')
+avatars = json.loads((ROOT / 'shared/avatars/catalog.json').read_text(encoding='utf-8'))['avatars']
+pack('avatars-classic', 'Visages du village · Classique',
+     (ASSETS / 'cards' / a['source'] for a in avatars), 'avatars', 'classic', 'assets/avatars/classic/')
 for directory in sorted((ASSETS / 'audio/classic/neural').iterdir()):
     if directory.is_dir() and not directory.name.startswith('classic_'):
         pack('voice-' + directory.name.replace('_', '-'), 'Voix · ' + voice_labels.get(directory.name, directory.name),

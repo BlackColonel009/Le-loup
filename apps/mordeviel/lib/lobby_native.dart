@@ -239,7 +239,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Choisis l’édition de chaque carte. Voyante, Métamorphe, Salvateur et Loup-Garou possèdent des variantes Intense/Horreur : consulte le Codex avant de démarrer. L’environnement reste celui du salon.',
+                    'Choisis l’édition de chaque carte : ses pouvoirs Classiques, Intense ou Horreur la suivent en partie mixte. Consulte le Codex avant de démarrer. L’environnement reste celui du salon.',
                   ),
                   for (final role in collectionCards)
                     for (
@@ -295,7 +295,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             ),
             FilledButton(
               onPressed: () => Navigator.pop(dialog, styles),
-              child: const Text('Appliquer les visuels'),
+              child: const Text('Appliquer les éditions'),
             ),
           ],
         ),
@@ -852,6 +852,22 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   );
 
   Widget _villagePage() => VillageNavigation(
+    room: _room,
+    privateState: _nightPrivate,
+    selfId: _client?.id,
+    connected: _connected,
+    onRoleCard: _client != null && _role != null
+        ? () => _showRole(
+            context,
+            configuredRole(
+              _role!,
+              feminine: _femaleFor(_client?.id),
+              seerCampOnly: _room!['seer_camp_only'] == true,
+            ),
+            covered: true,
+            edition: _nightPrivate?['edition'] as String?,
+          )
+        : null,
     voiceControl: _voiceControls,
     banner: _host != null && !widget.online && !_speakerReminderDismissed
         ? Material(
@@ -896,6 +912,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     actions: _section(VillageDestination.actions),
     preparation: _section(VillageDestination.preparation),
     chat: VillageChat(
+      selfId: _client?.id,
       room: _room!,
       privateState: _nightPrivate,
       isHost: _host != null,

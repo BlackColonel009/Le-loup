@@ -73,8 +73,6 @@ class BotDecisions {
     if (own['can_act'] != true) return null;
     final phase = game['phase'];
     // Reactions may belong to an eliminated player (hunter, scapegoat, mayor).
-    if (phase == 'hunter')
-      return action('hunter.shoot', target: choose(others));
     final variants = (own['variant_abilities'] as List? ?? []).cast<Map>();
     if (variants.isNotEmpty && _random.nextBool()) {
       final ability = variants[_random.nextInt(variants.length)];
@@ -82,12 +80,18 @@ class BotDecisions {
         ..shuffle(_random);
       final count = ability['min'] as int;
       if (choices.length >= count) {
-        return action(
-          ability['action'] as String,
-          targets: choices.take(count).toList(),
-        );
+        return {
+          ...action(
+            ability['action'] as String,
+            targets: choices.take(count).toList(),
+          ),
+          if (ability['text_input'] == true)
+            'text': 'Les ombres ont entendu votre chasse…',
+        };
       }
     }
+    if (phase == 'hunter')
+      return action('hunter.shoot', target: choose(others));
     final ability = own['ability'];
     if (ability is Map) {
       if (ability['can_pass'] == true && _random.nextInt(5) == 0)
@@ -309,7 +313,7 @@ class _TestBot {
     final move = policy.next(id, _game, _own);
     if (move == null) return;
     final key =
-        '${move['phase_revision']}:${move['action']}${move['action'] == 'wolves.choose' ? ':${move['target']}' : ''}';
+        '${move['phase_revision']}:${move['action']}${['wolves.choose', 'hunter.shoot', 'sisters.transfer_agree'].contains(move['action']) ? ':${move['target'] ?? move['targets']}' : ''}';
     if (move['action'] == 'wolves.choose') {
       if ((_own['choices'] as Map?)?[id] == move['target']) return;
     } else if (!_sent.add(key)) {
@@ -323,6 +327,7 @@ class _TestBot {
       targets: (move['targets'] as List?)?.cast<String>(),
       save: move['save'] as bool?,
       kill: move['kill'] as String?,
+      text: move['text'] as String?,
     );
     // Scripted messages are deliberately neutral: no hidden role disclosure.
     if (move['action'] == 'vote.cast' &&

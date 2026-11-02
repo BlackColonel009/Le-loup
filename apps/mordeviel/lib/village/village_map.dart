@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:local_host/local_host.dart';
 import 'weather_overlay.dart';
 import 'house_sprite_geometry.dart';
+import 'house_contour_light.dart';
 import 'guardian_aura.dart';
 import '../content/content_image.dart';
 import '../content/pack_store.dart';
@@ -41,28 +42,30 @@ const horrorVillagePlots = <Offset>[
   Offset(.415, .273),
 ];
 
-/// Four columns and five rows, populated around the council square first.
+/// Ground anchors surveyed on map_v3's 1536 × 1024 artwork. The snowy
+/// clearings narrow and shift between rows; a regular grid lands on the roads.
+/// Keep the slot order: existing players retain their place around the square.
 const intenseVillagePlots = <Offset>[
-  Offset(.36, .565),
-  Offset(.64, .565),
-  Offset(.18, .565),
-  Offset(.82, .565),
-  Offset(.36, .405),
-  Offset(.64, .405),
-  Offset(.36, .725),
-  Offset(.64, .725),
-  Offset(.18, .405),
-  Offset(.82, .405),
-  Offset(.18, .725),
-  Offset(.82, .725),
-  Offset(.36, .265),
-  Offset(.64, .265),
-  Offset(.18, .265),
-  Offset(.82, .265),
-  Offset(.36, .885),
-  Offset(.64, .885),
-  Offset(.18, .885),
-  Offset(.82, .885),
+  Offset(577 / 1536, 553 / 1024),
+  Offset(965 / 1536, 553 / 1024),
+  Offset(275 / 1536, 553 / 1024),
+  Offset(1280 / 1536, 553 / 1024),
+  Offset(581 / 1536, 398 / 1024),
+  Offset(959 / 1536, 398 / 1024),
+  Offset(573 / 1536, 718 / 1024),
+  Offset(974 / 1536, 718 / 1024),
+  Offset(287 / 1536, 398 / 1024),
+  Offset(1268 / 1536, 398 / 1024),
+  Offset(266 / 1536, 718 / 1024),
+  Offset(1288 / 1536, 718 / 1024),
+  Offset(584 / 1536, 256 / 1024),
+  Offset(954 / 1536, 256 / 1024),
+  Offset(300 / 1536, 256 / 1024),
+  Offset(1257 / 1536, 256 / 1024),
+  Offset(569 / 1536, 884 / 1024),
+  Offset(977 / 1536, 884 / 1024),
+  Offset(281 / 1536, 884 / 1024),
+  Offset(1266 / 1536, 884 / 1024),
 ];
 
 /// Coordonnées des parcelles du décor fourni, en proportions de 1376 × 768.
@@ -446,6 +449,13 @@ class _VillageMapState extends State<VillageMap> with WidgetsBindingObserver {
                                       width: _houseWidth,
                                       height: _spriteExtent + 28,
                                       child: _House(
+                                        marked:
+                                            (game?['marked_houses'] as List? ??
+                                                    const [])
+                                                .contains(
+                                                  placement.player['id'],
+                                                ),
+                                        paused: game?['paused'] == true,
                                         spriteExtent: _spriteExtent,
                                         ready:
                                             game == null &&
@@ -758,8 +768,12 @@ class _House extends StatelessWidget {
     this.horror = false,
     this.protected = false,
     this.ready = false,
+    this.paused = false,
+    this.marked = false,
   });
   final bool ready;
+  final bool paused;
+  final bool marked;
   final double spriteExtent;
   final bool protected;
   final bool intense;
@@ -811,18 +825,26 @@ class _House extends StatelessWidget {
                     duration: MediaQuery.disableAnimationsOf(context)
                         ? Duration.zero
                         : const Duration(milliseconds: 800),
-                    child: HouseSprite(
-                      key: ValueKey(
-                        '${horror
-                            ? 'horror'
-                            : intense
-                            ? 'intense'
-                            : 'classic'}-$state',
-                      ),
-                      state: state,
-                      intense: intense,
-                      horror: horror,
-                    ),
+                    child: intense && !horror
+                        ? HouseContourLight(
+                            key: ValueKey('intense-$state'),
+                            state: state,
+                            phase: (player['house_slot'] as int? ?? 0) * .173,
+                            paused: paused,
+                            child: HouseSprite(state: state, intense: true),
+                          )
+                        : HouseSprite(
+                            key: ValueKey(
+                              '${horror
+                                  ? 'horror'
+                                  : intense
+                                  ? 'intense'
+                                  : 'classic'}-$state',
+                            ),
+                            state: state,
+                            intense: intense,
+                            horror: horror,
+                          ),
                   ),
                 ),
               ],
@@ -831,6 +853,20 @@ class _House extends StatelessWidget {
         ),
       ),
       if (protected) Positioned.fill(child: GuardianAura(intense: intense)),
+      if (marked)
+        Positioned(
+          left: 0,
+          top: 8,
+          child: Tooltip(
+            message: 'Cette maison porte la marque du Veilleur',
+            child: Icon(
+              Icons.visibility,
+              key: ValueKey('marked-house-${player['id']}'),
+              color: const Color(0xFFD9B8EB),
+              size: intense ? 34 : 22,
+            ),
+          ),
+        ),
       if (bubble)
         Positioned(
           right: -2,

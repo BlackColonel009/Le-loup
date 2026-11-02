@@ -47,6 +47,7 @@ dependencies:
   workmanager: ^0.10.10
   flutter_local_notifications: ^22.3.3
   livekit_client: ^2.12.0
+  file_selector: ^1.1.0
 
 dev_dependencies:
   integration_test:
@@ -90,6 +91,7 @@ flutter:
     - assets/audio/classic/wolf_howl.mp3
     - assets/audio/classic/claw_1.wav
     - assets/audio/classic/claw_2.wav
+    - assets/audio/classic/curtain_tear.wav
     - assets/audio/classic/rain_loop.wav
     - assets/audio/classic/thunder.wav
     - assets/audio/classic/neural/classic_male/death_idiot.wav
@@ -179,6 +181,7 @@ flutter:
     - assets/audio/classic/neural/ghost/preview.wav
     - assets/audio/classic/neural/cold_killer/preview.wav
     - assets/branding/
+    - assets/branding/opening/
     - assets/effects/
   fonts:
     - family: VillageSans

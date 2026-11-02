@@ -3,6 +3,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../content/content_image.dart';
 
+const owlFlightStart = 12.0, owlFlightReturn = 18.0, owlFlightEnd = 21.0;
+
+Offset visibleOwlPerch(Size viewport, Offset projected) => Offset(
+  projected.dx.clamp(48.0, math.max(48.0, viewport.width - 48)),
+  projected.dy.clamp(100.0, math.max(100.0, viewport.height * .38)),
+);
+
 class OwlFlight extends StatelessWidget {
   const OwlFlight({
     super.key,
@@ -25,19 +32,31 @@ class OwlFlight extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, box) {
       final size = box.biggest;
-      final perch = camera == null
+      final projected = camera == null
           ? Offset(size.width - 50, 55)
           : MatrixUtils.transformPoint(
               camera!.value,
               Offset(world.width * .90, world.height * .16),
             );
+      // Free camera navigation can put the old world anchor outside the screen.
+      // Keep a branch at the visible edge instead of losing the owl entirely.
+      final perch = visibleOwlPerch(size, projected);
+      final edgeBranch = (perch - projected).distance > 1;
       final perchedSize = camera == null
           ? 76.0
-          : (120 * camera!.value.getMaxScaleOnAxis()).clamp(18.0, 90.0);
-      if (seconds < 32 || seconds >= 41) {
+          : (120 *
+                    math.sqrt(
+                      math.pow(camera!.value.entry(0, 0), 2) +
+                          math.pow(camera!.value.entry(1, 0), 2),
+                    ))
+                .clamp(44.0, 90.0);
+      if (seconds < owlFlightStart || seconds >= owlFlightEnd) {
         return Stack(
           children: [
+            if (edgeBranch)
+              Positioned.fill(child: CustomPaint(painter: _PerchBranch(perch))),
             Positioned(
+              key: const ValueKey('owl-perched'),
               left: perch.dx - perchedSize / 2,
               top: perch.dy - perchedSize,
               width: perchedSize,
@@ -50,11 +69,11 @@ class OwlFlight extends StatelessWidget {
           ],
         );
       }
-      final returning = seconds > 38;
-      final t = ((seconds - (returning ? 38 : 32)) / (returning ? 3 : 6)).clamp(
-        0.0,
-        1.0,
-      );
+      final returning = seconds > owlFlightReturn;
+      final t =
+          ((seconds - (returning ? owlFlightReturn : owlFlightStart)) /
+                  (returning ? 3 : 6))
+              .clamp(0.0, 1.0);
       final center = size.center(Offset.zero);
       final a = returning
           ? Offset(-size.width * .15, size.height * .15)
@@ -112,7 +131,10 @@ class OwlFlight extends StatelessWidget {
       return Stack(
         clipBehavior: Clip.none,
         children: [
+          if (edgeBranch)
+            Positioned.fill(child: CustomPaint(painter: _PerchBranch(perch))),
           Positioned(
+            key: const ValueKey('owl-flying'),
             left:
                 p.dx -
                 extent / 2 +
@@ -129,6 +151,43 @@ class OwlFlight extends StatelessWidget {
       );
     },
   );
+}
+
+class _PerchBranch extends CustomPainter {
+  const _PerchBranch(this.perch);
+  final Offset perch;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final right = perch.dx >= size.width / 2;
+    final edge = right ? size.width : 0.0;
+    final direction = right ? -1.0 : 1.0;
+    final paint = Paint()
+      ..color = const Color(0xFF22252A)
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    canvas.drawPath(
+      Path()
+        ..moveTo(edge, perch.dy + 30)
+        ..quadraticBezierTo(
+          perch.dx - direction * 35,
+          perch.dy + 14,
+          perch.dx + direction * 20,
+          perch.dy - 2,
+        ),
+      paint..strokeWidth = 7,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(perch.dx - direction * 18, perch.dy + 9)
+        ..lineTo(perch.dx + direction * 3, perch.dy - 14)
+        ..moveTo(perch.dx - direction * 36, perch.dy + 18)
+        ..lineTo(perch.dx - direction * 43, perch.dy - 5),
+      paint..strokeWidth = 3,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_PerchBranch old) => old.perch != perch;
 }
 
 class _WingClip extends CustomClipper<Rect> {

@@ -82,7 +82,7 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
       _player?.stop();
       _lastSound = null;
     }
-    if (oldWidget.seed != widget.seed) {
+    if (oldWidget.seed != widget.seed || !oldWidget.night && widget.night) {
       _clock.value = (widget.seed % 7) / 120;
       _lastSound = null;
     }
@@ -116,7 +116,7 @@ class _HorrorAmbienceState extends State<HorrorAmbience>
   void _sound() {
     if (!widget.night) return;
     final seconds = _clock.value * 120;
-    final cue = seconds >= 33 && seconds < 36
+    final cue = seconds >= owlFlightStart + 1 && seconds < owlFlightStart + 4
         ? 'owl.wav'
         : seconds >= 72 && seconds < 75
         ? 'witch_laugh.wav'

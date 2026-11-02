@@ -113,6 +113,7 @@ def require_target(c, uid):
 
 
 def profile_data(c, viewer, target):
+    from .avatars import avatar_in
     person = require_target(c, target)
     pref = preference(c, target)
     is_friend = friends(c, viewer, target)
@@ -127,6 +128,7 @@ def profile_data(c, viewer, target):
         (min(viewer, target), max(viewer, target)),
     ).fetchone()
     result = {
+        "avatar": None if blocked(c, viewer, target) else avatar_in(c, target),
         "id": target,
         "nickname": person["nickname"],
         "verified": person["role"] == "admin",

@@ -410,6 +410,7 @@ class LocalHost implements GameHost {
     _game = NightGame(
       _roles,
       electMayor: true,
+      mayorEdition: _cardStyles['mayor'] ?? visualPack,
       editions: editions,
       campOnly: seerCampOnly,
       revealOnDeath: revealRolesOnDeath,

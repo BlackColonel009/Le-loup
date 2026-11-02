@@ -14,6 +14,7 @@ import 'community_session.dart';
 import 'community_failure.dart';
 import '../stickers/chat_stickers.dart';
 import '../design/action_spacing.dart';
+import 'community_conversation.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -35,6 +36,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
   bool _restoring = true;
   String? _token, _nickname, _error;
   bool _isAdmin = false;
+  int? _userId;
   double _mutedUntil = 0;
   bool _register = true, _busy = false, _refreshing = false;
   bool _loadError = false;
@@ -262,6 +264,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         _loadError = false;
         _expiresAt = null;
         _nickname = null;
+        _userId = null;
         _isAdmin = false;
         _register = false;
         _password.clear();
@@ -299,6 +302,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
             _loadError = false;
           }
           _nickname = user['nickname'] as String;
+          _userId = user['id'] as int?;
           _isAdmin = user['role'] == 'admin';
           _mutedUntil = (user['muted_until'] as num? ?? 0).toDouble();
           _messages = (chat['messages'] as List)
@@ -317,13 +321,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
   }
 
   Future<void> _send() => _run(() async {
-    if (_message.text.trim().isEmpty) return;
+    final submitted = _message.text;
+    if (submitted.trim().isEmpty) return;
     await _request(
       'messages',
       method: 'POST',
-      body: {'text': _message.text.trim()},
+      body: {'text': submitted.trim()},
     );
-    _message.clear();
+    if (_message.text == submitted) _message.clear();
     await _refresh();
   });
   Future<void> _sendSticker() async {
@@ -585,136 +590,26 @@ class _CommunityScreenState extends State<CommunityScreen> {
     ),
   );
 
-  Widget _chat() => Column(
-    children: [
-      const Padding(
-        padding: EdgeInsets.fromLTRB(12, 8, 12, 0),
-        child: Text(
-          'Évite les insultes et les termes sexuels. Après 3 avertissements consécutifs : chat restreint pendant 3 h.',
-          style: TextStyle(fontSize: 12),
-        ),
-      ),
-      if (_mutedUntil > DateTime.now().millisecondsSinceEpoch / 1000)
-        const Padding(
-          padding: EdgeInsets.all(12),
-          child: Text(
-            'Chat temporairement restreint. Tu peux lire les échanges et contacter le support privé.',
-          ),
-        ),
-      Padding(
-        padding: const EdgeInsets.all(12),
-        child: Text(
-          'Bienvenue $_nickname${_isAdmin ? ' · Administrateur certifié' : ''} · Questions, entraide et partages',
-        ),
-      ),
-      Expanded(
-        child: _messages.isEmpty
-            ? const Center(child: Text('Ouvre la discussion avec le village.'))
-            : ListView.builder(
-                reverse: true,
-                padding: const EdgeInsets.all(12),
-                itemCount: _messages.length,
-                itemBuilder: (context, i) {
-                  final m = _messages[_messages.length - 1 - i];
-                  return Card(
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          Flexible(
-                            child: InkWell(
-                              onTap: m['user_id'] is int
-                                  ? () => Navigator.of(context).push(
-                                      MaterialPageRoute<void>(
-                                        builder: (_) => SocialProfileScreen(
-                                          userId: m['user_id'] as int,
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-                              child: Text(m['nickname'] as String),
-                            ),
-                          ),
-                          if (m['role'] == 'admin')
-                            const Padding(
-                              padding: EdgeInsets.only(left: 6),
-                              child: Tooltip(
-                                message: 'Administrateur certifié',
-                                child: Icon(Icons.verified, size: 18),
-                              ),
-                            ),
-                        ],
-                      ),
-                      subtitle: ChatMessageBody(
-                        text: m['text'] as String,
-                        selectable: true,
-                      ),
-                      trailing: IconButton(
-                        tooltip: 'Signaler ce message',
-                        icon: const Icon(Icons.flag_outlined, size: 18),
-                        onPressed: _busy
-                            ? null
-                            : () => _run(() async {
-                                await _request(
-                                  'messages/${m['id']}/report',
-                                  method: 'POST',
-                                );
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Signalement transmis.'),
-                                    ),
-                                  );
-                                }
-                              }),
-                      ),
-                    ),
-                  );
-                },
-              ),
-      ),
-      SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IconButton(
-                tooltip: 'Stickers',
-                onPressed:
-                    _busy ||
-                        _mutedUntil >
-                            DateTime.now().millisecondsSinceEpoch / 1000
-                    ? null
-                    : _sendSticker,
-                icon: const Icon(Icons.emoji_emotions_outlined),
-              ),
-              Expanded(
-                child: TextField(
-                  controller: _message,
-                  minLines: 1,
-                  maxLines: 4,
-                  maxLength: 2000,
-                  decoration: const InputDecoration(
-                    labelText: 'Ton message au village',
-                  ),
-                ),
-              ),
-              IconButton(
-                tooltip: 'Envoyer',
-                onPressed:
-                    _busy ||
-                        _mutedUntil >
-                            DateTime.now().millisecondsSinceEpoch / 1000
-                    ? null
-                    : _send,
-                icon: const Icon(Icons.send),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ],
+  Widget _chat() => CommunityConversation(
+    messages: _messages,
+    controller: _message,
+    userId: _userId,
+    nickname: _nickname,
+    busy: _busy,
+    muted: _mutedUntil > DateTime.now().millisecondsSinceEpoch / 1000,
+    onSend: _send,
+    onSticker: _sendSticker,
+    onProfile: (id) => Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => SocialProfileScreen(userId: id)),
+    ),
+    onReport: (id) => _run(() async {
+      await _request('messages/$id/report', method: 'POST');
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Signalement transmis.')));
+      }
+    }),
   );
 
   Widget _support() => ListView(

@@ -98,8 +98,9 @@ ClassicRole configuredRole(
   bool feminine = false,
   String edition = 'classic',
 }) {
-  if (id == 'mayor') return mayorOffice;
-  final role = classicRoles.firstWhere((role) => role.id == id);
+  final role = id == 'mayor'
+      ? mayorOffice
+      : classicRoles.firstWhere((role) => role.id == id);
   final variant = cardVariant(id, edition);
   if (variant != null) {
     return ClassicRole(
@@ -107,8 +108,8 @@ ClassicRole configuredRole(
       '${role.name} · ${variant['name']}',
       role.camp,
       role.phase,
-      variant['rules']!,
-      '${variant['rules']}\n\nRègle de base : ${role.details}${id == 'seer' && seerCampOnly ? '\nRéglage : les visions révèlent uniquement le camp.' : ''}',
+      variant['summary']!,
+      '${variant['rules']}\n\nRepères classiques (les exceptions de cette édition priment) : ${role.details}${id == 'seer' && seerCampOnly ? '\nRéglage : les visions révèlent uniquement le camp.' : ''}',
       assetExtension: role.assetExtension,
       feminine: feminine,
     );

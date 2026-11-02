@@ -27,7 +27,9 @@ class GameHistoryScreen extends StatelessWidget {
   String role(dynamic id) => id is String ? configuredRole(id).name : 'Joueur';
 
   String describe(Map e) {
-    final actor = '${name(e['actor'])} (${role(e['role'])})';
+    final actor = e['kind'] == 'action' && e['role'] is String
+        ? '${name(e['actor'])} (${configuredRole(e['role'] as String, edition: e['edition'] as String? ?? 'classic').name})'
+        : name(e['actor']);
     final target = name(e['target']);
     final selected = names(e['targets']);
     switch (e['kind']) {
@@ -49,9 +51,25 @@ class GameHistoryScreen extends StatelessWidget {
         return switch (e['effect']) {
           'infection' => '$target rejoint la meute.',
           'angel_becomes_villager' =>
-            '$target devient Simple Villageois après le premier vote.',
+            '$target devient ${e['edition'] == 'intense' ? 'Éclaireur Intense' : 'Simple Villageois'} après son épreuve.',
           'infection_pending' =>
-            '$target est infecté ; conversion prévue la nuit suivante.',
+            '$target porte une infection en attente de conversion.',
+          'watch_result' =>
+            '$actor a observé $target : ${switch (e['count']) {
+              0 => 'aucune action',
+              1 => 'une action',
+              _ => 'plusieurs actions',
+            }}.',
+          'hunter_ward' =>
+            'Le bouclier transmis par le Franc-tireur arrête une attaque sur $target.',
+          'curse_lifted' =>
+            'L’exécution d’un loup lève la malédiction visant $target.',
+          'inherited_resistance' =>
+            'La résistance transmise par l’Ancien sauve $target.',
+          'presage_saved' =>
+            'Le présage de $actor sauve $target et lui coûte sa résistance.',
+          'sister_redirect' =>
+            'Le serment transfère l’attaque de $target vers ${name(e['recipient'])}.',
           'elder_curse' =>
             'La malédiction de l’Ancien désactive les pouvoirs du Village.',
           'elder_resists' =>
@@ -65,14 +83,20 @@ class GameHistoryScreen extends StatelessWidget {
             'Le rôle de $target est voilé jusqu’au réveil suivant.',
           'saved' =>
             'La potion de vie sauve $target et annule son éventuelle infection.',
-          _ => 'Sans accord unanime, la meute n’élimine personne.',
+          'no_pack_victim' =>
+            'Sans accord unanime, la meute n’élimine personne.',
+          _ => 'Un effet de jeu est résolu pour $target.',
         };
       case 'mayor_election':
         return e['target'] == null
             ? 'Élection du Maire : aucun candidat départagé.'
             : '${name(e['target'])} est élu Maire. Bulletins : ${(e['ballots'] as Map).entries.map((b) => '${name(b.key)} → ${b.value == null ? 'blanc' : name(b.value)}').join(', ')}.';
       case 'mayor_succession':
-        return '${name(e['actor'])} transmet le titre de Maire à ${name(e['target'])}.';
+        return e['sealed'] == true && e['valid'] == false
+            ? 'Le successeur du testament de ${name(e['actor'])} est mort : une nouvelle élection est proposée.'
+            : '${name(e['actor'])} transmet le titre de Maire à ${name(e['target'])}${e['sealed'] == true ? ' par testament scellé' : ''}.';
+      case 'vote_round':
+        return 'Premier scrutin à égalité : ${e['reason'] == 'mayor_revote' ? 'le Maire impose un second scrutin' : 'le Médiateur doit choisir entre relancer le scrutin et son sacrifice'}. Bulletins : ${(e['ballots'] as Map? ?? {}).entries.map((b) => '${name(b.key)} → ${b.value == null ? 'blanc' : name(b.value)}').join(', ')}.';
       case 'vote_result':
         final details = <String>[
           for (final b in (e['ballots'] as Map? ?? {}).entries)
@@ -117,6 +141,54 @@ class GameHistoryScreen extends StatelessWidget {
       'witch.potions' =>
         '$actor : ${e['save'] == true ? 'potion de vie sur ${name(e['victim'])}' : 'aucune potion de vie'} ; ${e['kill'] != null ? 'potion de mort sur ${name(e['kill'])}' : 'aucune potion de mort'}.',
       'hunter.shoot' => '$actor tire sur $target.',
+      'hunter.ward' =>
+        '$actor renonce au tir et transmet un bouclier à $selected.',
+      'villager.watch' =>
+        '$actor observe la maison de $selected pour cette nuit.',
+      'witch.delay' => '$actor utilise son poison différé sur $selected.',
+      'witch.curse' =>
+        '$actor condamne $selected au prochain crépuscule, sauf exécution d’un loup.',
+      'alpha.terror' =>
+        '$actor remplace son attaque supplémentaire par la terreur sur $selected.',
+      'white_wolf.defer' =>
+        '$actor reporte son attaque personnelle à la nuit suivante.',
+      'white_wolf.outsider' =>
+        '$actor chasse $selected hors de la meute et annonce la présence d’un traître.',
+      'infection.immediate' =>
+        '$actor choisit une conversion de $selected à la résolution de cette nuit.',
+      'infection.dormant' =>
+        '$actor laisse une infection dormante chez $selected.',
+      'infection.activate' =>
+        '$actor active son infection dormante chez $selected.',
+      'idiot.ballot' => '$actor engage son unique bulletin exceptionnel.',
+      'idiot.contagion' =>
+        '$actor prive publiquement $selected du prochain scrutin.',
+      'piper.triple' => '$actor utilise son triple charme sur $selected.',
+      'piper.illusion' =>
+        '$actor ajoute $selected comme faux charmé, sans effet sur sa victoire.',
+      'little_girl.false_whisper' =>
+        '$actor dépose un faux murmure anonyme dans la meute.',
+      'elder.transfer' => '$actor transmet sa résistance intacte à $selected.',
+      'elder.presage' =>
+        '$actor prédit publiquement une attaque sur $selected.',
+      'scapegoat.revote' =>
+        '$actor relance le scrutin et renonce à son bulletin de ce tour.',
+      'scapegoat.accept' => '$actor accepte son sacrifice pour l’égalité.',
+      'scapegoat.mark' =>
+        '$actor demande à $selected de révéler son camp ou de perdre son prochain vote.',
+      'mark.reveal' => '$actor choisit de révéler publiquement son camp.',
+      'mark.refuse' =>
+        '$actor garde son camp secret et perd son prochain vote.',
+      'mayor.strategy' =>
+        '$actor renonce au vote double pour un éventuel second scrutin.',
+      'mayor.testament' =>
+        '$actor scelle son testament en faveur de $selected.',
+      'lovers.break_agree' => '$actor accepte la rupture du pacte amoureux.',
+      'lovers.break_decline' => '$actor refuse de rompre le pacte amoureux.',
+      'sisters.chat_agree' => '$actor accepte la rencontre privée des Sœurs.',
+      'sisters.chat_decline' => '$actor refuse la rencontre privée des Sœurs.',
+      'sisters.transfer_agree' =>
+        '$actor désigne $selected comme sœur dont l’attaque sera transférée.',
       'metamorph.swap' =>
         '$actor échange les cartes de $selected.${e['new_roles'] is Map ? ' Nouveaux rôles : ${(e['new_roles'] as Map).entries.map((r) => '${name(r.key)} : ${role(r.value)}').join(', ')}.' : ''}',
       'cupid.link' => '$actor lie les amoureux : $selected.',

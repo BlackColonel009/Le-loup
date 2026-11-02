@@ -51,6 +51,8 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Messages autorisés'), findsNothing);
+      await tester.ensureVisible(find.text('Voir la phase en cours'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Voir la phase en cours'));
       await tester.pumpAndSettle();
       expect(find.text('Bulletins secrets'), findsOneWidget);

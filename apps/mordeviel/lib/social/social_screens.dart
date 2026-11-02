@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../profile/player_avatar.dart';
+import '../profile/avatar_gallery.dart';
 import '../community/community_screen.dart';
 import 'social_api.dart';
 import 'private_chat_screen.dart';
@@ -802,11 +804,26 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
             ),
           if (p != null) ...[
             const SizedBox(height: 12),
-            const CircleAvatar(
-              radius: 42,
-              backgroundColor: Color(0xFF28313B),
-              child: Icon(Icons.person_outline, size: 54, color: _gold),
+            PlayerAvatar(
+              avatar: p['avatar'] as Map?,
+              nickname: p['nickname'] as String,
             ),
+            if (p['is_self'] == true)
+              Center(
+                child: TextButton.icon(
+                  icon: const Icon(Icons.edit_outlined),
+                  label: const Text('Changer mon portrait'),
+                  onPressed: () async {
+                    final changed = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AvatarGalleryScreen(),
+                      ),
+                    );
+                    if (changed == true && mounted) await _load();
+                  },
+                ),
+              ),
             const SizedBox(height: 16),
             Text(
               p['nickname'] as String,

@@ -521,7 +521,7 @@ void main() {
     },
   );
   test('Tous les appels déclarés sont embarqués', () {
-    for (final asset in ['claw_1.wav', 'claw_2.wav']) {
+    for (final asset in ['claw_1.wav', 'claw_2.wav', 'curtain_tear.wav']) {
       expect(
         File('assets/audio/classic/$asset').lengthSync(),
         greaterThan(1000),
@@ -552,11 +552,15 @@ void main() {
         'claw_2.wav',
       ]);
       expect(backend.calls, isNot(contains('wolf_howl.mp3')));
+      audio.openingTear();
+      await audio.settled;
+      expect(backend.calls.last, 'curtain_tear.wav');
       audio.welcome();
       await audio.settled;
       expect(backend.calls.last, 'wolf_howl.mp3');
       expect(backend.calls.where((s) => s == 'music').length, 1);
       audio.openingScratch(1);
+      audio.openingTear();
       await audio.settled;
       expect(backend.calls.last, 'wolf_howl.mp3');
     },

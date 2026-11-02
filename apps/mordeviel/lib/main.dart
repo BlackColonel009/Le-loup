@@ -77,6 +77,7 @@ class _EntranceState extends State<_Entrance> {
             ready: widget.ready,
             onStart: ClassicAudio.instance.opening,
             onScratch: ClassicAudio.instance.openingScratch,
+            onTear: ClassicAudio.instance.openingTear,
             onComplete: () {
               if (mounted) setState(() => _opened = true);
             },
