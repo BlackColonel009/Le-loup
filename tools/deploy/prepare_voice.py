@@ -10,7 +10,8 @@ from dotenv import dotenv_values
 
 def prepare(backend, domain=None):
     env = backend / '.env'
-    values = dotenv_values(env) if env.exists() else {}
+    env_existed = env.exists()
+    values = dotenv_values(env) if env_existed else {}
     public = urlparse(values.get('MORDEVIEL_PUBLIC_URL') or 'https://mordeviel.newtechnologiestg.com')
     domain = domain or public.hostname
     if not domain or not all(c.isalnum() or c in '.-' for c in domain):
@@ -57,7 +58,9 @@ logging:
   level: warn
 ''', encoding='utf-8')
     if os.name != 'nt':
-        os.chmod(env, 0o600)
+        # Existing permissions may grant the systemd service access to a root-owned file.
+        if not env_existed:
+            os.chmod(env, 0o600)
         os.chmod(config, 0o600)
     return config
 

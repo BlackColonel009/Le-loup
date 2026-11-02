@@ -27,6 +27,17 @@ docker compose -f tools/deploy/voice.compose.yaml up -d
 
 `prepare_voice.py` ajoute uniquement les réglages vocaux manquants dans `backend/.env`. Il conserve les réglages SMTP et les clés déjà définies, génère les nouvelles clés sans les afficher, et produit `backend/data/livekit/livekit.yaml`. Le dossier de données et `.env` sont ignorés par Git. Le script est réexécutable sans renouveler les clés existantes.
 
+Le propriétaire et les permissions d'un `.env` existant sont conservés pour ne pas retirer l'accès au compte du service systemd. Un nouveau `.env` est créé avec les permissions privées `0600` sous Linux. Si le script est exécuté par root et l'API par un autre compte, donner le fichier au compte de l'API avant de redémarrer :
+
+```bash
+api_user="$(systemctl show legendeofwolf --property=User --value)"
+api_user="${api_user:-root}"
+sudo chown "$api_user" /var/www/Le-loup/backend/.env
+sudo chmod 600 /var/www/Le-loup/backend/.env
+```
+
+Cette correction rétablit aussi l'accès si une ancienne version du script a restreint les permissions d'un `.env` appartenant à root. Elle n'affiche pas les secrets et n'ouvre pas le fichier aux autres comptes.
+
 Il réutilise le certificat Let's Encrypt du domaine public, monté en lecture seule dans le conteneur. Adapter le domaine configuré dans `MORDEVIEL_PUBLIC_URL` avant d'exécuter le script si le site change d'adresse.
 
 Les quatre paramètres backend sont :

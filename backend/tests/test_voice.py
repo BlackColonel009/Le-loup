@@ -5,6 +5,7 @@ import hmac
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from fastapi import HTTPException
@@ -134,10 +135,13 @@ def test_narration_temporarily_removes_publish_permission(hub, monkeypatch):
     asyncio.run(scenario())
 
 
-def test_prepare_preserves_existing_env_and_keys(tmp_path):
+def test_prepare_preserves_existing_env_and_keys(tmp_path, monkeypatch):
     spec = importlib.util.spec_from_file_location('prepare_voice', Path(__file__).resolve().parents[2] / 'tools/deploy/prepare_voice.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    mode_changes = []
+    monkeypatch.setattr(module, 'os', SimpleNamespace(
+        name='posix', chmod=lambda path, mode: mode_changes.append((path, mode))))
     env = tmp_path / '.env'
     original = 'SMTP_USE_TLS=true\nMORDEVIEL_SMTP_PASSWORD=private-fixture\n'
     env.write_text(original)
@@ -147,4 +151,17 @@ def test_prepare_preserves_existing_env_and_keys(tmp_path):
     assert 'auto_create: false' in config.read_text()
     module.prepare(tmp_path)
     assert env.read_text() == first
+    assert all(path != env for path, _ in mode_changes)
+    assert (config, 0o600) in mode_changes
     assert config.parent == tmp_path / 'data/livekit'
+
+
+def test_prepare_makes_new_env_private(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location('prepare_voice', Path(__file__).resolve().parents[2] / 'tools/deploy/prepare_voice.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    mode_changes = []
+    monkeypatch.setattr(module, 'os', SimpleNamespace(
+        name='posix', chmod=lambda path, mode: mode_changes.append((path, mode))))
+    module.prepare(tmp_path)
+    assert (tmp_path / '.env', 0o600) in mode_changes
