@@ -1,17 +1,17 @@
 {
-  "source": "Gemini, vidéo fournie par Logan le 3 novembre 2026",
-  "original_filename": "gemini_generated_video_d298c117.mp4",
-  "original_sha256": "0b1a7f5a7889d192e86865ed8e6942c5fb33a94e833faa95840b5037f9e2c5df",
+  "source": "Gemini video supplied by Logan; approved local Qwen game narration",
+  "original_filename": "gemini_generated_video_bd65af76.mp4",
+  "original_sha256": "8cbcbd8dc71190a3e7aa3a1aa699b9b57605123e126b5666fcaf58f91c47fb83",
   "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
-  "asset_sha256": "4d9bc3be9e3854e1e32f8e067143816dccc2a8fa968098e8177b8005a7214e2f",
-  "asset_bytes": 3412955,
-  "duration_seconds": 10.03,
+  "asset_sha256": "2cd378aaaf8f18d6e24ac0b60a7a954e9c871a30175bd4affe69aeedc0cf7d7e",
+  "asset_bytes": 2423957,
+  "duration_seconds": 10.0,
   "width": 720,
   "height": 1280,
   "fps": 24,
   "video_codec": "H.264",
   "audio_codec": "AAC stereo 48000Hz",
-  "processing": "Remux MP4 faststart sans recompression ; images et son conservés.",
+  "processing": "Native portrait, subtitle removal, approved Qwen voice and game audio mix.",
   "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
   "previous_versions": [
     {
@@ -20,6 +20,22 @@
       "asset_sha256": "313a1e29d09941ac065b8dd76067f0f4e22b78032d42d49c10be37a0a077ca2b",
       "width": 1280,
       "height": 720
+    },
+    {
+      "source": "Gemini, vidéo fournie par Logan le 3 novembre 2026",
+      "original_filename": "gemini_generated_video_d298c117.mp4",
+      "original_sha256": "0b1a7f5a7889d192e86865ed8e6942c5fb33a94e833faa95840b5037f9e2c5df",
+      "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
+      "asset_sha256": "4d9bc3be9e3854e1e32f8e067143816dccc2a8fa968098e8177b8005a7214e2f",
+      "asset_bytes": 3412955,
+      "duration_seconds": 10.03,
+      "width": 720,
+      "height": 1280,
+      "fps": 24,
+      "video_codec": "H.264",
+      "audio_codec": "AAC stereo 48000Hz",
+      "processing": "Remux MP4 faststart sans recompression ; images et son conservés.",
+      "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip"
     }
   ]
 }

@@ -1,0 +1,68 @@
+{
+  "source_filename": "gemini_generated_video_bd65af76.mp4",
+  "source_sha256": "8cbcbd8dc71190a3e7aa3a1aa699b9b57605123e126b5666fcaf58f91c47fb83",
+  "text": "Bienvenue dans Mordeviel Legendary… que la traque commence.",
+  "voice": {
+    "text": "Bienvenue dans Mordeviel Legendary… que la traque commence.",
+    "profile": "intense_male",
+    "engine": {
+      "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+      "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+      "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+      "local_changes": [
+        "disable remote code",
+        "limit CPU threads to four",
+        "omit unused design encoder"
+      ]
+    },
+    "reference_sha256": "6737fc55e6f55f086fdf82b7fd22a6df9d1516b4e8d1ff89e9038fbf1e9c71e2",
+    "takes": [
+      {
+        "cue": "welcome",
+        "spoken_text": "Bienvenue dans Mordeviel Lédjèndeuri.",
+        "seed": 3112026
+      },
+      {
+        "cue": "threat",
+        "spoken_text": "Que la traque commence.",
+        "seed": 3112027
+      }
+    ],
+    "pause_seconds": 0.72,
+    "seconds": 5.609,
+    "sha256": "6efb2ce697ef4d98f3a9158007bf4a017bdcb9ae5eae62000b0c36c51a5d7f2f",
+    "generated_locally": true
+  },
+  "voice_start_seconds": 3.2,
+  "voice_end_seconds": 8.997,
+  "second_part_tempo": 0.94,
+  "reverb_delays_ms": [
+    72,
+    145
+  ],
+  "music": "Game original moonlit_village.wav; ducked during narration",
+  "effects": [
+    "claw_1.wav",
+    "claw_2.wav",
+    "curtain_tear.wav"
+  ],
+  "original_narration_replaced": true,
+  "burned_in_subtitles_removed": true,
+  "export": "exports\\intro-mordeviel\\mordeviel-intro-qwen-1080x1920.mp4",
+  "export_sha256": "b640fe56e0468fa9ce72d5e178f7496e536e9ff810852b0d92f5fba73494bbc0",
+  "export_dimensions": [
+    1080,
+    1920
+  ],
+  "duration_seconds": 10.0,
+  "app_dimensions": [
+    720,
+    1280
+  ],
+  "app_sha256": "2cd378aaaf8f18d6e24ac0b60a7a954e9c871a30175bd4affe69aeedc0cf7d7e",
+  "app_bytes": 2423957,
+  "codecs": "H.264 High / AAC stereo 48 kHz",
+  "note": "Source 720x1280; export upscaled proportionally, app keeps native resolution.",
+  "previous_video_archive": "media\\opening\\archive-video-2026-11-03\\intro-before-qwen-022cf0102d02.mp4"
+}
