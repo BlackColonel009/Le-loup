@@ -6,15 +6,16 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#101916">
 <title>Administration · Mordeviel</title>
-<meta name="description" content="Gestion des cartes de la vitrine Mordeviel. Accès administrateur.">
+<meta name="description" content="Gestion des annonces, des emails et des cartes de Mordeviel. Accès administrateur.">
 <meta property="og:title" content="Administration · Mordeviel">
-<meta property="og:description" content="Gestion des cartes de la vitrine Mordeviel. Accès administrateur.">
+<meta property="og:description" content="Gestion des annonces, des emails et des cartes de Mordeviel. Accès administrateur.">
 <link rel="icon" href="/site-assets/logo.png">
 <link rel="stylesheet" href="/site-assets/site.css">
 <script src="/site-assets/site.js" defer>
 </script>
 <script src="/site-assets/admin.js" defer>
 </script>
+<script src="/site-assets/admin-announcements.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -35,10 +36,10 @@
 <main id="contenu">
 <section class="legal-hero">
 <p class="eyebrow">ESPACE ÉDITEUR</p>
-<h1>Les cartes<br>
+<h1>Les nouvelles<br>
 <em>du village.</em>
 </h1>
-<p>Publiez les visuels de la vitrine, sans modifier les règles du jeu.</p>
+<p>Gérez les annonces du site et du jeu, leurs envois par email et les visuels de la vitrine.</p>
 </section>
 <section class="section admin-content">
 <div id="admin-login" class="form-panel">
@@ -60,6 +61,26 @@
 <p id="admin-status" role="status" aria-live="polite">
 </p>
 <div id="admin-dashboard" hidden>
+<section id="announcements-admin" class="form-panel">
+<p class="eyebrow">SITE · APPLICATION · EMAIL</p>
+<h2>Les annonces du village</h2>
+<p>Publiez une mise à jour, un événement ou une nouveauté. La même annonce apparaît sur la vitrine et dans le jeu. L’envoi par email se lance séparément après publication.</p>
+<form id="announcement-form">
+<h3 id="announcement-editor-title">Nouvelle annonce</h3>
+<label for="announcement-title">Titre</label>
+<input id="announcement-title" maxlength="160" required>
+<label for="announcement-body">Texte de l’annonce</label>
+<textarea id="announcement-body" rows="7" maxlength="6000" required></textarea>
+<p id="announcement-draft-status" class="admin-hint" role="status">Les brouillons restent dans ce navigateur, sans être publiés.</p>
+<button class="button" type="submit">Publier sur le site et dans le jeu</button>
+<button id="announcement-new" class="text-button" type="button">Nouvelle annonce</button>
+<button id="announcement-discard" class="text-button" type="button">Effacer ce brouillon</button>
+</form>
+<p id="announcement-status" role="status" aria-live="polite"></p>
+<div class="admin-actions"><h3>Annonces publiées</h3><button id="announcement-refresh" class="text-button" type="button">Actualiser les annonces</button><a href="/#annonces" target="_blank" rel="noopener">Voir sur le site ↗</a></div>
+<div id="admin-announcements" aria-live="polite"></div>
+<p class="admin-hint">Les emails reprennent le thème des rappels hebdomadaires et respectent les désinscriptions. Une même version d’annonce n’est envoyée qu’une fois par destinataire. Masquer une annonce la retire du site et du jeu.</p>
+</section>
 <section class="form-panel">
 <form id="mail-form">
 <p class="eyebrow">COMMUNAUTÉ</p>

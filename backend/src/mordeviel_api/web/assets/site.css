@@ -132,6 +132,11 @@ textarea{min-height:100px;resize:vertical}
 .admin-entry{display:flex;gap:16px;align-items:center;border-bottom:1px solid #b8a16b33;padding:20px 0}
 .admin-entry img{width:65px;height:95px;object-fit:contain}
 .admin-entry h3{font-size:23px;margin:0}
+.announcement-admin-entry>div{min-width:0;width:100%}
+.announcement-admin-entry h3,.announcement-admin-body{overflow-wrap:anywhere}
+.admin-entry .announcement-admin-body{white-space:pre-wrap;font-size:15px;line-height:1.6}
+#announcements-admin{margin-bottom:32px;scroll-margin-top:100px}
+#announcements-admin .admin-actions{flex-wrap:wrap;gap:12px}
 .admin-entry button{margin-right:12px}
 .admin-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
 .admin-entry p{font-size:12px;margin-bottom:8px}

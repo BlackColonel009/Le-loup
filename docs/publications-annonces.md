@@ -1,5 +1,31 @@
 # Annonces, brouillons et emails
 
+## Administration depuis le site
+
+Dans `/administration`, après connexion avec un compte administrateur, la rubrique
+**Les annonces du village** permet de créer, modifier et masquer les mêmes annonces
+que l’application. La vitrine et le jeu utilisent la source commune
+`/community/info` ; il n’existe pas de publication séparée pour le site.
+
+Le titre et le texte sont sauvegardés en brouillon dans le stockage local du
+navigateur, par compte et par publication. Ils sont restaurés après rechargement
+et reconnexion dans ce navigateur, sans être publiés. Ces brouillons ne sont pas
+synchronisés avec ceux de l’application ni avec un autre appareil. Un stockage
+indisponible est signalé ; le formulaire garde alors son texte tant que la page
+reste ouverte. « Effacer ce brouillon » ne modifie pas une annonce déjà publiée.
+
+Après publication, **Envoyer / suivre les emails** affiche les compteurs et demande
+confirmation avant de programmer l’envoi. Il utilise les mêmes endpoints et le
+même thème de mail que l’application ; les règles de désinscription, de version
+de contenu et de protection contre les doublons restent identiques. La publication
+n’envoie jamais automatiquement un email. Une panne SMTP ne retire pas l’annonce
+du site ou du jeu. Le bouton **Actualiser les annonces** recharge les annonces,
+y compris celles créées depuis l’application.
+
+La vitrine récupère les changements à son prochain rafraîchissement ; le jeu les
+affiche à son prochain chargement des annonces. Masquer retire le contenu des deux
+listes publiques, sans pouvoir rappeler des emails déjà envoyés.
+
 ## Utilisation
 
 Les annonces servent aux mises à jour, aux événements à venir et aux nouveautés

@@ -1,0 +1,43 @@
+{
+  "source_filename": "gemini_generated_video_00c88355.mp4",
+  "source_sha256": "56ac39f4077d8522bbdba51f729867276b57038ad54db21e608ff6f9bdfb1f62",
+  "text": "Bienvenue dans Mordeviel Legendary… que la traque commence.",
+  "welcome_generation": {
+    "seconds": 2.8,
+    "sha256": "89bd2ecdc5b4cee9fc572368c7d547b1e66249f5330d75c32eee54267857642f",
+    "text": "Bienvenue dans Mordeviel Legendary.",
+    "spoken_text": "Bienvenue dans Mordeviel Lédjèndeuri.",
+    "reference": ".tmp\\audio\\opening-qwen\\threat.wav",
+    "reference_sha256": "d4e9e74827fd449d8e8138169344ef25cabc598e26116f416f453e99cb04384a",
+    "reference_text": "Que la traque commence.",
+    "seed": 3112028,
+    "engine": {
+      "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+      "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+      "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+      "local_changes": [
+        "disable remote code",
+        "limit CPU threads to four",
+        "omit unused design encoder"
+      ]
+    }
+  },
+  "original_final_phrase_preserved_sample_for_sample": true,
+  "approved_master": "exports/intro-mordeviel/voix-qwen-intense.wav",
+  "approved_master_sha256": "c319d57732ae52de1ddc1cfadf035f346d7bdd69e739b770490fe61557ff6852",
+  "voice_onset_seconds": 3.2,
+  "voice_end_seconds": 8.692416666666666,
+  "pause_seconds": 0.72,
+  "mix_peak": 0.5288874544203281,
+  "background": "Original Gemini ambience; female speech separated with UVR Inst_HQ_3",
+  "new_music_or_effects": false,
+  "video_stream_identical": true,
+  "video_sha256": "3f9122e40e656792715e8ea960b4c29e580987a73a5c3488e18ec1faf2f586b2",
+  "video_bytes": 3229038,
+  "video_export": "exports/intro-chasseur/mordeviel-ouverture-voix-chasseur.mp4",
+  "voice_export": "exports/intro-chasseur/voix-chasseur-unifiee.wav",
+  "installed_in_app": true,
+  "previous_video_archive": "media/opening/archive-video-2026-11-03/intro-before-chasseur-a81360c6070a.mp4",
+  "asset_sha256": "3f9122e40e656792715e8ea960b4c29e580987a73a5c3488e18ec1faf2f586b2"
+}

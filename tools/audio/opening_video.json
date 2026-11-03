@@ -1,17 +1,18 @@
 {
-  "source": "Gemini, video fournie et choisie par Logan le 3 novembre 2026",
+  "source": "Gemini video supplied by Logan; unified approved hunter voice",
   "original_filename": "gemini_generated_video_00c88355.mp4",
   "original_sha256": "56ac39f4077d8522bbdba51f729867276b57038ad54db21e608ff6f9bdfb1f62",
   "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
-  "asset_sha256": "a81360c6070a25064a97744001991fe900a88e5586a1773adbae8c6b0ffaabfe",
-  "asset_bytes": 3150789,
+  "asset_sha256": "3f9122e40e656792715e8ea960b4c29e580987a73a5c3488e18ec1faf2f586b2",
+  "asset_bytes": 3229038,
   "duration_seconds": 10.03,
   "width": 720,
   "height": 1280,
   "fps": 24,
   "video_codec": "H.264",
   "audio_codec": "AAC stereo 48000Hz",
-  "processing": "Remux MP4 faststart sans recompression ; images et son originaux conserves.",
+  "processing": "Original video stream unchanged; original ambience with unified Qwen hunter voice.",
+  "narration_metadata": "tools/audio/opening_chasseur.json",
   "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
   "previous_versions": [
     {
@@ -53,6 +54,23 @@
       "processing": "Native portrait, subtitle removal, approved Qwen voice and game audio mix.",
       "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
       "video_archive": "media/opening/archive-video-2026-11-03/intro-before-00c88355-2cd378aaaf8f.mp4"
+    },
+    {
+      "source": "Gemini, video fournie et choisie par Logan le 3 novembre 2026",
+      "original_filename": "gemini_generated_video_00c88355.mp4",
+      "original_sha256": "56ac39f4077d8522bbdba51f729867276b57038ad54db21e608ff6f9bdfb1f62",
+      "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
+      "asset_sha256": "a81360c6070a25064a97744001991fe900a88e5586a1773adbae8c6b0ffaabfe",
+      "asset_bytes": 3150789,
+      "duration_seconds": 10.03,
+      "width": 720,
+      "height": 1280,
+      "fps": 24,
+      "video_codec": "H.264",
+      "audio_codec": "AAC stereo 48000Hz",
+      "processing": "Remux MP4 faststart sans recompression ; images et son originaux conserves.",
+      "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
+      "video_archive": "media/opening/archive-video-2026-11-03/intro-before-chasseur-a81360c6070a.mp4"
     }
   ]
 }

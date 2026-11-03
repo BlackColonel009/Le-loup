@@ -1,6 +1,6 @@
 # Ouverture vidéo Gemini — 3 novembre 2026
 
-L'ouverture utilise maintenant la vidéo portrait choisie par Logan : `gemini_generated_video_00c88355.mp4`. Son image et son son sont conservés tels quels, sans nouvelle narration ni retouche. Le MP4 est réorganisé pour démarrer rapidement, sans recompression. La version précédente avec narration Qwen est sauvegardée ; elle reste disponible mais n'est plus jouée dans l'application.
+L'ouverture utilise la vidéo portrait choisie par Logan : `gemini_generated_video_00c88355.mp4`, avec son ambiance sonore d’origine et la voix du chasseur approuvée. La prise « Que la traque commence » est conservée à l’identique. La phrase de bienvenue a été générée localement avec Qwen en prenant cette même prise comme référence, pour rapprocher son timbre et son interprétation. Une pause de 0,72 seconde sépare les deux phrases. La voix féminine est séparée du fond sonore pendant sa réplique ; les griffures, le vent et le rideau proviennent de Gemini. Les images sont conservées sans réencodage ni retouche.
 
 ## Sauvegarde de l'ancienne version
 
@@ -11,11 +11,11 @@ Le MP4 historique inclus montre le rideau seul ; le code archivé contient bien 
 ## Nouvelle séquence
 
 - Ressource locale : `apps/mordeviel/assets/branding/opening/intro_gemini.mp4` ; aucun téléchargement requis.
-- Durée : environ 10 secondes, **720 × 1280** à 24 images/s, H.264 et AAC stéréo. Taille embarquée : **3.00 Mio**. Les flux vidéo et audio originaux sont conservés sans recompression.
+- Durée : environ 10 secondes, **720 × 1280** à 24 images/s, H.264 et AAC stéréo. Taille embarquée : **3,08 Mio**. Le flux vidéo est conservé sans recompression ; seul le mixage audio est remplacé.
 - Le format portrait remplit naturellement mieux le téléphone. Dans les deux orientations, l'image complète conserve ses proportions au centre ; une vue agrandie, assombrie et floutée du même film remplit les marges éventuelles. Le logo n'est ni étiré ni coupé. Les deux vues partagent un seul lecteur.
 - La rotation réutilise le lecteur et conserve la position de lecture.
 - « Passer » reste accessible dans une zone sûre et attend aussi la préparation de l'application.
-- Le son original suit le volume des effets et le mode silencieux enregistrés. La musique de l'accueil ne joue pas sous le film. La vidéo est mise en pause avant l'accueil, qui retrouve son hurlement et sa musique habituels.
+- Le mixage sonore suit le volume des effets et le mode silencieux enregistrés. La musique de l'accueil ne joue pas sous le film. La vidéo est mise en pause avant l'accueil, qui retrouve son hurlement et sa musique habituels.
 - La mise en arrière-plan met la vidéo et son son en pause ; le retour reprend la lecture. La réduction des mouvements utilise un logo statique.
 - Si un codec manque, si l'initialisation dépasse six secondes ou si la lecture reste figée huit secondes au premier plan, un logo statique permet d'accéder au jeu. L'écran ne reste pas bloqué sur le lecteur.
 
@@ -27,6 +27,8 @@ La nouvelle vidéo a été décodée intégralement, image et son, avec FFmpeg, 
 
 Aucun APK ni exécutable Windows n'a été compilé. Aucun changement de serveur n'est nécessaire.
 
-La précédente vidéo portrait est sauvegardée dans `media/opening/archive-video-2026-11-03/intro-before-qwen-4d9bc3be9e38.mp4`. La provenance, les empreintes et les paramètres audio sont conservés dans `tools/audio/opening_narration.json`. Les scripts `create_opening_voice.py` puis `compose_opening_narration.py --source ... --ffmpeg ... --apply` reproduisent le montage avec le Python Qwen local. Les références vocales validées restent inchangées.
+La précédente vidéo portrait est sauvegardée dans `media/opening/archive-video-2026-11-03/intro-before-qwen-4d9bc3be9e38.mp4`. Le fichier `tools/audio/opening_narration.json` et les scripts `create_opening_voice.py` / `compose_opening_narration.py` décrivent la première proposition, désormais historique. Les références vocales validées restent inchangées.
 
 La version Qwen remplacée est conservée dans `media/opening/archive-video-2026-11-03/intro-before-00c88355-2cd378aaaf8f.mp4`. Le fichier `opening_narration.json` est marqué inactif pour cette ouverture.
+
+La version actuelle est exportée dans `exports/intro-chasseur/mordeviel-ouverture-voix-chasseur.mp4`. Sa provenance et ses empreintes sont enregistrées dans `tools/audio/opening_chasseur.json`. Le contrôle compare le flux vidéo à celui de Gemini et vérifie que la dernière phrase est conservée échantillon par échantillon. Le mixage a été décodé intégralement sans erreur et son niveau ne sature pas. L’ouverture remplacée immédiatement avant cette installation est archivée sous `media/opening/archive-video-2026-11-03/intro-before-chasseur-a81360c6070a.mp4`.
