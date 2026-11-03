@@ -14,6 +14,7 @@ import 'services/immersion_preferences.dart';
 import 'challenges/challenge_discovery.dart';
 import 'challenges/challenges_screen.dart';
 import 'design/home_top_bar.dart';
+import 'design/app_version_label.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -325,6 +326,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     letterSpacing: 2,
                   ),
                 ),
+                const SizedBox(height: 8),
+                const AppVersionLabel(),
               ],
             );
             return Center(

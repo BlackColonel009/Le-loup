@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mordeviel/services/app_updates.dart';
 import 'package:mordeviel/services/app_update_gate.dart';
+import 'package:mordeviel/design/app_version_label.dart';
 
 Map<String, dynamic> manifest({
   String version = '0.2.0+2',
@@ -47,7 +48,7 @@ void main() {
     },
   );
   test(
-    'Un lien modifié à version égale demande une installation réelle',
+    'Un lien modifié à version égale ne demande pas de réinstallation',
     () async {
       Future<AppRelease?> check(String id, int stamp) => checkAppUpdate(
         platform: 'android',
@@ -55,16 +56,29 @@ void main() {
         package: () async => installed('0.2.0', '2', stamp),
       );
       expect(await check('a', 100), isNull);
-      expect(await check('b', 100), isNotNull);
+      expect(await check('b', 100), isNull);
       expect(
         await check('b', 100),
-        isNotNull,
+        isNull,
       ); // Seeing the alert does not dismiss it.
       expect(
         await check('b', 200),
         isNull,
       ); // Package update timestamp changed.
       expect(await check('b', 200), isNull);
+    },
+  );
+  test(
+    '0.3.4 est proposée à 0.3.3 puis disparaît après installation',
+    () async {
+      for (final version in ['0.3.3', '0.3.4', '0.3.5']) {
+        final release = await checkAppUpdate(
+          platform: 'android',
+          fetch: () async => manifest(version: '0.3.4'),
+          package: () async => installed(version, '3', 100),
+        );
+        expect(release != null, version == '0.3.3');
+      }
     },
   );
   test(
@@ -143,5 +157,49 @@ void main() {
     );
     await tester.pump();
     expect(find.text('Jeu local disponible'), findsOneWidget);
+  });
+  testWidgets(
+    'Une publication pendant la session est détectée sans redémarrage',
+    (tester) async {
+      var published = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AppUpdateGate(
+            check: () async => published
+                ? AppRelease(
+                    version: '0.3.4',
+                    installed: '0.3.3+3',
+                    url: Uri.parse('https://example.com/app.apk'),
+                    id: 'release',
+                  )
+                : null,
+            child: const Text('Accueil conservé'),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('Accueil conservé'), findsOneWidget);
+      published = true;
+      await tester.pump(const Duration(minutes: 1));
+      await tester.pump();
+      expect(find.text('Mise à jour disponible'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets('Le pied de page affiche la version du paquet installé', (
+    tester,
+  ) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'Mordeviel',
+      packageName: 'com.mordeviel.mordeviel',
+      version: '0.3.3',
+      buildNumber: '3',
+      buildSignature: '',
+    );
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: AppVersionLabel())),
+    );
+    await tester.pump();
+    expect(find.text('Version 0.3.3'), findsOneWidget);
   });
 }

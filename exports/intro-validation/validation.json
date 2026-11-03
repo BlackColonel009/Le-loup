@@ -1,0 +1,23 @@
+{
+  "validation_only": true,
+  "source_filename": "gemini_generated_video_00c88355.mp4",
+  "source_sha256": "56ac39f4077d8522bbdba51f729867276b57038ad54db21e608ff6f9bdfb1f62",
+  "video_stream_identical": true,
+  "voice": "exports/intro-mordeviel/voix-qwen-intense.wav",
+  "voice_sha256": "c319d57732ae52de1ddc1cfadf035f346d7bdd69e739b770490fe61557ff6852",
+  "voice_onset_seconds": 3.2,
+  "background": "Only the original Gemini soundtrack, separated locally during the female speech",
+  "original_audio_untouched_before_seconds": 3.07,
+  "original_audio_restored_at_seconds": 8.72,
+  "new_music_or_sound_effects": false,
+  "new_voice_generated": false,
+  "separator": {
+    "package": "sherpa-onnx==2.0.1",
+    "model": "UVR-MDX-NET-Inst_HQ_3.onnx",
+    "model_sha256": "c207b845d51dc1303c543503f6f5a8b596da5d7de97bead77b3e16ec38e8d5b3",
+    "source": "https://k2-fsa.github.io/sherpa/onnx/source-separation/models.html"
+  },
+  "application_unchanged_sha256": "a81360c6070a25064a97744001991fe900a88e5586a1773adbae8c6b0ffaabfe",
+  "output_sha256": "39bea75b5caa08cd1735c51ea43072573de5fe7c7d8e9d38e3ce847e69e127e2",
+  "output_bytes": 3228501
+}

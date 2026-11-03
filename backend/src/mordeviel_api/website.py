@@ -120,7 +120,7 @@ class DownloadSettings(BaseModel):
         if self.download_enabled and not self.download_url:
             raise ValueError("Ajoute le lien avant d’activer le téléchargement.")
         if self.download_enabled and not re.fullmatch(r'\d+\.\d+\.\d+(?:\+\d+)?', self.download_version):
-            raise ValueError('Indique la version réelle de l’APK, par exemple 0.2.0+2. Augmente ce numéro à chaque mise à jour.')
+            raise ValueError('Indique la version réelle de l’APK, par exemple 0.3.4. Augmente ce numéro à chaque mise à jour.')
         return self
 
 

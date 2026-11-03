@@ -16,6 +16,8 @@ Le lecteur de cartes utilise le cache persistant des packs. La création/configu
 
 ## Détecteur de mise à jour Android
 
+> Cette section décrit le fonctionnement initial. La version actuelle du projet est désormais `0.3.3+3` ; un changement de lien à version égale ne demande plus de réinstallation. Consulter [Version de l’application](version-application.md) pour le fonctionnement et la procédure de publication à jour.
+
 Le build préparé est **0.2.0+2**. Après la vidéo d'ouverture, l'application consulte `/app-update` avant l'accueil, le hurlement et le Collectionneur. L'API reprend directement les champs déjà présents dans l'administration du site : version, lien MEGA et activation des téléchargements. Le bouton **Enregistrer le lien de téléchargement** publie donc aussi l'annonce de nouvelle version.
 
 Le numéro saisi doit correspondre au vrai APK : `0.2.0+2`, puis par exemple `0.2.1+3` pour une publication suivante. Les versions sont comparées numériquement et le numéro de build est pris en compte lorsqu'il est renseigné. Un changement du lien complet, y compris de sa clé après `#`, change également l'empreinte de publication.

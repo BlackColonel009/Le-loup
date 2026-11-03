@@ -22,28 +22,34 @@ class AppUpdateGate extends StatefulWidget {
 class _AppUpdateGateState extends State<AppUpdateGate>
     with WidgetsBindingObserver {
   AppRelease? _release;
-  bool _checking = true, _opening = false;
+  bool _checking = false, _opening = false, _checked = false;
+  Timer? _poll;
   String? _error;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _check();
+    _poll = Timer.periodic(const Duration(minutes: 1), (_) {
+      final state = WidgetsBinding.instance.lifecycleState;
+      if (state == null || state == AppLifecycleState.resumed) _check();
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _poll?.cancel();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _release != null) _check();
+    if (state == AppLifecycleState.resumed) _check();
   }
 
   Future<void> _check() async {
-    if (_checking && _release != null) return;
+    if (_checking) return;
     setState(() {
       _checking = true;
       _error = null;
@@ -61,7 +67,12 @@ class _AppUpdateGateState extends State<AppUpdateGate>
         );
       }
     } finally {
-      if (mounted) setState(() => _checking = false);
+      if (mounted) {
+        setState(() {
+          _checking = false;
+          _checked = true;
+        });
+      }
     }
   }
 
@@ -91,7 +102,7 @@ class _AppUpdateGateState extends State<AppUpdateGate>
 
   @override
   Widget build(BuildContext context) {
-    if (!_checking && _release == null) return widget.child;
+    if (_release == null && (_checked || !_checking)) return widget.child;
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -130,6 +141,11 @@ class _AppUpdateGateState extends State<AppUpdateGate>
                                 color: Color(0xFFE5C385),
                                 fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Version installée : ${_release!.installed}',
+                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 12),
                             const Text(
