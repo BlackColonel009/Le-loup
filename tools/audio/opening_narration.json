@@ -64,5 +64,7 @@
   "app_bytes": 2423957,
   "codecs": "H.264 High / AAC stereo 48 kHz",
   "note": "Source 720x1280; export upscaled proportionally, app keeps native resolution.",
-  "previous_video_archive": "media\\opening\\archive-video-2026-11-03\\intro-before-qwen-022cf0102d02.mp4"
+  "previous_video_archive": "media\\opening\\archive-video-2026-11-03\\intro-before-qwen-022cf0102d02.mp4",
+  "active_in_app": false,
+  "superseded_by": "gemini_generated_video_00c88355.mp4"
 }

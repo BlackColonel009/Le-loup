@@ -1,17 +1,17 @@
 {
-  "source": "Gemini video supplied by Logan; approved local Qwen game narration",
-  "original_filename": "gemini_generated_video_bd65af76.mp4",
-  "original_sha256": "8cbcbd8dc71190a3e7aa3a1aa699b9b57605123e126b5666fcaf58f91c47fb83",
+  "source": "Gemini, video fournie et choisie par Logan le 3 novembre 2026",
+  "original_filename": "gemini_generated_video_00c88355.mp4",
+  "original_sha256": "56ac39f4077d8522bbdba51f729867276b57038ad54db21e608ff6f9bdfb1f62",
   "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
-  "asset_sha256": "2cd378aaaf8f18d6e24ac0b60a7a954e9c871a30175bd4affe69aeedc0cf7d7e",
-  "asset_bytes": 2423957,
-  "duration_seconds": 10.0,
+  "asset_sha256": "a81360c6070a25064a97744001991fe900a88e5586a1773adbae8c6b0ffaabfe",
+  "asset_bytes": 3150789,
+  "duration_seconds": 10.03,
   "width": 720,
   "height": 1280,
   "fps": 24,
   "video_codec": "H.264",
   "audio_codec": "AAC stereo 48000Hz",
-  "processing": "Native portrait, subtitle removal, approved Qwen voice and game audio mix.",
+  "processing": "Remux MP4 faststart sans recompression ; images et son originaux conserves.",
   "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
   "previous_versions": [
     {
@@ -36,6 +36,23 @@
       "audio_codec": "AAC stereo 48000Hz",
       "processing": "Remux MP4 faststart sans recompression ; images et son conservés.",
       "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip"
+    },
+    {
+      "source": "Gemini video supplied by Logan; approved local Qwen game narration",
+      "original_filename": "gemini_generated_video_bd65af76.mp4",
+      "original_sha256": "8cbcbd8dc71190a3e7aa3a1aa699b9b57605123e126b5666fcaf58f91c47fb83",
+      "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
+      "asset_sha256": "2cd378aaaf8f18d6e24ac0b60a7a954e9c871a30175bd4affe69aeedc0cf7d7e",
+      "asset_bytes": 2423957,
+      "duration_seconds": 10.0,
+      "width": 720,
+      "height": 1280,
+      "fps": 24,
+      "video_codec": "H.264",
+      "audio_codec": "AAC stereo 48000Hz",
+      "processing": "Native portrait, subtitle removal, approved Qwen voice and game audio mix.",
+      "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
+      "video_archive": "media/opening/archive-video-2026-11-03/intro-before-00c88355-2cd378aaaf8f.mp4"
     }
   ]
 }
