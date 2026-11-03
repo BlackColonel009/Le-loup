@@ -1,5 +1,5 @@
 // Credentials stay in memory; no localStorage, cookie or URL tokens.
-let adminToken=null, adminUserId=null, verification=null, editing=null, adminCards=[];
+let adminToken=null, verification=null, editing=null, adminCards=[];
 const adminStatus=(text,error=false)=>setMessage(text,error,'#admin-status');
 function logout(){adminToken=null;verification=null;editing=null;adminCards=[];$('#admin-cards').replaceChildren();$('#admin-dashboard').hidden=true;$('#admin-login').hidden=false;$('#login-form').hidden=false;$('#verify-form').hidden=true;$('#password').value='';$('#verify-code').value='';$('#card-form').reset();$('#download-form').reset();$('#download-status').textContent='';adminStatus('Session fermée.');}
 async function loadAdmin(){
@@ -32,7 +32,6 @@ $('#login-form').addEventListener('submit',event=>{event.preventDefault();busy(e
   const data=await api('/community/login',{nickname:$('#nickname').value.trim(),password:$('#password').value});$('#password').value='';
   if(data.user.role!=='admin')throw Error('Cet espace est réservé aux administrateurs.');
   adminToken=data.token;
-  adminUserId=data.user.id;
   if(data.verification_required){verification=data.challenge_id;$('#login-form').hidden=true;$('#verify-form').hidden=false;adminStatus('Un code a été envoyé à ton adresse email.');$('#verify-code').focus();return;}
   try{await loadAdmin();adminStatus('Connexion administrateur réussie.');}catch(e){logout();throw e;}
 },'#admin-status');});

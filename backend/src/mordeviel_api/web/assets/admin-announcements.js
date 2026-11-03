@@ -2,11 +2,30 @@
 // Only draft text is persisted; credentials remain in memory in admin.js.
 let announcementEditing = null, announcementDraftLoaded = false;
 let announcementWorking = false;
+let announcementAccountId = null, announcementAccountRequest = null;
+async function ensureAnnouncementAccount() {
+  if (announcementAccountId !== null) return;
+  if (!announcementAccountRequest) {
+    const token = adminToken;
+    announcementAccountRequest = api('/community/profile', undefined, token, 'GET').then(user => {
+      if (token !== adminToken) throw Error('Session modifiée. Reconnectez-vous.');
+      if (user.role !== 'admin' || !Number.isInteger(user.id)) throw Error('Compte administrateur indisponible.');
+      announcementAccountId = user.id;
+    }).finally(() => { announcementAccountRequest = null; });
+  }
+  await announcementAccountRequest;
+}
 const announcementMessage = (text, error=false) => setMessage(text, error, '#announcement-status');
-const draftPrefix = () => 'mordeviel.announcement.' + adminUserId + '.';
+const draftPrefix = () => 'mordeviel.announcement.' + announcementAccountId + '.';
 const draftKey = () => draftPrefix() + (announcementEditing ?? 'new');
 function saveAnnouncementDraft() {
-  if (!adminUserId || announcementWorking) return;
+  if (!adminToken || announcementWorking) return;
+  if (announcementAccountId === null) {
+    ensureAnnouncementAccount().then(saveAnnouncementDraft).catch(() => {
+      $('#announcement-draft-status').textContent = 'Brouillon non sauvegardé : actualisez la session. Le texte reste dans ce formulaire.';
+    });
+    return;
+  }
   try {
     if (!$('#announcement-title').value && !$('#announcement-body').value) {
       localStorage.removeItem(draftKey());
@@ -42,6 +61,7 @@ async function announcementAction(work) {
   finally { announcementWorking = false; buttons.forEach(b => b.disabled = false); }
 }
 async function loadAnnouncementsAdmin() {
+  await ensureAnnouncementAccount();
   const data = await api('/community/info', undefined, adminToken, 'GET');
   const items = data.announcements || [];
   if (!announcementDraftLoaded) {
@@ -102,7 +122,7 @@ $('#announcement-discard').onclick=()=>{
 };
 $('#announcement-refresh').onclick=()=>announcementAction(loadAnnouncementsAdmin);
 $('#logout').addEventListener('click',()=>{
-  announcementDraftLoaded=false;announcementEditing=null;adminUserId=null;
+  announcementDraftLoaded=false;announcementEditing=null;announcementAccountId=null;
   $('#announcement-form').reset();$('#admin-announcements').replaceChildren();
   announcementMessage('');$('#announcement-draft-status').textContent='Les brouillons restent dans ce navigateur, sans être publiés.';
 });
