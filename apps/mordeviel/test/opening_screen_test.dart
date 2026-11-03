@@ -32,7 +32,7 @@ class _VideoPlatform extends VideoPlayerPlatform {
         events.add(
           VideoEvent(
             eventType: VideoEventType.initialized,
-            size: const Size(1280, 720),
+            size: const Size(720, 1280),
             duration: const Duration(seconds: 10),
           ),
         );
@@ -229,33 +229,42 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  for (final size in [const Size(320, 568), const Size(1000, 400)]) {
-    testWidgets('Image entière et proportions conservées à $size', (
-      tester,
-    ) async {
-      tester.view.physicalSize = size;
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OpeningVideoStage(
-              videoSize: Size(1280, 720),
-              backdrop: ColoredBox(color: Colors.black),
-              child: ColoredBox(key: ValueKey('film'), color: Colors.amber),
+  for (final videoSize in [const Size(1280, 720), const Size(720, 1280)]) {
+    for (final size in [const Size(320, 568), const Size(1000, 400)]) {
+      testWidgets(
+        'Film $videoSize : image entière et proportions conservées à $size',
+        (tester) async {
+          tester.view.physicalSize = size;
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: OpeningVideoStage(
+                  videoSize: videoSize,
+                  backdrop: const ColoredBox(color: Colors.black),
+                  child: const ColoredBox(
+                    key: ValueKey('film'),
+                    color: Colors.amber,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+          final rect = tester.getRect(find.byKey(const ValueKey('film')));
+          expect(
+            rect.width / rect.height,
+            closeTo(videoSize.aspectRatio, .001),
+          );
+          expect(rect.left, greaterThanOrEqualTo(-.01));
+          expect(rect.top, greaterThanOrEqualTo(-.01));
+          expect(rect.right, lessThanOrEqualTo(size.width + .01));
+          expect(rect.bottom, lessThanOrEqualTo(size.height + .01));
+          expect(tester.takeException(), isNull);
+        },
       );
-      final rect = tester.getRect(find.byKey(const ValueKey('film')));
-      expect(rect.width / rect.height, closeTo(1280 / 720, .001));
-      expect(rect.left, greaterThanOrEqualTo(-.01));
-      expect(rect.top, greaterThanOrEqualTo(-.01));
-      expect(rect.right, lessThanOrEqualTo(size.width + .01));
-      expect(rect.bottom, lessThanOrEqualTo(size.height + .01));
-      expect(tester.takeException(), isNull);
-    });
+    }
   }
   testWidgets(
     'Le décor bouge, les commandes restent fixes ; pause en arrière-plan',

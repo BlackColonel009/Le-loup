@@ -36,8 +36,8 @@ def photo():
 def test_starter_is_random_assigned_once_and_shared_by_profiles(api):
     uid, headers, registered = account(api, 'Alice')
     first = api.get('/community/avatars', headers=headers).json()
-    assert len(first['avatars']) == 20
-    assert sum(not a['locked'] for a in first['avatars']) == 4
+    assert len(first['avatars']) == 35
+    assert sum(not a['locked'] for a in first['avatars']) == 5
     assert first['avatar']['id'] in STARTERS
     assert registered['user']['avatar'] == first['avatar']
     assert api.get('/community/profile', headers=headers).json()['avatar'] == first['avatar']
@@ -84,7 +84,7 @@ def test_personal_photo_is_private_normalized_and_deleted_on_replacement(api, tm
 def test_premium_borders_and_creator_cannot_be_claimed_by_players(api):
     uid, headers, _ = account(api, 'Alice')
     data = api.get('/community/avatars', headers=headers).json()
-    assert sum(b['locked'] for b in data['borders']) == 8
+    assert sum(b['locked'] for b in data['borders']) == 33
     assert not any(b['id'] == 'creator-gold' for b in data['borders'])
     for border in ['ruby', 'rainbow', 'creator-gold', 'unknown']:
         assert api.put('/community/avatar/border', headers=headers, json={'border_id': border, 'locked': False}).status_code == 403

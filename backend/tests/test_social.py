@@ -477,6 +477,8 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
         assert "assignments" not in snapshot and "account_token" not in str(snapshot)
         assert api.get("/social/summary", headers=player[1]).json()["invitations"] == 0
         engine = api.app.state.rooms.engines[room_data["code"]]
+        assert snapshot['match_id'] == engine.social_id
+        assert private['match_id'] == engine.social_id
         assert engine.accounts[joined["id"]] == player[0]
         # Another account cannot steal this authenticated player's resume token.
         from starlette.websockets import WebSocketDisconnect

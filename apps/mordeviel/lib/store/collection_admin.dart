@@ -383,14 +383,14 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Text(
-                'Rotation automatique quotidienne : 5 cartes, voix rare, environnement très rare. Tu peux remplacer la sélection du jour.',
+                'Rotation quotidienne : 5 cartes, parfois un sticker, une voix rare ou un environnement très rare. Tu peux remplacer la sélection du jour.',
               ),
               OutlinedButton.icon(
                 onPressed: _busy
                     ? null
                     : () async {
                         final selected = await _select(
-                          '5 cartes + au plus 1 voix et 1 thème',
+                          '5 cartes + au plus 1 voix, 1 thème et 1 sticker',
                           (_data!['daily_ids'] as List).cast<String>(),
                         );
                         if (selected != null) {
@@ -441,9 +441,15 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
               Wrap(
                 spacing: 8,
                 children: [
-                  for (final theme in ['intense', 'horror'])
+                  for (final theme in ['intense', 'horror', 'extras'])
                     ChoiceChip(
-                      label: Text(theme == 'intense' ? 'Intense' : 'Horreur'),
+                      label: Text(
+                        theme == 'intense'
+                            ? 'Intense'
+                            : theme == 'horror'
+                            ? 'Horreur'
+                            : 'Accessoires',
+                      ),
                       selected: _filter == theme,
                       onSelected: (_) => setState(() => _filter = theme),
                     ),

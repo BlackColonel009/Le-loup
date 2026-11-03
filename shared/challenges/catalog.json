@@ -1,0 +1,605 @@
+{
+  "version": 1,
+  "challenges": [
+    {
+      "id": "welcome",
+      "title": "Bienvenue à Mordeviel",
+      "description": "Vérifier son compte.",
+      "metric": "verified",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "welcome"
+        },
+        {
+          "kind": "avatar",
+          "id": "classic-sisters"
+        },
+        {
+          "kind": "sticker",
+          "id": "rewards_villager_suspect"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "first-night",
+      "title": "Première nuit",
+      "description": "Terminer une partie.",
+      "metric": "games",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_elder_think"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "first-win",
+      "title": "Première victoire",
+      "description": "Remporter une partie.",
+      "metric": "wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "amber"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "regular",
+      "title": "Habitué du village",
+      "description": "Terminer 10 parties.",
+      "metric": "games",
+      "target": 10,
+      "rewards": [
+        {
+          "kind": "avatar_choice",
+          "ids": [
+            "reward-legends-shaman",
+            "reward-legends-battle-sister",
+            "reward-legends-heretic"
+          ]
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "veteran",
+      "title": "Vétéran de Mordeviel",
+      "description": "Terminer 50 parties.",
+      "metric": "games",
+      "target": 50,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "gold"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "first-fangs",
+      "title": "Premiers crocs",
+      "description": "Participer à une dévoration réussie dans 2 parties différentes.",
+      "metric": "devouring_games",
+      "target": 2,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_wolf_bite"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "predator",
+      "title": "Prédateur nocturne",
+      "description": "Cumuler 10 victimes en loup, avec la meute ou le pouvoir du Loup Blanc.",
+      "metric": "wolf_victims",
+      "target": 10,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "ruby"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "champion",
+      "title": "Champion du village",
+      "description": "Cumuler 10 victoires, tous rôles confondus.",
+      "metric": "wins",
+      "target": 10,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "emerald"
+        }
+      ],
+      "category": "Premiers pas"
+    },
+    {
+      "id": "keen-eye",
+      "title": "Regard perçant",
+      "description": "Découvrir un membre de la meute dans 3 parties avec la Voyante.",
+      "metric": "seer_games",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_seer_read"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "second-chance",
+      "title": "Une seconde chance",
+      "description": "Sauver effectivement un joueur avec la potion de vie dans 2 parties.",
+      "metric": "witch_games",
+      "target": 2,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-witch"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "watchman",
+      "title": "Veilleur du village",
+      "description": "Empêcher une mort avec le Salvateur dans 2 parties.",
+      "metric": "guardian_games",
+      "target": 2,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-guardian"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "last-bullet",
+      "title": "Dernière balle",
+      "description": "Éliminer un membre de la meute avec le tir du Chasseur.",
+      "metric": "hunter_wolf",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-hunter"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "destiny",
+      "title": "Liés par le destin",
+      "description": "Gagner en faisant partie des amoureux.",
+      "metric": "lover_wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-cupid"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "infection",
+      "title": "La meute s’agrandit",
+      "description": "Réussir une infection avec le Père des Loups.",
+      "metric": "infections",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-wolf-father"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "solitary",
+      "title": "Solitaire de la lune",
+      "description": "Remporter la victoire personnelle du Loup Blanc.",
+      "metric": "white_wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-white-wolf"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "fatal-melody",
+      "title": "Mélodie fatale",
+      "description": "Remporter la victoire personnelle du Joueur de Flûte.",
+      "metric": "piper_wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-piper"
+        }
+      ],
+      "category": "Maîtrise"
+    },
+    {
+      "id": "faces",
+      "title": "Visages du village",
+      "description": "Terminer des parties avec 5 rôles différents.",
+      "metric": "roles",
+      "target": 5,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_secret"
+        }
+      ],
+      "category": "Découverte"
+    },
+    {
+      "id": "many-lives",
+      "title": "Mille vies",
+      "description": "Terminer des parties avec 10 rôles différents.",
+      "metric": "roles",
+      "target": 10,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-legends-shadow"
+        }
+      ],
+      "category": "Découverte"
+    },
+    {
+      "id": "citizen",
+      "title": "Simple citoyen",
+      "description": "Terminer 5 parties comme Villageois ou Villageoise.",
+      "metric": "villager_games",
+      "target": 5,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "reward-legends-fallen-paladin"
+        }
+      ],
+      "category": "Découverte"
+    },
+    {
+      "id": "both-camps",
+      "title": "Dans chaque camp",
+      "description": "Gagner avec le village et avec la meute.",
+      "metric": "winning_camps",
+      "target": 2,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_wolf_meeting"
+        }
+      ],
+      "category": "Découverte"
+    },
+    {
+      "id": "universes",
+      "title": "Les trois univers",
+      "description": "Terminer une partie dans chacun des trois univers.",
+      "metric": "themes",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "indigo"
+        }
+      ],
+      "category": "Découverte"
+    },
+    {
+      "id": "verdict",
+      "title": "Le bon verdict",
+      "description": "Voter pour un loup réellement exécuté dans 3 parties.",
+      "metric": "verdict_games",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_vote_against"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "night-vision",
+      "title": "Vision nocturne",
+      "description": "Utiliser la Voyante pendant 3 nuits d’une même partie.",
+      "metric": "seer_nights_best",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "azure"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "remedy",
+      "title": "Remède précieux",
+      "description": "Sauver un autre joueur avec la Sorcière, puis gagner.",
+      "metric": "remedy_win",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_witch_rescue"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "guarded",
+      "title": "Sous bonne garde",
+      "description": "Sauver 2 joueurs différents avec le Salvateur.",
+      "metric": "guarded_players",
+      "target": 2,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-village-guardian"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "rampart",
+      "title": "Dernier rempart",
+      "description": "Gagner avec le village en restant vivant comme Villageois.",
+      "metric": "villager_survivor",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_vigilance"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "memory",
+      "title": "Mémoire ancienne",
+      "description": "Résister à une attaque des loups grâce au pouvoir de l’Ancien.",
+      "metric": "elder_resists",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-elder"
+        }
+      ],
+      "category": "Village"
+    },
+    {
+      "id": "howl",
+      "title": "Hurlement victorieux",
+      "description": "Gagner 3 parties avec la meute.",
+      "metric": "wolf_wins",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "reward-village-wolf"
+        }
+      ],
+      "category": "Meute"
+    },
+    {
+      "id": "long-hunt",
+      "title": "Longue chasse",
+      "description": "Participer à une dévoration pendant 3 nuits d’une même partie.",
+      "metric": "hunt_nights_best",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_white_wolf_howl"
+        }
+      ],
+      "category": "Meute"
+    },
+    {
+      "id": "new-blood",
+      "title": "Sang nouveau",
+      "description": "Infecter un joueur puis gagner avec lui dans la meute.",
+      "metric": "infection_win",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-village-twin-wolves"
+        }
+      ],
+      "category": "Meute"
+    },
+    {
+      "id": "hungry",
+      "title": "Faim insatiable",
+      "description": "Éliminer avec l’attaque supplémentaire du Grand Méchant Loup.",
+      "metric": "alpha_kills",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_wolf_fierce"
+        }
+      ],
+      "category": "Meute"
+    },
+    {
+      "id": "betrayal",
+      "title": "Trahison blanche",
+      "description": "Éliminer un autre loup avec le pouvoir du Loup Blanc.",
+      "metric": "white_kills",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_wolf_stare"
+        }
+      ],
+      "category": "Meute"
+    },
+    {
+      "id": "impossible-love",
+      "title": "Amour impossible",
+      "description": "Remporter la victoire en couple de camps opposés.",
+      "metric": "mixed_love_win",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-village-cupid"
+        }
+      ],
+      "category": "Exploits"
+    },
+    {
+      "id": "celestial",
+      "title": "Victoire céleste",
+      "description": "Remporter la victoire spéciale de l’Ange.",
+      "metric": "angel_wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "classic-angel"
+        }
+      ],
+      "category": "Exploits"
+    },
+    {
+      "id": "dance",
+      "title": "Tout le village danse",
+      "description": "Remporter la victoire du Joueur de Flûte.",
+      "metric": "piper_wins",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-village-piper"
+        }
+      ],
+      "category": "Exploits"
+    },
+    {
+      "id": "alone",
+      "title": "Seul sous la lune",
+      "description": "Gagner avec le Loup Blanc, dernier survivant.",
+      "metric": "white_alone",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "amethyst"
+        }
+      ],
+      "category": "Exploits"
+    },
+    {
+      "id": "destinies",
+      "title": "Collectionneur de destins",
+      "description": "Gagner avec 8 rôles différents.",
+      "metric": "winning_roles",
+      "target": 8,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "rainbow"
+        }
+      ],
+      "category": "Exploits"
+    },
+    {
+      "id": "rendezvous",
+      "title": "Rendez-vous au village",
+      "description": "Terminer des parties pendant 3 jours différents.",
+      "metric": "days",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_hope"
+        }
+      ],
+      "category": "Communauté"
+    },
+    {
+      "id": "faithful",
+      "title": "Fidèle aux nuits",
+      "description": "Jouer pendant 10 jours différents.",
+      "metric": "days",
+      "target": 10,
+      "rewards": [
+        {
+          "kind": "border",
+          "id": "reward-legends-night-raven"
+        }
+      ],
+      "category": "Communauté"
+    },
+    {
+      "id": "friends",
+      "title": "Soirée entre amis",
+      "description": "Terminer une partie avec au moins 3 amis de sa liste.",
+      "metric": "friend_games",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_heroic"
+        }
+      ],
+      "category": "Communauté"
+    },
+    {
+      "id": "festival",
+      "title": "Nuit de fête",
+      "description": "Terminer une partie commencée pendant un événement officiel.",
+      "metric": "event_games",
+      "target": 1,
+      "rewards": [
+        {
+          "kind": "sticker",
+          "id": "rewards_alpha_howl"
+        }
+      ],
+      "category": "Événements"
+    },
+    {
+      "id": "seasons",
+      "title": "Mémoire des saisons",
+      "description": "Participer à 3 événements officiels distincts.",
+      "metric": "events",
+      "target": 3,
+      "rewards": [
+        {
+          "kind": "avatar",
+          "id": "reward-legends-cursed-archivist"
+        }
+      ],
+      "category": "Événements"
+    }
+  ]
+}

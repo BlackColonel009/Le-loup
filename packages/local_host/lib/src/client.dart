@@ -214,6 +214,7 @@ class LobbyClient {
     bool? save,
     String? kill,
     String? text,
+    String? replyTo,
     List<String>? targets,
   }) => _socket?.add(
     jsonEncode({
@@ -225,6 +226,7 @@ class LobbyClient {
       if (save != null) 'save': save,
       'kill': kill,
       if (text != null) 'text': text,
+      if (replyTo != null) 'reply_to': replyTo,
       if (targets != null) 'targets': targets,
     }),
   );

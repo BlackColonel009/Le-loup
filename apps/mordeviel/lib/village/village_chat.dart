@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:local_host/local_host.dart' show stickerMessage;
 import '../design/game_theme.dart';
 import '../stickers/chat_stickers.dart';
+import '../chat/message_reply.dart';
+import '../stickers/sticker_suggestions.dart';
+import 'package:local_host/local_host.dart' show ChatSticker;
 import 'village_guidance.dart';
 
 class VillageChat extends StatefulWidget {
@@ -20,7 +23,13 @@ class VillageChat extends StatefulWidget {
   final Map<String, dynamic> room;
   final Map<String, dynamic>? privateState;
   final String? selfId;
-  final void Function(String action, int revision, String text) onSend;
+  final void Function(
+    String action,
+    int revision,
+    String text, {
+    String? replyTo,
+  })
+  onSend;
   @override
   State<VillageChat> createState() => _VillageChatState();
 }
@@ -28,6 +37,7 @@ class VillageChat extends StatefulWidget {
 class _VillageChatState extends State<VillageChat> {
   final _text = TextEditingController();
   final _focus = FocusNode();
+  Map? _reply;
   final _bondClock = Stopwatch();
   Timer? _bondTicker;
   Map? get _bond => widget.privateState?['bond_chat'] as Map?;
@@ -75,7 +85,10 @@ class _VillageChatState extends State<VillageChat> {
       isHost: old.isHost,
       connected: old.connected,
     );
-    if (previousChannel.scope != _channel.scope) _text.clear();
+    if (previousChannel.scope != _channel.scope) {
+      _text.clear();
+      _reply = null;
+    }
   }
 
   @override
@@ -98,19 +111,29 @@ class _VillageChatState extends State<VillageChat> {
       _command,
       (widget.room['game'] as Map)['phase_revision'] as int,
       _text.text.trim(),
+      replyTo: _reply?['id'] as String?,
     );
     _text.clear();
+    setState(() => _reply = null);
   }
 
-  Future<void> _sticker({bool reaction = false}) async {
-    _focus.unfocus();
-    final sticker = await showStickerPicker(context);
-    if (!mounted || sticker == null || !_channel.writable) return;
+  Future<void> _sticker({bool reaction = false, ChatSticker? suggested}) async {
+    if (suggested == null) _focus.unfocus();
+    final scope = _channel.scope;
+    final sticker = suggested ?? await showStickerPicker(context);
+    if (!mounted ||
+        sticker == null ||
+        !_channel.writable ||
+        scope != _channel.scope) {
+      return;
+    }
     widget.onSend(
       reaction ? 'reaction.send' : _command,
       (widget.room['game'] as Map)['phase_revision'] as int,
       stickerMessage(sticker),
+      replyTo: reaction ? null : _reply?['id'] as String?,
     );
+    if (!reaction) setState(() => _reply = null);
   }
 
   String _name(dynamic id) => id == 'unknown'
@@ -293,7 +316,22 @@ class _VillageChatState extends State<VillageChat> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (channel.writable) ...[
+                        StickerSuggestions(
+                          controller: _text,
+                          scope: channel.scope,
+                          enabled: channel.writable,
+                          onSelect: (sticker) => _sticker(suggested: sticker),
+                        ),
+                        if (_reply != null)
+                          MessageReply(
+                            reply: {
+                              ..._reply!,
+                              'sender': _name(_reply!['author']),
+                            },
+                            onCancel: () => setState(() => _reply = null),
+                          ),
                         Container(
+                          key: const ValueKey('village-composer-field'),
                           margin: const EdgeInsets.only(top: 6),
                           decoration: BoxDecoration(
                             color: GameTheme.panel,
@@ -463,18 +501,42 @@ class _VillageChatState extends State<VillageChat> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        mine ? 'Toi · $name' : name,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: GameTheme.gold,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              mine ? 'Toi · $name' : name,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: GameTheme.gold,
+                              ),
+                            ),
+                          ),
+                          if (channel.writable && message['id'] != null)
+                            IconButton(
+                              tooltip: 'Répondre',
+                              visualDensity: VisualDensity.compact,
+                              icon: const Icon(Icons.reply, size: 18),
+                              onPressed: () {
+                                setState(() => _reply = message);
+                                _focus.requestFocus();
+                              },
+                            ),
+                        ],
                       ),
                       const SizedBox(height: 5),
+                      if (message['reply_id'] != null)
+                        MessageReply(
+                          reply: {
+                            'sender': _name(message['reply_author']),
+                            'text': message['reply_text'],
+                          },
+                        ),
                       ChatMessageBody(
                         text: message['text'] as String,
-                        selectable: true,
+                        selectable: false,
                       ),
                     ],
                   ),
@@ -484,6 +546,13 @@ class _VillageChatState extends State<VillageChat> {
           ),
         ),
       ),
+    ).replyable(
+      channel.writable && message['id'] != null
+          ? () {
+              setState(() => _reply = message);
+              _focus.requestFocus();
+            }
+          : null,
     );
   }
 }

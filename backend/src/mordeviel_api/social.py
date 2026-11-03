@@ -788,6 +788,8 @@ def sync_match(db, engine):
     if engine.snapshot.get("phase") == "lobby":
         return
     with db.db() as c:
+        from . import challenges
+        challenges.capture_events(c, engine)
         valid_accounts = {}
         for player, uid in engine.accounts.items():
             current = c.execute(
@@ -831,6 +833,7 @@ def sync_match(db, engine):
         for player, uid in valid_accounts.items():
             if not c.execute("SELECT 1 FROM users WHERE id=?", (uid,)).fetchone():
                 continue
+            challenges.ensure_user(c, uid)
             deaths = [
                 e
                 for e in history
@@ -881,6 +884,7 @@ def sync_match(db, engine):
                     int(any(e.get("cause") == "vote" for e in deaths)),
                 ),
             )
+        challenges.record_match(c, engine, valid_accounts, practice)
 
 
 def close_room(db, engine):

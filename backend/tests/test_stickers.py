@@ -21,7 +21,8 @@ def test_sticker_community_roundtrip_and_unknown_rejection(tmp_path, monkeypatch
         ).json()
         auth = {"Authorization": "Bearer " + sender["token"]}
         token = "[[sticker:" + next(iter(STICKERS)) + "]]"
-        assert len(STICKERS) == 17
+        assert sum(s.get("pack", "classic") == "classic" for s in STICKERS.values()) == 17
+        assert sum(s.get("pack") == "rewards" for s in STICKERS.values()) == 58
         assert (
             api.post(
                 "/community/messages", headers=auth, json={"text": token}

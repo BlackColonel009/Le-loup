@@ -115,6 +115,8 @@ def verify_email(
                     "UPDATE email_challenges SET used=1 WHERE user_id=?",
                     (user['id'],),
                 )
+                from .challenges import ensure_user
+                ensure_user(connection, user['id'])
     except sqlite3.IntegrityError:
         raise HTTPException(409, "Cette adresse email est déjà utilisée.") from None
     if error:

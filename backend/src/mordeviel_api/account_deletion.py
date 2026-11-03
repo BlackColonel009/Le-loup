@@ -85,6 +85,11 @@ def confirm_deletion(
                     "avatar_unlocks",
                     "player_avatar_styles",
                     "border_unlocks",
+                    "challenge_users",
+                    "challenge_metrics",
+                    "challenge_distinct",
+                    "challenge_progress",
+                    "challenge_matches",
                 ):
                     connection.execute(
                         f"DELETE FROM {table} WHERE user_id=?", (user_id,)

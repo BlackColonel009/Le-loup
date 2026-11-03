@@ -10,12 +10,17 @@ Future<void> showVictory(
   required Map<String, dynamic> game,
   required List players,
   CardAmbience ambience = CardAmbience.classic,
+  String continueLabel = 'Voir les rôles et retourner au village',
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
   barrierLabel: 'Fin de partie',
-  pageBuilder: (_, _, _) =>
-      VictoryScene(game: game, players: players, ambience: ambience),
+  pageBuilder: (_, _, _) => VictoryScene(
+    game: game,
+    players: players,
+    ambience: ambience,
+    continueLabel: continueLabel,
+  ),
 );
 
 class VictoryScene extends StatefulWidget {
@@ -24,10 +29,12 @@ class VictoryScene extends StatefulWidget {
     required this.game,
     required this.players,
     this.ambience = CardAmbience.classic,
+    this.continueLabel = 'Voir les rôles et retourner au village',
   });
   final Map<String, dynamic> game;
   final List players;
   final CardAmbience ambience;
+  final String continueLabel;
   @override
   State<VictoryScene> createState() => _VictorySceneState();
 }
@@ -159,9 +166,7 @@ class _VictorySceneState extends State<VictoryScene>
                     FilledButton.icon(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.cottage_outlined),
-                      label: const Text(
-                        'Voir les rôles et retourner au village',
-                      ),
+                      label: Text(widget.continueLabel),
                     ),
                   ],
                 ),

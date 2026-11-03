@@ -197,11 +197,11 @@ extension _BondVariants on NightGame {
     };
   }
 
-  void _sendBondMessage(String id, dynamic text) {
+  void _sendBondMessage(String id, dynamic text, {dynamic replyTo}) {
     final chat = _bondPrivate(id);
     if (chat == null || chat['open'] != true)
       throw StateError('Cet échange privé est fermé pour vous.');
-    _chat(id, text, _expanded.bondChats[phase]!.messages);
+    _chat(id, text, _expanded.bondChats[phase]!.messages, replyTo: replyTo);
   }
 
   String? _redirectSisterAttack(String? target) {

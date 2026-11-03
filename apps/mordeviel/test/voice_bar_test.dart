@@ -83,7 +83,7 @@ void main() {
                   connected: true,
                   isHost: false,
                   privateState: const {'alive': true},
-                  onSend: (_, _, _) {},
+                  onSend: (_, _, _, {replyTo}) {},
                 ),
                 voiceControl: VoiceBar(voice: voice),
               ),

@@ -27,7 +27,7 @@ void main() {
             privateState: g.privateState('a'),
             isHost: false,
             connected: true,
-            onSend: (action, revision, text) {
+            onSend: (action, revision, text, {replyTo}) {
               command = action;
               sent = text;
             },

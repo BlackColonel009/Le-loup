@@ -1,0 +1,592 @@
+[
+  {
+    "id": "reward-legends-druid",
+    "title": "Druide",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 0,
+    "source": "reward-legends-druid.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-druid.png",
+    "unlock": "challenge",
+    "opening": [
+      0.23855,
+      0.282861,
+      0.489994,
+      0.489994
+    ]
+  },
+  {
+    "id": "reward-legends-headless-rider",
+    "title": "Cavalier sans tête",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 1,
+    "source": "reward-legends-headless-rider.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-headless-rider.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-alchemist",
+    "title": "Alchimiste",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 2,
+    "source": "reward-legends-alchemist.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-alchemist.png",
+    "unlock": "challenge",
+    "opening": [
+      0.235182,
+      0.282669,
+      0.489037,
+      0.489037
+    ]
+  },
+  {
+    "id": "reward-legends-battle-sister",
+    "title": "Sœur de bataille",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 3,
+    "source": "reward-legends-battle-sister.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-battle-sister.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-shaman",
+    "title": "Chaman",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 4,
+    "source": "reward-legends-shaman.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-shaman.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-vampire",
+    "title": "Vampire",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 5,
+    "source": "reward-legends-vampire.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-vampire.png",
+    "unlock": "challenge",
+    "opening": [
+      0.209755,
+      0.225425,
+      0.557014,
+      0.557014
+    ]
+  },
+  {
+    "id": "reward-legends-scarred-wolf",
+    "title": "Loup-Garou écorché",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 6,
+    "source": "reward-legends-scarred-wolf.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-scarred-wolf.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-sentinel",
+    "title": "Sentinelle",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 7,
+    "source": "reward-legends-sentinel.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-sentinel.png",
+    "unlock": "challenge",
+    "opening": [
+      0.200524,
+      0.234691,
+      0.534013,
+      0.534013
+    ]
+  },
+  {
+    "id": "reward-legends-heretic",
+    "title": "Hérétique",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 8,
+    "source": "reward-legends-heretic.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-heretic.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-shadow",
+    "title": "Ombre",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 9,
+    "source": "reward-legends-shadow.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-shadow.png",
+    "unlock": "challenge",
+    "opening": [
+      0.239093,
+      0.226805,
+      0.547202,
+      0.547202
+    ]
+  },
+  {
+    "id": "reward-legends-berserker",
+    "title": "Berserker",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 10,
+    "source": "reward-legends-berserker.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-berserker.png",
+    "unlock": "challenge",
+    "opening": [
+      0.231769,
+      0.24136,
+      0.479072,
+      0.479072
+    ]
+  },
+  {
+    "id": "reward-legends-witch-queen",
+    "title": "Reine des Sorcières",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 11,
+    "source": "reward-legends-witch-queen.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-witch-queen.png",
+    "unlock": "challenge",
+    "opening": [
+      0.256577,
+      0.320201,
+      0.413202,
+      0.413202
+    ]
+  },
+  {
+    "id": "reward-legends-monster-hunter",
+    "title": "Chasseur de monstres",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 12,
+    "source": "reward-legends-monster-hunter.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-monster-hunter.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-ghost",
+    "title": "Fantôme",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 13,
+    "source": "reward-legends-ghost.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-ghost.png",
+    "unlock": "challenge",
+    "opening": [
+      0.279598,
+      0.315665,
+      0.448791,
+      0.448791
+    ]
+  },
+  {
+    "id": "reward-legends-dwarf-artificer",
+    "title": "Artificier nain",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 14,
+    "source": "reward-legends-dwarf-artificer.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-dwarf-artificer.png",
+    "unlock": "challenge",
+    "opening": [
+      0.234856,
+      0.258206,
+      0.526845,
+      0.526845
+    ]
+  },
+  {
+    "id": "reward-legends-fallen-paladin",
+    "title": "Paladin déchu",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 15,
+    "source": "reward-legends-fallen-paladin.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-fallen-paladin.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-wolf-lord",
+    "title": "Seigneur des Loups",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 16,
+    "source": "reward-legends-wolf-lord.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-wolf-lord.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-night-raven",
+    "title": "Corbeau de la nuit",
+    "kind": "borders",
+    "sheet": "legends",
+    "position": 17,
+    "source": "reward-legends-night-raven.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-legends-night-raven.png",
+    "unlock": "challenge",
+    "opening": [
+      0.283174,
+      0.246722,
+      0.525372,
+      0.525372
+    ]
+  },
+  {
+    "id": "reward-legends-midnight-wolf",
+    "title": "Loup-Garou de minuit",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 18,
+    "source": "reward-legends-midnight-wolf.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-midnight-wolf.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-legends-cursed-archivist",
+    "title": "Archiviste maudit",
+    "kind": "portraits",
+    "sheet": "legends",
+    "position": 19,
+    "source": "reward-legends-cursed-archivist.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-legends-cursed-archivist.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-village-villager",
+    "title": "Villageois",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 0,
+    "source": "reward-village-villager.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-villager.png",
+    "unlock": "challenge",
+    "opening": [
+      0.241838,
+      0.274317,
+      0.5127,
+      0.5127
+    ]
+  },
+  {
+    "id": "reward-village-wolf",
+    "title": "Loup-Garou",
+    "kind": "portraits",
+    "sheet": "village",
+    "position": 1,
+    "source": "reward-village-wolf.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-village-wolf.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-village-seer",
+    "title": "Voyante",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 2,
+    "source": "reward-village-seer.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-seer.png",
+    "unlock": "challenge",
+    "opening": [
+      0.209088,
+      0.217073,
+      0.584664,
+      0.584664
+    ]
+  },
+  {
+    "id": "reward-village-witch",
+    "title": "Sorcière",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 3,
+    "source": "reward-village-witch.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-witch.png",
+    "unlock": "challenge",
+    "opening": [
+      0.268678,
+      0.253665,
+      0.524923,
+      0.524923
+    ]
+  },
+  {
+    "id": "reward-village-hunter",
+    "title": "Chasseur",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 4,
+    "source": "reward-village-hunter.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-hunter.png",
+    "unlock": "challenge",
+    "opening": [
+      0.183257,
+      0.268694,
+      0.519716,
+      0.519716
+    ]
+  },
+  {
+    "id": "reward-village-little-girl",
+    "title": "Petite Fille",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 5,
+    "source": "reward-village-little-girl.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-little-girl.png",
+    "unlock": "challenge",
+    "opening": [
+      0.18806,
+      0.220718,
+      0.564786,
+      0.564786
+    ]
+  },
+  {
+    "id": "reward-village-cupid",
+    "title": "Cupidon",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 6,
+    "source": "reward-village-cupid.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-cupid.png",
+    "unlock": "challenge",
+    "opening": [
+      0.296347,
+      0.300836,
+      0.399496,
+      0.399496
+    ]
+  },
+  {
+    "id": "reward-village-guardian",
+    "title": "Salvateur",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 7,
+    "source": "reward-village-guardian.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-guardian.png",
+    "unlock": "challenge",
+    "opening": [
+      0.199459,
+      0.242752,
+      0.510021,
+      0.510021
+    ]
+  },
+  {
+    "id": "reward-village-elder",
+    "title": "Ancien",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 8,
+    "source": "reward-village-elder.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-elder.png",
+    "unlock": "challenge",
+    "opening": [
+      0.243294,
+      0.230854,
+      0.511537,
+      0.511537
+    ]
+  },
+  {
+    "id": "reward-village-scapegoat",
+    "title": "Bouc émissaire",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 9,
+    "source": "reward-village-scapegoat.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-scapegoat.png",
+    "unlock": "challenge",
+    "opening": [
+      0.221506,
+      0.223088,
+      0.539346,
+      0.539346
+    ]
+  },
+  {
+    "id": "reward-village-alpha",
+    "title": "Alpha",
+    "kind": "portraits",
+    "sheet": "village",
+    "position": 10,
+    "source": "reward-village-alpha.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-village-alpha.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-village-white-wolf",
+    "title": "Loup Blanc",
+    "kind": "portraits",
+    "sheet": "village",
+    "position": 11,
+    "source": "reward-village-white-wolf.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-village-white-wolf.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-village-wolf-father",
+    "title": "Père des Loups",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 12,
+    "source": "reward-village-wolf-father.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-wolf-father.png",
+    "unlock": "challenge",
+    "opening": [
+      0.211587,
+      0.232992,
+      0.501654,
+      0.501654
+    ]
+  },
+  {
+    "id": "reward-village-idiot",
+    "title": "Idiot du Village",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 13,
+    "source": "reward-village-idiot.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-idiot.png",
+    "unlock": "challenge",
+    "opening": [
+      0.157928,
+      0.203397,
+      0.588367,
+      0.588367
+    ]
+  },
+  {
+    "id": "reward-village-piper",
+    "title": "Joueur de Flûte",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 14,
+    "source": "reward-village-piper.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-piper.png",
+    "unlock": "challenge",
+    "opening": [
+      0.23424,
+      0.237855,
+      0.528307,
+      0.528307
+    ]
+  },
+  {
+    "id": "reward-village-angel",
+    "title": "Ange",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 15,
+    "source": "reward-village-angel.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-angel.png",
+    "unlock": "challenge",
+    "opening": [
+      0.276508,
+      0.334159,
+      0.452823,
+      0.452823
+    ]
+  },
+  {
+    "id": "reward-village-metamorph",
+    "title": "Voleur / Métamorphe",
+    "kind": "portraits",
+    "sheet": "village",
+    "position": 16,
+    "source": "reward-village-metamorph.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-village-metamorph.png",
+    "unlock": "challenge"
+  },
+  {
+    "id": "reward-village-raven",
+    "title": "Corbeau",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 17,
+    "source": "reward-village-raven.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-raven.png",
+    "unlock": "challenge",
+    "opening": [
+      0.237959,
+      0.246141,
+      0.555559,
+      0.555559
+    ]
+  },
+  {
+    "id": "reward-village-twin-wolves",
+    "title": "Loups de la légende",
+    "kind": "borders",
+    "sheet": "village",
+    "position": 18,
+    "source": "reward-village-twin-wolves.png",
+    "pack_id": "borders-rewards",
+    "asset": "assets/borders/rewards/reward-village-twin-wolves.png",
+    "unlock": "challenge",
+    "opening": [
+      0.258115,
+      0.27457,
+      0.471617,
+      0.471617
+    ]
+  },
+  {
+    "id": "reward-village-game-master",
+    "title": "Maître du jeu",
+    "kind": "portraits",
+    "sheet": "village",
+    "position": 19,
+    "source": "reward-village-game-master.png",
+    "pack_id": "avatars-rewards",
+    "asset": "assets/avatars/rewards/reward-village-game-master.png",
+    "unlock": "challenge"
+  }
+]

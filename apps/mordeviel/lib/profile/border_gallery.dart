@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'avatar_border.dart';
 import 'player_avatar.dart';
 
-class AvatarBorderGallery extends StatelessWidget {
+class AvatarBorderGallery extends StatefulWidget {
   const AvatarBorderGallery({
     super.key,
     required this.borders,
@@ -14,6 +14,18 @@ class AvatarBorderGallery extends StatelessWidget {
   final Map? current;
   final bool canEdit;
   final ValueChanged<Map<String, dynamic>> onSelect;
+  @override
+  State<AvatarBorderGallery> createState() => _AvatarBorderGalleryState();
+}
+
+class _AvatarBorderGalleryState extends State<AvatarBorderGallery> {
+  bool _illustrated = false;
+  List<Map<String, dynamic>> get borders => widget.borders
+      .where((b) => (b['effect'] == 'artwork') == _illustrated)
+      .toList();
+  Map? get current => widget.current;
+  bool get canEdit => widget.canEdit;
+  ValueChanged<Map<String, dynamic>> get onSelect => widget.onSelect;
 
   void _preview(BuildContext context, Map<String, dynamic> border) {
     showDialog<void>(
@@ -29,7 +41,9 @@ class AvatarBorderGallery extends StatelessWidget {
               child: AnimatedAvatarBorder(
                 border: border,
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(
+                    border['effect'] == 'artwork' ? 0 : 15,
+                  ),
                   child: PlayerAvatar(
                     avatar: {...?current, 'border_id': 'none'},
                     size: 122,
@@ -40,10 +54,10 @@ class AvatarBorderGallery extends StatelessWidget {
             const SizedBox(height: 20),
             const Icon(Icons.lock_outline, color: Color(0xFFD6AE70)),
             const SizedBox(height: 8),
-            const Text('Défis ou achat à venir', textAlign: TextAlign.center),
+            const Text('Bordure à débloquer', textAlign: TextAlign.center),
             const SizedBox(height: 8),
             const Text(
-              'Tu peux admirer son animation. Cette bordure n’est pas encore déblocable.',
+              'Consulte les récompenses du carnet des défis dans ton profil. D’autres offres seront annoncées dans la boutique.',
               textAlign: TextAlign.center,
             ),
           ],
@@ -68,9 +82,26 @@ class AvatarBorderGallery extends StatelessWidget {
       ),
       const SizedBox(height: 6),
       const Text(
-        'Des reflets en mouvement autour de ton portrait. Les bordures colorées seront déblocables par défis ou achat. Touche une bordure pour voir son animation.',
+        'Anneaux animés et cadres illustrés autour de ton portrait. Gagne des récompenses dans le carnet des défis. Touche une bordure pour voir son aperçu.',
       ),
       const SizedBox(height: 14),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          ChoiceChip(
+            label: const Text('Animées'),
+            selected: !_illustrated,
+            onSelected: (_) => setState(() => _illustrated = false),
+          ),
+          ChoiceChip(
+            label: const Text('Illustrées'),
+            selected: _illustrated,
+            onSelected: (_) => setState(() => _illustrated = true),
+          ),
+        ],
+      ),
+      const SizedBox(height: 10),
       LayoutBuilder(
         builder: (context, box) => GridView.builder(
           shrinkWrap: true,
@@ -137,7 +168,9 @@ class AvatarBorderGallery extends StatelessWidget {
                                 animate: false,
                                 border: border,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(
+                                    border['effect'] == 'artwork' ? 0 : 10,
+                                  ),
                                   child: Opacity(
                                     opacity: locked ? .4 : 1,
                                     child: const CircleAvatar(
@@ -174,7 +207,7 @@ class AvatarBorderGallery extends StatelessWidget {
                       const SizedBox(height: 5),
                       Text(
                         locked
-                            ? 'Défis ou achat à venir'
+                            ? 'Bordure à débloquer'
                             : selected
                             ? 'Sélectionnée'
                             : canEdit

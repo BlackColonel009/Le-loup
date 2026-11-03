@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../challenges/challenges_screen.dart';
 import 'package:flutter/material.dart';
 import '../profile/player_avatar.dart';
 import '../profile/avatar_border.dart';
@@ -850,6 +851,30 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
                 ),
               ),
             const SizedBox(height: 24),
+            if (p['is_self'] == true) ...[
+              Card(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 10,
+                  ),
+                  leading: const Icon(
+                    Icons.workspace_premium,
+                    color: _gold,
+                    size: 30,
+                  ),
+                  title: const Text('Mes défis et mes récompenses'),
+                  subtitle: const Text(
+                    'Votre progression, vos portraits et vos trésors.',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ChallengesScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             if (p['stats_visible'] == true) ...[
               StatsGrid(stats: p['stats'] as Map),
               const Text(

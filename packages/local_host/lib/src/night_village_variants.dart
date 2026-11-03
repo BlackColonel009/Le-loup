@@ -91,6 +91,7 @@ extension _VillageVariants on NightGame {
         final message = <Map<String, String>>[];
         _chat(id, text, message);
         _wolfMessages.add({
+          'id': message.single['id']!,
           'author': 'unknown',
           'text': '[Présence inconnue] ${message.single['text']}',
         });

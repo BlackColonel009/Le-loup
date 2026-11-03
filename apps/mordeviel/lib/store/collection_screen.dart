@@ -10,12 +10,15 @@ import '../content/downloads_screen.dart';
 import '../content/pack_store.dart';
 import '../services/public_content.dart';
 import '../social/social_api.dart';
+import '../stickers/chat_stickers.dart';
+import 'package:local_host/local_host.dart' show chatStickerById;
 
 const _gold = Color(0xFFD6B16D);
 
 class CollectionScreen extends StatefulWidget {
-  const CollectionScreen({super.key, this.initialTab = 0});
+  const CollectionScreen({super.key, this.initialTab = 0, this.initialTheme});
   final int initialTab;
+  final String? initialTheme;
   @override
   State<CollectionScreen> createState() => _CollectionScreenState();
 }
@@ -58,6 +61,7 @@ class _CollectionScreenState extends State<CollectionScreen>
       ],
     };
     if (widget.initialTab == 1) _theme = 'intense';
+    if (widget.initialTheme != null) _theme = widget.initialTheme!;
     WidgetsBinding.instance.addObserver(this);
     _load();
     _timer = Timer.periodic(const Duration(seconds: 30), (_) {
@@ -224,7 +228,7 @@ class _CollectionScreenState extends State<CollectionScreen>
         if (collector) ...[
           const SizedBox(height: 8),
           const Text(
-            '5 cartes par jour · parfois une voix ou un environnement rare. Renouvellement à minuit UTC.',
+            '5 cartes par jour · parfois un sticker à collectionner, une voix ou un environnement rare. Renouvellement à minuit UTC.',
             style: TextStyle(fontSize: 12, color: Colors.white70),
           ),
           TextButton.icon(
@@ -270,6 +274,11 @@ class _CollectionScreenState extends State<CollectionScreen>
                   seed: p['id'].hashCode,
                   child: role != null
                       ? RoleCardFront(role: role, ambience: ambience)
+                      : p['kind'] == 'sticker' && chatStickerById(id) != null
+                      ? ChatStickerImage(
+                          sticker: chatStickerById(id)!,
+                          size: 160,
+                        )
                       : Icon(
                           card
                               ? Icons.style
@@ -410,6 +419,11 @@ class _CollectionScreenState extends State<CollectionScreen>
                             onSelected: (_) =>
                                 setState(() => _theme = theme.asset),
                           ),
+                        ChoiceChip(
+                          label: const Text('Stickers'),
+                          selected: _theme == 'extras',
+                          onSelected: (_) => setState(() => _theme = 'extras'),
+                        ),
                       ],
                     ),
                   if (collector)

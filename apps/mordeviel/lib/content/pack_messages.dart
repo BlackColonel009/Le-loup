@@ -1,7 +1,10 @@
 String packLabel(String id) =>
     const {
       'stickers-classic': 'Stickers · Émotions du village',
+      'stickers-rewards': 'Stickers · Curiosités à collectionner',
       'avatars-classic': 'Avatars · Visages classiques',
+      'avatars-rewards': 'Profils · Médaillons de légende',
+      'borders-rewards': 'Bordures · Cadres de légende',
       'horror-cards': 'Horreur · Cartes',
       'horror-village': 'Horreur · Village et sentences',
       'horror-ambience': 'Horreur · Sons d’ambiance',
@@ -17,7 +20,10 @@ String packLabel(String id) =>
     'Pack supplémentaire';
 
 String? downloadablePackForAsset(String asset) {
+  if (asset.contains('/avatars/rewards/')) return 'avatars-rewards';
+  if (asset.contains('/borders/rewards/')) return 'borders-rewards';
   if (asset.contains('/avatars/classic/')) return 'avatars-classic';
+  if (asset.contains('/stickers/rewards/')) return 'stickers-rewards';
   if (asset.contains('/stickers/')) return 'stickers-classic';
   if (asset.contains('/cards/horror/')) return 'horror-cards';
   if (asset.contains('/village/horror/')) return 'horror-village';

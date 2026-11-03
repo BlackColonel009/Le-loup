@@ -122,6 +122,8 @@ Future<void> showDailyCollector(BuildContext context) async {
                           Icon(
                             p['kind'] == 'voice'
                                 ? Icons.record_voice_over_outlined
+                                : p['kind'] == 'sticker'
+                                ? Icons.emoji_emotions_outlined
                                 : p['kind'] == 'theme'
                                 ? Icons.landscape_outlined
                                 : Icons.style_outlined,

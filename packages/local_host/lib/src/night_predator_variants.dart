@@ -143,7 +143,19 @@ extension _PredatorVariants on NightGame {
       if (_extra.infections[id]! <= night) {
         if (alive.contains(id)) {
           _extra.infected.add(id);
-          _log('effect', {'effect': 'infection', 'target': id});
+          final source = _history.reversed
+              .where(
+                (e) =>
+                    e['kind'] == 'action' &&
+                    e['action'] == 'infection.convert' &&
+                    (e['targets'] as List? ?? [e['target']]).contains(id),
+              )
+              .firstOrNull;
+          _log('effect', {
+            'effect': 'infection',
+            'target': id,
+            'actor': source?['actor'],
+          });
           _notice(
             id,
             'Vous rejoignez la meute. Vous conservez votre rôle et ses pouvoirs ; votre camp est désormais Loups-Garous. Une action déjà effectuée ne peut pas être rejouée.',

@@ -42,6 +42,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
   bool _loadError = false;
   List<Map<String, dynamic>> _messages = [], _tickets = [];
   Timer? _poll;
+  Map<String, dynamic>? _reply;
 
   @override
   void initState() {
@@ -269,6 +270,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         _register = false;
         _password.clear();
         _messages = [];
+        _reply = null;
         _tickets = [];
       });
     }
@@ -322,17 +324,22 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   Future<void> _send() => _run(() async {
     final submitted = _message.text;
+    final reply = _reply;
     if (submitted.trim().isEmpty) return;
     await _request(
       'messages',
       method: 'POST',
-      body: {'text': submitted.trim()},
+      body: {
+        'text': submitted.trim(),
+        if (reply != null) 'reply_to': reply['id'],
+      },
     );
     if (_message.text == submitted) _message.clear();
+    if (mounted && identical(_reply, reply)) setState(() => _reply = null);
     await _refresh();
   });
-  Future<void> _sendSticker() async {
-    final sticker = await showStickerPicker(context);
+  Future<void> _sendSticker([ChatSticker? suggested]) async {
+    final sticker = suggested ?? await showStickerPicker(context);
     if (!mounted ||
         sticker == null ||
         _busy ||
@@ -341,11 +348,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
       return;
     }
     await _run(() async {
+      final reply = _reply;
       await _request(
         'messages',
         method: 'POST',
-        body: {'text': stickerMessage(sticker)},
+        body: {
+          'text': stickerMessage(sticker),
+          if (reply != null) 'reply_to': reply['id'],
+        },
       );
+      if (mounted && identical(_reply, reply)) setState(() => _reply = null);
       await _refresh();
     });
   }
@@ -594,6 +606,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
   );
 
   Widget _chat() => CommunityConversation(
+    reply: _reply,
+    onReply: (message) => setState(() => _reply = message),
+    onCancelReply: () => setState(() => _reply = null),
     messages: _messages,
     controller: _message,
     userId: _userId,
@@ -602,6 +617,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     muted: _mutedUntil > DateTime.now().millisecondsSinceEpoch / 1000,
     onSend: _send,
     onSticker: _sendSticker,
+    onSuggestedSticker: (sticker) => _sendSticker(sticker),
     onProfile: (id) => Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => SocialProfileScreen(userId: id)),
     ),

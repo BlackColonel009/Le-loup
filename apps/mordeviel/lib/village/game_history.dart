@@ -33,6 +33,8 @@ class GameHistoryScreen extends StatelessWidget {
     final target = name(e['target']);
     final selected = names(e['targets']);
     switch (e['kind']) {
+      case 'deal':
+        return 'Les rôles sont attribués secrètement aux joueurs.';
       case 'phase':
         return e['label'] as String;
       case 'sentence':

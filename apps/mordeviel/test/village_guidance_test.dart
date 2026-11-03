@@ -281,7 +281,7 @@ void main() {
                 privateState: own,
                 isHost: false,
                 connected: true,
-                onSend: (_, _, _) {},
+                onSend: (_, _, _, {replyTo}) {},
                 fullPage: true,
               ),
             ),

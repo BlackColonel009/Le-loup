@@ -1,0 +1,42 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "transparent_background": true,
+  "provided_by": "Logan",
+  "sheets": [
+    {
+      "source": "C:/Users/hp/Downloads/Gemini_Generated_Image_3csk6z3csk6z3csk.jpg",
+      "result": "shared/avatars/reward_sources/legends-transparent.png",
+      "prompt": "BACKGROUND EXTRACTION OF THIS EXACT 5-COLUMN BY 4-ROW AVATAR COSMETICS SHEET. Preserve all 20 original designs, materials, colours, ornament shapes, relative positions and original grid/aspect ratio. Remove ONLY the surrounding leather/wood picture frame, textured grey/paper background and captions underneath the individual items. Keep text engraved INSIDE medallions as part of the illustration. For OPEN AVATAR FRAMES remove the generic grey placeholder head, its entire grey/cream circular backing and the white question mark inside, leaving a REAL TRANSPARENT HOLE so a player's face can appear through. Preserve all decorative overlaps such as bats, deer, snakes, ghosts, potions, leaves, tusks and lanterns. Keep the centre illustration of FULL MEDALLIONS opaque: do not hollow out painted shields, wolf portraits, skulls, mammoth, books, ice medallion, golden cross medallion or MJ seal. All outside areas and holes must have genuine transparent alpha, not a chequerboard or black fill. Do not redesign, redraw, add new assets, alter artwork or rearrange the grid. This is production cutout extraction of the supplied artwork.",
+      "source_sha256": "c40967e7eba08ad881dcd626f1392d2aa6e5f169f1e2dca80b7997917d7314ee",
+      "result_sha256": "548f44975ede6422fd1d05fdc759ef668486cf260b1fdbb86a021e9c16104bbb"
+    },
+    {
+      "source": "C:/Users/hp/Downloads/Gemini_Generated_Image_savll9savll9savl.jpg",
+      "result": "shared/avatars/reward_sources/village-transparent.png",
+      "prompt": "BACKGROUND EXTRACTION OF THIS EXACT 5-COLUMN BY 4-ROW AVATAR COSMETICS SHEET. Preserve all 20 original designs, materials, colours, ornament shapes, relative positions and original grid/aspect ratio. Remove ONLY the surrounding leather/wood picture frame, textured grey/paper background and captions underneath the individual items. Keep text engraved INSIDE medallions as part of the illustration. For OPEN AVATAR FRAMES remove the generic grey placeholder head, its entire grey/cream circular backing and the white question mark inside, leaving a REAL TRANSPARENT HOLE so a player's face can appear through. Preserve all decorative overlaps such as bats, deer, snakes, ghosts, potions, leaves, tusks and lanterns. Keep the centre illustration of FULL MEDALLIONS opaque: do not hollow out painted shields, wolf portraits, skulls, mammoth, books, ice medallion, golden cross medallion or MJ seal. All outside areas and holes must have genuine transparent alpha, not a chequerboard or black fill. Do not redesign, redraw, add new assets, alter artwork or rearrange the grid. This is production cutout extraction of the supplied artwork.",
+      "source_sha256": "f90f2474fc5438803f0812ce0056422270a17a133e94fb676876956a5fc8ebb8",
+      "result_sha256": "1f5161c6b7040e1a1b74e962e72cc4e0e4eae02b17cc0617b19d8aaaf5785f31"
+    }
+  ],
+  "hole_corrections": {
+    "files": [
+      "shared/avatars/reward_sources/overrides/reward-village-hunter.png",
+      "shared/avatars/reward_sources/overrides/reward-village-elder.png"
+    ],
+    "prompt": "Edit this avatar FRAME only. It must be a real ring that can be laid over a player's photograph. Remove the WHOLE central disc inside the inner rim: remove the generic head, question mark and brown or cracked stone backing, leaving a clean genuine transparent circular hole. Preserve the decorative outer ring exactly, including its metal or runes, rim, antlers, ammunition and blades. Keep the existing exterior transparency. No redraw, no added objects, no text, no colours changed. Keep the same square composition and object scale. Only remove the interior disc."
+  },
+  "count": {
+    "portraits": 15,
+    "borders": 25
+  },
+  "outputs": [
+    "shared/avatars/rewards/portraits/",
+    "shared/avatars/rewards/borders/"
+  ],
+  "metadata": "shared/avatars/rewards.json",
+  "scripts": [
+    "tools/content/split_profile_rewards.py",
+    "tools/content/sync_profile_rewards.py"
+  ],
+  "notes": "Mechanical separation/cropping and transparent padding after imagegen cutouts; square exported canvases; Hunter and Elder override derivatives capped at 384 pixels before padding. The fitted inner rim sets the portrait placement under decorative overlaps."
+}

@@ -86,7 +86,8 @@ void main() {
                 village: ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
-                    VillageMap(animateGhosts: false,
+                    VillageMap(
+                      animateGhosts: false,
                       displayHeight: 480,
                       room: room,
                       selfId: 'p0',
@@ -113,7 +114,7 @@ void main() {
                   isHost: false,
                   connected: true,
                   fullPage: true,
-                  onSend: (_, _, _) {},
+                  onSend: (_, _, _, {replyTo}) {},
                 ),
               ),
             ),
@@ -183,4 +184,3 @@ void main() {
     });
   });
 }
-

@@ -218,7 +218,7 @@ void main() {
                 privateState: const {'alive': true},
                 isHost: false,
                 connected: true,
-                onSend: (_, _, _) {},
+                onSend: (_, _, _, {replyTo}) {},
               ),
             ),
           ),

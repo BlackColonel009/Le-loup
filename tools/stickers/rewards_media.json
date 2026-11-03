@@ -1,0 +1,25 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "transparent_background": true,
+  "provided_by": "Logan",
+  "images": [
+    {
+      "source": "Gemini_Generated_Image_hyd8v4hyd8v4hyd8.jpg",
+      "source_sha256": "693d65539b1fbd1aa10ff9ad6cf9172bc4b39f6f9ef14cf07dd5c67d7769131b",
+      "output": "shared/stickers/sources/roles-transparent.png",
+      "output_sha256": "418bd1d4c2ac1ebf0bdd4c7d937f00ec212b2f671bc1f9c6c615c8d1ffbff3fd",
+      "prompt": "EDIT THE PROVIDED STICKER SHEET, BACKGROUND EXTRACTION ONLY. Remove the leather/wood picture frame and the entire paper/grey textured background so every existing sticker (including its existing thick white die-cut outline and its existing original black caption on its own white backing) is isolated on TRUE TRANSPARENT alpha. Preserve the original sheet aspect ratio, layout, item positions, all original characters, expressions, details, words, text, colours, and all individual stickers. Do not invent, redraw, replace, correct, rearrange or add anything. Keep every sticker present, keep its white contour and white text backing opaque. Remove only the unwanted background OUTSIDE sticker outlines. This is production sprite-sheet extraction, not creating new artwork."
+    },
+    {
+      "source": "Gemini_Generated_Image_9emvlo9emvlo9emv.jpg",
+      "source_sha256": "eea116fbeded039857f723de669c777f179ab580a323de8e50386002b8294911",
+      "output": "shared/stickers/sources/reactions-transparent.png",
+      "output_sha256": "030a83ab87a094b7278f03601fe0807c80ae9ccb4ace5131fa444d96dcb9e7fa",
+      "prompt": "EDIT THE PROVIDED STICKER SHEET, BACKGROUND EXTRACTION ONLY. Remove the leather/wood picture frame and the entire paper/grey textured background so every existing sticker (including its existing thick white die-cut outline and its existing original black caption on its own white backing) is isolated on TRUE TRANSPARENT alpha. Preserve the original sheet aspect ratio, layout, item positions, all original characters, expressions, details, words, text, colours, and all individual stickers. Do not invent, redraw, replace, correct, rearrange or add anything. Keep every sticker present, keep its white contour and white text backing opaque. Remove only the unwanted background OUTSIDE sticker outlines. This is production sprite-sheet extraction, not creating new artwork."
+    }
+  ],
+  "individual_files": "apps/mordeviel/assets/stickers/rewards/",
+  "count": 58,
+  "pack": "stickers-rewards",
+  "processing": "Background extraction with imagegen followed by deterministic component separation, cropping and 6 px transparent padding. No new drawings commissioned. One orphan caption without a drawing is excluded."
+}

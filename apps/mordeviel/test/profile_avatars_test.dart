@@ -27,7 +27,9 @@ void main() {
     );
     await folder.create(recursive: true);
     final files = <Map<String, dynamic>>[];
-    for (final a in avatarCatalog) {
+    for (final a in avatarCatalog.where(
+      (a) => a['pack_id'] == 'avatars-classic',
+    )) {
       final asset = a['asset'] as String;
       final bytes = await File(
         a['creator_only'] == true
@@ -71,7 +73,14 @@ void main() {
   test(
     '21 visages téléchargeables dont le Créateur, quatre portraits de départ',
     () {
-      expect(avatarCatalog.length, 21);
+      expect(
+        avatarCatalog.where((a) => a['pack_id'] == 'avatars-classic'),
+        hasLength(21),
+      );
+      expect(
+        avatarCatalog.where((a) => a['pack_id'] == 'avatars-rewards'),
+        hasLength(15),
+      );
       expect(avatarCatalog.where((a) => a['starter'] == true).length, 4);
       expect(PackStore.instance.installed('avatars-classic'), isTrue);
       for (final avatar in avatarCatalog) {
@@ -135,22 +144,22 @@ void main() {
       );
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
-        find.text('Chasseur'),
+        find.byKey(const ValueKey('avatar-classic-hunter')),
         250,
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Chasseur'));
+      await tester.tap(find.byKey(const ValueKey('avatar-classic-hunter')));
       await tester.pump();
       expect(chosen, isEmpty);
-      expect(find.textContaining('Ce visage se débloquera'), findsOneWidget);
+      expect(find.textContaining('Ce visage est verrouillé'), findsOneWidget);
       await tester.scrollUntilVisible(
-        find.text('Voyante'),
+        find.byKey(const ValueKey('avatar-classic-seer')),
         -250,
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Voyante'));
+      await tester.tap(find.byKey(const ValueKey('avatar-classic-seer')));
       await tester.pump();
       await tester.runAsync(
         () => Future<void>.delayed(const Duration(milliseconds: 30)),

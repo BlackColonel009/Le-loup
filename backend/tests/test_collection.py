@@ -33,9 +33,9 @@ def product(state, pid):
 def test_collection_default_classics_free_preview_and_price_gate(collection_api):
     api, user, admin = collection_api
     state = api.get("/collection/me", headers=user).json()
-    assert len(state["products"]) == 70
+    assert len(state["products"]) == 128
     assert len([p for p in state["products"] if p["owned"]]) == 20
-    assert all(p["accessible"] for p in state["products"])
+    assert all(p["accessible"] == (p["kind"] != "sticker") for p in state["products"])
     assert not any(p["claimable"] for p in state["products"])
     assert (
         api.post(
@@ -79,7 +79,7 @@ def test_collection_default_classics_free_preview_and_price_gate(collection_api)
         == 200
     )
     assert all(
-        p["accessible"]
+        p["accessible"] == (p["kind"] != "sticker")
         for p in api.get("/collection/me", headers=user).json()["products"]
     )
 

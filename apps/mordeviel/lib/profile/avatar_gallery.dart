@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../content/pack_store.dart';
 import '../content/require_packs.dart';
 import '../social/social_api.dart';
+import '../challenges/challenges_screen.dart';
 import 'player_avatar.dart';
 import 'profile_photo.dart';
 import 'avatar_border.dart';
@@ -97,7 +98,7 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
   Future<void> _select(Map avatar) async {
     if (avatar['locked'] == true) {
       _message(
-        'Ce visage se débloquera grâce aux futurs défis. Les conditions seront annoncées dans le jeu.',
+        'Ce visage est verrouillé. Consulte le carnet des défis pour découvrir les portraits à gagner.',
       );
       return;
     }
@@ -125,11 +126,9 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
       }
       if (!mounted) return;
     }
-    if (!await ensurePacksAvailable(
-      context,
-      ['avatars-classic'],
-      reason: 'Télécharge les visages Classiques pour utiliser ce portrait.',
-    )) {
+    if (!await ensurePacksAvailable(context, [
+      avatar['pack_id'] as String? ?? 'avatars-classic',
+    ], reason: 'Télécharge le pack de ce portrait pour l’utiliser.')) {
       return;
     }
     if (!mounted) return;
@@ -221,6 +220,15 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
       _message('Connecte-toi à la communauté pour personnaliser ta bordure.');
       return;
     }
+    if (border['pack_id'] is String &&
+        !await ensurePacksAvailable(
+          context,
+          [border['pack_id'] as String],
+          reason: 'Télécharge cette bordure pour l’utiliser sur ton profil.',
+        )) {
+      return;
+    }
+    if (!mounted) return;
     setState(() => _saving = true);
     try {
       await _request(
@@ -236,7 +244,7 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
     }
   }
 
-  Future<void> _download() async {
+  Future<void> _download([List<String> ids = const ['avatars-classic']]) async {
     try {
       await PackStore.instance.refresh();
     } catch (_) {
@@ -251,7 +259,7 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
     if (!mounted) return;
     await ensurePacksAvailable(
       context,
-      ['avatars-classic'],
+      ids,
       reason:
           'Les images des avatars sont un pack téléchargeable. Elles restent ensuite disponibles sur cet appareil.',
     );
@@ -289,6 +297,16 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
                 onPressed: _download,
                 icon: const Icon(Icons.download_outlined),
                 label: const Text('Pack d’avatars Classiques'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => _download(const ['avatars-rewards']),
+                icon: const Icon(Icons.person_outline),
+                label: const Text('Profils à gagner'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => _download(const ['borders-rewards']),
+                icon: const Icon(Icons.filter_frames_outlined),
+                label: const Text('Bordures à gagner'),
               ),
               if (_canEdit)
                 OutlinedButton.icon(
@@ -329,7 +347,19 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
             style: TextStyle(fontFamily: 'Cormorant', fontSize: 26),
           ),
           const Text(
-            'Défis à venir · ces portraits ne sont pas encore déblocables. Leurs conditions seront annoncées prochainement.',
+            'Remporte les défis pour gagner de nouveaux portraits. D’autres récompenses enrichiront aussi cette collection.',
+          ),
+          TextButton.icon(
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ChallengesScreen(),
+                ),
+              );
+              if (mounted) await _load();
+            },
+            icon: const Icon(Icons.workspace_premium_outlined),
+            label: const Text('Consulter mes défis'),
           ),
           _grid(_avatars.where((a) => a['locked'] == true).toList()),
           const SizedBox(height: 18),
@@ -337,7 +367,7 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
             child: Padding(
               padding: EdgeInsets.all(18),
               child: Text(
-                'Prochainement : collections Intense et Horreur. Les futurs avatars payants et les récompenses de défis seront présentés ici.',
+                'Les récompenses reçues restent dans ton compte. Les prochaines collections enrichiront les défis et les offres de la boutique.',
               ),
             ),
           ),
@@ -367,8 +397,9 @@ class _AvatarGalleryScreenState extends State<AvatarGalleryScreen> {
         return Semantics(
           button: true,
           label:
-              '${avatar['title']}${locked ? ', verrouillé, défi à venir' : ', disponible'}',
+              '${avatar['title']}${locked ? ', verrouillé' : ', disponible'}',
           child: InkWell(
+            key: ValueKey('avatar-${avatar['id']}'),
             onTap: () => _select(avatar),
             borderRadius: BorderRadius.circular(16),
             child: DecoratedBox(

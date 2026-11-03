@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../content/content_image.dart';
 import '../content/require_packs.dart';
+import '../social/social_api.dart';
+import '../store/collection_screen.dart';
 import 'package:local_host/local_host.dart'
     show ChatSticker, chatStickers, stickerFromMessage;
 
@@ -48,15 +50,6 @@ class ChatMessageBody extends StatelessWidget {
 }
 
 Future<ChatSticker?> showStickerPicker(BuildContext context) async {
-  if (!await ensurePacksAvailable(
-        context,
-        ['stickers-classic'],
-        reason:
-            'Pour choisir et envoyer un sticker, installe le pack des émotions du village.',
-      ) ||
-      !context.mounted) {
-    return null;
-  }
   return showModalBottomSheet<ChatSticker>(
     context: context,
     isScrollControlled: true,
@@ -80,6 +73,78 @@ class StickerPicker extends StatefulWidget {
 class _StickerPickerState extends State<StickerPicker> {
   String _query = '';
   bool _chosen = false;
+  bool _checking = true;
+  String _pack = 'classic';
+  final _allowed = <String>{};
+  @override
+  void initState() {
+    super.initState();
+    _loadAccess();
+  }
+
+  Future<void> _loadAccess() async {
+    try {
+      final data = await SocialApi.instance.request('/collection/me');
+      if (!mounted) return;
+      _allowed.clear();
+      _allowed.addAll(
+        (data['products'] as List)
+            .where((p) => p['kind'] == 'sticker' && p['accessible'] == true)
+            .map((p) => p['id'] as String),
+      );
+    } catch (_) {
+      // Sans session ou réseau, les nouveaux accessoires restent verrouillés.
+    }
+    if (mounted) setState(() => _checking = false);
+  }
+
+  bool _locked(ChatSticker sticker) =>
+      sticker.productId != null && !_allowed.contains(sticker.productId);
+  Future<void> _pick(ChatSticker sticker) async {
+    if (_chosen) return;
+    if (_locked(sticker)) {
+      await showDialog<void>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: const Text('Sticker à débloquer'),
+          content: const Text(
+            'Consulte les récompenses du carnet des défis dans ton profil, ou les offres de la boutique et du Collectionneur. Télécharger les images ne déverrouille pas ce sticker.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: const Text('Fermer'),
+            ),
+            FilledButton(
+              onPressed: () async {
+                Navigator.pop(dialog);
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const CollectionScreen(initialTheme: 'extras'),
+                  ),
+                );
+                if (mounted) await _loadAccess();
+              },
+              child: const Text('Voir les accessoires'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    _chosen = true;
+    if (await ensurePacksAvailable(context, [
+          sticker.packId,
+        ], reason: 'Installe ce pack pour envoyer ses stickers.') &&
+        mounted) {
+      Navigator.pop(context, sticker);
+    } else {
+      _chosen = false;
+    }
+  }
+
   String normalize(String value) {
     var result = value.toLowerCase();
     for (final pair in {
@@ -107,7 +172,7 @@ class _StickerPickerState extends State<StickerPicker> {
   Widget build(BuildContext context) {
     final query = normalize(_query.trim());
     final matches = chatStickers
-        .where((s) => normalize(s.label).contains(query))
+        .where((s) => s.pack == _pack && normalize(s.label).contains(query))
         .toList();
     return SafeArea(
       top: false,
@@ -120,7 +185,9 @@ class _StickerPickerState extends State<StickerPicker> {
               children: [
                 Expanded(
                   child: Text(
-                    'Émotions du village',
+                    _pack == 'classic'
+                        ? 'Émotions du village'
+                        : 'Curiosités à collectionner',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -132,11 +199,31 @@ class _StickerPickerState extends State<StickerPicker> {
               ],
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Tous les personnages sont disponibles pour tout le monde.',
-              style: TextStyle(fontSize: 12),
+              _pack == 'classic'
+                  ? 'Les stickers classiques sont disponibles pour tout le monde.'
+                  : 'Récompenses de défis · Boutique · Collectionneur${_checking ? ' · Actualisation…' : ''}',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Wrap(
+              spacing: 8,
+              children: [
+                ChoiceChip(
+                  label: const Text('Classiques'),
+                  selected: _pack == 'classic',
+                  onSelected: (_) => setState(() => _pack = 'classic'),
+                ),
+                ChoiceChip(
+                  label: const Text('À collectionner'),
+                  selected: _pack == 'rewards',
+                  onSelected: (_) => setState(() => _pack = 'rewards'),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -171,20 +258,32 @@ class _StickerPickerState extends State<StickerPicker> {
                         clipBehavior: Clip.antiAlias,
                         child: InkWell(
                           key: ValueKey('pick-${sticker.id}'),
-                          onTap: () {
-                            if (_chosen) return;
-                            _chosen = true;
-                            Navigator.pop(context, sticker);
-                          },
+                          onTap: () => _pick(sticker),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: Column(
                               children: [
                                 Expanded(
                                   child: Center(
-                                    child: ChatStickerImage(
-                                      sticker: sticker,
-                                      size: 100,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Opacity(
+                                          opacity: _locked(sticker) ? .4 : 1,
+                                          child: IgnorePointer(
+                                            child: ChatStickerImage(
+                                              sticker: sticker,
+                                              size: 100,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_locked(sticker))
+                                          const Icon(
+                                            Icons.lock,
+                                            color: Color(0xFFE3C58C),
+                                            size: 30,
+                                          ),
+                                      ],
                                     ),
                                   ),
                                 ),

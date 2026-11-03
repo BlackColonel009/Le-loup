@@ -64,9 +64,20 @@ class _PlayerAvatarState extends State<PlayerAvatar> {
   @override
   Widget build(BuildContext context) {
     final border = avatarBorder(widget.avatar?['border_id'] as String?);
+    final fullArt = avatarCatalog.any(
+      (a) => a['id'] == widget.avatar?['id'] && a['full_art'] == true,
+    );
     final portrait = Padding(
-      padding: EdgeInsets.all(border == null ? 3 : widget.size * .09),
-      child: ClipOval(child: _portrait()),
+      padding: EdgeInsets.all(
+        border?['effect'] == 'artwork'
+            ? 0
+            : border == null
+            ? 3
+            : widget.size * .09,
+      ),
+      child: fullArt && widget.avatar?['kind'] != 'photo'
+          ? _portrait()
+          : ClipOval(child: _portrait()),
     );
     return Semantics(
       label:
@@ -140,6 +151,13 @@ class _PlayerAvatarState extends State<PlayerAvatar> {
           );
         }
         final crop = (definition['crop'] as List).cast<num>();
+        if (definition['full_art'] == true) {
+          return ContentImage(
+            definition['asset'] as String,
+            fit: BoxFit.contain,
+            cacheWidth: 768,
+          );
+        }
         return LayoutBuilder(
           builder: (context, box) {
             final width = box.maxWidth / crop[2],

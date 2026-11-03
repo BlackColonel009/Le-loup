@@ -28,6 +28,7 @@ class Registration(Credentials):
 
 class Message(BaseModel):
     text: str = Field(min_length=1, max_length=2000)
+    reply_to: int | None = Field(default=None, gt=0)
 
 
 class Ticket(BaseModel):
@@ -89,6 +90,8 @@ class Store:
                     id TEXT PRIMARY KEY,user_id INTEGER,email TEXT,purpose TEXT NOT NULL,
                     digest TEXT NOT NULL,expires REAL NOT NULL,attempts INTEGER NOT NULL,used INTEGER NOT NULL);
             """)
+            from .chat_replies import add_reply_column
+            add_reply_column(db, "messages")
             columns = {row["name"] for row in db.execute("PRAGMA table_info(users)")}
             for name, definition in [
                 ("role", "TEXT NOT NULL DEFAULT 'player'"),
@@ -358,19 +361,20 @@ def messages(
     with db.db() as connection:
         # Latest page for the first visit, chronological incremental pages afterwards.
         if after <= 0:
-            rows = connection.execute("""SELECT messages.id,user_id,nickname,role,text,created FROM messages
+            rows = connection.execute("""SELECT messages.id,user_id,nickname,role,text,created,reply_to FROM messages
                 JOIN users ON users.id=user_id WHERE hidden=0 ORDER BY messages.id DESC LIMIT 50""").fetchall()[
                 ::-1
             ]
         else:
             rows = connection.execute(
-                """SELECT messages.id,user_id,nickname,role,text,created FROM messages
+                """SELECT messages.id,user_id,nickname,role,text,created,reply_to FROM messages
                 JOIN users ON users.id=user_id WHERE hidden=0 AND messages.id>?
                 ORDER BY messages.id LIMIT 50""",
                 (after,),
             ).fetchall()
         portraits = {uid: None if blocked(connection, user['id'], uid) else avatar_in(connection, uid) for uid in {r['user_id'] for r in rows}}
-        return {"messages": [dict(row) | {'avatar': portraits[row['user_id']]} for row in rows]}
+        from .chat_replies import with_replies
+        return {"messages": [row | {'avatar': portraits[row['user_id']]} for row in with_replies(connection, rows)]}
 
 
 @router.post("/messages", status_code=201)
@@ -383,21 +387,25 @@ def post_message(
     text = data.text.strip()
     if not text:
         raise HTTPException(422, "Écris un message.")
-    from .stickers import validate_sticker
+    from .stickers import require_sticker_access, validate_sticker
 
     try:
         sticker = validate_sticker(text)
     except ValueError as error:
         raise HTTPException(422, str(error)) from error
     with db.db() as connection:
+        from .chat_replies import require_reply
         from .moderation import check_message
+
+        require_reply(connection, data.reply_to)
+        require_sticker_access(connection, user['id'], sticker)
 
         warning = check_message(connection, user["id"], "[sticker]" if sticker else text)
         if warning is None:
             db.limit(("post", user["id"]), 1, 2)
             result = connection.execute(
-                "INSERT INTO messages(user_id,text,created) VALUES(?,?,?)",
-                (user["id"], text, time.time()),
+                "INSERT INTO messages(user_id,text,created,reply_to) VALUES(?,?,?,?)",
+                (user["id"], text, time.time(), data.reply_to),
             )
     if warning:
         raise HTTPException(warning[0], warning[1])

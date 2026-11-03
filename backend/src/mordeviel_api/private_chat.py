@@ -4,8 +4,9 @@ import time
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from .chat_replies import add_reply_column, require_reply, with_replies
 from .social import Database, User, friends, require_target
-from .stickers import validate_sticker
+from .stickers import require_sticker_access, validate_sticker
 
 router = APIRouter(prefix="/social/chats", tags=["private-chat"])
 
@@ -22,6 +23,7 @@ def initialize(db):
             text TEXT NOT NULL, created REAL NOT NULL);
         CREATE INDEX IF NOT EXISTS friend_chat_pair ON friend_chat_messages(low_id,high_id,id);
         """)
+        add_reply_column(c, "friend_chat_messages")
     purge(db)
 
 
@@ -44,13 +46,15 @@ def history(target: int, *, user: User, db: Database):
     with db.db() as c:
         person, pair = access(c, user["id"], target)
         window = c.execute("SELECT expires FROM friend_chat_windows WHERE low_id=? AND high_id=?", pair).fetchone()
-        rows = c.execute("SELECT id,sender_id,text,created FROM friend_chat_messages WHERE low_id=? AND high_id=? ORDER BY id DESC LIMIT 100", pair).fetchall()
+        rows = c.execute("SELECT id,sender_id,text,created,reply_to FROM friend_chat_messages WHERE low_id=? AND high_id=? ORDER BY id DESC LIMIT 100", pair).fetchall()
+        messages = with_replies(c, reversed(rows), pair)
     return {"friend": {"id": target, "nickname": person["nickname"]}, "viewer_id": user["id"],
-            "reset_at": window["expires"] if window else None, "messages": [dict(r) for r in reversed(rows)]}
+            "reset_at": window["expires"] if window else None, "messages": messages}
 
 
 class Message(BaseModel):
     text: str = Field(min_length=1, max_length=300)
+    reply_to: int | None = Field(default=None, gt=0)
 
 
 @router.post("/{target}", status_code=201)
@@ -59,7 +63,7 @@ def send(target: int, data: Message, *, user: User, db: Database):
     if not text:
         raise HTTPException(422, "Écris un message avant de l’envoyer.")
     try:
-        validate_sticker(text)
+        sticker = validate_sticker(text)
     except ValueError as error:
         raise HTTPException(422, str(error)) from None
     db.limit(("friend-chat", user["id"]), 30, 60)
@@ -67,13 +71,15 @@ def send(target: int, data: Message, *, user: User, db: Database):
     with db.db() as c:
         c.execute("BEGIN IMMEDIATE")
         _, pair = access(c, user["id"], target)
+        require_sticker_access(c, user['id'], sticker)
         now = time.time()
         window = c.execute("SELECT expires FROM friend_chat_windows WHERE low_id=? AND high_id=?", pair).fetchone()
         if window and window['expires'] <= now:
             c.execute("DELETE FROM friend_chat_messages WHERE low_id=? AND high_id=?", pair)
             c.execute("DELETE FROM friend_chat_windows WHERE low_id=? AND high_id=?", pair)
         c.execute("INSERT OR IGNORE INTO friend_chat_windows VALUES(?,?,?)", (*pair, now + 86400))
-        c.execute("INSERT INTO friend_chat_messages(low_id,high_id,sender_id,text,created) VALUES(?,?,?,?,?)", (*pair, user["id"], text, now))
+        require_reply(c, data.reply_to, pair)
+        c.execute("INSERT INTO friend_chat_messages(low_id,high_id,sender_id,text,created,reply_to) VALUES(?,?,?,?,?,?)", (*pair, user["id"], text, now, data.reply_to))
         # Keep storage bounded, even in a busy 24-hour conversation.
         c.execute("DELETE FROM friend_chat_messages WHERE low_id=? AND high_id=? AND id NOT IN (SELECT id FROM friend_chat_messages WHERE low_id=? AND high_id=? ORDER BY id DESC LIMIT 500)", (*pair, *pair))
     return {"ok": True}

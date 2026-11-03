@@ -1,15 +1,25 @@
 {
   "source": "Gemini, vidéo fournie par Logan le 3 novembre 2026",
-  "original_filename": "gemini_generated_video_994fdc96.mp4",
-  "original_sha256": "063c4543349e6958f3ca85995136567272272b98b0ad8369c7a1a3c70923fb80",
+  "original_filename": "gemini_generated_video_d298c117.mp4",
+  "original_sha256": "0b1a7f5a7889d192e86865ed8e6942c5fb33a94e833faa95840b5037f9e2c5df",
   "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
-  "asset_sha256": "313a1e29d09941ac065b8dd76067f0f4e22b78032d42d49c10be37a0a077ca2b",
+  "asset_sha256": "4d9bc3be9e3854e1e32f8e067143816dccc2a8fa968098e8177b8005a7214e2f",
+  "asset_bytes": 3412955,
   "duration_seconds": 10.03,
-  "width": 1280,
-  "height": 720,
+  "width": 720,
+  "height": 1280,
   "fps": 24,
   "video_codec": "H.264",
   "audio_codec": "AAC stereo 48000Hz",
   "processing": "Remux MP4 faststart sans recompression ; images et son conservés.",
-  "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip"
+  "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip",
+  "previous_versions": [
+    {
+      "original_filename": "gemini_generated_video_994fdc96.mp4",
+      "original_sha256": "063c4543349e6958f3ca85995136567272272b98b0ad8369c7a1a3c70923fb80",
+      "asset_sha256": "313a1e29d09941ac065b8dd76067f0f4e22b78032d42d49c10be37a0a077ca2b",
+      "width": 1280,
+      "height": 720
+    }
+  ]
 }

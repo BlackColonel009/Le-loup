@@ -35,10 +35,15 @@ def pack(pack_id, title, files, kind, theme=None, asset_prefix=None):
 
 
 pack('stickers-classic', 'Émotions du village', (ASSETS / 'stickers/classic').glob('*.png'), 'stickers')
+pack('stickers-rewards', 'Curiosités du village · Stickers à collectionner', (ASSETS / 'stickers/rewards').glob('*.png'), 'stickers')
 avatars = json.loads((ROOT / 'shared/avatars/catalog.json').read_text(encoding='utf-8'))['avatars']
 pack('avatars-classic', 'Visages du village · Classique',
      ((ROOT / 'shared/avatars/artwork' if a.get('source_root') == 'avatars' else ASSETS / 'cards') / a['source']
-      for a in avatars), 'avatars', 'classic', 'assets/avatars/classic/')
+      for a in avatars if a['pack_id'] == 'avatars-classic'), 'avatars', 'classic', 'assets/avatars/classic/')
+pack('avatars-rewards', 'Médaillons de légende · Profils à gagner',
+     (ROOT / 'shared/avatars/rewards/portraits').glob('*.png'), 'avatars', 'rewards', 'assets/avatars/rewards/')
+pack('borders-rewards', 'Cadres de légende · Bordures à gagner',
+     (ROOT / 'shared/avatars/rewards/borders').glob('*.png'), 'borders', 'rewards', 'assets/borders/rewards/')
 for directory in sorted((ASSETS / 'audio/classic/neural').iterdir()):
     if directory.is_dir() and not directory.name.startswith('classic_'):
         pack('voice-' + directory.name.replace('_', '-'), 'Voix · ' + voice_labels.get(directory.name, directory.name),

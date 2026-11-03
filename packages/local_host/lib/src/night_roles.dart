@@ -354,13 +354,31 @@ extension _AdditionalRoles on NightGame {
   }
 
   void _resolveExtraDeaths() {
+    final savedTarget = _attack;
+    final wouldDie =
+        savedTarget != null &&
+        !(roles[savedTarget] == 'elder' &&
+            _powerEnabled(savedTarget) &&
+            !_extra.elderHit.contains(savedTarget)) &&
+        !(_powerEnabled(savedTarget) &&
+            _expanded.elderGifts.contains(savedTarget)) &&
+        !_expanded.presages.entries.any(
+          (e) =>
+              e.value == savedTarget &&
+              alive.contains(e.key) &&
+              _powerEnabled(e.key),
+        );
     final victims = <String, String>{};
     void packAttack(String? id) {
       if (id == null || !alive.contains(id)) return;
       id = _redirectSisterAttack(id)!;
       if (_consumeHunterWard(id)) return;
       if (_guardBlocksPack(id)) {
-        _log('effect', {'effect': 'protected', 'target': id});
+        _log('effect', {
+          'effect': 'protected',
+          'target': id,
+          'actor': _guardActor,
+        });
         return;
       }
       if (_blockByElderVariant(id)) return;
@@ -385,7 +403,6 @@ extension _AdditionalRoles on NightGame {
         packAttack(_attack);
       }
     }
-    if (_saved) _log('effect', {'effect': 'saved', 'target': _attack});
     if (_attack == null) _log('effect', {'effect': 'no_pack_victim'});
     packAttack(_extra.extraAttack);
     if (_extra.whiteAttack != null) victims[_extra.whiteAttack!] = 'white_wolf';
@@ -393,6 +410,18 @@ extension _AdditionalRoles on NightGame {
     _resolveDelayedPoisons(victims);
     _resolveVariantProtection(victims);
     _kill(victims);
+    if (_saved) {
+      _log('effect', {
+        'effect': 'saved',
+        'target': _attack,
+        'actor': _rescuer,
+        'effective':
+            wouldDie &&
+            _attack != null &&
+            alive.contains(_attack) &&
+            _extra.infectTarget != _attack,
+      });
+    }
     _resolveWatches();
     _applyDueInfections();
     if (_saved &&
@@ -655,6 +684,7 @@ extension _AdditionalRoles on NightGame {
         _expanded.loversSource = _cardTokens[id];
         _expanded.loversMeetingNight = night;
       case 'guardian.protect':
+        _guardActor = id;
         _extra.protected = chosen.single;
         _extra.guardPrevious[id] = chosen.single;
         _extra.guardNight[id] = night;

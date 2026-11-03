@@ -11,7 +11,12 @@
       "source_root": "avatars",
       "creator_only": true,
       "starter": false,
-      "crop": [0, 0, 1, 1]
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "classic-villager",
@@ -331,6 +336,276 @@
         0.11000000000000001,
         0.4,
         0.27999999999999997
+      ]
+    },
+    {
+      "id": "reward-legends-headless-rider",
+      "role_id": "cosmetic",
+      "title": "Cavalier sans tête",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-headless-rider.png",
+      "source": "reward-legends-headless-rider.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-battle-sister",
+      "role_id": "cosmetic",
+      "title": "Sœur de bataille",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-battle-sister.png",
+      "source": "reward-legends-battle-sister.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-shaman",
+      "role_id": "cosmetic",
+      "title": "Chaman",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-shaman.png",
+      "source": "reward-legends-shaman.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-scarred-wolf",
+      "role_id": "cosmetic",
+      "title": "Loup-Garou écorché",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-scarred-wolf.png",
+      "source": "reward-legends-scarred-wolf.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-heretic",
+      "role_id": "cosmetic",
+      "title": "Hérétique",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-heretic.png",
+      "source": "reward-legends-heretic.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-monster-hunter",
+      "role_id": "cosmetic",
+      "title": "Chasseur de monstres",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-monster-hunter.png",
+      "source": "reward-legends-monster-hunter.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-fallen-paladin",
+      "role_id": "cosmetic",
+      "title": "Paladin déchu",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-fallen-paladin.png",
+      "source": "reward-legends-fallen-paladin.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-wolf-lord",
+      "role_id": "cosmetic",
+      "title": "Seigneur des Loups",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-wolf-lord.png",
+      "source": "reward-legends-wolf-lord.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-midnight-wolf",
+      "role_id": "cosmetic",
+      "title": "Loup-Garou de minuit",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-midnight-wolf.png",
+      "source": "reward-legends-midnight-wolf.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-legends-cursed-archivist",
+      "role_id": "cosmetic",
+      "title": "Archiviste maudit",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-legends-cursed-archivist.png",
+      "source": "reward-legends-cursed-archivist.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-village-wolf",
+      "role_id": "cosmetic",
+      "title": "Loup-Garou",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-village-wolf.png",
+      "source": "reward-village-wolf.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-village-alpha",
+      "role_id": "cosmetic",
+      "title": "Alpha",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-village-alpha.png",
+      "source": "reward-village-alpha.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-village-white-wolf",
+      "role_id": "cosmetic",
+      "title": "Loup Blanc",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-village-white-wolf.png",
+      "source": "reward-village-white-wolf.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-village-metamorph",
+      "role_id": "cosmetic",
+      "title": "Voleur / Métamorphe",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-village-metamorph.png",
+      "source": "reward-village-metamorph.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "reward-village-game-master",
+      "role_id": "cosmetic",
+      "title": "Maître du jeu",
+      "theme": "rewards",
+      "pack_id": "avatars-rewards",
+      "asset": "assets/avatars/rewards/reward-village-game-master.png",
+      "source": "reward-village-game-master.png",
+      "source_root": "rewards",
+      "starter": false,
+      "full_art": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
       ]
     }
   ]

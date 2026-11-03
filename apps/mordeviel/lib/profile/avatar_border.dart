@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../services/immersion_preferences.dart';
+import '../content/content_image.dart';
 import 'border_catalog.g.dart';
 export 'border_catalog.g.dart';
 
@@ -8,7 +9,7 @@ Map<String, Object>? avatarBorder(String? id) => avatarBorderCatalog
     .where((b) => b['id'] == id && b['effect'] != 'none')
     .firstOrNull;
 
-/// Procedural rings: no video, sprite sheet or extra download in the APK.
+/// Native animated rings and downloaded illustrated frames share this wrapper.
 class AnimatedAvatarBorder extends StatefulWidget {
   const AnimatedAvatarBorder({
     super.key,
@@ -56,6 +57,7 @@ class _AnimatedAvatarBorderState extends State<AnimatedAvatarBorder>
 
   void _sync() {
     if (widget.animate &&
+        widget.border['effect'] != 'artwork' &&
         !_reduced &&
         !ImmersionPreferences.instance.lightEffects &&
         !_paused &&
@@ -81,12 +83,50 @@ class _AnimatedAvatarBorderState extends State<AnimatedAvatarBorder>
   }
 
   @override
-  Widget build(BuildContext context) => RepaintBoundary(
-    child: CustomPaint(
-      foregroundPainter: _BorderPainter(widget.border, _turn),
-      child: widget.child,
-    ),
-  );
+  Widget build(BuildContext context) {
+    if (widget.border['effect'] == 'artwork') {
+      final opening = (widget.border['opening'] as List).cast<num>();
+      return RepaintBoundary(
+        child: LayoutBuilder(
+          builder: (context, bounds) {
+            final side = math.min(bounds.maxWidth, bounds.maxHeight);
+            final dx = (bounds.maxWidth - side) / 2;
+            final dy = (bounds.maxHeight - side) / 2;
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned(
+                  left: dx + side * opening[0],
+                  top: dy + side * opening[1],
+                  width: side * opening[2],
+                  height: side * opening[3],
+                  child: ClipOval(child: widget.child),
+                ),
+                IgnorePointer(
+                  child: ContentImage(
+                    widget.border['asset'] as String,
+                    fit: BoxFit.contain,
+                    autoDownload: true,
+                    cacheWidth:
+                        (bounds.maxWidth *
+                                MediaQuery.devicePixelRatioOf(context))
+                            .ceil()
+                            .clamp(96, 768),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+    }
+    return RepaintBoundary(
+      child: CustomPaint(
+        foregroundPainter: _BorderPainter(widget.border, _turn),
+        child: widget.child,
+      ),
+    );
+  }
 }
 
 class _BorderPainter extends CustomPainter {

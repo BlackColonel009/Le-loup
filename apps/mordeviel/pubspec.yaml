@@ -86,6 +86,8 @@ flutter:
     - assets/village/intense/sentences/
     - assets/audio/classic/moonlit_village.wav
     - assets/audio/classic/ending_bright.wav
+    - assets/audio/classic/challenge_progress.wav
+    - assets/audio/classic/challenge_unlock.wav
     - assets/audio/classic/ending_dark.wav
     - assets/audio/classic/hunter_volley.wav
     - assets/audio/classic/card_flick.wav

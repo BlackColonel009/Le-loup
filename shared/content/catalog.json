@@ -113,6 +113,364 @@
       ]
     },
     {
+      "id": "stickers-rewards",
+      "title": "Curiosités du village · Stickers à collectionner",
+      "kind": "stickers",
+      "theme": null,
+      "version": "f4d192b6e9e2c2f0",
+      "size": 3196862,
+      "files": [
+        {
+          "asset": "assets/stickers/rewards/rewards_alpha_dominate.png",
+          "size": 43761,
+          "sha256": "516ebc7e250902d0b1acdde420331663b370803ef4340769061f754035cf2b64",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/516ebc7e250902d0b1acdde420331663b370803ef4340769061f754035cf2b64"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_alpha_howl.png",
+          "size": 83640,
+          "sha256": "0320e121875274348fb217bbe8b62c5f0b16e8a88d9b6c9fc42e19bf3958df5f",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/0320e121875274348fb217bbe8b62c5f0b16e8a88d9b6c9fc42e19bf3958df5f"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_angel_pray.png",
+          "size": 46083,
+          "sha256": "81c1851c124c9bf5bfb2e696a09cabfae76ebd285fa913b6b726718875eb0825",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/81c1851c124c9bf5bfb2e696a09cabfae76ebd285fa913b6b726718875eb0825"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_angel_rescue.png",
+          "size": 42989,
+          "sha256": "52c7b7dd476d946a99af7a49dbe868cd3bccfd9e11407d451f03a4e5690a081a",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/52c7b7dd476d946a99af7a49dbe868cd3bccfd9e11407d451f03a4e5690a081a"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_confused.png",
+          "size": 69389,
+          "sha256": "e20b1296f5bc9218f0a0263c6355d4fe21a8124a4b6b4e5de45cf0238dcbb0a3",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/e20b1296f5bc9218f0a0263c6355d4fe21a8124a4b6b4e5de45cf0238dcbb0a3"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_cupid_aim.png",
+          "size": 44366,
+          "sha256": "444141454c0e20509d6810166c79b9b527b92c39904bf68616c4f041791818c2",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/444141454c0e20509d6810166c79b9b527b92c39904bf68616c4f041791818c2"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_cupid_archer.png",
+          "size": 46531,
+          "sha256": "8a6474f79f551cb8fc39638e580f2807b11ed9938d2a6f4bcd051d3ac3b3c0c2",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/8a6474f79f551cb8fc39638e580f2807b11ed9938d2a6f4bcd051d3ac3b3c0c2"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_cupid_arrow.png",
+          "size": 16579,
+          "sha256": "fe4a788fa29a4548aab87a6478247802f6947dd234745f00dbce802e771a1e05",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/fe4a788fa29a4548aab87a6478247802f6947dd234745f00dbce802e771a1e05"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_cupid_bow.png",
+          "size": 49416,
+          "sha256": "da092f496cf8b977657d949dedf244393f616c73628433bd367349101e9633fc",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/da092f496cf8b977657d949dedf244393f616c73628433bd367349101e9633fc"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_doubtful.png",
+          "size": 54957,
+          "sha256": "ab17d525effeb89b666d595f8ebac47a74a28d4c9a6fce7e5695042cd87e755a",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/ab17d525effeb89b666d595f8ebac47a74a28d4c9a6fce7e5695042cd87e755a"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_elder_bound.png",
+          "size": 40163,
+          "sha256": "787aba1f8876a7005493b315641f28b89f6b20acd54a18e2cd5931009986abe2",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/787aba1f8876a7005493b315641f28b89f6b20acd54a18e2cd5931009986abe2"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_elder_think.png",
+          "size": 38625,
+          "sha256": "675aa91b55ed6275865c6444cc316fc9bf5899fa3e65f233fad7c05a8a59ad4e",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/675aa91b55ed6275865c6444cc316fc9bf5899fa3e65f233fad7c05a8a59ad4e"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_evil_laugh.png",
+          "size": 83974,
+          "sha256": "2ea0cd40b33a5b1ca18fa8eb3b9ec840abfd03a8ada4155704f2118931da9966",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/2ea0cd40b33a5b1ca18fa8eb3b9ec840abfd03a8ada4155704f2118931da9966"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_father_command.png",
+          "size": 53313,
+          "sha256": "79894a52da20b06b11ea27230d6e32dfa376d611abcee9007e1437d570fea7db",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/79894a52da20b06b11ea27230d6e32dfa376d611abcee9007e1437d570fea7db"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_hand_vote.png",
+          "size": 43926,
+          "sha256": "7aa2fec17cf7ece6e3c787d49cfbbd19c5047d2f6e4f56ea5a2993034b106a6f",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/7aa2fec17cf7ece6e3c787d49cfbbd19c5047d2f6e4f56ea5a2993034b106a6f"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_heroic.png",
+          "size": 73226,
+          "sha256": "d7c9436cd7bfd6f9b09829c42539afb004e59d53a707bb2d169b3bd8ad4cf5c7",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/d7c9436cd7bfd6f9b09829c42539afb004e59d53a707bb2d169b3bd8ad4cf5c7"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_hope.png",
+          "size": 23685,
+          "sha256": "fe61ce820714c20fc6001b2be94a40cd309419f1b489a297db60782041066599",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/fe61ce820714c20fc6001b2be94a40cd309419f1b489a297db60782041066599"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_hunter_aim.png",
+          "size": 37910,
+          "sha256": "8fdf281d0ff4462873b02b8b1d88680d9252e429e158fb0d3ef402de6862aa7e",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/8fdf281d0ff4462873b02b8b1d88680d9252e429e158fb0d3ef402de6862aa7e"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_hunter_load.png",
+          "size": 49603,
+          "sha256": "6d5ba6b7c3b1c5dc288ae56dc30d6595e71731fbd9029c6b4cb8f53d129b9c68",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/6d5ba6b7c3b1c5dc288ae56dc30d6595e71731fbd9029c6b4cb8f53d129b9c68"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_hunter_resolve.png",
+          "size": 44625,
+          "sha256": "e9bba30a8778f2f1251cc8f480c7d10d37f7c8130136eb9d7f5d48b038991236",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/e9bba30a8778f2f1251cc8f480c7d10d37f7c8130136eb9d7f5d48b038991236"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_idiot_smile.png",
+          "size": 32892,
+          "sha256": "d88fb11d3b4c6fc59031c02dd7eae04e09475f33e477466dbcc230b07c7dcb19",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/d88fb11d3b4c6fc59031c02dd7eae04e09475f33e477466dbcc230b07c7dcb19"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_incredible.png",
+          "size": 63720,
+          "sha256": "a8b76c2219f97c8c1ec87e672201f4e7186d6938fb657e00c444641fee315422",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/a8b76c2219f97c8c1ec87e672201f4e7186d6938fb657e00c444641fee315422"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_investigation.png",
+          "size": 80945,
+          "sha256": "463196e1eff71fbf97ba1c057a0970ffd6bd934c4f265805215aa9a184b84375",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/463196e1eff71fbf97ba1c057a0970ffd6bd934c4f265805215aa9a184b84375"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_its_you.png",
+          "size": 80171,
+          "sha256": "9e1a29c4524962b35db32cde326c750c35a9aa9fe28aee8e8d13ef576a577aa7",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/9e1a29c4524962b35db32cde326c750c35a9aa9fe28aee8e8d13ef576a577aa7"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_justice.png",
+          "size": 85030,
+          "sha256": "04bd1ef4eaaedd5f702948fcd728070eafdadf6b28d3334d54c9e35e8b4e2a9c",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/04bd1ef4eaaedd5f702948fcd728070eafdadf6b28d3334d54c9e35e8b4e2a9c"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_love_arrow.png",
+          "size": 90154,
+          "sha256": "b0722d6e184be53f931ea953f2747482c43204fd0b65e922abb5e279a2056139",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/b0722d6e184be53f931ea953f2747482c43204fd0b65e922abb5e279a2056139"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_pack_attack.png",
+          "size": 56419,
+          "sha256": "f9269299110728ad09bf59a01c0d4bb8626066586541f23400442573679f75a2",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/f9269299110728ad09bf59a01c0d4bb8626066586541f23400442573679f75a2"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_piper_play.png",
+          "size": 49295,
+          "sha256": "d36a97a95f5df80ea689e2b0ac373347a8189945347d06e9a6ffbb0ec7e78e3a",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/d36a97a95f5df80ea689e2b0ac373347a8189945347d06e9a6ffbb0ec7e78e3a"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_potion.png",
+          "size": 70709,
+          "sha256": "9cdce2ab477699b64fa0f57eb8776fb6ea1e3ad9c721e762c332f4ccf4a8ec65",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/9cdce2ab477699b64fa0f57eb8776fb6ea1e3ad9c721e762c332f4ccf4a8ec65"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_quick_justice.png",
+          "size": 43681,
+          "sha256": "afe05436358084ca7d22224b5d114e5391b6e902e6b5cc0f58603673a21e6ccf",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/afe05436358084ca7d22224b5d114e5391b6e902e6b5cc0f58603673a21e6ccf"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_sad_wolf.png",
+          "size": 75242,
+          "sha256": "9a0f1983701439b96a2382e8ddb6e510567be7028a74fecc6f9556d3bbf59458",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/9a0f1983701439b96a2382e8ddb6e510567be7028a74fecc6f9556d3bbf59458"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_scapegoat_cry.png",
+          "size": 52753,
+          "sha256": "84b7788b3b5202e25b0467442b3dad83a19b6140a198efa160bd63a9e903ca22",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/84b7788b3b5202e25b0467442b3dad83a19b6140a198efa160bd63a9e903ca22"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_secret.png",
+          "size": 57311,
+          "sha256": "09b64cd4efc4dff46070bf8ff9edb4e113c5dba51ca50b0c1d5fb29fb89f9b5c",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/09b64cd4efc4dff46070bf8ff9edb4e113c5dba51ca50b0c1d5fb29fb89f9b5c"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_seen_that.png",
+          "size": 72781,
+          "sha256": "1d24e477a3a5538738e94c4f18cbf368375ec60ecd4738db910299d08f89ce84",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/1d24e477a3a5538738e94c4f18cbf368375ec60ecd4738db910299d08f89ce84"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_seer_eye.png",
+          "size": 40751,
+          "sha256": "caec312093059b6c78a08075ed628c0023eca64f3fae13d3ed2a6cf7e9275f34",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/caec312093059b6c78a08075ed628c0023eca64f3fae13d3ed2a6cf7e9275f34"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_seer_read.png",
+          "size": 50108,
+          "sha256": "20a8141f63702e02bbb124e47e1c2733a88953ac609ed214c4eacdc9246ab723",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/20a8141f63702e02bbb124e47e1c2733a88953ac609ed214c4eacdc9246ab723"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_seer_reveal.png",
+          "size": 50493,
+          "sha256": "363f9b49f11c9baab48a48fa452f4a4a994d0f4accca6012a10008ed3edf6481",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/363f9b49f11c9baab48a48fa452f4a4a994d0f4accca6012a10008ed3edf6481"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_surprise_attack.png",
+          "size": 93266,
+          "sha256": "610a6f5301b5fa658ff3edc078981debbb3d85c308c5d3d52fe15f8082eea91e",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/610a6f5301b5fa658ff3edc078981debbb3d85c308c5d3d52fe15f8082eea91e"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_suspect.png",
+          "size": 68374,
+          "sha256": "5be236346d74e0b3d60e318fc89528320a2f95aa3e9cff5e83cb1531dfd1b54c",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/5be236346d74e0b3d60e318fc89528320a2f95aa3e9cff5e83cb1531dfd1b54c"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_vigilance.png",
+          "size": 68805,
+          "sha256": "8e4913d4914f3a473f6cd6552b9a7769964c8a9024de1b8cb7fe62b1cabf4563",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/8e4913d4914f3a473f6cd6552b9a7769964c8a9024de1b8cb7fe62b1cabf4563"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_villager_doubt.png",
+          "size": 30065,
+          "sha256": "9c60781f3d4307e74a2e6d07c64297ca795d1c68927b1bf6c3a390eaf79206c2",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/9c60781f3d4307e74a2e6d07c64297ca795d1c68927b1bf6c3a390eaf79206c2"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_villager_fear.png",
+          "size": 46958,
+          "sha256": "bc42858b45dd85e279c3f8c557920638457bf1b10aa4ebad5307f3aa041cae56",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/bc42858b45dd85e279c3f8c557920638457bf1b10aa4ebad5307f3aa041cae56"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_villager_suspect.png",
+          "size": 52249,
+          "sha256": "0f8616075d8ae2b943161aac7d4ede27130e41780b9c9928d6b26f446184c0c3",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/0f8616075d8ae2b943161aac7d4ede27130e41780b9c9928d6b26f446184c0c3"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_vision.png",
+          "size": 72081,
+          "sha256": "f95b9fd58534cc8e911d8873f9614fd6359f9fe6deaa7cdc02049d51e59721ec",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/f95b9fd58534cc8e911d8873f9614fd6359f9fe6deaa7cdc02049d51e59721ec"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_vote_against.png",
+          "size": 62248,
+          "sha256": "d203b71fa701ca24a4cf4ef28824d79eeca74bc84873b01b91aac8ec34ad5b73",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/d203b71fa701ca24a4cf4ef28824d79eeca74bc84873b01b91aac8ec34ad5b73"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_white_wolf_howl.png",
+          "size": 45301,
+          "sha256": "fcc17f67c965b34fbe81e61b47382f674e64991538afee194c1d49d4d770408f",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/fcc17f67c965b34fbe81e61b47382f674e64991538afee194c1d49d4d770408f"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_witch_devil.png",
+          "size": 44019,
+          "sha256": "7aa8b59304a591b6f3df54a45dc57c4c8a760fc2547dd2205504652efca6998f",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/7aa8b59304a591b6f3df54a45dc57c4c8a760fc2547dd2205504652efca6998f"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_witch_pink.png",
+          "size": 38418,
+          "sha256": "297430e8810096aed29450f7d15ba5cf3fa685f8cacd96251ce78f163617e783",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/297430e8810096aed29450f7d15ba5cf3fa685f8cacd96251ce78f163617e783"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_witch_prepare.png",
+          "size": 53062,
+          "sha256": "f9d81b3c6195a084e92c00039abd0c83f40435e328bf82286bdb7cc7b108398a",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/f9d81b3c6195a084e92c00039abd0c83f40435e328bf82286bdb7cc7b108398a"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_witch_purple.png",
+          "size": 37143,
+          "sha256": "f487a38820b27b7997265a9197b4d41f644a38ae790f006a22e851ab4d068e86",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/f487a38820b27b7997265a9197b4d41f644a38ae790f006a22e851ab4d068e86"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_witch_rescue.png",
+          "size": 112472,
+          "sha256": "21639962e69d7f4c94cca26495129b7a046fc6ea120aa08784798ea962f5b7fd",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/21639962e69d7f4c94cca26495129b7a046fc6ea120aa08784798ea962f5b7fd"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_bite.png",
+          "size": 47106,
+          "sha256": "95282ea8c6bf88fde2ba9916cb6d8c71ea2fa0ffec1cc75f2c7b5c04ae8f3740",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/95282ea8c6bf88fde2ba9916cb6d8c71ea2fa0ffec1cc75f2c7b5c04ae8f3740"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_claw.png",
+          "size": 38265,
+          "sha256": "64c6352ef7e8c5f4fe9a777fc41ea69abccb7770324929e6d8fccddb64fc858b",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/64c6352ef7e8c5f4fe9a777fc41ea69abccb7770324929e6d8fccddb64fc858b"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_fierce.png",
+          "size": 49813,
+          "sha256": "14bc57ed7c218a001cadfc8c27313d5f4b7a14bb4904931c0b8735dbb279a7d5",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/14bc57ed7c218a001cadfc8c27313d5f4b7a14bb4904931c0b8735dbb279a7d5"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_meeting.png",
+          "size": 57403,
+          "sha256": "a9fde39fac275e515b1d6837fda1f8bc934010c86ec26636cdeb0286cf3cd28b",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/a9fde39fac275e515b1d6837fda1f8bc934010c86ec26636cdeb0286cf3cd28b"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_prowl.png",
+          "size": 48018,
+          "sha256": "d3150612f5cb692df3770f27ff8ddbe5ada1c002f209664bdf745acc6dec90cd",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/d3150612f5cb692df3770f27ff8ddbe5ada1c002f209664bdf745acc6dec90cd"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_run.png",
+          "size": 48897,
+          "sha256": "ab4126f2fb83c576a6c8114fb60b02dc8920b2bcece802a22406cffe46db8f97",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/ab4126f2fb83c576a6c8114fb60b02dc8920b2bcece802a22406cffe46db8f97"
+        },
+        {
+          "asset": "assets/stickers/rewards/rewards_wolf_stare.png",
+          "size": 43683,
+          "sha256": "f549a21645c8c57299d51e521ce0ec32b6d0ef84d94196ef05bf08a8d645110c",
+          "url": "/content/packs/stickers-rewards/f4d192b6e9e2c2f0/f549a21645c8c57299d51e521ce0ec32b6d0ef84d94196ef05bf08a8d645110c"
+        }
+      ]
+    },
+    {
       "id": "avatars-classic",
       "title": "Visages du village · Classique",
       "kind": "avatars",
@@ -245,6 +603,266 @@
           "size": 267076,
           "sha256": "a3a4eb79447fd7ba96b855726f06977e7fc1f72895a0dd5fde36d1e2b5665b71",
           "url": "/content/packs/avatars-classic/09ce1e7b904883b8/a3a4eb79447fd7ba96b855726f06977e7fc1f72895a0dd5fde36d1e2b5665b71"
+        }
+      ]
+    },
+    {
+      "id": "avatars-rewards",
+      "title": "Médaillons de légende · Profils à gagner",
+      "kind": "avatars",
+      "theme": "rewards",
+      "version": "7eddf5846c98639a",
+      "size": 1654507,
+      "files": [
+        {
+          "asset": "assets/avatars/rewards/reward-legends-battle-sister.png",
+          "size": 121530,
+          "sha256": "7228077a0e1c91ab9ed1ab88c494d57a6289b41ee584a29d5cb4f76cb2b89ae3",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/7228077a0e1c91ab9ed1ab88c494d57a6289b41ee584a29d5cb4f76cb2b89ae3"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-cursed-archivist.png",
+          "size": 119529,
+          "sha256": "ae383f2dd7a69f9da6144e1e017db2c3fd0a9d9059666246c8876a2a19f83295",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/ae383f2dd7a69f9da6144e1e017db2c3fd0a9d9059666246c8876a2a19f83295"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-fallen-paladin.png",
+          "size": 109813,
+          "sha256": "441622e9aabd6302c689578ea34f131368b3e3a6cc099c8ca4ab234bcae039a6",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/441622e9aabd6302c689578ea34f131368b3e3a6cc099c8ca4ab234bcae039a6"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-headless-rider.png",
+          "size": 112792,
+          "sha256": "64d9653553f77d88d7acf877fc9972c08a01ed616aa71b9b09f22f7556ad02bd",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/64d9653553f77d88d7acf877fc9972c08a01ed616aa71b9b09f22f7556ad02bd"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-heretic.png",
+          "size": 117655,
+          "sha256": "aa89f256df33c5b4e854ee2d71807e66069408e002c3ffa55270414bc04f762e",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/aa89f256df33c5b4e854ee2d71807e66069408e002c3ffa55270414bc04f762e"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-midnight-wolf.png",
+          "size": 130897,
+          "sha256": "5848cc57d94f058bdd37efd14b22aa5f584ac659f84abdb6ece1b0aea1d96cdf",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/5848cc57d94f058bdd37efd14b22aa5f584ac659f84abdb6ece1b0aea1d96cdf"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-monster-hunter.png",
+          "size": 115212,
+          "sha256": "d237bb51cba0278887bbde5c1364676d4fa426ac9bc3c2b7b2d2abb387da7ab6",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/d237bb51cba0278887bbde5c1364676d4fa426ac9bc3c2b7b2d2abb387da7ab6"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-scarred-wolf.png",
+          "size": 107115,
+          "sha256": "101cc5407f030e794ab451f30bf89821f1bbe933fc01eebb7a781b7e23c2897d",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/101cc5407f030e794ab451f30bf89821f1bbe933fc01eebb7a781b7e23c2897d"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-shaman.png",
+          "size": 127991,
+          "sha256": "e6de45dfde8618833f8220730734e678921c0aa97ceda9117f28924f30d82687",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/e6de45dfde8618833f8220730734e678921c0aa97ceda9117f28924f30d82687"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-legends-wolf-lord.png",
+          "size": 119325,
+          "sha256": "965a6838433c1555c63b6081f6a298b130376b67a4673ff67a229c558809bb4f",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/965a6838433c1555c63b6081f6a298b130376b67a4673ff67a229c558809bb4f"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-village-alpha.png",
+          "size": 99513,
+          "sha256": "b49679a09d2e859c74c74af458c47432b4356a168b30407b7e5b45cd07859991",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/b49679a09d2e859c74c74af458c47432b4356a168b30407b7e5b45cd07859991"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-village-game-master.png",
+          "size": 86758,
+          "sha256": "197aac3268cf93d2415145a0f02a115754214d44ec83a506f42b74c7b00c8659",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/197aac3268cf93d2415145a0f02a115754214d44ec83a506f42b74c7b00c8659"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-village-metamorph.png",
+          "size": 98368,
+          "sha256": "73f5856c919337cb7645c6e96e5ed39b6a7460e8b73b906763f2b640a56854de",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/73f5856c919337cb7645c6e96e5ed39b6a7460e8b73b906763f2b640a56854de"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-village-white-wolf.png",
+          "size": 82541,
+          "sha256": "bfe3d210f772c604c32bf4463de8bad877e066648d585eaa57018ed765b6d084",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/bfe3d210f772c604c32bf4463de8bad877e066648d585eaa57018ed765b6d084"
+        },
+        {
+          "asset": "assets/avatars/rewards/reward-village-wolf.png",
+          "size": 105468,
+          "sha256": "b1192c15a7522f717dea66a0824110b9d70b1ec4899b1f750cfc18df0ab1b329",
+          "url": "/content/packs/avatars-rewards/7eddf5846c98639a/b1192c15a7522f717dea66a0824110b9d70b1ec4899b1f750cfc18df0ab1b329"
+        }
+      ]
+    },
+    {
+      "id": "borders-rewards",
+      "title": "Cadres de légende · Bordures à gagner",
+      "kind": "borders",
+      "theme": "rewards",
+      "version": "b4d8955bb0304ec9",
+      "size": 2282951,
+      "files": [
+        {
+          "asset": "assets/borders/rewards/reward-legends-alchemist.png",
+          "size": 103075,
+          "sha256": "8e189da9e5d99447df6da71b26c6ffc179dba64c3bae66ed0ece91f938cdb44a",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/8e189da9e5d99447df6da71b26c6ffc179dba64c3bae66ed0ece91f938cdb44a"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-berserker.png",
+          "size": 80618,
+          "sha256": "1f05f2a32fd416a28b85ca87aaccfce56e858326a1036303309b17d1ee3db8eb",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/1f05f2a32fd416a28b85ca87aaccfce56e858326a1036303309b17d1ee3db8eb"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-druid.png",
+          "size": 106038,
+          "sha256": "cfd1fb250bd88117a10bf7e99cb5a65c9a8c1339aefeab9e8523b1cb6060a408",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/cfd1fb250bd88117a10bf7e99cb5a65c9a8c1339aefeab9e8523b1cb6060a408"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-dwarf-artificer.png",
+          "size": 90406,
+          "sha256": "a65da6c0381a16620180946b00926e3729dbb0f1b03c563e4aa5226c812649e1",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/a65da6c0381a16620180946b00926e3729dbb0f1b03c563e4aa5226c812649e1"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-ghost.png",
+          "size": 75946,
+          "sha256": "49b508bc43ba3059585cdbff9ccf71bdf69d3ff8bc424f3d86e0ddb212e5f1b6",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/49b508bc43ba3059585cdbff9ccf71bdf69d3ff8bc424f3d86e0ddb212e5f1b6"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-night-raven.png",
+          "size": 72601,
+          "sha256": "ac7789f911a9cbbfb8c7aea2a102e4f0adc679154335cff00a1a09eac037525e",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/ac7789f911a9cbbfb8c7aea2a102e4f0adc679154335cff00a1a09eac037525e"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-sentinel.png",
+          "size": 78407,
+          "sha256": "5bfbf19faf902e987d2365aee31a56c5bfd1e858cf3d670dace1bd7498820d89",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/5bfbf19faf902e987d2365aee31a56c5bfd1e858cf3d670dace1bd7498820d89"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-shadow.png",
+          "size": 85954,
+          "sha256": "5d9a36003f35bc7986b53e4abf92cf9666eeb72d79b03913ab724dbe66b72ea0",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/5d9a36003f35bc7986b53e4abf92cf9666eeb72d79b03913ab724dbe66b72ea0"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-vampire.png",
+          "size": 95706,
+          "sha256": "851ce2c6e1fd76d973231a713f64dfe494bca9dfa22765351ae9b2b4d1a10aee",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/851ce2c6e1fd76d973231a713f64dfe494bca9dfa22765351ae9b2b4d1a10aee"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-legends-witch-queen.png",
+          "size": 78550,
+          "sha256": "bdac4abd24874a87c349efa7610442a85b9be2d3d739be151c70608ee2a27bc7",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/bdac4abd24874a87c349efa7610442a85b9be2d3d739be151c70608ee2a27bc7"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-angel.png",
+          "size": 84815,
+          "sha256": "1b2aa119eca09b78bb31b90f53705e6c0d1e6b303ea2f571ae99965ea4b11a26",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/1b2aa119eca09b78bb31b90f53705e6c0d1e6b303ea2f571ae99965ea4b11a26"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-cupid.png",
+          "size": 99553,
+          "sha256": "d0fabe3ec59003fe82e9ace2c36ae35fc468946fc6b8cd829b5bd83a7451f43e",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/d0fabe3ec59003fe82e9ace2c36ae35fc468946fc6b8cd829b5bd83a7451f43e"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-elder.png",
+          "size": 160474,
+          "sha256": "465bdd6387440cc01cf13a9e48c01dd430274085ba076bf59f3629740a785cc3",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/465bdd6387440cc01cf13a9e48c01dd430274085ba076bf59f3629740a785cc3"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-guardian.png",
+          "size": 83132,
+          "sha256": "f87ff40d29cd387e9ccd794999982b7a35ee3c149dbbedd4de05a88352061fdb",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/f87ff40d29cd387e9ccd794999982b7a35ee3c149dbbedd4de05a88352061fdb"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-hunter.png",
+          "size": 154746,
+          "sha256": "e391f889097c2c3dff98d898355bfbff357fbd5a13f005554686b561b3fe6735",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/e391f889097c2c3dff98d898355bfbff357fbd5a13f005554686b561b3fe6735"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-idiot.png",
+          "size": 72806,
+          "sha256": "ae9c5ca8eb715e4e2b0641137649eb2b53e5457a914348b03d9269795c2fe323",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/ae9c5ca8eb715e4e2b0641137649eb2b53e5457a914348b03d9269795c2fe323"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-little-girl.png",
+          "size": 70727,
+          "sha256": "8247317dc6071cb7bc282ec664251432ff11202c1df75f27dc04a10a9598a6a6",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/8247317dc6071cb7bc282ec664251432ff11202c1df75f27dc04a10a9598a6a6"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-piper.png",
+          "size": 87293,
+          "sha256": "15e5b013d28496ed7931cf4b56e00763adb580ce4f857c19a148a8bf79d29e18",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/15e5b013d28496ed7931cf4b56e00763adb580ce4f857c19a148a8bf79d29e18"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-raven.png",
+          "size": 70716,
+          "sha256": "be4fa74d3dc7c2f6a4ad79ebbab18722dabb04c6357277aa0b62fa2d09240fd2",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/be4fa74d3dc7c2f6a4ad79ebbab18722dabb04c6357277aa0b62fa2d09240fd2"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-scapegoat.png",
+          "size": 74811,
+          "sha256": "3b03dbd79c03df98085604ea9ecd23d4017bf02e3e2f94a4e13d8a538aba2cb3",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/3b03dbd79c03df98085604ea9ecd23d4017bf02e3e2f94a4e13d8a538aba2cb3"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-seer.png",
+          "size": 84364,
+          "sha256": "e6b0cdfefecee584baf86252ba184b8ccf5f8675595ee22abb915b7c0b096354",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/e6b0cdfefecee584baf86252ba184b8ccf5f8675595ee22abb915b7c0b096354"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-twin-wolves.png",
+          "size": 91883,
+          "sha256": "df8dd1a2c583d9527ebaf844d4439924d1591c6e5b1733a5c95868dd54840f54",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/df8dd1a2c583d9527ebaf844d4439924d1591c6e5b1733a5c95868dd54840f54"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-villager.png",
+          "size": 96667,
+          "sha256": "3c56a35a6704d1bd19f55f550151633d64161eb5e6c8b0d9dcbfb4880b322ad7",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/3c56a35a6704d1bd19f55f550151633d64161eb5e6c8b0d9dcbfb4880b322ad7"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-witch.png",
+          "size": 95640,
+          "sha256": "ff8ca78cf81f44464d28d393d9c9dc1d90b81489c091ce2ac6a32c6478feadd4",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/ff8ca78cf81f44464d28d393d9c9dc1d90b81489c091ce2ac6a32c6478feadd4"
+        },
+        {
+          "asset": "assets/borders/rewards/reward-village-wolf-father.png",
+          "size": 88023,
+          "sha256": "cc6ea1be7e2675bd7921c21c952a7ec6b86fa28ad30d4102a93c9f03f6bb0b3c",
+          "url": "/content/packs/borders-rewards/b4d8955bb0304ec9/cc6ea1be7e2675bd7921c21c952a7ec6b86fa28ad30d4102a93c9f03f6bb0b3c"
         }
       ]
     },

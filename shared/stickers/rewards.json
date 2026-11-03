@@ -1,0 +1,874 @@
+[
+  {
+    "id": "rewards_villager_suspect",
+    "role": "Villageois",
+    "emotion": "Soupçon",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 0,
+    "keywords": [
+      "villageois",
+      "soupcon",
+      "suspect",
+      "accuse"
+    ]
+  },
+  {
+    "id": "rewards_seer_read",
+    "role": "Voyante",
+    "emotion": "Vision",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 1,
+    "keywords": [
+      "voyante",
+      "vision"
+    ]
+  },
+  {
+    "id": "rewards_witch_prepare",
+    "role": "Sorcière",
+    "emotion": "Préparation",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 2,
+    "keywords": [
+      "sorciere",
+      "preparation"
+    ]
+  },
+  {
+    "id": "rewards_cupid_aim",
+    "role": "Cupidon",
+    "emotion": "Visée",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 3,
+    "keywords": [
+      "cupidon",
+      "visee",
+      "amour",
+      "amoureux",
+      "coeur"
+    ]
+  },
+  {
+    "id": "rewards_cupid_archer",
+    "role": "Cupidon",
+    "emotion": "Arc tendu",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 4,
+    "keywords": [
+      "cupidon",
+      "arc",
+      "tendu",
+      "amour",
+      "amoureux",
+      "coeur"
+    ]
+  },
+  {
+    "id": "rewards_hunter_load",
+    "role": "Chasseur",
+    "emotion": "Chargement",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 5,
+    "keywords": [
+      "chasseur",
+      "chargement"
+    ]
+  },
+  {
+    "id": "rewards_wolf_bite",
+    "role": "Loup-Garou",
+    "emotion": "Morsure",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 6,
+    "keywords": [
+      "loup",
+      "garou",
+      "morsure",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_scapegoat_cry",
+    "role": "Bouc émissaire",
+    "emotion": "Larmes",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 7,
+    "keywords": [
+      "bouc",
+      "emissaire",
+      "larmes",
+      "triste",
+      "pleure"
+    ]
+  },
+  {
+    "id": "rewards_elder_bound",
+    "role": "Ancien",
+    "emotion": "Inquiétude",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 8,
+    "keywords": [
+      "ancien",
+      "inquietude"
+    ]
+  },
+  {
+    "id": "rewards_elder_think",
+    "role": "Ancien",
+    "emotion": "Réflexion",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 9,
+    "keywords": [
+      "ancien",
+      "reflexion"
+    ]
+  },
+  {
+    "id": "rewards_idiot_smile",
+    "role": "Idiot du Village",
+    "emotion": "Sourire",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 10,
+    "keywords": [
+      "idiot",
+      "village",
+      "sourire"
+    ]
+  },
+  {
+    "id": "rewards_piper_play",
+    "role": "Joueur de Flûte",
+    "emotion": "Mélodie",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 11,
+    "keywords": [
+      "joueur",
+      "flute",
+      "melodie"
+    ]
+  },
+  {
+    "id": "rewards_angel_pray",
+    "role": "Ange",
+    "emotion": "Prière",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 12,
+    "keywords": [
+      "ange",
+      "priere"
+    ]
+  },
+  {
+    "id": "rewards_white_wolf_howl",
+    "role": "Loup Blanc",
+    "emotion": "Hurlement",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 13,
+    "keywords": [
+      "loup",
+      "blanc",
+      "hurlement",
+      "loups",
+      "garou"
+    ]
+  },
+  {
+    "id": "rewards_father_command",
+    "role": "Père des Loups",
+    "emotion": "Ordre",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 14,
+    "keywords": [
+      "pere",
+      "loups",
+      "ordre"
+    ]
+  },
+  {
+    "id": "rewards_wolf_stare",
+    "role": "Loup-Garou",
+    "emotion": "Regard sombre",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 15,
+    "keywords": [
+      "loup",
+      "garou",
+      "regard",
+      "sombre",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_alpha_dominate",
+    "role": "Loup Alpha",
+    "emotion": "Domination",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 16,
+    "keywords": [
+      "loup",
+      "alpha",
+      "domination"
+    ]
+  },
+  {
+    "id": "rewards_wolf_prowl",
+    "role": "Loup-Garou",
+    "emotion": "Rôde",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 17,
+    "keywords": [
+      "loup",
+      "garou",
+      "rode",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_wolf_run",
+    "role": "Loup-Garou",
+    "emotion": "Course",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 18,
+    "keywords": [
+      "loup",
+      "garou",
+      "course",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_hand_vote",
+    "role": "Villageois",
+    "emotion": "Vote",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 19,
+    "keywords": [
+      "villageois",
+      "vote",
+      "voter",
+      "contre",
+      "suspect"
+    ]
+  },
+  {
+    "id": "rewards_wolf_claw",
+    "role": "Loup-Garou",
+    "emotion": "Griffure",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 20,
+    "keywords": [
+      "loup",
+      "garou",
+      "griffure",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_witch_pink",
+    "role": "Sorcière",
+    "emotion": "Potion rose",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 21,
+    "keywords": [
+      "sorciere",
+      "potion",
+      "rose"
+    ]
+  },
+  {
+    "id": "rewards_witch_purple",
+    "role": "Sorcière",
+    "emotion": "Potion violette",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 22,
+    "keywords": [
+      "sorciere",
+      "potion",
+      "violette"
+    ]
+  },
+  {
+    "id": "rewards_hunter_aim",
+    "role": "Chasseur",
+    "emotion": "Tir en vue",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 23,
+    "keywords": [
+      "chasseur",
+      "tir",
+      "vue"
+    ]
+  },
+  {
+    "id": "rewards_cupid_bow",
+    "role": "Cupidon",
+    "emotion": "Flèche ailée",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 24,
+    "keywords": [
+      "cupidon",
+      "fleche",
+      "ailee",
+      "amour",
+      "amoureux",
+      "coeur"
+    ]
+  },
+  {
+    "id": "rewards_cupid_arrow",
+    "role": "Cupidon",
+    "emotion": "Flèche rouge",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 25,
+    "keywords": [
+      "cupidon",
+      "fleche",
+      "rouge",
+      "amour",
+      "amoureux",
+      "coeur"
+    ]
+  },
+  {
+    "id": "rewards_villager_fear",
+    "role": "Villageois",
+    "emotion": "Terreur",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 26,
+    "keywords": [
+      "villageois",
+      "terreur",
+      "peur",
+      "effraye"
+    ]
+  },
+  {
+    "id": "rewards_wolf_fierce",
+    "role": "Loup-Garou",
+    "emotion": "Féroce",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 27,
+    "keywords": [
+      "loup",
+      "garou",
+      "feroce",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_villager_doubt",
+    "role": "Villageoise",
+    "emotion": "Doute",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 28,
+    "keywords": [
+      "villageoise",
+      "doute",
+      "bizarre",
+      "suspect"
+    ]
+  },
+  {
+    "id": "rewards_seer_eye",
+    "role": "Voyante",
+    "emotion": "Regard perçant",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 29,
+    "keywords": [
+      "voyante",
+      "regard",
+      "percant"
+    ]
+  },
+  {
+    "id": "rewards_witch_devil",
+    "role": "Sorcière",
+    "emotion": "Diabolique",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 30,
+    "keywords": [
+      "sorciere",
+      "diabolique",
+      "mdr",
+      "rire"
+    ]
+  },
+  {
+    "id": "rewards_hunter_resolve",
+    "role": "Chasseur",
+    "emotion": "Détermination",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 31,
+    "keywords": [
+      "chasseur",
+      "determination"
+    ]
+  },
+  {
+    "id": "rewards_quick_justice",
+    "role": "Villageois",
+    "emotion": "Sentence",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 32,
+    "keywords": [
+      "villageois",
+      "sentence",
+      "vote",
+      "coupable"
+    ]
+  },
+  {
+    "id": "rewards_angel_rescue",
+    "role": "Ange",
+    "emotion": "Sauvetage",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 33,
+    "keywords": [
+      "ange",
+      "sauvetage",
+      "merci",
+      "sauve",
+      "sauver",
+      "seconde chance"
+    ]
+  },
+  {
+    "id": "rewards_hope",
+    "role": "Villageoise",
+    "emotion": "Espoir",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 34,
+    "keywords": [
+      "villageoise",
+      "espoir",
+      "sauve"
+    ]
+  },
+  {
+    "id": "rewards_pack_attack",
+    "role": "Meute",
+    "emotion": "Attaque",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 35,
+    "keywords": [
+      "meute",
+      "attaque",
+      "devorer"
+    ]
+  },
+  {
+    "id": "rewards_wolf_meeting",
+    "role": "Villageois",
+    "emotion": "Rencontre du loup",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 36,
+    "keywords": [
+      "villageois",
+      "rencontre",
+      "loup",
+      "loups",
+      "garou"
+    ]
+  },
+  {
+    "id": "rewards_seer_reveal",
+    "role": "Voyante",
+    "emotion": "Révélation",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "roles",
+    "position": 37,
+    "keywords": [
+      "voyante",
+      "revelation",
+      "vision",
+      "decouvrir"
+    ]
+  },
+  {
+    "id": "rewards_its_you",
+    "role": "Loup-Garou",
+    "emotion": "C’est toi le loup !",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 0,
+    "keywords": [
+      "loup",
+      "garou",
+      "toi",
+      "c est toi",
+      "toi le loup",
+      "accuse"
+    ]
+  },
+  {
+    "id": "rewards_vote_against",
+    "role": "Villageois",
+    "emotion": "Je vote contre !",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 1,
+    "keywords": [
+      "villageois",
+      "vote",
+      "contre",
+      "voter",
+      "suspect"
+    ]
+  },
+  {
+    "id": "rewards_suspect",
+    "role": "Villageois",
+    "emotion": "Suspect, suspect",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 2,
+    "keywords": [
+      "villageois",
+      "suspect",
+      "soupcon",
+      "accuse"
+    ]
+  },
+  {
+    "id": "rewards_secret",
+    "role": "Villageois",
+    "emotion": "Chut, secret",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 3,
+    "keywords": [
+      "villageois",
+      "chut",
+      "secret",
+      "silence"
+    ]
+  },
+  {
+    "id": "rewards_seen_that",
+    "role": "Villageois",
+    "emotion": "T’as vu ça ?",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 4,
+    "keywords": [
+      "villageois",
+      "regarde",
+      "t as vu",
+      "surpris"
+    ]
+  },
+  {
+    "id": "rewards_vigilance",
+    "role": "Salvateur",
+    "emotion": "Vigilance",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 5,
+    "keywords": [
+      "salvateur",
+      "vigilance"
+    ]
+  },
+  {
+    "id": "rewards_vision",
+    "role": "Voyante",
+    "emotion": "Vision révélatrice",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 6,
+    "keywords": [
+      "voyante",
+      "vision",
+      "revelatrice",
+      "decouvrir"
+    ]
+  },
+  {
+    "id": "rewards_potion",
+    "role": "Sorcière",
+    "emotion": "Potion d’amour",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 7,
+    "keywords": [
+      "sorciere",
+      "potion",
+      "amour",
+      "poison"
+    ]
+  },
+  {
+    "id": "rewards_love_arrow",
+    "role": "Cupidon",
+    "emotion": "Flèche",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 8,
+    "keywords": [
+      "cupidon",
+      "fleche"
+    ]
+  },
+  {
+    "id": "rewards_investigation",
+    "role": "Villageois",
+    "emotion": "Enquête complète",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 9,
+    "keywords": [
+      "villageois",
+      "enquete",
+      "complete"
+    ]
+  },
+  {
+    "id": "rewards_incredible",
+    "role": "Villageois",
+    "emotion": "Incroyable !",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 10,
+    "keywords": [
+      "villageois",
+      "incroyable",
+      "wow",
+      "waouh"
+    ]
+  },
+  {
+    "id": "rewards_evil_laugh",
+    "role": "Loup-Garou",
+    "emotion": "Rire diabolique",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 11,
+    "keywords": [
+      "loup",
+      "garou",
+      "rire",
+      "diabolique",
+      "haha",
+      "hahaha",
+      "mdr",
+      "lol"
+    ]
+  },
+  {
+    "id": "rewards_confused",
+    "role": "Villageois",
+    "emotion": "Confus",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 12,
+    "keywords": [
+      "villageois",
+      "confus",
+      "hein",
+      "quoi",
+      "perdu",
+      "comprends pas"
+    ]
+  },
+  {
+    "id": "rewards_sad_wolf",
+    "role": "Loup-Garou",
+    "emotion": "Triste loup",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 13,
+    "keywords": [
+      "loup",
+      "garou",
+      "triste",
+      "pleure",
+      "larmes",
+      "loups"
+    ]
+  },
+  {
+    "id": "rewards_doubtful",
+    "role": "Villageois",
+    "emotion": "Douteux",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 14,
+    "keywords": [
+      "villageois",
+      "douteux",
+      "doute",
+      "bizarre",
+      "suspect"
+    ]
+  },
+  {
+    "id": "rewards_justice",
+    "role": "Villageois",
+    "emotion": "Sentence rapide",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 15,
+    "keywords": [
+      "villageois",
+      "sentence",
+      "rapide",
+      "vote",
+      "coupable"
+    ]
+  },
+  {
+    "id": "rewards_heroic",
+    "role": "Villageois",
+    "emotion": "Saut héroïque",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 16,
+    "keywords": [
+      "villageois",
+      "saut",
+      "heroique",
+      "bravo",
+      "gg"
+    ]
+  },
+  {
+    "id": "rewards_alpha_howl",
+    "role": "Loup Alpha",
+    "emotion": "Hurlement royal",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 17,
+    "keywords": [
+      "loup",
+      "alpha",
+      "hurlement",
+      "royal"
+    ]
+  },
+  {
+    "id": "rewards_surprise_attack",
+    "role": "Loup-Garou",
+    "emotion": "Attaque surprise",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 18,
+    "keywords": [
+      "loup",
+      "garou",
+      "attaque",
+      "surprise",
+      "devorer",
+      "meute"
+    ]
+  },
+  {
+    "id": "rewards_witch_rescue",
+    "role": "Sorcière",
+    "emotion": "Sauvé par la Sorcière",
+    "pack": "rewards",
+    "unlock": "challenge_or_shop",
+    "sheet": "reactions",
+    "position": 19,
+    "keywords": [
+      "sorciere",
+      "sauve",
+      "merci",
+      "sauver",
+      "seconde chance"
+    ]
+  }
+]

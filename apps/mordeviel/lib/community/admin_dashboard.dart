@@ -5,6 +5,7 @@ import 'publication_dialog.dart';
 import '../stickers/chat_stickers.dart';
 import 'community_mail_settings.dart';
 import '../store/collection_admin.dart';
+import '../challenges/challenge_events_admin.dart';
 
 typedef AdminRequest =
     Future<Map<String, dynamic>> Function(
@@ -401,6 +402,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   builder: (_) => CommunityMailSettings(
                                     request: widget.request,
                                   ),
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.emoji_events_outlined),
+                              title: const Text(
+                                'Défis et événements officiels',
+                              ),
+                              subtitle: const Text(
+                                'Programmer les périodes des défis événementiels',
+                              ),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const ChallengeEventsAdmin(),
                                 ),
                               ),
                             ),

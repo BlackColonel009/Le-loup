@@ -42,6 +42,7 @@ class NightGame {
       _editions[id] = edition;
       _cardTokens[id] = 'card:$id';
     }
+    _log('deal', {'roles': Map.of(_roles), 'editions': Map.of(_editions)});
     final sisters = roles.values.where((r) => r == 'sisters').length;
     if (!cardEditions.contains(mayorEdition))
       throw ArgumentError('Édition du Maire inconnue.');
@@ -189,6 +190,8 @@ class NightGame {
       'cause': cause,
       'role': roles[id],
       'edition': editionOf(id),
+      'camp': _camp(id),
+      if (cause == 'night') 'pack_ids': alive.where(_isWolf).toList(),
       ...?_deathOrigins[id],
     });
     _deathEvents.add({
@@ -297,6 +300,7 @@ class NightGame {
   final Map<String, String?> _mayorBallots = {};
   final Set<String> _recognizedSisters = {};
   final List<Map<String, String>> _dayMessages = [];
+  int _messageSequence = 0;
   Map<String, dynamic>? _voteSummary;
   bool chatOpen = true;
   String _afterReactions = 'day';
@@ -381,6 +385,10 @@ class NightGame {
     'narration_events': [for (final e in _narrationEvents) Map.of(e)],
     if (phase == 'ended')
       'history': [for (final event in _history) _copyHistory(event)],
+    if (phase == 'ended')
+      'dealt_roles': Map.of(
+        _history.firstWhere((e) => e['kind'] == 'deal')['roles'] as Map,
+      ),
     'phase': phase,
     'phase_revision': revision,
     'night': night,
@@ -665,7 +673,14 @@ class NightGame {
             : null;
         _countNightTarget(_attack);
         _attack = _redirectSisterAttack(_attack);
-        if (_guardBlocksPack(_attack)) _attack = null;
+        if (_guardBlocksPack(_attack)) {
+          _log('effect', {
+            'effect': 'protected',
+            'target': _attack,
+            'actor': _guardActor,
+          });
+          _attack = null;
+        }
         if (_consumeHunterWard(_attack)) _attack = null;
         _nightCompleted.add('wolves');
         _wolfMessages.clear();
@@ -818,6 +833,8 @@ class NightGame {
       'edition': editionOf(id),
       'camp': _camp(id),
       'role': roles[id],
+      if (action['target'] is String)
+        'target_camp': _camp(action['target'] as String),
       for (final key in ['action', 'target', 'targets', 'save', 'kill'])
         if (action.containsKey(key))
           key: action[key] is List ? List.of(action[key]) : action[key],
@@ -915,7 +932,7 @@ class NightGame {
           !chatOpen) {
         throw StateError('Le chat général est fermé pour vous.');
       }
-      _chat(id, action['text'], _dayMessages);
+      _chat(id, action['text'], _dayMessages, replyTo: action['reply_to']);
       return;
     }
     if (!timed &&
@@ -975,7 +992,7 @@ class NightGame {
       throw StateError('Un joueur éliminé ne peut plus agir.');
     }
     if (action['action'] == 'bond.chat') {
-      _sendBondMessage(id, action['text']);
+      _sendBondMessage(id, action['text'], replyTo: action['reply_to']);
       return;
     }
     if (['voting', 'mayor_election'].contains(phase) &&
@@ -990,7 +1007,7 @@ class NightGame {
       return;
     }
     if (phase == 'wolves' && _isWolf(id) && action['action'] == 'wolves.chat') {
-      _chat(id, action['text'], _wolfMessages);
+      _chat(id, action['text'], _wolfMessages, replyTo: action['reply_to']);
       return;
     }
     if (_actVariants(id, action)) return;
@@ -1047,16 +1064,38 @@ class NightGame {
     }
   }
 
-  void _chat(String id, dynamic text, List<Map<String, String>> messages) {
+  void _chat(
+    String id,
+    dynamic text,
+    List<Map<String, String>> messages, {
+    dynamic replyTo,
+  }) {
     if (text is! String || text.trim().isEmpty || text.length > 300)
       throw ArgumentError('Message de 1 à 300 caractères.');
     validateStickerMessage(text);
+    final quoted = replyTo == null
+        ? null
+        : messages.where((m) => m['id'] == replyTo).firstOrNull;
+    if (replyTo != null && (replyTo is! String || quoted == null)) {
+      throw ArgumentError(
+        'Le message cité n’est plus disponible dans cet échange.',
+      );
+    }
     if (_lastMessage[id] != null &&
         _clock().difference(_lastMessage[id]!).inMilliseconds < 1000) {
       throw StateError('Patientez une seconde entre deux messages.');
     }
     _lastMessage[id] = _clock();
-    messages.add({'author': id, 'text': text.trim()});
+    messages.add({
+      'id': 'message-${++_messageSequence}',
+      'author': id,
+      'text': text.trim(),
+      if (quoted != null) ...{
+        'reply_id': quoted['id']!,
+        'reply_author': quoted['author']!,
+        'reply_text': quoted['text']!,
+      },
+    });
     if (messages.length > 100) messages.removeAt(0);
   }
 }

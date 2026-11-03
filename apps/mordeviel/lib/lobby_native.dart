@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'audio/classic_audio.dart';
+import 'challenges/challenges_screen.dart';
 import 'audio/audio_settings.dart';
 import 'audio/voice_settings.dart';
 import 'design/game_theme.dart';
@@ -772,7 +773,18 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
               game: ending,
               players: _room?['players'] as List? ?? [],
               ambience: _ambience,
+              continueLabel: widget.online && _client != null
+                  ? 'Continuer · voir mes défis'
+                  : 'Voir les rôles et retourner au village',
             );
+            if (mounted && _client != null && widget.online) {
+              await Navigator.of(context).push<void>(
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ChallengesScreen(matchId: _room?['match_id'] as String?),
+                ),
+              );
+            }
             continue;
           }
           final event = _deathQueue.removeAt(0);
@@ -932,8 +944,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
       isHost: _host != null,
       connected: _connected,
       fullPage: true,
-      onSend: (action, revision, text) =>
-          _client?.gameAction(action, revision, text: text),
+      onSend: (action, revision, text, {replyTo}) =>
+          _client?.gameAction(action, revision, text: text, replyTo: replyTo),
     ),
   );
 

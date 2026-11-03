@@ -98,7 +98,7 @@ void main() {
             },
             isHost: false,
             connected: true,
-            onSend: (_, _, _) => sent = true,
+            onSend: (_, _, _, {replyTo}) => sent = true,
           ),
         ),
       ),

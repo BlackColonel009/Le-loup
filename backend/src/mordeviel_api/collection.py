@@ -118,6 +118,14 @@ def initialize(db):
                 "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title) VALUES(?,'theme',?,'',?)",
                 (f"theme-{theme}", theme, f"Environnement {theme.title()}"),
             )
+        from .stickers import STICKERS
+        for sticker in STICKERS.values():
+            if sticker.get('pack') != 'rewards':
+                continue
+            c.execute(
+                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title) VALUES(?,'sticker','extras',?,?)",
+                (f"sticker-{sticker['id']}", sticker['id'], f"{sticker['role']} · {sticker['emotion']}"),
+            )
 
 
 def free_access(c):
@@ -157,7 +165,7 @@ def day_offers(c, day):
     )
     selected = [p["id"] for p in ordered if p["kind"] == "card"][:5]
     seed = int(hashlib.sha256(day.encode()).hexdigest()[:8], 16)
-    for kind, divisor in [("voice", 10), ("theme", 20)]:
+    for kind, divisor in [("voice", 10), ("theme", 20), ("sticker", 4)]:
         extra = next((p["id"] for p in ordered if p["kind"] == kind), None)
         if seed % divisor == 0 and extra:
             selected.append(extra)
@@ -218,11 +226,12 @@ def view(c, uid=None):
     ]
     result = []
     for p in products(c):
-        baseline = p["theme"] == "classic"
+        baseline = p["theme"] == "classic" and p["kind"] == "card"
         possessed = baseline or p["id"] in owned
-        access = possessed or free or p["id"] in trials
+        preview = free and p["kind"] != "sticker"
+        access = possessed or preview or p["id"] in trials
         ends = [end for ids, end in active_trials if not ids or p["id"] in ids]
-        if free:
+        if preview:
             ends.append(until)
         days = (
             max(0, (date.fromisoformat(max(ends)) - date.fromisoformat(day)).days + 1)
@@ -239,7 +248,7 @@ def view(c, uid=None):
                 "access_reason": "owned"
                 if possessed
                 else "free_preview"
-                if free
+                if preview
                 else "trial"
                 if p["id"] in trials
                 else "locked",
@@ -497,7 +506,7 @@ def remove_trial(tid: int, *, admin: Admin, db: Database):
 
 class Daily(BaseModel):
     day: date
-    products: list[str] = Field(min_length=5, max_length=7)
+    products: list[str] = Field(min_length=5, max_length=8)
 
 
 @router.put("/community/admin/collection/daily")
@@ -514,11 +523,11 @@ def edit_daily(data: Daily, *, admin: Admin, db: Database):
             raise HTTPException(422, "Sélection invalide.")
         counts = {
             kind: sum(p["kind"] == kind for p in items)
-            for kind in ["card", "voice", "theme"]
+            for kind in ["card", "voice", "theme", "sticker"]
         }
-        if counts["card"] != 5 or counts["voice"] > 1 or counts["theme"] > 1:
+        if counts["card"] != 5 or counts["voice"] > 1 or counts["theme"] > 1 or counts["sticker"] > 1:
             raise HTTPException(
-                422, "Choisis cinq cartes, et au plus une voix et un thème."
+                422, "Choisis cinq cartes, et au plus une voix, un thème et un accessoire sticker."
             )
         c.execute(
             "INSERT OR REPLACE INTO collection_days VALUES(?,?)",

@@ -118,6 +118,7 @@ class Engine:
                 event = json.loads(line)
                 if "room" in event:
                     self.snapshot = event["room"]
+                    self.snapshot['match_id'] = self.social_id
                     if self.voice:
                         self.voice.state_changed(self)
                     if self.snapshot.get('phase')=='lobby':
@@ -399,11 +400,23 @@ async def player_socket(socket: WebSocket, code: str):
                         and event.get("code") != code
                     ):
                         raise ValueError("Code de salon incorrect.")
+                    if event.get('type') == 'game.action' and isinstance(event.get('text'), str):
+                        from .stickers import require_sticker_access, validate_sticker
+                        try:
+                            sticker = validate_sticker(event['text'])
+                            with socket.app.state.community.db() as connection:
+                                require_sticker_access(connection, account_id, sticker)
+                        except (ValueError, HTTPException) as error:
+                            await socket.send_json({'type': 'error', 'message': str(error.detail) if isinstance(error, HTTPException) else str(error)})
+                            continue
                     await upstream.send(json.dumps(event))
 
             async def to_player():
                 async for text in upstream:
                     event=json.loads(text)
+                    if event.get('type') == 'room.snapshot':
+                        event['match_id'] = engine.social_id
+                        text = json.dumps(event)
                     if event.get('type')=='room.joined' and authenticated_join:
                         from .social import claim_player
                         claim_player(socket.app.state.community,engine,event['id'],account_id)
