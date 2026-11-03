@@ -1,194 +1,262 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 import 'package:mordeviel/design/opening_screen.dart';
-import 'package:mordeviel/design/opening_curtain.dart';
 import 'package:mordeviel/design/drifting_backdrop.dart';
-import 'package:mordeviel/design/game_theme.dart';
+
+class _VideoPlatform extends VideoPlayerPlatform {
+  final events = StreamController<VideoEvent>.broadcast();
+  final calls = <String>[];
+  final sources = <DataSource>[];
+  final volumes = <double>[];
+  bool fail = false, silent = false;
+  Duration position = Duration.zero;
+  @override
+  Future<void> init() async {}
+  @override
+  Future<int?> createWithOptions(VideoCreationOptions options) async {
+    sources.add(options.dataSource);
+    return 1;
+  }
+
+  @override
+  Stream<VideoEvent> videoEventsFor(int playerId) {
+    scheduleMicrotask(() {
+      if (fail) {
+        events.addError(
+          PlatformException(code: 'VideoError', message: 'Codec'),
+        );
+      } else if (!silent) {
+        events.add(
+          VideoEvent(
+            eventType: VideoEventType.initialized,
+            size: const Size(1280, 720),
+            duration: const Duration(seconds: 10),
+          ),
+        );
+      }
+    });
+    return events.stream;
+  }
+
+  @override
+  Future<void> play(int playerId) async => calls.add('play');
+  @override
+  Future<void> pause(int playerId) async => calls.add('pause');
+  @override
+  Future<void> dispose(int playerId) async => calls.add('dispose');
+  @override
+  Future<void> setVolume(int playerId, double volume) async =>
+      volumes.add(volume);
+  @override
+  Future<void> setLooping(int playerId, bool looping) async {}
+  @override
+  Future<void> setPlaybackSpeed(int playerId, double speed) async {}
+  @override
+  Future<void> setMixWithOthers(bool mixWithOthers) async {}
+  @override
+  Future<void> seekTo(int playerId, Duration value) async => position = value;
+  @override
+  Future<Duration> getPosition(int playerId) async => position;
+  @override
+  Widget buildView(int playerId) => const ColoredBox(color: Colors.amber);
+}
 
 void main() {
-  if (const bool.fromEnvironment('CAPTURE_OPENING')) {
-    setUpAll(() async {
-      for (final entry in {
-        'VillageSans': 'assets/fonts/SourceSans3[wght].ttf',
-        'Cormorant': 'assets/fonts/CormorantGaramond[wght].ttf',
-      }.entries) {
-        final bytes = await File(entry.value).readAsBytes();
-        await (FontLoader(
-          entry.key,
-        )..addFont(Future.value(ByteData.sublistView(bytes)))).load();
-      }
-    });
-    testWidgets('Captures des griffures, de la déchirure et du logo', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      final boundary = GlobalKey();
-      await tester.pumpWidget(
-        RepaintBoundary(
-          key: boundary,
-          child: MaterialApp(
-            theme: GameTheme.classic,
-            debugShowCheckedModeBanner: false,
-            home: OpeningScreen(
-              onStart: () {},
-              onScratch: (_) {},
-              onComplete: () {},
-            ),
-          ),
-        ),
-      );
-      await tester.runAsync(() async {
-        final context = tester.element(find.byType(OpeningScreen));
-        await precacheImage(
-          const AssetImage('assets/branding/logo.png'),
-          context,
-        );
-        for (final name in ['black_curtain', 'claw_tears']) {
-          await precacheImage(
-            ResizeImage(
-              AssetImage('assets/branding/opening/$name.png'),
-              width: 1280,
-            ),
-            context,
-          );
-        }
-      });
-      await tester.pump();
-      for (final (name, delay) in [
-        ('claws', 800),
-        ('tear', 900),
-        ('logo', 2700),
-      ]) {
-        await tester.pump(Duration(milliseconds: delay));
-        expect(tester.takeException(), isNull);
-        await tester.runAsync(() async {
-          final picture =
-              await (boundary.currentContext!.findRenderObject()!
-                      as RenderRepaintBoundary)
-                  .toImage();
-          final data = await picture.toByteData(format: ui.ImageByteFormat.png);
-          await Directory('build/previews').create(recursive: true);
-          await File(
-            'build/previews/opening_$name.png',
-          ).writeAsBytes(data!.buffer.asUint8List());
-          picture.dispose();
-        });
-      }
-    });
-  }
-  for (final size in [const Size(320, 568), const Size(1000, 400)]) {
-    testWidgets('Deux griffures et révélation finie à $size', (tester) async {
-      tester.view.physicalSize = size;
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      final strikes = <int>[];
+  late _VideoPlatform platform;
+  setUp(() {
+    platform = _VideoPlatform();
+    VideoPlayerPlatform.instance = platform;
+  });
+  tearDown(() => platform.events.close());
+
+  testWidgets(
+    'La vidéo locale finit une seule fois et coupe son son avant l’accueil',
+    (tester) async {
       var started = 0, completed = 0;
-      var tears = 0;
       await tester.pumpWidget(
         MaterialApp(
-          theme: GameTheme.classic,
           home: OpeningScreen(
             onStart: () => started++,
-            onScratch: strikes.add,
-            onTear: () => tears++,
-            onComplete: () => completed++,
+            onComplete: () {
+              expect(platform.calls.last, 'pause');
+              completed++;
+            },
           ),
         ),
       );
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(strikes, [1]);
-      await tester.pump(const Duration(milliseconds: 750));
-      expect(strikes, [1, 2]);
-      expect(tears, 0);
-      await tester.pump(const Duration(milliseconds: 1600));
-      expect(tears, 1);
-      expect(completed, 0);
-      await tester.pump(const Duration(milliseconds: 1100));
+      await tester.pump();
       expect(started, 1);
-      // Le rideau a disparu, mais le logo termine son reflet avant l'accueil.
-      expect(completed, 0);
-      expect(find.byType(OpeningCurtain), findsNothing);
-      expect(find.text('Le village s’éveille…'), findsOneWidget);
-      expect(
-        find.bySemanticsLabel('Logo de Mordeviel Legendary'),
-        findsOneWidget,
-      );
-      final loading = tester.widget<LinearProgressIndicator>(
-        find.byType(LinearProgressIndicator),
-      );
-      expect(loading.value, greaterThan(0));
-      expect(loading.value, lessThan(1));
-      await tester.pump(const Duration(milliseconds: 1800));
+      expect(platform.sources.single.asset, OpeningScreen.videoAsset);
+      expect(platform.calls, contains('play'));
+      platform.events.add(VideoEvent(eventType: VideoEventType.completed));
+      await tester.pump();
+      await tester.pump();
       expect(completed, 1);
-      await tester.pump(const Duration(seconds: 2));
-      expect(strikes, [1, 2]);
+      await tester.tap(find.text('Passer'));
+      await tester.pump();
       expect(completed, 1);
+      await tester.pumpWidget(const SizedBox());
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pump();
+      expect(platform.calls, contains('dispose'));
       expect(tester.takeException(), isNull);
-    });
-  }
-  testWidgets('Passer attend la préparation, puis termine une seule fois', (
+    },
+  );
+
+  testWidgets('Passer attend la préparation sans jouer la vidéo', (
     tester,
   ) async {
     final ready = Completer<void>();
     var completed = 0;
-    final strikes = <int>[];
     await tester.pumpWidget(
       MaterialApp(
         home: OpeningScreen(
           ready: ready.future,
           onStart: () {},
-          onScratch: strikes.add,
           onComplete: () => completed++,
         ),
       ),
     );
+    await tester.pump();
     await tester.tap(find.text('Passer'));
-    await tester.pump(const Duration(seconds: 5));
+    await tester.pump(const Duration(seconds: 2));
     expect(completed, 0);
+    expect(platform.calls, isNot(contains('play')));
     ready.complete();
     await tester.pump();
     await tester.pump();
     expect(completed, 1);
-    expect(strikes, isEmpty);
-    await tester.tap(find.text('Passer'));
-    expect(completed, 1);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
   });
-  testWidgets('Animations réduites : logo et fondu, sans déchirure', (
+
+  testWidgets(
+    'Rotation sans redémarrage, pause et reprise, réglage silencieux',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      var completed = 0;
+      Widget scene(double volume) => MaterialApp(
+        home: OpeningScreen(
+          volume: volume,
+          onStart: () {},
+          onComplete: () => completed++,
+        ),
+      );
+      await tester.pumpWidget(scene(.4));
+      await tester.pump();
+      await tester.pump();
+      expect(platform.volumes.last, .4);
+      tester.view.physicalSize = const Size(844, 390);
+      await tester.pump();
+      await tester.pump();
+      expect(platform.sources, hasLength(1));
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pump(const Duration(seconds: 20));
+      expect(platform.calls.last, 'pause');
+      expect(completed, 0);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      expect(platform.calls.last, 'play');
+      await tester.pumpWidget(scene(0));
+      await tester.pump();
+      expect(platform.volumes.last, 0);
+      await tester.tap(find.text('Passer'));
+      await tester.pump();
+      expect(completed, 1);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final fault in ['codec', 'initialisation', 'lecture figée']) {
+    testWidgets('Un échec de $fault ne bloque pas le jeu', (tester) async {
+      platform.fail = fault == 'codec';
+      platform.silent = fault == 'initialisation';
+      var completed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: OpeningScreen(onStart: () {}, onComplete: () => completed++),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+      if (!platform.fail) {
+        for (var i = 0; i < 9; i++) {
+          await tester.pump(const Duration(seconds: 1));
+        }
+      }
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+      expect(completed, 1);
+      expect(
+        find.bySemanticsLabel('Logo de Mordeviel Legendary'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump();
+    });
+  }
+
+  testWidgets('Mouvements réduits : logo statique sans lecteur ni son vidéo', (
     tester,
   ) async {
-    final strikes = <int>[];
     var completed = 0;
     await tester.pumpWidget(
       MaterialApp(
         home: MediaQuery(
           data: const MediaQueryData(disableAnimations: true),
-          child: OpeningScreen(
-            onStart: () {},
-            onScratch: strikes.add,
-            onComplete: () => completed++,
-          ),
+          child: OpeningScreen(onStart: () {}, onComplete: () => completed++),
         ),
       ),
     );
+    await tester.pump(const Duration(seconds: 1));
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
+    expect(platform.sources, isEmpty);
     expect(completed, 1);
-    expect(strikes, isEmpty);
     expect(
       find.bySemanticsLabel('Logo de Mordeviel Legendary'),
       findsOneWidget,
     );
+    await tester.pumpWidget(const SizedBox());
   });
+
+  for (final size in [const Size(320, 568), const Size(1000, 400)]) {
+    testWidgets('Image entière et proportions conservées à $size', (
+      tester,
+    ) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OpeningVideoStage(
+              videoSize: Size(1280, 720),
+              backdrop: ColoredBox(color: Colors.black),
+              child: ColoredBox(key: ValueKey('film'), color: Colors.amber),
+            ),
+          ),
+        ),
+      );
+      final rect = tester.getRect(find.byKey(const ValueKey('film')));
+      expect(rect.width / rect.height, closeTo(1280 / 720, .001));
+      expect(rect.left, greaterThanOrEqualTo(-.01));
+      expect(rect.top, greaterThanOrEqualTo(-.01));
+      expect(rect.right, lessThanOrEqualTo(size.width + .01));
+      expect(rect.bottom, lessThanOrEqualTo(size.height + .01));
+      expect(tester.takeException(), isNull);
+    });
+  }
   testWidgets(
     'Le décor bouge, les commandes restent fixes ; pause en arrière-plan',
     (tester) async {

@@ -123,7 +123,7 @@ class Engine:
                     if self.snapshot.get('phase')=='lobby':
                         active={p['id'] for p in self.snapshot.get('players',[])}
                         self.accounts={p:uid for p,uid in self.accounts.items() if p in active}
-                    if self.db:
+                    if self.db and (not self.recent_saved or self.snapshot.get('phase') == 'ended'):
                         from .social import sync_match
                         try:
                             sync_match(self.db,self)
@@ -378,6 +378,10 @@ async def player_socket(socket: WebSocket, code: str):
                             try: account=authenticated(authorization='Bearer '+str(raw_token),db=socket.app.state.community)
                             except HTTPException as error: raise ValueError(error.detail) from error
                         account_id=account['id'] if account else None
+                        # Replace all client claims; this name is host-only in Dart.
+                        event.pop('account_nickname', None)
+                        if account is not None:
+                            event['account_nickname'] = account['nickname']
                         if event.get('type')=='room.resume':
                             resume_id=engine.player_tokens.get(hashlib.sha256(str(event.get('token','')).encode()).hexdigest())
                             if resume_id in engine.accounts and engine.accounts[resume_id]!=account_id:

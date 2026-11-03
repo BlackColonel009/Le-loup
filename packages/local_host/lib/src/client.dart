@@ -14,6 +14,7 @@ class LobbyClient {
   String? _nickname;
   String _appearance = 'male';
   String? _accountToken;
+  String? _accountNickname;
   bool _closed = false;
   bool _inGame = false;
   bool _background = false;
@@ -36,6 +37,7 @@ class LobbyClient {
         _nickname!,
         appearance: _appearance,
         communityToken: _accountToken,
+        communityNickname: _accountNickname,
       );
     } finally {
       _reconnecting = false;
@@ -61,8 +63,10 @@ class LobbyClient {
     String nickname, {
     String appearance = 'male',
     String? communityToken,
+    String? communityNickname,
   }) async {
     _accountToken = communityToken;
+    _accountNickname = communityNickname;
     _appearance = appearance;
     final previous = _socket;
     _socket = null;
@@ -179,6 +183,7 @@ class LobbyClient {
         'code': code.trim(),
         'nickname': nickname.trim(),
         'appearance': _appearance,
+        if (_accountNickname != null) 'account_nickname': _accountNickname,
         if (remote && _accountToken != null) 'account_token': _accountToken,
       }),
     );

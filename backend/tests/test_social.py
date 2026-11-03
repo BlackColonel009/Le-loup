@@ -461,6 +461,7 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
                 "type": "room.join",
                 "code": room_data["code"],
                 "nickname": "Joueur Masque",
+                "account_nickname": "FauxCompte",
                 "account_token": player[2],
             }
         )
@@ -468,6 +469,9 @@ def test_real_social_room_identity_mixed_cards_and_invitations(api):
         snapshot = receive(socket, "room.snapshot")
         assert snapshot["pack_label"] == "mixed"
         assert snapshot["players"][0]["nickname"] == "Joueur Masque"
+        assert 'account_names' not in snapshot
+        private = receive(mdj, 'host.snapshot')['room']
+        assert private['account_names'][joined['id']] == 'PlayerSocial'
         assert api.get("/social/me", headers=player[1]).json()["nickname"] == "PlayerSocial"
         assert api.get("/social/me", headers=owner[1]).json()["nickname"] == "HostSocial"
         assert "assignments" not in snapshot and "account_token" not in str(snapshot)

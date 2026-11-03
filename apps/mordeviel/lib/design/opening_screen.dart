@@ -1,49 +1,41 @@
 import 'dart:async';
-import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'game_theme.dart';
-import 'opening_curtain.dart';
 
-/// Une ouverture finie, sans pourcentage fictif : l'accueil attend aussi [ready].
+/// La vidéo de Logan reste locale ; aucune connexion ni pack n'est nécessaire.
 class OpeningScreen extends StatefulWidget {
   const OpeningScreen({
     super.key,
     this.ready,
+    this.volume = .65,
     required this.onStart,
-    required this.onScratch,
     required this.onComplete,
-    this.onTear,
   });
-  final VoidCallback? onTear;
+  static const videoAsset = 'assets/branding/opening/intro_gemini.mp4';
   final Future<void>? ready;
+  final double volume;
   final VoidCallback onStart, onComplete;
-  final ValueChanged<int> onScratch;
   @override
   State<OpeningScreen> createState() => _OpeningScreenState();
 }
 
 class _OpeningScreenState extends State<OpeningScreen>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  static const _curtainMilliseconds = 3800;
-  static const _totalMilliseconds = 5600;
-  late final AnimationController _time;
-  bool _ready = false, _started = false, _finished = false;
-  bool _reduced = false, _paused = false, _skip = false;
-  final _struck = <int>{};
+    with WidgetsBindingObserver {
+  VideoPlayerController? _video;
+  Future<void> _media = Future.value();
+  Timer? _watchdog, _fallbackDelay;
+  Duration _position = Duration.zero;
+  int _stalled = 0;
+  bool _ready = false, _prepared = false, _loaded = false;
+  bool _started = false, _finished = false, _paused = false;
+  bool _skip = false, _reduced = false, _fallback = false, _ended = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _time =
-        AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: _totalMilliseconds),
-          )
-          ..addListener(_tick)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) _finish();
-          });
     if (widget.ready == null) {
       _ready = true;
     } else {
@@ -52,11 +44,10 @@ class _OpeningScreenState extends State<OpeningScreen>
   }
 
   Future<void> _waitForReady() async {
-    // Une erreur audio ne doit pas bloquer l'accès au jeu.
     try {
       await widget.ready;
     } catch (_) {
-      /* Le jeu reste accessible. */
+      // Une sortie audio indisponible ne doit pas bloquer l'accès au jeu.
     }
     if (!mounted) return;
     _ready = true;
@@ -69,63 +60,162 @@ class _OpeningScreenState extends State<OpeningScreen>
     _reduced =
         MediaQuery.disableAnimationsOf(context) ||
         MediaQuery.accessibleNavigationOf(context);
-    if (_reduced) _time.duration = const Duration(milliseconds: 450);
-    _begin();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _finished) return;
+      if (_reduced) {
+        _syncPlayback();
+        _begin();
+      } else if (!_prepared && !_skip) {
+        _prepared = true;
+        unawaited(_prepareVideo());
+      } else {
+        _begin();
+      }
+    });
+  }
+
+  Future<void> _prepareVideo() async {
+    final controller = VideoPlayerController.asset(
+      OpeningScreen.videoAsset,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
+    _video = controller;
+    controller.addListener(_onVideo);
+    try {
+      await controller.initialize().timeout(const Duration(seconds: 6));
+      if (!mounted || _finished || _fallback) return;
+      await controller.setLooping(false);
+      if (!mounted || _finished || _fallback) return;
+      setState(() => _loaded = true);
+      _watchdog = Timer.periodic(const Duration(seconds: 1), (_) {
+        if (_paused || !_started || _finished || _skip || _reduced) return;
+        final value = controller.value;
+        if (value.position != _position) {
+          _position = value.position;
+          _stalled = 0;
+        } else if (++_stalled >= 8) {
+          _useFallback();
+        }
+      });
+      _begin();
+    } catch (_) {
+      _useFallback();
+    }
+  }
+
+  @override
+  void didUpdateWidget(OpeningScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.volume != oldWidget.volume) _syncPlayback();
   }
 
   void _begin() {
-    if (!_ready || _started || !mounted || _paused) return;
-    // Les callbacks et changements de page restent en dehors de build.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _started || _paused) return;
+    if (!_ready || _finished || _paused || !mounted) return;
+    if (!_started) {
       _started = true;
       widget.onStart();
-      if (_skip) {
-        _finish();
-      } else {
-        _time.forward();
-      }
-    });
-    WidgetsBinding.instance.ensureVisualUpdate();
-  }
-
-  void _tick() {
-    if (_reduced || _finished) return;
-    for (final (strike, threshold) in [(1, .1), (2, .29)]) {
-      if (_curtainProgress >= threshold && _struck.add(strike)) {
-        widget.onScratch(strike);
-      }
     }
-    _tear();
+    if (_skip || _ended) {
+      unawaited(_finish());
+    } else if (_fallback || _reduced) {
+      _fallbackDelay ??= Timer(const Duration(milliseconds: 650), () {
+        _fallbackDelay = null;
+        _ended = true;
+        _begin();
+      });
+    } else if (_loaded) {
+      _syncPlayback();
+    }
   }
 
-  void _tear() {
-    if (_curtainProgress >= .44 && _struck.add(3)) widget.onTear?.call();
+  // Les changements de focus, de volume et le bouton Passer sont sérialisés.
+  void _syncPlayback() {
+    _media = _media
+        .then<void>((_) async {
+          final controller = _video;
+          if (!mounted ||
+              controller == null ||
+              !controller.value.isInitialized) {
+            return;
+          }
+          if (_ready &&
+              _loaded &&
+              !_paused &&
+              !_finished &&
+              !_skip &&
+              !_reduced &&
+              !_fallback) {
+            await controller.setVolume(widget.volume.clamp(0, 1));
+            // L'état peut avoir changé pendant l'appel natif setVolume.
+            if (mounted &&
+                !_paused &&
+                !_finished &&
+                !_skip &&
+                !_fallback &&
+                !_reduced) {
+              await controller.play();
+            }
+          } else {
+            await controller.pause();
+          }
+        })
+        .catchError((Object _) => _useFallback());
   }
 
-  double get _curtainProgress =>
-      (_time.value * _totalMilliseconds / _curtainMilliseconds).clamp(0, 1);
+  void _onVideo() {
+    if (!mounted || _finished) return;
+    final value = _video!.value;
+    if (value.hasError) {
+      _useFallback();
+    } else if (value.isCompleted) {
+      _ended = true;
+      _begin();
+    }
+  }
 
-  void _finish() {
-    if (_finished || !_ready) return;
+  void _useFallback() {
+    if (!mounted || _finished || _fallback) return;
+    _watchdog?.cancel();
+    setState(() => _fallback = true);
+    _syncPlayback();
+    _begin();
+  }
+
+  Future<void> _finish() async {
+    if (_finished || !_ready || _paused) return;
     _finished = true;
-    _time.stop();
+    _fallbackDelay?.cancel();
+    _watchdog?.cancel();
+    _syncPlayback();
+    // Couper le son avant que l'accueil ne joue son hurlement.
+    try {
+      await _media.timeout(const Duration(seconds: 1));
+    } catch (_) {
+      // Le lecteur sera également libéré à la fermeture de l'écran.
+    }
+    if (!mounted) return;
+    if (_paused) {
+      _finished = false;
+      _ended = true;
+      return;
+    }
     widget.onComplete();
   }
 
   void _skipOpening() {
     _skip = true;
-    _time.stop();
-    if (_ready) _finish();
+    _syncPlayback();
+    _begin();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _paused = state != AppLifecycleState.resumed;
+    _stalled = 0;
     if (_paused) {
-      _time.stop();
-    } else if (_started && !_finished && !_skip) {
-      _time.forward();
+      _fallbackDelay?.cancel();
+      _fallbackDelay = null;
+      _syncPlayback();
     } else {
       _begin();
     }
@@ -134,153 +224,131 @@ class _OpeningScreenState extends State<OpeningScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _time.dispose();
+    _watchdog?.cancel();
+    _fallbackDelay?.cancel();
+    final controller = _video;
+    if (controller != null) {
+      controller.removeListener(_onVideo);
+      unawaited(controller.dispose().catchError((Object _) {}));
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.black,
-    body: AnimatedBuilder(
-      animation: _time,
-      builder: (context, _) => Stack(
-        fit: StackFit.expand,
-        children: [
-          // Le rideau découvre le chargement ; l'accueil vient après le reflet.
+    body: Stack(
+      fit: StackFit.expand,
+      children: [
+        if (_reduced || _fallback)
+          const _StaticLogo()
+        else if (_loaded)
           ExcludeSemantics(
-            excluding: !_reduced && _curtainProgress < .95,
-            child: _LogoLoading(
-              progress: _reduced
-                  ? 1
-                  : ((_time.value * _totalMilliseconds - 3600) / 2000).clamp(
-                      0,
-                      1,
-                    ),
-              reduced: _reduced,
+            child: OpeningVideoStage(
+              videoSize: _video!.value.size,
+              backdrop: VideoPlayer(_video!),
+              child: VideoPlayer(_video!),
             ),
-          ),
-          if (!_reduced && _curtainProgress < 1)
-            IgnorePointer(child: OpeningCurtain(progress: _curtainProgress)),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextButton(
-                  onPressed: _skipOpening,
-                  child: const Text('Passer'),
-                ),
+          )
+        else
+          const Center(
+            child: SizedBox(
+              width: 90,
+              child: LinearProgressIndicator(
+                minHeight: 2,
+                color: GameTheme.gold,
+                backgroundColor: Color(0x332E2619),
               ),
             ),
           ),
-        ],
-      ),
+        SafeArea(
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: GameTheme.ivory,
+                  backgroundColor: Colors.black.withValues(alpha: .55),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                ),
+                onPressed: _skipOpening,
+                child: const Text('Passer'),
+              ),
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }
 
-/// L'ancien écran de chargement, révélé sous les pans déchirés.
-class _LogoLoading extends StatelessWidget {
-  const _LogoLoading({required this.progress, required this.reduced});
-  final double progress;
-  final bool reduced;
-
+/// Même vidéo et même cadrage après rotation, sans étirement ni logo coupé.
+/// Une seconde vue de la même texture remplit les marges, sans second décodage.
+class OpeningVideoStage extends StatelessWidget {
+  const OpeningVideoStage({
+    super.key,
+    required this.videoSize,
+    required this.child,
+    required this.backdrop,
+  });
+  final Size videoSize;
+  final Widget child, backdrop;
   @override
-  Widget build(BuildContext context) {
-    final sweep = ((progress - .08) / .7).clamp(0, 1);
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: RadialGradient(
-          colors: [Color(0xFF29342D), GameTheme.ink],
-          radius: .8,
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, bounds) {
+      final size = videoSize.isEmpty ? const Size(1280, 720) : videoSize;
+      final extraSpace =
+          (bounds.maxWidth / bounds.maxHeight - size.aspectRatio).abs() > .08;
+      Widget fitted(Widget view, BoxFit fit) => FittedBox(
+        fit: fit,
+        child: SizedBox(width: size.width, height: size.height, child: view),
+      );
+      return ClipRect(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (extraSpace)
+              ImageFiltered(
+                imageFilter: ui.ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                child: fitted(backdrop, BoxFit.cover),
+              ),
+            if (extraSpace) const ColoredBox(color: Color(0xAA000000)),
+            fitted(child, BoxFit.contain),
+          ],
         ),
+      );
+    },
+  );
+}
+
+class _StaticLogo extends StatelessWidget {
+  const _StaticLogo();
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: const BoxDecoration(
+      gradient: RadialGradient(
+        colors: [Color(0xFF29342D), GameTheme.ink],
+        radius: .8,
       ),
-      child: Center(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Semantics(
-                    label: 'Logo de Mordeviel Legendary',
-                    image: true,
-                    child: ExcludeSemantics(
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          maxWidth: 330,
-                          maxHeight: 330,
-                        ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: GameTheme.gold.withValues(
-                                alpha: reduced
-                                    ? .07
-                                    : .06 + .04 * math.sin(progress * math.pi),
-                              ),
-                              blurRadius: 70,
-                              spreadRadius: 10,
-                            ),
-                          ],
-                        ),
-                        child: ShaderMask(
-                          blendMode: BlendMode.srcATop,
-                          shaderCallback: (bounds) =>
-                              LinearGradient(
-                                colors: [
-                                  Colors.transparent,
-                                  reduced
-                                      ? Colors.transparent
-                                      : const Color(0xDFFFF4D9),
-                                  Colors.transparent,
-                                ],
-                                stops: const [0, .5, 1],
-                              ).createShader(
-                                Rect.fromLTWH(
-                                  bounds.width * (-.8 + sweep * 2),
-                                  0,
-                                  bounds.width * .65,
-                                  bounds.height,
-                                ),
-                              ),
-                          child: Image.asset(
-                            'assets/branding/logo.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Le village s’éveille…',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(color: GameTheme.ivory),
-                ),
-                const SizedBox(height: 16),
-                Semantics(
-                  label: 'Ouverture du village',
-                  child: SizedBox(
-                    width: 110,
-                    height: 2,
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      color: GameTheme.gold,
-                      backgroundColor: GameTheme.gold.withValues(alpha: .15),
-                    ),
-                  ),
-                ),
-              ],
+    ),
+    child: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(56),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 330, maxHeight: 330),
+            child: Image.asset(
+              'assets/branding/logo.png',
+              fit: BoxFit.contain,
+              semanticLabel: 'Logo de Mordeviel Legendary',
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

@@ -53,6 +53,7 @@ class VoiceState:
         self.fingerprint = None
         self.epoch = ''
         self.access = {}
+        self.transport_access = {}
         self.rooms = set()
         self.created = {}
         self.retired = set()
@@ -74,15 +75,20 @@ class VoiceState:
         if not snapshot.get('automatic_narration', True):
             self.blocked_until = 0.0
         blocked = time.monotonic() < self.blocked_until
-        access = {identity: {**rights, 'publish': bool(rights.get('publish') and not blocked)}
+        transport_access = {identity: dict(rights)
                   for identity, rights in snapshot.get('voice_access', {}).items()
                   if rights.get('channel') in {'village', 'wolves', 'narrator'}}
-        fingerprint = json.dumps([game.get('phase_revision'), access], sort_keys=True)
+        # Narration is a local push-to-talk pause, not a new media room. Revoke
+        # actual game permissions by retiring the room, as before (self-hosted).
+        access = {identity: {**rights, 'publish': bool(rights.get('publish') and not blocked)}
+                  for identity, rights in transport_access.items()}
+        fingerprint = json.dumps(transport_access, sort_keys=True)
+        self.transport_access = transport_access
+        self.access = access
         if fingerprint != self.fingerprint:
             self.retired.update(self.rooms)
             self.rooms.clear()
             self.epoch = secrets.token_hex(16)
-            self.access = access
             self.fingerprint = fingerprint
 
 
@@ -142,9 +148,9 @@ class VoiceHub:
                 return {'channel': None, 'publish': False, 'message': 'Le vocal est fermé pour cette phase.'}
             room = f'mw-{state.epoch}-{channel}'
             current = state.epoch
-            if room not in state.rooms or time.monotonic() - state.created.get(room, 0) > 8:
-                await self.rpc('CreateRoom', {'name': room, 'empty_timeout': 60,
-                                             'departure_timeout': 10, 'max_participants': 21})
+            if room not in state.rooms or time.monotonic() - state.created.get(room, 0) > 45:
+                await self.rpc('CreateRoom', {'name': room, 'empty_timeout': 120,
+                                             'departure_timeout': 120, 'max_participants': 21})
                 # A phase can advance during the media server round-trip.
                 state.update(engine)
                 if state.epoch != current:
@@ -153,7 +159,7 @@ class VoiceHub:
                 state.rooms.add(room)
                 state.created[room] = time.monotonic()
             grants = {'room': room, 'roomJoin': True, 'canSubscribe': True,
-                      'canPublish': rights['publish'], 'canPublishData': False,
+                      'canPublish': state.transport_access[identity]['publish'], 'canPublishData': False,
                       'canPublishSources': ['microphone'], 'canUpdateOwnMetadata': False}
             return {'url': self.url, 'token': signed_token(self.key, self.secret, grants, identity),
                     'channel': channel, 'epoch': state.epoch, 'publish': rights['publish'],

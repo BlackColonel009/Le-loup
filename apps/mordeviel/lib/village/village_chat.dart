@@ -182,6 +182,8 @@ class _VillageChatState extends State<VillageChat> {
                           Expanded(
                             child: Text(
                               channel.title,
+                              maxLines: compact ? 1 : 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontFamily: 'Cormorant',
                                 fontSize: compact ? 20 : 25,
@@ -233,36 +235,40 @@ class _VillageChatState extends State<VillageChat> {
                 child: channel.messages.isEmpty
                     ? LayoutBuilder(
                         builder: (context, box) => Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (box.maxHeight > 100) ...[
-                                Icon(
-                                  icon,
-                                  size: 38,
-                                  color: GameTheme.gold.withValues(alpha: .65),
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                              if (box.maxHeight > 35)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Text(
-                                    channel.writable
-                                        ? channel.private
-                                              ? 'Votre échange commence ici.'
-                                              : 'Le conseil attend vos premiers mots.'
-                                        : 'Aucun message pour le moment.',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: GameTheme.muted,
-                                      fontSize: 13,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (box.maxHeight > 100) ...[
+                                  Icon(
+                                    icon,
+                                    size: 38,
+                                    color: GameTheme.gold.withValues(
+                                      alpha: .65,
                                     ),
                                   ),
-                                ),
-                            ],
+                                  const SizedBox(height: 10),
+                                ],
+                                if (box.maxHeight > 35)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Text(
+                                      channel.writable
+                                          ? channel.private
+                                                ? 'Votre échange commence ici.'
+                                                : 'Le conseil attend vos premiers mots.'
+                                          : 'Aucun message pour le moment.',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: GameTheme.muted,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       )

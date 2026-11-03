@@ -9,6 +9,11 @@ import 'voice_transport.dart';
 typedef VoiceGrantLoader =
     Future<Map<String, dynamic>> Function(String code, String credential);
 
+class VoiceGrantFailure extends StateError {
+  VoiceGrantFailure(this.status, String message) : super(message);
+  final int status;
+}
+
 Future<Map<String, dynamic>> loadVoiceGrant(
   String code,
   String credential,
@@ -31,7 +36,8 @@ Future<Map<String, dynamic>> loadVoiceGrant(
       data = Map<String, dynamic>.from(jsonDecode(body) as Map);
     } catch (_) {}
     if (response.statusCode != 200) {
-      throw StateError(
+      throw VoiceGrantFailure(
+        response.statusCode,
         data?['detail'] as String? ??
             'Le vocal est indisponible. Le chat écrit reste accessible.',
       );
@@ -66,9 +72,11 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
   String? channel, error;
   bool wanted = false, busy = false, locked = false, transmitting = false;
   bool _publish = false, _held = false, _foreground = true, _disposed = false;
+  bool _refreshing = false, _refreshQueued = false;
   int _generation = 0;
   Timer? _poll;
   Future<void> _writes = Future.value();
+  Future<void> _media = Future.value();
   Future<void> get microphoneSettled => _writes;
   bool get connected => transport.connected;
   bool get canSpeak =>
@@ -87,7 +95,7 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
     required bool gameConnected,
   }) {
     final next = enabled && gameConnected ? '$code:$contextKey' : null;
-    final changedCredential = credential != _credential;
+    final changedCredential = credential != _credential || code != _code;
     _code = code;
     _credential = credential;
     if (next == _context && !changedCredential) return;
@@ -95,7 +103,10 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
     _generation++;
     _cut();
     _publish = false;
-    unawaited(_disconnect());
+    if (changedCredential || next == null) {
+      _epoch = null;
+      unawaited(_disconnect());
+    }
     if (wanted) unawaited(refresh());
   }
 
@@ -119,15 +130,22 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> _disconnect() async {
-    try {
-      await transport.disconnect();
-    } catch (_) {}
+    await _serializeMedia(() async {
+      try {
+        await transport.disconnect();
+      } catch (_) {}
+    });
     if (!_disposed) notifyListeners();
   }
 
+  Future<void> _serializeMedia(Future<void> Function() action) {
+    final next = _media.catchError((Object _) {}).then((_) => action());
+    _media = next.catchError((Object _) {});
+    return next;
+  }
+
   Future<void> refresh() async {
-    if (busy ||
-        _disposed ||
+    if (_disposed ||
         !wanted ||
         !_foreground ||
         _context == null ||
@@ -135,8 +153,13 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
         _credential == null) {
       return;
     }
-    busy = true;
-    notifyListeners();
+    if (_refreshing) {
+      _refreshQueued = true;
+      return;
+    }
+    _refreshing = true;
+    busy = !connected;
+    if (busy) notifyListeners();
     final generation = _generation;
     try {
       final grant = await _loader(_code!, _credential!);
@@ -156,17 +179,35 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
       }
       if (epoch != _epoch || !connected) {
         _cut();
-        await _disconnect();
-        if (generation != _generation || !wanted) return;
-        await transport.connect(
-          grant['url'] as String,
-          grant['token'] as String,
-        );
-        if (_disposed || generation != _generation || !wanted || !_foreground) {
-          await _disconnect();
-          return;
-        }
-        _epoch = epoch;
+        busy = true;
+        notifyListeners();
+        await _serializeMedia(() async {
+          if (_disposed ||
+              generation != _generation ||
+              !wanted ||
+              !_foreground) {
+            return;
+          }
+          await transport.disconnect();
+          if (_disposed ||
+              generation != _generation ||
+              !wanted ||
+              !_foreground) {
+            return;
+          }
+          await transport.connect(
+            grant['url'] as String,
+            grant['token'] as String,
+          );
+          if (_disposed ||
+              generation != _generation ||
+              !wanted ||
+              !_foreground) {
+            await transport.disconnect();
+            return;
+          }
+          _epoch = epoch;
+        });
       }
       error = null;
     } catch (failure) {
@@ -176,11 +217,19 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
         error = failure is StateError
             ? failure.message.toString()
             : 'Connexion vocale impossible. Vérifie Internet et les autorisations ; la partie continue par écrit.';
-        await _disconnect();
+        if (failure is VoiceGrantFailure &&
+            [401, 403, 404].contains(failure.status)) {
+          await _disconnect();
+        }
       }
     } finally {
       busy = false;
+      _refreshing = false;
       if (!_disposed) notifyListeners();
+      if (_refreshQueued) {
+        _refreshQueued = false;
+        if (!_disposed) unawaited(refresh());
+      }
     }
   }
 
@@ -266,10 +315,7 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
     transport.removeListener(_transportChanged);
     _audio.conversation(false);
     unawaited(
-      transport
-          .disconnect()
-          .catchError((Object _) {})
-          .whenComplete(transport.dispose),
+      _disconnect().catchError((Object _) {}).whenComplete(transport.dispose),
     );
     super.dispose();
   }

@@ -103,7 +103,10 @@ class LiveKitVoiceTransport extends VoiceTransport {
     }
     final track = _track;
     await track?.unmute();
-    if (!stillAllowed()) {
+    if (stillAllowed() && identical(room, _room)) {
+      // A synchronous push-to-talk cut may precede the SDK's mute operation.
+      if (track != null) track.mediaStreamTrack.enabled = true;
+    } else {
       silence();
       await track?.mute();
     }

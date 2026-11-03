@@ -73,7 +73,7 @@ void main() {
     },
   );
   test(
-    'La voix du MDJ remplace le choix personnel et les appels restent ordonnés',
+    'La voix du MDJ remplace le choix personnel et une réception tardive ne rejoue pas les anciens appels',
     () async {
       final backend = FakeAudio();
       final audio = ClassicAudio(
@@ -106,16 +106,10 @@ void main() {
       audio.room(playing, isHost: true);
       expect(audio.voiceProfile.id, 'duke');
       await flush();
-      expect(backend.calls.last, 'neural/duke/mdj_sleep.wav');
-      backend.completed.add(null);
-      await flush();
-      expect(backend.calls.last, 'neural/duke/mdj_seer.wav');
-      backend.completed.add(null);
-      await flush();
       expect(backend.calls.last, 'neural/duke/mdj_close_seer.wav');
       backend.completed.add(null);
       await audio.settled;
-      expect(backend.calls.where((c) => c.endsWith('.wav')).length, 3);
+      expect(backend.calls.where((c) => c.endsWith('.wav')).length, 1);
       audio.room({
         ...playing,
         'automatic_narration': false,

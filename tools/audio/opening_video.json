@@ -1,0 +1,15 @@
+{
+  "source": "Gemini, vidéo fournie par Logan le 3 novembre 2026",
+  "original_filename": "gemini_generated_video_994fdc96.mp4",
+  "original_sha256": "063c4543349e6958f3ca85995136567272272b98b0ad8369c7a1a3c70923fb80",
+  "asset": "apps/mordeviel/assets/branding/opening/intro_gemini.mp4",
+  "asset_sha256": "313a1e29d09941ac065b8dd76067f0f4e22b78032d42d49c10be37a0a077ca2b",
+  "duration_seconds": 10.03,
+  "width": 1280,
+  "height": 720,
+  "fps": 24,
+  "video_codec": "H.264",
+  "audio_codec": "AAC stereo 48000Hz",
+  "processing": "Remux MP4 faststart sans recompression ; images et son conservés.",
+  "archive": "media/opening/archive-native-2026-11-03/ouverture-native-complete.zip"
+}

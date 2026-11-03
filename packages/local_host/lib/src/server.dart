@@ -7,6 +7,7 @@ import 'night_game.dart';
 import 'card_variants.dart';
 import 'role_rules.dart';
 import 'game_host.dart';
+import 'sentence_draw.dart';
 
 class LocalHost implements GameHost {
   LocalHost({
@@ -21,6 +22,7 @@ class LocalHost implements GameHost {
   Timer? _transitionTimer;
   DateTime? _transitionEnd;
   String? _transitionTarget;
+  String? _transitionError;
   void _ensureNoTransition() {
     if (_transitionTarget != null)
       throw StateError('Le changement de jour ou de nuit est déjà en cours.');
@@ -41,6 +43,7 @@ class LocalHost implements GameHost {
       throw ArgumentError('Transition jour ou nuit attendue.');
     }
     final revision = game.revision;
+    _transitionError = null;
     _phaseTimer?.cancel();
     _transitionTarget = target;
     _transitionEnd = DateTime.now().add(transitionDelay);
@@ -49,10 +52,18 @@ class LocalHost implements GameHost {
       _transitionEnd = null;
       _transitionTimer = null;
       if (identical(_game, game) && !game.closed && game.revision == revision) {
-        if (target == 'night') {
-          startNight(seconds: duration);
-        } else {
-          finishNight();
+        try {
+          if (target == 'night') {
+            startNight(seconds: duration);
+          } else {
+            finishNight();
+          }
+        } on StateError catch (error) {
+          _transitionError = error.message.toString();
+          _publish();
+        } on ArgumentError catch (error) {
+          _transitionError = error.message?.toString() ?? 'Transition annulée.';
+          _publish();
         }
       } else {
         _publish();
@@ -75,6 +86,7 @@ class LocalHost implements GameHost {
   }
 
   final _players = <String, Map<String, dynamic>>{};
+  final _accountNames = <String, String>{};
   final _tokens = <String, String>{};
   final _roles = <String, String>{};
   NightGame? _game;
@@ -85,6 +97,7 @@ class LocalHost implements GameHost {
     _ensureNoTransition();
     if (_game == null) throw StateError('Distribuez les rôles d’abord.');
     _game!.startNight(seconds: seconds);
+    _sentenceTimer?.cancel();
     _gameChanged();
   }
 
@@ -227,8 +240,10 @@ class LocalHost implements GameHost {
   }
 
   void spinSentence() {
+    _ensureNoTransition();
     if (_game == null) throw StateError('Aucune partie en cours.');
-    _game!.spinSentence(_random.nextInt(sentenceOptions.length));
+    _game!.validateSpinSentence();
+    _game!.spinSentence(_sentenceDraw.next(sentenceOptions.length));
     _scheduleSentenceEnd();
     _publish();
   }
@@ -267,6 +282,7 @@ class LocalHost implements GameHost {
   Map<String, String> _cardStyles = {};
   String get visualPack => _visualPack;
   List<String> _sentenceOptions = List.of(NightGame.sentences);
+  late final _sentenceDraw = SentenceDraw(_random);
   List<String> get sentenceOptions => List.unmodifiable(_sentenceOptions);
   String _secret() => List.generate(
     32,
@@ -521,6 +537,11 @@ class LocalHost implements GameHost {
 
   // Réservé au MDJ, jamais diffusé sur les sockets des joueurs.
   Map<String, dynamic> get snapshot => {
+    if (_transitionError != null) 'transition_error': _transitionError,
+    'account_names': {
+      for (final id in _accountNames.keys)
+        if (_players.containsKey(id)) id: _accountNames[id],
+    },
     'voice_muted': _voiceMuted.where(_players.containsKey).toList(),
     'voice_access': {
       'host': _voiceAccess('host', host: true),
@@ -617,13 +638,21 @@ class LocalHost implements GameHost {
   }
 
   void _receive(WebSocket socket, dynamic raw) {
-    void error(String message, {String? code}) => socket.add(
-      jsonEncode({
-        'type': 'error',
-        'message': message,
-        if (code != null) 'code': code,
-      }),
-    );
+    void error(String message, {String? code}) {
+      if (socket.readyState != WebSocket.open) return;
+      try {
+        socket.add(
+          jsonEncode({
+            'type': 'error',
+            'message': message,
+            if (code != null) 'code': code,
+          }),
+        );
+      } on StateError {
+        /* A late message can race a disconnected peer. */
+      }
+    }
+
     try {
       if (raw is! String || raw.length > 4096) {
         socket.close(1009, 'Message trop volumineux');
@@ -644,6 +673,11 @@ class LocalHost implements GameHost {
           return;
         }
         final player = _players[id]!;
+        final account = data['account_nickname'];
+        if (account is String &&
+            account.trim().isNotEmpty &&
+            account.length <= 24)
+          _accountNames[id] = account.trim();
         if (player['connected'] == true) {
           error(
             'Cette session est encore connectée. Réessaie dans quelques secondes.',
@@ -710,6 +744,11 @@ class LocalHost implements GameHost {
                 !_players.values.any((player) => player['house_slot'] == slot),
           ),
         };
+        final account = data['account_nickname'];
+        if (account is String &&
+            account.trim().isNotEmpty &&
+            account.length <= 24)
+          _accountNames[id] = account.trim();
         _peers[socket] = player;
         _players[id] = player;
         _trace('Arrivée de $name · ${_players.length} joueurs');
@@ -786,6 +825,7 @@ class LocalHost implements GameHost {
   }
 
   void _publish() {
+    if (_updates.isClosed) return;
     if (_game != null) {
       _roles
         ..clear()
@@ -794,8 +834,12 @@ class LocalHost implements GameHost {
     final encoded = jsonEncode(publicSnapshot);
     for (final peer in _peers.keys.toList()) {
       if (peer.readyState == WebSocket.open) {
-        peer.add(encoded);
-        _sendGameState(peer, _peers[peer]!['id'] as String);
+        try {
+          peer.add(encoded);
+          _sendGameState(peer, _peers[peer]!['id'] as String);
+        } on StateError catch (error) {
+          scheduleMicrotask(() => _depart(peer, error: error));
+        }
       }
     }
     _updates.add(snapshot);
@@ -812,6 +856,7 @@ class LocalHost implements GameHost {
     _pending.clear();
     _peers.clear();
     _players.clear();
+    _accountNames.clear();
     for (final timer in _reconnectExpiry.values) {
       timer.cancel();
     }

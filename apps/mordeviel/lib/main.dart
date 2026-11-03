@@ -72,15 +72,19 @@ class _EntranceState extends State<_Entrance> {
             checkMaintenance: widget.checkMaintenance,
             showCollectorOnLaunch: true,
           )
-        : OpeningScreen(
+        : ListenableBuilder(
             key: const ValueKey('opening'),
-            ready: widget.ready,
-            onStart: ClassicAudio.instance.opening,
-            onScratch: ClassicAudio.instance.openingScratch,
-            onTear: ClassicAudio.instance.openingTear,
-            onComplete: () {
-              if (mounted) setState(() => _opened = true);
-            },
+            listenable: ClassicAudio.instance,
+            builder: (context, _) => OpeningScreen(
+              ready: widget.ready,
+              volume: ClassicAudio.instance.muted
+                  ? 0
+                  : ClassicAudio.instance.effectLevel,
+              onStart: ClassicAudio.instance.silence,
+              onComplete: () {
+                if (mounted) setState(() => _opened = true);
+              },
+            ),
           ),
   );
 }

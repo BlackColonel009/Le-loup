@@ -192,6 +192,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
   String? _narrationRoom;
   int _narrationRevision = -1;
   int _narrationGeneration = 0;
+  bool _currentStoryAutomatic = false;
   Future<void> get settled => _pending;
 
   Future<void> initialize() async {
@@ -394,6 +395,8 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
             : (events.last['revision'] as int) - 1;
       }
       if (phase == 'ended') {
+        _narrationGeneration++;
+        if (_currentStoryAutomatic) _cancelStory();
         if (events.isNotEmpty) {
           _narrationRevision = events.last['revision'] as int;
         }
@@ -401,8 +404,13 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
         if (previousVoice != null) notifyListeners();
         return;
       }
-      for (final event in events) {
-        if ((event['revision'] as int) <= _narrationRevision) continue;
+      final latest = events
+          .where((event) => (event['revision'] as int) > _narrationRevision)
+          .lastOrNull;
+      if (latest != null) {
+        final event = latest;
+        _narrationGeneration++;
+        if (_currentStoryAutomatic) _cancelStory();
         _narrationRevision = event['revision'] as int;
         _currentVoice = event['cue'] as String;
         if (roomAutomatic) {
@@ -628,6 +636,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     _queue((backend) async {
       final cancel = Completer<void>();
       _cancelCurrentStory = cancel;
+      _currentStoryAutomatic = automatic;
       try {
         for (final cue in cues) {
           if (epoch != _epoch ||
@@ -686,7 +695,10 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
           }
         }
       } finally {
-        if (identical(_cancelCurrentStory, cancel)) _cancelCurrentStory = null;
+        if (identical(_cancelCurrentStory, cancel)) {
+          _cancelCurrentStory = null;
+          _currentStoryAutomatic = false;
+        }
         _stories--;
         if (_stories == 0) _cueEnded();
       }

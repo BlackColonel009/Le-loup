@@ -75,6 +75,7 @@ class NightGame {
   final bool electMayor;
   final String mayorEdition;
   final List<Map<String, dynamic>> _deathEvents = [];
+  String _deathBatch = 'night-0';
   final List<Map<String, dynamic>> _history = [];
   final _reactions = <String, Map<String, dynamic>>{};
   final _lastReaction = <String, DateTime>{};
@@ -148,7 +149,7 @@ class NightGame {
                 .inMilliseconds)
             .clamp(0, 4500);
 
-  void spinSentence(int index) {
+  void validateSpinSentence() {
     if (_voteSummary?['eliminated'] == null ||
         ![
           'hunter',
@@ -162,6 +163,10 @@ class NightGame {
       );
     }
     if (_sentence != null) throw StateError('La sentence est déjà tirée.');
+  }
+
+  void spinSentence(int index) {
+    validateSpinSentence();
     if (index < 0 || index >= sentenceOptions.length)
       throw ArgumentError('Sentence inconnue.');
     _sentence = {
@@ -192,6 +197,7 @@ class NightGame {
       'cause': cause,
       'night': night,
       'was_mayor': _pendingMayor == id || _mayor == id,
+      'batch': _deathBatch,
     });
   }
 
@@ -302,6 +308,8 @@ class NightGame {
     if (seconds < 15 || seconds > 600)
       throw ArgumentError('Durée entre 15 et 600 secondes.');
     _votes.clear();
+    deaths = [];
+    _deathBatch = 'vote-$night';
     _expanded.voteSeconds = seconds;
     _voteSummary = null;
     if (electMayor && _mayor == null && _mayorElectionNight != night) {
@@ -409,6 +417,7 @@ class NightGame {
           entry.key: editionOf(entry.key),
     },
     'sentence_options': sentenceOptions,
+    'death_batch': _deathBatch,
     'death_events': [
       for (final event in _deathEvents)
         {
@@ -555,6 +564,7 @@ class NightGame {
   void _startNightUnchecked(int seconds) {
     durationSeconds = seconds;
     night++;
+    _deathBatch = 'night-$night';
     _startExtraNight();
     final weatherRoll = _weatherDraw(100);
     _nightWeather = weatherRoll < 18
@@ -706,6 +716,7 @@ class NightGame {
 
   void _dawn() {
     _afterReactions = 'day';
+    _deathBatch = 'night-$night';
     deaths = [];
     _resolveExtraDeaths();
     _enter('dawn');
@@ -721,6 +732,7 @@ class NightGame {
   }
 
   void _resolveVote() {
+    _deathBatch = 'vote-$night';
     final eligible = _eligibleVoters.length;
     final counts = <String, int>{};
     var blank = 0;

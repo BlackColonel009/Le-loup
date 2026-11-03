@@ -131,7 +131,26 @@ def test_narration_temporarily_removes_publish_permission(hub, monkeypatch):
         clock[0] += 3
         next_grant = await hub.grant(engine, 'p1')
         assert next_grant['publish'] is True
-        assert next_grant['epoch'] != first['epoch']
+        assert next_grant['epoch'] == first['epoch']
+    asyncio.run(scenario())
+
+
+def test_public_phase_changes_do_not_recreate_a_healthy_media_room(hub):
+    calls = []
+
+    async def rpc(method, data):
+        calls.append(method)
+        return {}
+    hub.rpc = rpc
+    engine = Engine()
+
+    async def scenario():
+        first = await hub.grant(engine, 'p1')
+        for revision in range(2, 9):
+            engine.snapshot['game']['phase_revision'] = revision
+            again = await hub.grant(engine, 'p1')
+            assert again['epoch'] == first['epoch']
+        assert calls == ['CreateRoom']
     asyncio.run(scenario())
 
 

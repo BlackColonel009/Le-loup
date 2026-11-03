@@ -31,6 +31,7 @@ class SentenceWheel extends StatefulWidget {
     this.onContinue,
     this.intense = false,
     this.horror = false,
+    this.transitionPending = false,
   });
   final Map<String, dynamic> game;
   final bool isHost;
@@ -39,6 +40,7 @@ class SentenceWheel extends StatefulWidget {
   final VoidCallback? onContinue;
   final bool intense;
   final bool horror;
+  final bool transitionPending;
   @override
   State<SentenceWheel> createState() => _SentenceWheelState();
 }
@@ -180,9 +182,13 @@ class _SentenceWheelState extends State<SentenceWheel>
             ),
             if (widget.isHost && sentence == null)
               FilledButton.icon(
-                onPressed: widget.onSpin,
+                onPressed: widget.transitionPending ? null : widget.onSpin,
                 icon: const Icon(Icons.casino_outlined),
-                label: const Text('Lancer la roue des sentences'),
+                label: Text(
+                  widget.transitionPending
+                      ? 'Changement de phase en cours…'
+                      : 'Lancer la roue des sentences',
+                ),
               ),
             if (!widget.isHost && sentence == null)
               const Text('Le MDJ peut lancer la roue.'),

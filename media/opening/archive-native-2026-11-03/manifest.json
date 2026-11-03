@@ -1,0 +1,82 @@
+{
+  "apps/mordeviel/lib/design/opening_screen.dart": {
+    "bytes": 9109,
+    "sha256": "1431a4267acd508eb0d4a611642a85966ed26625c0131d8f772a6439d8386178"
+  },
+  "apps/mordeviel/lib/design/opening_curtain.dart": {
+    "bytes": 8333,
+    "sha256": "309756fd9af30d013232288db968e91d8dbfa9f44383f473e6f3e595657753ad"
+  },
+  "apps/mordeviel/lib/main.dart": {
+    "bytes": 13582,
+    "sha256": "9f674b4a9ed176d7bb306b8d35020e8efc856d6e018cb9453e1f93a7a22273fc"
+  },
+  "apps/mordeviel/lib/audio/classic_audio.dart": {
+    "bytes": 27498,
+    "sha256": "ac376c316fe66a51263ce2e3ff23809b8bed24709e49fb69c96ee6364ae5172a"
+  },
+  "apps/mordeviel/test/opening_screen_test.dart": {
+    "bytes": 8093,
+    "sha256": "68bbfa8be783cae6b76285cbb236259324023f433e56443e5834783ba818eaed"
+  },
+  "apps/mordeviel/test/classic_audio_test.dart": {
+    "bytes": 19204,
+    "sha256": "e1bca4bab65b138905fc8e6b11d89459e208de6c7862ab65cbaf357195bc1ff7"
+  },
+  "apps/mordeviel/pubspec.yaml": {
+    "bytes": 11160,
+    "sha256": "ebb9b0921740ab2587cf418d0cc758ca0c2187b5d467f38b63d9aa4b7077c3b6"
+  },
+  "apps/mordeviel/pubspec.lock": {
+    "bytes": 32528,
+    "sha256": "85a448506894b780665c970d9d7c2f4f780665ee453c5b2a699de20d019a7b3e"
+  },
+  "apps/mordeviel/assets/branding/opening/black_curtain.png": {
+    "bytes": 2501544,
+    "sha256": "166c37335940753910cecbe59b72fdd6dd805231c940833f98d932165c8e032f"
+  },
+  "apps/mordeviel/assets/branding/opening/claw_tears.png": {
+    "bytes": 1372316,
+    "sha256": "fdacaf1ecb0c2f7192314147f8129e97c08333cb281a64a1d097fb1e779af958"
+  },
+  "apps/mordeviel/assets/branding/logo.png": {
+    "bytes": 1964449,
+    "sha256": "4c7fde1513ac678a7508efe2e218db74b0182851f42277da43cc450aadbb7d46"
+  },
+  "apps/mordeviel/assets/audio/classic/claw_1.wav": {
+    "bytes": 55608,
+    "sha256": "b46f2944ea0be2b112121ea92031d87f2292c3ecb19e611f8094a7a86e0e4780"
+  },
+  "apps/mordeviel/assets/audio/classic/claw_2.wav": {
+    "bytes": 47668,
+    "sha256": "361618cd695c687d40303b260ebadd6389dee22879629283a111980b7f3df1b6"
+  },
+  "apps/mordeviel/assets/audio/classic/curtain_tear.wav": {
+    "bytes": 180852,
+    "sha256": "af80ce19b030a3885e0db9140b0e7cc2777ff836e145c20f1052b11d6dddbd97"
+  },
+  "tools/audio/opening_media.json": {
+    "bytes": 3517,
+    "sha256": "7aa9dd7c5344ca99e6b24979f87ed74eea5b4e2cc8d2690b79db4dcfe1083484"
+  },
+  "tools/audio/compose_claws.py": {
+    "bytes": 2059,
+    "sha256": "c2074e8f96b2e2c76131f4dccc9465443e4531b697278e13543d5ded8c6457e1"
+  },
+  "tools/audio/sources/cloth_0013.mp3": {
+    "bytes": 120896,
+    "sha256": "93ce221ab889ca535e21b948efe1646a58ef0e9d28ae2974a418cd455f647a63"
+  },
+  "docs/navigation-et-ouverture.md": {
+    "bytes": 5897,
+    "sha256": "700cfbcae16566a70d07c5878a83fbb2faff9ab11b34cba1ae4670e859ba2f01"
+  },
+  "media/opening/mordeviel-opening-preview.mp4": {
+    "bytes": 976460,
+    "sha256": "51210c70d21c43a19e34805c6dd3c9357235020f811d54dad297b136d7f2b65d"
+  },
+  "apps/mordeviel/build/previews/opening_logo.png": {
+    "bytes": 226961,
+    "sha256": "e431850c9bfddb55df9d6b274ea9688cc544d40e1f9f52709a1092c2358a1adf"
+  }
+}

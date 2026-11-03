@@ -19,6 +19,8 @@ import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
 import 'village/phase_transition_banner.dart';
 import 'village/revival_scene.dart';
+import 'joining/host_identity.dart';
+import 'joining/room_entrance.dart';
 import 'village/victory_scene.dart';
 import 'village/ending_data.dart';
 import 'cards/classic_role.dart';
@@ -61,6 +63,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   final _gameStartAlert = GameStartAlertTracker();
   final _phaseNotice = PhaseTransitionNotice();
   GameVoice? _voice;
+  final _voiceSpeakers = ValueNotifier<Set<String>>({});
   bool _supportsFeature(String feature) =>
       (_room?['features'] as List? ?? const []).contains(feature);
   Widget? get _voiceControls {
@@ -86,7 +89,12 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   }
 
   void _voiceChanged() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    final next = _voice?.speakers ?? <String>{};
+    final current = _voiceSpeakers.value;
+    if (next.length != current.length || !next.containsAll(current)) {
+      _voiceSpeakers.value = Set.of(next);
+    }
   }
 
   @override
@@ -613,6 +621,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   final _rescueQueue = <Map<String, dynamic>>[];
   final _seenRescues = <String>{};
   bool _deathFeedInitialized = false;
+  bool _roomEntranceShown = false;
   bool _showingDeaths = false;
   bool _elderCursed = false, _anonymousCurse = false;
   String? _endingShown;
@@ -681,8 +690,13 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     final curse = !_elderCursed && game?['village_powers_lost'] == true;
     _elderCursed = game?['village_powers_lost'] == true;
     var illustratedCurse = false;
+    final batch = game?['death_batch'];
+    bool stale(Map event) =>
+        batch != null && event['batch'] != null && event['batch'] != batch;
+    _deathQueue.removeWhere(stale);
     for (final event in events) {
       if (_seenDeaths.add(event['id'] as String)) {
+        if (stale(event)) continue;
         final cursedCard = curse && event['role'] == 'elder';
         if (cursedCard) illustratedCurse = true;
         _deathQueue.add({...event, 'elder_curse': cursedCard});
@@ -1028,6 +1042,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   void dispose() {
     _voice?.removeListener(_voiceChanged);
     _voice?.dispose();
+    _voiceSpeakers.dispose();
     _phaseNotice.dispose();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(GameBackgroundSession.stop());
@@ -1079,6 +1094,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
       _rescueQueue.clear();
       _seenRescues.clear();
       _deathFeedInitialized = false;
+      _roomEntranceShown = false;
       _elderCursed = false;
       _anonymousCurse = false;
       _pendingEnding = null;
@@ -1141,9 +1157,11 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         _subscription = host.updates.listen((room) {
           if (mounted) {
             setState(() {
-              _room = room;
+              _room = hostDisplayRoom(room);
               _connected = room['online_connected'] != false;
-              _error = room['online_error'] as String?;
+              _error =
+                  room['online_error'] as String? ??
+                  room['transition_error'] as String?;
               _busy = false;
             });
             _refreshVillage();
@@ -1152,7 +1170,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         });
         setState(() {
           _addresses = addresses;
-          _room = host.snapshot;
+          _room = hostDisplayRoom(host.snapshot);
           _connected = true;
           _busy = false;
         });
@@ -1172,6 +1190,15 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             });
             _refreshVillage();
             _receiveDeaths(event);
+            if (!_roomEntranceShown) {
+              _roomEntranceShown = true;
+              final theme = _room?['visual_pack'] as String? ?? 'classic';
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted && _client == client && _connected) {
+                  unawaited(showRoomEntrance(context, theme));
+                }
+              });
+            }
           } else if (event['type'] == 'game.role') {
             setState(() => _role = event['role'] as String);
             _refreshVillage();
@@ -1214,6 +1241,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             }
           }
         });
+        final accountSession = await SocialApi.instance.session().catchError(
+          (Object _) => null,
+        );
         await client.connect(
           widget.online
               ? onlineSocketUri(
@@ -1224,9 +1254,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
           _code.text,
           _name.text,
           appearance: _appearance,
+          communityNickname: accountSession?.nickname,
           communityToken: widget.online
-              ? widget.communityToken ??
-                    (await SocialApi.instance.session())?.token
+              ? widget.communityToken ?? accountSession?.token
               : null,
         );
         if (!mounted) return;
@@ -1724,17 +1754,20 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         const SizedBox(height: 16),
       ],
       if (section == VillageDestination.village) ...[
-        VillageMap(
-          speakers: _voice?.speakers ?? const {},
-          reactions: mapReactions,
-          onPointerActivity: _mapPointerActivity,
-          protectedPlayerId: _protectedPlayerId(game),
-          displayHeight: mapHeight,
-          room: _room!,
-          selfId: _client?.id,
-          bubbleAuthors: bubbleAuthors,
-          onHouse: _openHouse,
-          onChat: _openChat,
+        ValueListenableBuilder<Set<String>>(
+          valueListenable: _voiceSpeakers,
+          builder: (context, speakers, _) => VillageMap(
+            speakers: speakers,
+            reactions: mapReactions,
+            onPointerActivity: _mapPointerActivity,
+            protectedPlayerId: _protectedPlayerId(game),
+            displayHeight: mapHeight,
+            room: _room!,
+            selfId: _client?.id,
+            bubbleAuthors: bubbleAuthors,
+            onHouse: _openHouse,
+            onChat: _openChat,
+          ),
         ),
         if (_client != null &&
             _supportsFeature('house_reactions') &&
@@ -1900,6 +1933,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         if (game != null &&
             (game['vote_result'] as Map?)?['eliminated'] != null)
           SentenceWheel(
+            transitionPending: _room?['transition'] != null,
             intense: _ambience == CardAmbience.intense,
             horror: _ambience == CardAmbience.horror,
             key: _sentenceKey,

@@ -12,7 +12,9 @@ Le conseil conserve **Discussion** et **Réunion et vote**. Le bouton « Voter m
 
 Le chat du conseil reprend des bulles plus lisibles, des initiales liées aux pseudos de partie, une indication Ouvert/Lecture/Pause/Spectateur et une saisie arrondie avec stickers. Les réactions sur les maisons sont conservées pour le conseil et la meute. Les échanges amoureux/Sœurs n’envoient aucune réaction publique sur la carte. Le brouillon public est conservé au passage du débat au vote ; un changement de canal efface le brouillon pour empêcher sa publication dans un autre groupe. Les transitions de hauteur et l’ouverture du clavier conservent le champ et son focus.
 
-## Ouverture locale
+## Ouverture locale initiale — archivée le 3 novembre 2026
+
+Cette ouverture est désormais remplacée par la vidéo fournie par Logan. La sauvegarde complète est dans `media/opening/archive-native-2026-11-03/`. Le fonctionnement actuel est décrit dans [Ouverture vidéo Gemini](ouverture-video-gemini.md). La description ci-dessous conserve la trace de l'ancienne version.
 
 L’ouverture est remplacée par une animation Flutter avec **textures photoréalistes générées**, et non une vidéo filmée. Elle fonctionne sans connexion sur Android et Windows, sans ajouter un lecteur vidéo à l’application.
 

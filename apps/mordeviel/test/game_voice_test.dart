@@ -8,12 +8,14 @@ import 'package:mordeviel/audio/classic_audio.dart';
 class FakeVoiceTransport extends VoiceTransport {
   bool online = false, mic = false;
   Completer<void>? capture;
+  int connections = 0;
   @override
   bool get connected => online;
   @override
   Set<String> get speakers => online && mic ? {'player'} : {};
   @override
   Future<void> connect(String url, String token) async {
+    connections++;
     online = true;
     notifyListeners();
   }
@@ -47,6 +49,82 @@ void contextFor(GameVoice voice, String phase) => voice.updateContext(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test(
+    'Une actualisation de phase conserve le transport si le canal est inchangé',
+    () async {
+      final transport = FakeVoiceTransport();
+      var epoch = 'village', calls = 0;
+      final voice = GameVoice(
+        transport: transport,
+        audio: ClassicAudio(),
+        loader: (_, _) async {
+          calls++;
+          return {
+            'epoch': epoch,
+            'channel': epoch,
+            'publish': true,
+            'url': 'wss://voice.invalid',
+            'token': 'fake',
+          };
+        },
+      );
+      addTearDown(voice.dispose);
+      contextFor(voice, 'day');
+      await voice.join();
+      expect(transport.connections, 1);
+      contextFor(voice, 'voting');
+      expect(transport.connected, isTrue);
+      await Future<void>.delayed(Duration.zero);
+      await voice.refresh();
+      expect(transport.connections, 1);
+      epoch = 'wolves';
+      contextFor(voice, 'wolves');
+      await Future<void>.delayed(Duration.zero);
+      await voice.refresh();
+      expect(transport.connections, 2);
+      expect(calls, greaterThanOrEqualTo(3));
+      await voice.leave();
+    },
+  );
+  test(
+    'Un appel de rôle arrivé pendant une requête vocale est traité sans attendre le poll',
+    () async {
+      final pending = Completer<Map<String, dynamic>>();
+      var calls = 0;
+      final transport = FakeVoiceTransport();
+      final voice = GameVoice(
+        transport: transport,
+        audio: ClassicAudio(),
+        loader: (_, _) async {
+          if (++calls == 1) return pending.future;
+          return {
+            'epoch': 'wolves',
+            'channel': 'wolves',
+            'publish': true,
+            'url': 'wss://voice.invalid',
+            'token': 'new',
+          };
+        },
+      );
+      addTearDown(voice.dispose);
+      contextFor(voice, 'day');
+      final joining = voice.join();
+      contextFor(voice, 'wolves');
+      pending.complete({
+        'epoch': 'day',
+        'channel': 'village',
+        'publish': true,
+        'url': 'wss://voice.invalid',
+        'token': 'old',
+      });
+      await joining;
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(calls, 2);
+      expect(voice.channel, 'wolves');
+      expect(transport.connected, isTrue);
+      await voice.leave();
+    },
+  );
   test('Maintien, relâchement, verrouillage et changement de phase', () async {
     final transport = FakeVoiceTransport();
     var epoch = 'day';

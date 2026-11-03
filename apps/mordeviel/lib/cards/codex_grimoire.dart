@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../services/immersion_preferences.dart';
+import 'codex_page_turn.dart';
 
 class CodexChapter {
   const CodexChapter(this.title, this.text);
@@ -86,7 +86,7 @@ class CodexGrimoire extends StatefulWidget {
 }
 
 class _CodexGrimoireState extends State<CodexGrimoire> {
-  PageController _controller = PageController(keepPage: false);
+  final _turner = GlobalKey<CodexPageTurnState>();
   List<_Leaf> _leaves = [];
   Object? _layout;
   int _spread = 0, _perSpread = 1, _chapter = 0, _offset = 0;
@@ -96,25 +96,10 @@ class _CodexGrimoireState extends State<CodexGrimoire> {
     if (oldWidget.chapters != widget.chapters) _layout = null;
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   int get _spreads => (_leaves.length / _perSpread).ceil();
   void _turn(int target) {
-    if (!_controller.hasClients || target < 0 || target >= _spreads) return;
-    if (MediaQuery.disableAnimationsOf(context) ||
-        ImmersionPreferences.instance.reduced(context)) {
-      _controller.jumpToPage(target);
-    } else {
-      _controller.animateToPage(
-        target,
-        duration: const Duration(milliseconds: 430),
-        curve: Curves.easeInOutCubic,
-      );
-    }
+    if (target < 0 || target >= _spreads) return;
+    _turner.currentState?.turnTo(target);
   }
 
   Future<void> _contents() async {
@@ -239,13 +224,7 @@ class _CodexGrimoireState extends State<CodexGrimoire> {
                               (p) => p.chapter == _chapter && p.end > _offset,
                             );
                             _spread = math.max(0, anchor) ~/ _perSpread;
-                            final previous = _controller;
-                            _controller = PageController(
-                              initialPage: _spread,
-                              keepPage: false,
-                            );
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              previous.dispose();
                               if (mounted) setState(() {});
                             });
                           }
@@ -273,69 +252,21 @@ class _CodexGrimoireState extends State<CodexGrimoire> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(cover),
-                              child: PageView.builder(
-                                key: ValueKey(token),
-                                controller: _controller,
-                                itemCount: _spreads,
-                                onPageChanged: (index) => setState(() {
+                              child: CodexPageTurn(
+                                key: _turner,
+                                index: _spread,
+                                count: _spreads,
+                                doublePage: two,
+                                layoutToken: token,
+                                gutter: gutter,
+                                pageBuilder: (index, left) =>
+                                    _page(index, margin, heading, left),
+                                onChanged: (index) => setState(() {
                                   _spread = index;
                                   final leaf = _leaves[index * _perSpread];
                                   _chapter = leaf.chapter;
                                   _offset = leaf.start;
                                 }),
-                                itemBuilder: (context, index) =>
-                                    AnimatedBuilder(
-                                      animation: _controller,
-                                      builder: (context, child) {
-                                        final position =
-                                            _controller.hasClients &&
-                                                _controller
-                                                    .position
-                                                    .hasContentDimensions
-                                            ? _controller.page ??
-                                                  _spread.toDouble()
-                                            : _spread.toDouble();
-                                        final turn = (index - position).clamp(
-                                          -1.0,
-                                          1.0,
-                                        );
-                                        final still =
-                                            MediaQuery.disableAnimationsOf(
-                                              context,
-                                            ) ||
-                                            ImmersionPreferences.instance
-                                                .reduced(context);
-                                        return Transform(
-                                          alignment: turn < 0
-                                              ? Alignment.centerRight
-                                              : Alignment.centerLeft,
-                                          transform: Matrix4.identity()
-                                            ..setEntry(3, 2, .001)
-                                            ..rotateY(still ? 0 : turn * .65),
-                                          child: child,
-                                        );
-                                      },
-                                      child: Row(
-                                        children: [
-                                          for (
-                                            var side = 0;
-                                            side < perSpread;
-                                            side++
-                                          ) ...[
-                                            if (side > 0)
-                                              const SizedBox(width: gutter),
-                                            Expanded(
-                                              child: _page(
-                                                index * perSpread + side,
-                                                margin,
-                                                heading,
-                                                two && side == 0,
-                                              ),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
                               ),
                             ),
                           );
