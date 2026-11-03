@@ -6,6 +6,7 @@ class LocalLobbyScreen extends StatelessWidget {
     this.online = false,
     this.initialCode,
     this.initialNickname,
+    this.initialAppearance,
     this.communityToken,
     this.autoStart = false,
     this.publicRoom = false,
@@ -14,6 +15,7 @@ class LocalLobbyScreen extends StatelessWidget {
   });
   final bool online;
   final String? initialCode, initialNickname, communityToken;
+  final String? initialAppearance;
   final bool autoStart, publicRoom;
   final String roomTitle, initialTheme;
   @override

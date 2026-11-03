@@ -94,11 +94,14 @@ class _SocialActionBarState extends State<SocialActionBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            tooltip: 'Amis et profil',
+            tooltip: social.challengeRewards > 0
+                ? 'Profil · cadeaux de défis à réclamer'
+                : 'Amis et profil',
             onPressed: () => _open(0),
             icon: Badge(
-              isLabelVisible: social.friendRequests > 0,
-              label: Text('${social.friendRequests}'),
+              isLabelVisible:
+                  social.friendRequests + social.challengeRewards > 0,
+              label: Text('${social.friendRequests + social.challengeRewards}'),
               child: const Icon(Icons.people_outline),
             ),
           ),
@@ -858,19 +861,30 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
                     horizontal: 18,
                     vertical: 10,
                   ),
-                  leading: const Icon(
-                    Icons.workspace_premium,
-                    color: _gold,
-                    size: 30,
+                  leading: Badge(
+                    isLabelVisible: (p['challenge_rewards'] as num? ?? 0) > 0,
+                    label: Text('${p['challenge_rewards'] ?? 0}'),
+                    child: const Icon(
+                      Icons.workspace_premium,
+                      color: _gold,
+                      size: 30,
+                    ),
                   ),
                   title: const Text('Mes défis et mes récompenses'),
-                  subtitle: const Text(
-                    'Votre progression, vos portraits et vos trésors.',
+                  subtitle: Text(
+                    (p['challenge_rewards'] as num? ?? 0) > 0
+                        ? '${p['challenge_rewards']} défi(s) accompli(s) · cadeaux à réclamer !'
+                        : 'Votre progression, vos portraits et vos trésors.',
                   ),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ChallengesScreen()),
-                  ),
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ChallengesScreen(),
+                      ),
+                    );
+                    if (mounted) await _load();
+                  },
                 ),
               ),
               const SizedBox(height: 16),
@@ -1112,6 +1126,31 @@ class _ProfileSocialCardState extends State<ProfileSocialCard> {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
+      Card(
+        color: (_data?['challenge_rewards'] as num? ?? 0) > 0
+            ? _gold.withValues(alpha: .12)
+            : null,
+        child: ListTile(
+          leading: Badge(
+            isLabelVisible: (_data?['challenge_rewards'] as num? ?? 0) > 0,
+            label: Text('${_data?['challenge_rewards'] ?? 0}'),
+            child: const Icon(Icons.redeem, color: _gold),
+          ),
+          title: const Text('Mes défis et mes cadeaux'),
+          subtitle: Text(
+            (_data?['challenge_rewards'] as num? ?? 0) > 0
+                ? 'Des cadeaux vous attendent · réclamez-les !'
+                : 'Accomplissez des défis et gagnez des récompenses.',
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ChallengesScreen()),
+            );
+            if (mounted) await _load();
+          },
+        ),
+      ),
       if (_data?['stats'] is Map) StatsGrid(stats: _data!['stats'] as Map),
       if (_data?['practice_stats'] is Map &&
           ((_data!['practice_stats'] as Map)['games'] as num? ?? 0) > 0) ...[

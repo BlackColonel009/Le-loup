@@ -54,11 +54,13 @@ class ChallengeCard extends StatefulWidget {
     this.animate = false,
     this.delay = Duration.zero,
     this.onChoose,
+    this.onClaim,
   });
   final Map challenge;
   final bool animate;
   final Duration delay;
   final VoidCallback? onChoose;
+  final VoidCallback? onClaim;
   @override
   State<ChallengeCard> createState() => _ChallengeCardState();
 }
@@ -101,6 +103,8 @@ class _ChallengeCardState extends State<ChallengeCard>
         ? (c['before'] as num? ?? 0).toDouble().clamp(0, current.toDouble())
         : current.toDouble();
     final completed = c['completed_at'] != null;
+    final claimable =
+        completed && c.containsKey('claimed_at') && c['claimed_at'] == null;
     final color = completed ? challengeGold : const Color(0xFF80D6CC);
     final rewards = (c['rewards'] as List? ?? []).cast<Map>();
     return Container(
@@ -130,7 +134,11 @@ class _ChallengeCardState extends State<ChallengeCard>
                   color: color.withValues(alpha: .12),
                 ),
                 child: Icon(
-                  completed ? Icons.workspace_premium : Icons.explore_outlined,
+                  claimable
+                      ? Icons.redeem
+                      : completed
+                      ? Icons.workspace_premium
+                      : Icons.explore_outlined,
                   color: color,
                   size: 24,
                 ),
@@ -160,10 +168,10 @@ class _ChallengeCardState extends State<ChallengeCard>
                 ),
               ),
               if (completed)
-                const Padding(
-                  padding: EdgeInsets.only(left: 6),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
                   child: Icon(
-                    Icons.check_circle,
+                    claimable ? Icons.card_giftcard : Icons.check_circle,
                     color: challengeGold,
                     size: 20,
                   ),
@@ -191,7 +199,9 @@ class _ChallengeCardState extends State<ChallengeCard>
                         Expanded(
                           child: Text(
                             completed
-                                ? (c['newly_completed'] == true
+                                ? (claimable
+                                      ? 'CADEAU À RÉCLAMER'
+                                      : c['newly_completed'] == true
                                       ? 'NOUVELLE RÉCOMPENSE'
                                       : 'DÉFI ACCOMPLI')
                                 : 'Votre progression',
@@ -290,7 +300,9 @@ class _ChallengeCardState extends State<ChallengeCard>
                   ),
                   Icon(
                     completed
-                        ? Icons.lock_open_rounded
+                        ? claimable
+                              ? Icons.card_giftcard
+                              : Icons.lock_open_rounded
                         : Icons.lock_outline_rounded,
                     size: 16,
                     color: completed ? challengeGold : Colors.white38,
@@ -298,7 +310,21 @@ class _ChallengeCardState extends State<ChallengeCard>
                 ],
               ),
             ),
-          if (completed && rewards.any((r) => r['kind'] == 'avatar_choice'))
+          if (claimable)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: widget.onClaim,
+                  icon: const Icon(Icons.redeem),
+                  label: const Text('Réclamer ma récompense'),
+                ),
+              ),
+            ),
+          if (completed &&
+              !claimable &&
+              rewards.any((r) => r['kind'] == 'avatar_choice'))
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: FilledButton.tonalIcon(

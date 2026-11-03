@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'audio/classic_audio.dart';
 import 'challenges/challenges_screen.dart';
+import 'challenges/reward_claim_dialog.dart';
 import 'audio/audio_settings.dart';
 import 'audio/voice_settings.dart';
 import 'design/game_theme.dart';
@@ -43,6 +44,7 @@ class LocalLobbyScreen extends StatefulWidget {
     this.online = false,
     this.initialCode,
     this.initialNickname,
+    this.initialAppearance,
     this.communityToken,
     this.autoStart = false,
     this.publicRoom = false,
@@ -51,6 +53,7 @@ class LocalLobbyScreen extends StatefulWidget {
   });
   final bool online;
   final String? initialCode, initialNickname, communityToken;
+  final String? initialAppearance;
   final bool autoStart, publicRoom;
   final String roomTitle, initialTheme;
   @override
@@ -378,7 +381,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
   VillageDestination _destination = VillageDestination.village;
   bool _mapPointerActive = false;
   final _name = TextEditingController();
-  String _appearance = 'male';
+  String? _appearance;
   bool _femaleFor(dynamic id) => (_room?['players'] as List? ?? const []).any(
     (p) => p['id'] == id && p['appearance'] == 'female',
   );
@@ -555,6 +558,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     WidgetsBinding.instance.addObserver(this);
     if (!widget.online) unawaited(_checkBotAdmin());
     _name.text = widget.initialNickname ?? '';
+    _appearance = ['male', 'female'].contains(widget.initialAppearance)
+        ? widget.initialAppearance
+        : null;
     _code.text = widget.initialCode ?? '';
     if (widget.online) {
       _address.text = apiBaseUrl;
@@ -768,11 +774,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             final ending = _pendingEnding!;
             _pendingEnding = null;
             ClassicAudio.instance.ending(ending['winner'] as String?);
+            var rewardsOffered = false;
             await showVictory(
               context,
               game: ending,
               players: _room?['players'] as List? ?? [],
               ambience: _ambience,
+              onRewardsReady: widget.online && _client != null
+                  ? (context) async {
+                      rewardsOffered = await presentPendingChallengeRewards(
+                        context,
+                      );
+                    }
+                  : null,
               continueLabel: widget.online && _client != null
                   ? 'Continuer · voir mes défis'
                   : 'Voir les rôles et retourner au village',
@@ -780,8 +794,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             if (mounted && _client != null && widget.online) {
               await Navigator.of(context).push<void>(
                 MaterialPageRoute(
-                  builder: (_) =>
-                      ChallengesScreen(matchId: _room?['match_id'] as String?),
+                  builder: (_) => ChallengesScreen(
+                    matchId: _room?['match_id'] as String?,
+                    autoPresentRewards: !rewardsOffered,
+                  ),
                 ),
               );
             }
@@ -1047,6 +1063,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     } on MissingPluginException {
       // Les tests de widgets n'exécutent pas les plugins natifs.
       debugPrint('Maintien de l’écran indisponible sur cette plateforme.');
+    } on PlatformException {
+      // Keeping the screen awake is optional and must never hide the salon.
+      debugPrint('Le maintien de l’écran n’a pas pu être activé.');
     }
   }
 
@@ -1120,6 +1139,13 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     if (_name.text.trim().isEmpty || _name.text.trim().length > 24) {
       setState(() => _error = 'Choisis un pseudo de 1 à 24 caractères.');
       _nameFocus.requestFocus();
+      return;
+    }
+    if (!hosting && _appearance == null) {
+      setState(
+        () => _error =
+            'Choisis Masculin · Villageois ou Féminin · Villageoise avant de rejoindre.',
+      );
       return;
     }
     setState(() {
@@ -1265,7 +1291,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
               : _address.text,
           _code.text,
           _name.text,
-          appearance: _appearance,
+          appearance: _appearance!,
           communityNickname: accountSession?.nickname,
           communityToken: widget.online
               ? widget.communityToken ?? accountSession?.token
@@ -1399,6 +1425,13 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
       _nameFocus.requestFocus();
       return;
     }
+    if (_appearance == null) {
+      setState(
+        () => _error =
+            'Choisis Villageois ou Villageoise avant de scanner le salon.',
+      );
+      return;
+    }
     setState(() {
       _scanning = true;
       _error = null;
@@ -1495,6 +1528,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     DropdownButtonFormField<String>(
       isExpanded: true,
       initialValue: _appearance,
+      key: const ValueKey('lobby-appearance'),
+      hint: const Text('Choisis Villageois ou Villageoise'),
       decoration: const InputDecoration(
         labelText: 'Sexe / apparence de la carte',
         helperText: 'Choix visuel uniquement, sans effet sur les pouvoirs.',
@@ -1503,9 +1538,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         DropdownMenuItem(value: 'male', child: Text('Masculin · Villageois')),
         DropdownMenuItem(value: 'female', child: Text('Féminin · Villageoise')),
       ],
-      onChanged: _busy
-          ? null
-          : (value) => setState(() => _appearance = value ?? 'male'),
+      onChanged: _busy ? null : (value) => setState(() => _appearance = value),
     ),
     if (widget.online) ...[
       const Center(

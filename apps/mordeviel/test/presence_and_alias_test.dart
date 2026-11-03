@@ -83,6 +83,14 @@ void main() {
     );
     await tester.tap(find.text('Entrer dans le village'));
     await tester.pumpAndSettle();
+    expect(names, isEmpty);
+    expect(find.text('Choisis Villageois ou Villageoise.'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('room-appearance')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Féminin · Villageoise').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Entrer dans le village'));
+    await tester.pumpAndSettle();
     expect(names, ['Le Masque']);
     await tester.tap(find.text('Rejoindre'));
     await tester.pumpAndSettle();
@@ -92,6 +100,14 @@ void main() {
           .controller!
           .text,
       isEmpty,
+    );
+    expect(
+      tester
+          .widget<DropdownButtonFormField<String>>(
+            find.byKey(const ValueKey('room-appearance')),
+          )
+          .initialValue,
+      isNull,
     );
     await tester.tap(find.text('Annuler'));
     await tester.pumpAndSettle();

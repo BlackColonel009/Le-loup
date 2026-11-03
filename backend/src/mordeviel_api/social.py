@@ -161,6 +161,8 @@ def profile_data(c, viewer, target):
             ).fetchone()
         )
     if mine:
+        from .challenges import pending_count
+        result['challenge_rewards'] = pending_count(c, target)
         result["practice_stats"] = dict(c.execute(
             "SELECT COUNT(*) AS games,COALESCE(SUM(wins),0) AS wins,COALESCE(SUM(wolf_victims),0) AS wolf_victims,COALESCE(SUM(devoured),0) AS devoured,COALESCE(SUM(executed),0) AS executed FROM social_bot_match_stats WHERE user_id=?",
             (target,),
@@ -220,6 +222,8 @@ def preferences(data: Preferences, *, user: User, db: Database):
 def summary(request: Request, *, user: User, db: Database):
     expire_invitations(db, request.app.state.rooms)
     with db.db() as c:
+        from .avatars import avatar_in
+        from .challenges import pending_count
         preference(c, user["id"])
         pending = sum(
             1
@@ -236,7 +240,9 @@ def summary(request: Request, *, user: User, db: Database):
         return {
             "user_id": user["id"],
             "nickname": user["nickname"],
+            "avatar": avatar_in(c, user["id"]),
             "friend_requests": pending,
+            "challenge_rewards": pending_count(c, user['id']),
             "invitations": invitations,
             "phone_notifications": bool(
                 preference(c, user["id"])["phone_notifications"]

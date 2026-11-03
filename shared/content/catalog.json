@@ -2657,6 +2657,142 @@
       ]
     },
     {
+      "id": "intense-cards",
+      "title": "Intense · Cartes",
+      "kind": "cards",
+      "theme": "intense",
+      "version": "a5f81da83de1ecd2",
+      "size": 25349052,
+      "files": [
+        {
+          "asset": "assets/cards/intense/alpha_wolf_intense.jpg",
+          "size": 1026465,
+          "sha256": "e18c61422b94a8f0ece7e62919edf53815a888416236748169dcabc66224926c",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/e18c61422b94a8f0ece7e62919edf53815a888416236748169dcabc66224926c"
+        },
+        {
+          "asset": "assets/cards/intense/angel_intense.jpg",
+          "size": 1021429,
+          "sha256": "c62868a69c3e32be6b01396a73faf3934b222176ea13ce31af70f90956f95bd3",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/c62868a69c3e32be6b01396a73faf3934b222176ea13ce31af70f90956f95bd3"
+        },
+        {
+          "asset": "assets/cards/intense/cupid_intense.jpg",
+          "size": 978884,
+          "sha256": "4a4bc7bb6289b28f1d22dbdd0c8c78a4d923f61b2cba03dfe05b329f663a86c2",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/4a4bc7bb6289b28f1d22dbdd0c8c78a4d923f61b2cba03dfe05b329f663a86c2"
+        },
+        {
+          "asset": "assets/cards/intense/elder_intense.jpg",
+          "size": 1026308,
+          "sha256": "2b4f7e221a87a05b3568c41b036180d73c88120474a8a54f92413d3c6636f383",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/2b4f7e221a87a05b3568c41b036180d73c88120474a8a54f92413d3c6636f383"
+        },
+        {
+          "asset": "assets/cards/intense/guardian_intense.jpg",
+          "size": 1018567,
+          "sha256": "9af083e4c39e7be212e70364388b0668be7c6f545e12d65382e0316060383b2b",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/9af083e4c39e7be212e70364388b0668be7c6f545e12d65382e0316060383b2b"
+        },
+        {
+          "asset": "assets/cards/intense/hunter_intense.jpg",
+          "size": 925919,
+          "sha256": "7b0849b18a8c6d3a3560a717f28e7fc4b11e61dee49654bb5bf61b27c50dd362",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/7b0849b18a8c6d3a3560a717f28e7fc4b11e61dee49654bb5bf61b27c50dd362"
+        },
+        {
+          "asset": "assets/cards/intense/idiot_intense.jpg",
+          "size": 1057203,
+          "sha256": "2f9941b5287b1b670dec46f26ef68bfef44aedae94952b9caaaa909bf48f7d63",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/2f9941b5287b1b670dec46f26ef68bfef44aedae94952b9caaaa909bf48f7d63"
+        },
+        {
+          "asset": "assets/cards/intense/little_girl_intense.jpg",
+          "size": 976330,
+          "sha256": "05605a9f82a9aa5f780bee4bd376f68d37803f08b22353c9718ea21a21bf7561",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/05605a9f82a9aa5f780bee4bd376f68d37803f08b22353c9718ea21a21bf7561"
+        },
+        {
+          "asset": "assets/cards/intense/mayor_intense.png",
+          "size": 2681746,
+          "sha256": "a8afaa58e86b6e68a1865e097fe1743ff5e0a004448225226126b62411653e3e",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/a8afaa58e86b6e68a1865e097fe1743ff5e0a004448225226126b62411653e3e"
+        },
+        {
+          "asset": "assets/cards/intense/metamorph_intense.jpg",
+          "size": 34491,
+          "sha256": "377f3202e2a2789d00fe4d3b5a07a96813db8989c7d0bf6cd2a0d5010983910a",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/377f3202e2a2789d00fe4d3b5a07a96813db8989c7d0bf6cd2a0d5010983910a"
+        },
+        {
+          "asset": "assets/cards/intense/Metamorphe.jpg",
+          "size": 34491,
+          "sha256": "377f3202e2a2789d00fe4d3b5a07a96813db8989c7d0bf6cd2a0d5010983910a",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/377f3202e2a2789d00fe4d3b5a07a96813db8989c7d0bf6cd2a0d5010983910a"
+        },
+        {
+          "asset": "assets/cards/intense/piper_intense.jpg",
+          "size": 1036016,
+          "sha256": "24065916ecd9ecfeacc9d82b616f0486f78e02a5e80b258ba27a19ea3c5503e3",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/24065916ecd9ecfeacc9d82b616f0486f78e02a5e80b258ba27a19ea3c5503e3"
+        },
+        {
+          "asset": "assets/cards/intense/scapegoat_intense.png",
+          "size": 2590071,
+          "sha256": "ec810e7c105c4048b857588af7c0fdd7ac7d535c4886091e59889634f0b8951c",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/ec810e7c105c4048b857588af7c0fdd7ac7d535c4886091e59889634f0b8951c"
+        },
+        {
+          "asset": "assets/cards/intense/seer_intense.jpg",
+          "size": 951897,
+          "sha256": "c695464a8646d32e0d70fb51364b23738555ac4fcb0c3ae1d10695d78242b917",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/c695464a8646d32e0d70fb51364b23738555ac4fcb0c3ae1d10695d78242b917"
+        },
+        {
+          "asset": "assets/cards/intense/sisters_intense.png",
+          "size": 2710558,
+          "sha256": "8e09331dea641c118c860184cbe105dd584621b1acd1f8a35ed08b709ed48c22",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/8e09331dea641c118c860184cbe105dd584621b1acd1f8a35ed08b709ed48c22"
+        },
+        {
+          "asset": "assets/cards/intense/villager_female.png",
+          "size": 2416595,
+          "sha256": "74dd9f6d217b16f4dd7d95f28855daaa835528d03212aeab2b7660d63db33069",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/74dd9f6d217b16f4dd7d95f28855daaa835528d03212aeab2b7660d63db33069"
+        },
+        {
+          "asset": "assets/cards/intense/villager_intense.jpg",
+          "size": 879965,
+          "sha256": "0a15f8ced2401d32ae0cdbe4ef0cc1a5014781b4a76e6e9c9da26c72307a0ae6",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/0a15f8ced2401d32ae0cdbe4ef0cc1a5014781b4a76e6e9c9da26c72307a0ae6"
+        },
+        {
+          "asset": "assets/cards/intense/werewolf_intense.jpg",
+          "size": 965705,
+          "sha256": "202d0cd2510a8c9344ff5bf1fc4f54b96a976f21d7df35f642654ea5cf635a1e",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/202d0cd2510a8c9344ff5bf1fc4f54b96a976f21d7df35f642654ea5cf635a1e"
+        },
+        {
+          "asset": "assets/cards/intense/white_wolf_intense.jpg",
+          "size": 1014634,
+          "sha256": "ea6cb8d987d787e5df7c34da4bda3f0fe1a0ba0617366a7da5f6014a8748b7f3",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/ea6cb8d987d787e5df7c34da4bda3f0fe1a0ba0617366a7da5f6014a8748b7f3"
+        },
+        {
+          "asset": "assets/cards/intense/witch_intense.jpg",
+          "size": 972949,
+          "sha256": "2f431da4829aabb270d6e90fd7e55476fc2f241a4db66a2f6e03b758d702673d",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/2f431da4829aabb270d6e90fd7e55476fc2f241a4db66a2f6e03b758d702673d"
+        },
+        {
+          "asset": "assets/cards/intense/wolf_father_intense.jpg",
+          "size": 1028829,
+          "sha256": "e325a9ed35feb093df219ac0856f40066602314bb633782fc5e179fcb946ef86",
+          "url": "/content/packs/intense-cards/a5f81da83de1ecd2/e325a9ed35feb093df219ac0856f40066602314bb633782fc5e179fcb946ef86"
+        }
+      ]
+    },
+    {
       "id": "horror-cards",
       "title": "Horreur · Cartes",
       "kind": "cards",

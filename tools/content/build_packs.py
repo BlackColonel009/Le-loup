@@ -48,6 +48,8 @@ for directory in sorted((ASSETS / 'audio/classic/neural').iterdir()):
     if directory.is_dir() and not directory.name.startswith('classic_'):
         pack('voice-' + directory.name.replace('_', '-'), 'Voix · ' + voice_labels.get(directory.name, directory.name),
              (p for p in directory.glob('*.wav') if p.name != 'preview.wav'), 'audio')
+pack('intense-cards', 'Intense · Cartes',
+     (p for p in (ASSETS / 'cards/intense').rglob('*') if p.is_file()), 'cards', 'intense')
 for kind, directory in [('cards', 'cards/horror'), ('village', 'village/horror'), ('ambience', 'audio/horror')]:
     pack('horror-' + kind, 'Horreur · ' + {'cards': 'Cartes', 'village': 'Village et sentences', 'ambience': 'Ambiances'}[kind],
          (p for p in (ASSETS / directory).rglob('*') if p.is_file()), kind, 'horror')

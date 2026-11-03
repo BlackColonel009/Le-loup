@@ -36,6 +36,12 @@ class TestPacks extends PackStore {
 }
 
 void main() {
+  test('Les cartes Intense dirigent vers leur pack téléchargeable', () {
+    expect(
+      downloadablePackForAsset('assets/cards/intense/villager_intense.jpg'),
+      'intense-cards',
+    );
+  });
   testWidgets('Le modal reste lisible sur un petit téléphone avec grand texte', (
     tester,
   ) async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../audio/classic_audio.dart';
 
@@ -8,6 +9,8 @@ class ChallengeSounds {
   static DateTime? _last;
   static void play({bool completed = false}) {
     final settings = ClassicAudio.instance;
+    final state = WidgetsBinding.instance.lifecycleState;
+    if (state != null && state != AppLifecycleState.resumed) return;
     if (settings.muted || settings.effectLevel == 0) return;
     final now = DateTime.now();
     if (_last != null && now.difference(_last!).inMilliseconds < 850) return;

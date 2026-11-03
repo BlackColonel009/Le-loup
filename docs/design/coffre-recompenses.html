@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mordeviel — Coffre des défis</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0c131c;color:#ffe5af;font:16px Georgia,serif}main{text-align:center;width:min(92vw,540px);padding:24px 0}h1{font-size:27px;margin:8px}p{color:#c8c4ba;line-height:1.5}svg{width:100%;overflow:visible}button{border:1px solid #ebcf94;border-radius:12px;background:#e5c385;color:#24190e;padding:15px 25px;font:bold 16px Georgia;cursor:pointer}button:focus-visible{outline:3px solid white;outline-offset:5px}.note{font:12px system-ui;color:#a9abae}.light{opacity:0}.chest{transform-origin:250px 230px;animation:rattle 2.6s infinite}.lid{transform-origin:250px 197px;animation:pressure 2.6s infinite}.opening .chest{animation:burst 2.8s both}.opening .lid{animation:open 2.8s both}.opening .light{animation:light 2.8s both}.spark{transform-origin:250px 200px}.opening .spark{animation:spark 2.8s both}
+@keyframes rattle{0%,40%,100%{transform:translate(0,0) rotate(0)}45%,55%,65%{transform:translate(-2px,-3px) rotate(-1.5deg)}50%,60%{transform:translate(2px,-5px) rotate(1.5deg)}}
+@keyframes pressure{0%,40%,70%,100%{transform:translateY(0)}50%,60%{transform:translateY(-4px) rotate(-1deg)}}
+@keyframes burst{0%,45%,100%{transform:translate(0,0)}10%,20%,30%,40%{transform:translate(-4px,-6px) rotate(-2deg)}15%,25%,35%{transform:translate(4px,-9px) rotate(2deg)}}
+@keyframes open{0%,42%{transform:translateY(0)}12%,24%,36%{transform:translateY(-6px)}65%{transform:translate(-7px,-87px) rotate(-15deg)}82%,100%{transform:translate(-4px,-72px) rotate(-12deg)}}
+@keyframes light{0%,44%{opacity:0}64%,100%{opacity:1}}
+ #seal{transform-origin:250px 198px}nav button{font-size:13px;padding:10px 13px}nav{margin-top:20px}
+@keyframes orbit{to{transform:rotate(360deg)}}
+nav button[aria-pressed=true]{background:#173344;color:#a8f5fc;box-shadow:0 0 0 2px #79ebf4}
+@keyframes spark{0%,44%{opacity:0;transform:scale(.2)}70%{opacity:1;transform:scale(1.2)}100%{opacity:.7;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.chest,.lid,.opening .chest,.opening .spark{animation:none}.opening .lid{animation:none;transform:translateY(-72px)}.opening .light{animation:none;opacity:1}}
+</style>
+<main>
+<p>MORDEVIEL · LES CADEAUX DU VILLAGE</p>
+<h1>Les coffres des défis</h1>
+<nav aria-label="Type de coffre"><button data-tier="classic">Classique</button> <button data-tier="epic">Épique</button> <button data-tier="premium">Premium</button></nav>
+<p id="tier-label">Classique · stickers et portraits classiques</p>
+<svg viewBox="0 0 500 340" role="img" aria-label="Coffre médiéval en bois cerclé de métal, secoué par une force intérieure">
+<defs>
+<linearGradient id="wood" x2="0" y2="1"><stop stop-color="#ad7139"/><stop offset="1" stop-color="#422516"/></linearGradient>
+<linearGradient id="metal" x2="1" y2=".3"><stop stop-color="#71532b"/><stop offset=".45" stop-color="#f3d79c"/><stop offset="1" stop-color="#94703a"/></linearGradient>
+<linearGradient id="beam" x2="0" y2="1"><stop stop-color="#ffdc93" stop-opacity="0"/><stop offset="1" stop-color="#ffe5ac" stop-opacity=".9"/></linearGradient>
+<radialGradient id="halo"><stop stop-color="#f8d387" stop-opacity=".35"/><stop offset="1" stop-color="#edb456" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="250" cy="277" rx="105" ry="13" fill="#000" opacity=".5"/>
+<circle cx="250" cy="194" r="150" fill="url(#halo)"/>
+<g id="seal" fill="none" stroke="#e4c3ff" opacity="0"><circle cx="250" cy="198" r="128"/><circle cx="250" cy="198" r="113"/><circle cx="250" cy="198" r="97"/><path d="M250 101L334 246H166ZM250 295L166 150H334Z"/><circle id="orbit" cx="250" cy="198" r="120"/><g id="sigils"></g></g>
+<g class="chest">
+<g class="light"><path d="M175 204L120 30H380L325 204Z" fill="url(#beam)"/><ellipse cx="250" cy="197" rx="78" ry="12" fill="#fff0b9"/></g>
+<rect x="165" y="197" width="170" height="77" rx="9" fill="url(#wood)" stroke="#d6b376" stroke-width="3"/>
+<path d="M168 221H332M168 247H332" stroke="#362016" stroke-width="3"/>
+<path d="M177 212Q200 205 223 213M254 234Q280 226 319 236M180 259Q220 253 245 260" fill="none" stroke="#d59a57" opacity=".35"/>
+<g fill="url(#metal)"><path d="M193 198H208V272H193Z"/><path d="M292 198H307V272H292Z"/></g>
+<g fill="#594020" stroke="#dfc68e"><circle cx="200" cy="210" r="3"/><circle cx="200" cy="258" r="3"/><circle cx="300" cy="210" r="3"/><circle cx="300" cy="258" r="3"/></g>
+<g class="lid"><path d="M160 193V168Q160 144 185 144H315Q340 144 340 168V193Z" fill="url(#wood)" stroke="#ebcc8f" stroke-width="3"/><path d="M162 174H338" stroke="#50301b" stroke-width="2"/><path d="M191 146H208V193H191ZM292 146H309V193H292Z" fill="url(#metal)"/><g fill="#594020"><circle cx="200" cy="156" r="3"/><circle cx="300" cy="156" r="3"/><circle cx="200" cy="184" r="3"/><circle cx="300" cy="184" r="3"/></g></g>
+<rect x="235" y="190" width="30" height="36" rx="5" fill="url(#metal)" stroke="#ffe5ad"/><circle cx="250" cy="202" r="5" fill="#40291b"/><path d="M248 203H252L254 215H246Z" fill="#40291b"/>
+<g id="jewel" opacity="0"><path d="M177 205H191L177 219ZM323 205H309L323 219ZM177 266H191L177 252ZM323 266H309L323 252Z" fill="url(#metal)"/><path d="M250 232L263 245L250 258L237 245Z" fill="#b279ef" stroke="#edd2ff"/><path d="M250 235L241 245" stroke="white"/><path d="M227 240C215 217 182 216 187 235C192 250 212 231 198 228M273 240C285 217 318 216 313 235C308 250 288 231 302 228M228 255Q209 271 191 254M272 255Q291 271 309 254" fill="none" stroke="url(#metal)" stroke-width="3"/><g id="crown" fill="url(#metal)"><path d="M220 178L212 153L234 164L250 142L266 164L288 153L280 178Z"/><circle cx="250" cy="164" r="5" fill="#79ebf4"/></g></g>
+</g>
+<g class="light spark" fill="#ffe9b7"><path d="M147 100l3 10 10 3-10 3-3 10-3-10-10-3 10-3ZM350 126l3 10 10 3-10 3-3 10-3-10-10-3 10-3ZM224 55l3 10 10 3-10 3-3 10-3-10-10-3 10-3Z"/><circle cx="185" cy="74" r="3"/><circle cx="315" cy="67" r="3"/><circle cx="370" cy="91" r="2"/></g>
+</svg>
+<button id="play">Ouvrir le coffre</button>
+<p id="status" aria-live="polite">Vos exploits méritent un cadeau.</p>
+<p class="note">Aperçu de mouvement · aucune récompense réelle n’est réclamée ici.</p>
+</main>
+<script>
+const scene=document.querySelector('main'),button=document.querySelector('#play'),status=document.querySelector('#status');let timer;
+const ns='http://www.w3.org/2000/svg',sigils=document.querySelector('#sigils');
+for(let i=0;i<48;i++){const a=i*Math.PI/24,r=i%4===0?127:123;const line=document.createElementNS(ns,'line');Object.entries({x1:250+Math.cos(a)*117,y1:198+Math.sin(a)*117,x2:250+Math.cos(a)*r,y2:198+Math.sin(a)*r}).forEach(([k,v])=>line.setAttribute(k,v));sigils.append(line)}
+for(let i=0;i<8;i++){const g=document.createElementNS(ns,'g');g.setAttribute('transform',`rotate(${i*45} 250 198)`);const path=document.createElementNS(ns,'path');path.setAttribute('d','M250 91a4 4 0 1 0 0-8a4 4 0 1 0 0 8M250 91v8m-4-4h8');g.append(path);sigils.append(g)}
+document.querySelectorAll('[data-tier]').forEach(choice=>choice.addEventListener('click',()=>{
+document.querySelectorAll('[data-tier]').forEach(item=>item.setAttribute('aria-pressed',String(item===choice)));
+clearTimeout(timer);scene.classList.remove('opening');button.disabled=false;button.textContent='Ouvrir le coffre';
+const tier=choice.dataset.tier,epic=tier==='epic',premium=tier==='premium';
+const light=premium?'#79ebf4':epic?'#d1a1ff':'#ffd995';
+document.querySelectorAll('#beam stop,#halo stop').forEach(stop=>stop.setAttribute('stop-color',light));
+document.querySelector('.light ellipse').setAttribute('fill',light);
+document.querySelector('.spark').setAttribute('fill',light);
+document.querySelector('#seal').setAttribute('stroke',light);
+document.querySelector('#crown').setAttribute('opacity',premium?'1':'0');
+document.querySelector('#tier-label').textContent=premium?'Premium · bordures animées':epic?'Épique · bordures sans animation':'Classique · stickers et portraits classiques';
+document.querySelector('#seal').setAttribute('opacity',tier==='classic'?'0':'.55');
+document.querySelector('#orbit').setAttribute('opacity',premium?'1':'0');
+document.querySelector('#jewel').setAttribute('opacity',tier==='classic'?'0':'1');
+document.querySelector('#jewel path:nth-child(2)').setAttribute('fill',premium?'#63e4eb':'#b279ef');
+const wood=document.querySelectorAll('#wood stop');wood[0].setAttribute('stop-color',premium?'#407d91':epic?'#9a75b6':'#ad7139');wood[1].setAttribute('stop-color',premium?'#11263e':epic?'#251932':'#422516');
+document.querySelector('#seal').style.animation=premium&&!matchMedia('(prefers-reduced-motion:reduce)').matches?'orbit 12s linear infinite':'none';
+status.textContent='Vos exploits méritent un cadeau.';
+}));
+button.addEventListener('click',()=>{clearTimeout(timer);scene.classList.remove('opening');void scene.offsetWidth;scene.classList.add('opening');button.disabled=true;status.textContent='Le coffre s’ouvre…';timer=setTimeout(()=>{button.disabled=false;button.textContent='Rejouer l’animation';status.textContent='Vos trésors sont révélés !';},2800)});
+// Show the decorated version immediately instead of hiding it behind a tab.
+document.querySelector('[data-tier=premium]').click();
+button.click();
+</script>
+</html>

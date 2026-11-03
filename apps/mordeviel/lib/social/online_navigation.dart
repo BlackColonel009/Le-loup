@@ -20,14 +20,15 @@ Future<void> openOnlineLobby(
     session = await SocialApi.instance.session();
   }
   if (!context.mounted || session == null) return;
-  final nickname = await chooseRoomNickname(context);
-  if (!context.mounted || nickname == null) return;
+  final identity = await chooseRoomIdentity(context, asHost: code == null);
+  if (!context.mounted || identity == null) return;
   await Navigator.of(context).push(
     MaterialPageRoute<void>(
       builder: (_) => LocalLobbyScreen(
         online: true,
         initialCode: code,
-        initialNickname: nickname,
+        initialNickname: identity.nickname,
+        initialAppearance: identity.appearance,
         communityToken: session!.token,
         autoStart: true,
         publicRoom: publicRoom,

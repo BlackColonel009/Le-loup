@@ -8,6 +8,9 @@ Future<bool> prepareRoomContent(
 }) async {
   final profile = room['narration_profile'] as String? ?? 'classic_male';
   final required = <String>[
+    if (room['visual_pack'] == 'intense' ||
+        ((room['card_styles'] as Map?)?.values.contains('intense') ?? false))
+      'intense-cards',
     if (room['visual_pack'] != 'horror' &&
         ((room['card_styles'] as Map?)?.values.contains('horror') ?? false))
       'horror-cards',

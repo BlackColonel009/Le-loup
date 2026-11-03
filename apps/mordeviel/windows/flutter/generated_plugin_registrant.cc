@@ -12,6 +12,7 @@
 #include <flutter_secure_storage_windows/flutter_secure_storage_windows_plugin.h>
 #include <flutter_webrtc/flutter_web_r_t_c_plugin.h>
 #include <livekit_client/live_kit_plugin.h>
+#include <url_launcher_windows/url_launcher_windows.h>
 #include <video_player_win/video_player_win_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
@@ -27,6 +28,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FlutterWebRTCPlugin"));
   LiveKitPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("LiveKitPlugin"));
+  UrlLauncherWindowsRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("UrlLauncherWindows"));
   VideoPlayerWinPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("VideoPlayerWinPluginCApi"));
 }

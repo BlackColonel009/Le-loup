@@ -5,6 +5,10 @@ import '../social/social_api.dart';
 import '../community/community_screen.dart';
 import 'challenge_card.dart';
 import 'challenge_sounds.dart';
+import 'reward_claim_dialog.dart';
+import '../social/social_service.dart';
+import '../profile/avatar_gallery.dart';
+import '../services/public_content.dart';
 
 class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({
@@ -12,9 +16,11 @@ class ChallengesScreen extends StatefulWidget {
     this.matchId,
     this.trainingReason,
     this.initialData,
+    this.autoPresentRewards = true,
   });
   final String? matchId, trainingReason;
   final Map<String, dynamic>? initialData;
+  final bool autoPresentRewards;
   @override
   State<ChallengesScreen> createState() => _ChallengesScreenState();
 }
@@ -24,6 +30,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   String? _error;
   bool _busy = true, _all = false, _sounded = false;
   bool _requiresLogin = false;
+  bool _rewardsOffered = false, _claimDialogOpen = false;
   String _filter = 'Tous';
   bool get _recap => widget.matchId != null && !_all;
   @override
@@ -50,6 +57,14 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
             );
             break;
           } on SocialError catch (error) {
+            if (!_recap && error.status == 401) {
+              try {
+                data = await loadPublicContent('challenges/catalog');
+                break;
+              } catch (_) {
+                throw error;
+              }
+            }
             if (!_recap || error.status != 404 || attempt == 3) rethrow;
             await Future<void>.delayed(
               Duration(milliseconds: 350 * (attempt + 1)),
@@ -63,7 +78,18 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
         _data = data;
         _busy = false;
       });
-      if (_recap && !_sounded && (data?['changes'] as List? ?? []).isNotEmpty) {
+      if (widget.autoPresentRewards &&
+          !_rewardsOffered &&
+          _pending.isNotEmpty) {
+        _rewardsOffered = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _claimRewards();
+        });
+      }
+      if (_recap &&
+          !_sounded &&
+          _pending.isEmpty &&
+          (data?['changes'] as List? ?? []).isNotEmpty) {
         _sounded = true;
         ChallengeSounds.play();
         final completed = (data!['changes'] as List).any(
@@ -87,6 +113,58 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
               : 'Impossible de charger les défis. Vos progrès enregistrés sont conservés.';
         });
       }
+    }
+  }
+
+  List<Map> get _pending =>
+      (_data?['pending_challenges'] as List? ?? []).cast<Map>();
+
+  Future<void> _claimRewards([List<Map>? selected]) async {
+    if (_claimDialogOpen) return;
+    final pending = selected ?? _pending;
+    if (pending.isEmpty) return;
+    _claimDialogOpen = true;
+    try {
+      await showRewardClaimDialog(
+        context,
+        challenges: pending,
+        claim: (ids) => SocialApi.instance.request(
+          '/challenges/claim',
+          method: 'POST',
+          body: {'challenge_ids': ids},
+        ),
+        onClaimed: (result) {
+          SocialService.instance.updateChallengeRewards(
+            result['pending_count'] as int? ?? 0,
+            forUser: result['user_id'] as int?,
+          );
+          if (!mounted) return;
+          final current = {
+            for (final ch in (result['challenges'] as List).cast<Map>())
+              ch['id']: ch,
+          };
+          setState(
+            () => _data = {
+              ...?_data,
+              for (final key in ['challenges', 'changes'])
+                if (_data?[key] is List)
+                  key: [
+                    for (final ch in (_data![key] as List).cast<Map>())
+                      {...ch, ...?current[ch['id']]},
+                  ],
+              'pending_challenges': current.values
+                  .where(
+                    (ch) =>
+                        ch['completed_at'] != null && ch['claimed_at'] == null,
+                  )
+                  .toList(),
+              'pending_count': result['pending_count'],
+            },
+          );
+        },
+      );
+    } finally {
+      _claimDialogOpen = false;
     }
   }
 
@@ -283,6 +361,71 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     ),
                   ],
                   if (!_busy && _error == null) ...[
+                    if (_data?['preview'] == true)
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Connectez votre compte pour conserver vos progrès et réclamer vos cadeaux.',
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              FilledButton.icon(
+                                onPressed: () async {
+                                  await Navigator.of(context).push<void>(
+                                    MaterialPageRoute(
+                                      builder: (_) => const CommunityScreen(),
+                                    ),
+                                  );
+                                  if (mounted) _load();
+                                },
+                                icon: const Icon(Icons.login),
+                                label: const Text(
+                                  'Me connecter à la communauté',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (_pending.isNotEmpty)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 18),
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: challengeGold.withValues(alpha: .13),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: challengeGold.withValues(alpha: .6),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Text(
+                              'VOS CADEAUX VOUS ATTENDENT',
+                              style: TextStyle(
+                                color: challengeGold,
+                                fontSize: 12,
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Bravo ! Des défis sont terminés. Récupérez vos récompenses pour les ajouter à votre collection.',
+                            ),
+                            const SizedBox(height: 14),
+                            FilledButton.icon(
+                              onPressed: () => _claimRewards(),
+                              icon: const Icon(Icons.redeem),
+                              label: const Text('Réclamer mes récompenses'),
+                            ),
+                          ],
+                        ),
+                      ),
                     if (widget.trainingReason != null ||
                         _data?['eligible'] == false)
                       Card(
@@ -336,6 +479,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         animate: _recap,
                         delay: Duration(milliseconds: (i * 120).clamp(0, 700)),
                         onChoose: () => _choose(visible[i]),
+                        onClaim: () => _claimRewards([visible[i]]),
                       ),
                   ],
                   if (_recap)
@@ -350,6 +494,16 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                       icon: const Icon(Icons.menu_book),
                       label: const Text('Consulter tous mes défis'),
                     ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const AvatarGalleryScreen(),
+                      ),
+                    ),
+                    icon: const Icon(Icons.face_retouching_natural),
+                    label: const Text('Mes portraits et bordures'),
+                  ),
                   const SizedBox(height: 12),
                   FilledButton.icon(
                     onPressed: () => Navigator.pop(context),

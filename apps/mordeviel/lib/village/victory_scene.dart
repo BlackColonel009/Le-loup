@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../cards/card_gallery.dart';
 import '../cards/classic_role.dart';
@@ -11,6 +12,7 @@ Future<void> showVictory(
   required List players,
   CardAmbience ambience = CardAmbience.classic,
   String continueLabel = 'Voir les rôles et retourner au village',
+  Future<void> Function(BuildContext)? onRewardsReady,
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
@@ -20,6 +22,7 @@ Future<void> showVictory(
     players: players,
     ambience: ambience,
     continueLabel: continueLabel,
+    onRewardsReady: onRewardsReady,
   ),
 );
 
@@ -30,11 +33,13 @@ class VictoryScene extends StatefulWidget {
     required this.players,
     this.ambience = CardAmbience.classic,
     this.continueLabel = 'Voir les rôles et retourner au village',
+    this.onRewardsReady,
   });
   final Map<String, dynamic> game;
   final List players;
   final CardAmbience ambience;
   final String continueLabel;
+  final Future<void> Function(BuildContext)? onRewardsReady;
   @override
   State<VictoryScene> createState() => _VictorySceneState();
 }
@@ -45,6 +50,8 @@ class _VictorySceneState extends State<VictoryScene>
     vsync: this,
     duration: const Duration(milliseconds: 2800),
   );
+  Timer? _rewardsDelay;
+  bool _scheduledRewards = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -53,10 +60,24 @@ class _VictorySceneState extends State<VictoryScene>
     } else if (_animation.value == 0) {
       _animation.forward();
     }
+    if (!_scheduledRewards && widget.onRewardsReady != null) {
+      _scheduledRewards = true;
+      _rewardsDelay = Timer(
+        Duration(
+          milliseconds: MediaQuery.disableAnimationsOf(context) ? 700 : 2800,
+        ),
+        () {
+          if (mounted && ModalRoute.of(context)?.isCurrent != false) {
+            unawaited(widget.onRewardsReady!(context));
+          }
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
+    _rewardsDelay?.cancel();
     _animation.dispose();
     super.dispose();
   }

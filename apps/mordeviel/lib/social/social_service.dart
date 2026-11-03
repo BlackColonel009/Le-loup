@@ -7,18 +7,29 @@ import '../services/game_notification_sound.dart';
 class SocialService extends ChangeNotifier with WidgetsBindingObserver {
   static final instance = SocialService();
   Timer? _timer;
-  bool _busy = false, _active = true;
+  bool _active = true;
+  Future<void>? _refreshJob;
   int _listeners = 0;
   int _epoch = 0;
+  int _rewardRevision = 0;
   Future<void>? _phoneSync;
   Future<void> _presenceWrite = Future.value();
   final _announcements = <String>[];
   final _presenceAlertIds = <int>{};
   String? _deviceId;
   bool signedIn = false;
-  int friendRequests = 0, invitations = 0;
+  String? nickname;
+  Map<String, dynamic>? avatar;
+  int friendRequests = 0, invitations = 0, challengeRewards = 0;
   int? userId;
-  bool get hasNews => friendRequests + invitations > 0;
+  bool get hasNews => friendRequests + invitations + challengeRewards > 0;
+  void updateChallengeRewards(int value, {int? forUser}) {
+    if (forUser != null && forUser != userId) return;
+    _rewardRevision++;
+    challengeRewards = value;
+    notifyListeners();
+  }
+
   String? takePresenceAnnouncement() {
     if (!_active || _announcements.isEmpty) return null;
     final names = _announcements.take(3).toList();
@@ -102,11 +113,24 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  Future<void> refresh() async {
-    if (_busy) return;
-    _busy = true;
+  Future<void> refresh({bool afterCurrent = false}) {
+    final running = _refreshJob;
+    if (running != null) {
+      return afterCurrent ? running.then((_) => refresh()) : running;
+    }
+    return _refreshJob = _refresh().whenComplete(() => _refreshJob = null);
+  }
+
+  Future<void> _refresh() async {
     final epoch = _epoch;
+    final rewardRevision = _rewardRevision;
     try {
+      final session = await SocialApi.instance.session();
+      if (epoch != _epoch) return;
+      if (nickname == null && session != null) {
+        nickname = session.nickname;
+        notifyListeners();
+      }
       final data = await SocialApi.instance.request('/social/summary');
       if (epoch != _epoch) return;
       if (userId != data['user_id']) {
@@ -115,8 +139,15 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
       }
       signedIn = true;
       userId = data['user_id'] as int;
+      nickname = data['nickname'] as String? ?? session?.nickname;
+      avatar = data['avatar'] is Map
+          ? Map<String, dynamic>.from(data['avatar'] as Map)
+          : null;
       friendRequests = data['friend_requests'] as int;
       invitations = data['invitations'] as int;
+      if (rewardRevision == _rewardRevision) {
+        challengeRewards = data['challenge_rewards'] as int? ?? 0;
+      }
       final sound = data['game_notification_sound'];
       if (sound is String) {
         try {
@@ -148,11 +179,13 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
         _presenceAlertIds.clear();
         signedIn = false;
         userId = null;
+        nickname = null;
+        avatar = null;
         friendRequests = 0;
         invitations = 0;
+        challengeRewards = 0;
       }
     } finally {
-      _busy = false;
       notifyListeners();
     }
   }
@@ -165,8 +198,11 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
     final offline = _presence('offline');
     signedIn = false;
     userId = null;
+    nickname = null;
+    avatar = null;
     friendRequests = 0;
     invitations = 0;
+    challengeRewards = 0;
     notifyListeners();
     try {
       // Presence is advisory: a slow heartbeat must not hold the account open.

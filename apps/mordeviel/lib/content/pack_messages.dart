@@ -6,6 +6,7 @@ String packLabel(String id) =>
       'avatars-rewards': 'Profils · Médaillons de légende',
       'borders-rewards': 'Bordures · Cadres de légende',
       'horror-cards': 'Horreur · Cartes',
+      'intense-cards': 'Intense · Cartes',
       'horror-village': 'Horreur · Village et sentences',
       'horror-ambience': 'Horreur · Sons d’ambiance',
       'voice-intense-male': 'Voix · Homme intense',
@@ -26,6 +27,7 @@ String? downloadablePackForAsset(String asset) {
   if (asset.contains('/stickers/rewards/')) return 'stickers-rewards';
   if (asset.contains('/stickers/')) return 'stickers-classic';
   if (asset.contains('/cards/horror/')) return 'horror-cards';
+  if (asset.contains('/cards/intense/')) return 'intense-cards';
   if (asset.contains('/village/horror/')) return 'horror-village';
   if (asset.contains('/audio/horror/')) return 'horror-ambience';
   final match = RegExp(r'(?:^|/)neural/([^/]+)/').firstMatch(asset);

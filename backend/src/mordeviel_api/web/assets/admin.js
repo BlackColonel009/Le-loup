@@ -54,7 +54,7 @@ $('#download-form').addEventListener('submit',event=>{
       download_version:$('#download-version').value.trim(),
       download_enabled:$('#download-enabled').checked
     },adminToken,'PUT');
-    setMessage(data.download_enabled ? 'Lien publié : les boutons de la vitrine ouvrent ce téléchargement.' : 'Lien enregistré. Les boutons de téléchargement sont désactivés.',false,'#download-status');
+    setMessage(data.download_enabled ? 'Version publiée : la vitrine et l’alerte de mise à jour Android utilisent maintenant ce lien.' : 'Lien enregistré. Les téléchargements et l’alerte de mise à jour sont désactivés.',false,'#download-status');
   },'#download-status');
 });
 

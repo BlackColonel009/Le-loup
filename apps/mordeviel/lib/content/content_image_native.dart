@@ -99,6 +99,7 @@ class _ContentImageState extends State<ContentImage> {
         );
       }
       if (widget.asset.contains('/avatars/') ||
+          widget.asset.contains('/cards/intense/') ||
           widget.asset.contains('/borders/') ||
           widget.asset.contains('/stickers/') ||
           widget.asset.contains('/horror/')) {

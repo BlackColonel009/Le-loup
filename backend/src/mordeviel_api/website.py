@@ -1,6 +1,8 @@
 """Buildless public website, shipped with the API package."""
 
+import hashlib
 import os
+import re
 from pathlib import Path
 from typing import Annotated
 from urllib.parse import urlsplit
@@ -80,6 +82,18 @@ def download_settings(db):
     }
 
 
+@router.get('/app-update')
+def app_update(*, db: Annotated[Store, Depends(store)]):
+    data = download_settings(db)
+    version, url = data['download_version'], data['download_url']
+    enabled = data['download_enabled'] and bool(re.fullmatch(r'\d+\.\d+\.\d+(?:\+\d+)?', version)) and bool(url)
+    return JSONResponse({
+        'enabled': enabled, 'platform': 'android', 'required': True,
+        'version': version if enabled else '', 'download_url': url if enabled else '',
+        'release_id': hashlib.sha256(f'{version}\n{url}'.encode()).hexdigest() if enabled else '',
+    }, headers={**HEADERS, 'Cache-Control': 'no-store'})
+
+
 class DownloadSettings(BaseModel):
     download_url: str = Field(default="", max_length=2048)
     download_enabled: bool = False
@@ -105,6 +119,8 @@ class DownloadSettings(BaseModel):
             _ = url.port
         if self.download_enabled and not self.download_url:
             raise ValueError("Ajoute le lien avant d’activer le téléchargement.")
+        if self.download_enabled and not re.fullmatch(r'\d+\.\d+\.\d+(?:\+\d+)?', self.download_version):
+            raise ValueError('Indique la version réelle de l’APK, par exemple 0.2.0+2. Augmente ce numéro à chaque mise à jour.')
         return self
 
 

@@ -9,6 +9,7 @@ import '../services/immersion_preferences.dart';
 import '../audio/card_foley.dart';
 import 'package:local_host/card_variants.dart' show cardVariant;
 import '../profile/avatar_gallery.dart';
+import '../content/require_packs.dart';
 
 enum CardAmbience {
   classic('Classique', 'classic'),
@@ -93,7 +94,7 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                       leading: const Icon(Icons.face_retouching_natural),
                       title: const Text('Découvrir les avatars des joueurs'),
                       subtitle: const Text(
-                        '4 portraits Classiques disponibles · défis à venir',
+                        '4 portraits Classiques disponibles · cadeaux de défis',
                       ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Navigator.push(
@@ -131,8 +132,23 @@ class _CardGalleryScreenState extends State<CardGalleryScreen> {
                         ChoiceChip(
                           label: Text(ambience.label),
                           selected: _ambience == ambience,
-                          onSelected: (_) =>
-                              setState(() => _ambience = ambience),
+                          onSelected: (_) async {
+                            final packs = switch (ambience) {
+                              CardAmbience.intense => ['intense-cards'],
+                              CardAmbience.horror => ['horror-cards'],
+                              _ => <String>[],
+                            };
+                            if (!await ensurePacksAvailable(
+                                  context,
+                                  packs,
+                                  reason:
+                                      'Installe les cartes de cette collection pour les découvrir.',
+                                ) ||
+                                !mounted) {
+                              return;
+                            }
+                            setState(() => _ambience = ambience);
+                          },
                         ),
                     ],
                   ),
@@ -656,12 +672,13 @@ class RoleCardFront extends StatelessWidget {
           builder: (context, size) => Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
+              ContentImage(
                 role.id == 'villager' && role.feminine
                     ? 'assets/cards/intense/villager_female.png'
                     : ['sisters', 'mayor', 'scapegoat'].contains(role.id)
                     ? 'assets/cards/intense/${role.id}_intense.png'
                     : 'assets/cards/intense/${role.id}_intense.jpg',
+                fallbackAsset: role.asset,
                 cacheWidth: 864,
                 fit: BoxFit.fill,
                 excludeFromSemantics: true,

@@ -6,7 +6,7 @@ Les 42 exemples de Logan sont maintenant décrits dans `shared/challenges/catalo
 
 - Profil personnel → **Mes défis et mes récompenses**.
 - Galerie des portraits → **Consulter mes défis**.
-- Fin d'une partie en ligne : révélations et victoire, puis **Continuer · voir mes défis**. Le bilan présente les seuls défis qui ont progressé pendant cette partie, la valeur avant/après et les récompenses acquises. Le bouton **Consulter tous mes défis** ouvre le carnet complet.
+- Fin d'une partie en ligne : révélations et victoire, puis un **modal automatique de cadeaux** après l'animation de victoire. Le coffre scintille, présente les objets disponibles et propose **Réclamer mes récompenses**. Le clic attend la confirmation serveur ; le coffre s'ouvre alors, des étoiles jaillissent et le message **Ces trésors sont à vous !** confirme la réception. Le bilan reste accessible ensuite avec les valeurs avant/après.
 - Le MDJ ne reçoit pas de victoire ni de défi de rôle pour une partie qu'il anime.
 - Les joueurs éliminés avant la conclusion restent éligibles. Quitter l'écran du bilan ne fait pas perdre les récompenses : elles sont déjà enregistrées.
 - Un joueur sans compte voit une invitation à se connecter à la communauté.
@@ -37,9 +37,11 @@ Les défis de victoire personnelle proches (Loup Blanc et Joueur de Flûte) rest
 
 ## Récompenses et permanence
 
-La vérification d'un nouveau compte accorde le cadeau de bienvenue : bordure **Cercle du village**, portrait **Deux Sœurs** et sticker **Villageois — Soupçon**. Les quatre portraits de départ sont conservés. Aucun portrait ou cadre n'est équipé automatiquement en remplacement du choix du joueur. Les anciens comptes reçoivent ce cadeau au premier accès au carnet ou à la fin d'une nouvelle partie.
+La vérification d'un nouveau compte rend disponible le cadeau de bienvenue : bordure **Cercle du village**, portrait **Deux Sœurs** et sticker **Villageois — Soupçon**. Il faut maintenant le **réclamer** pour ajouter ces trois objets à la collection. Les quatre portraits de départ sont conservés. Aucun portrait ou cadre n'est équipé automatiquement en remplacement du choix du joueur. Les anciens comptes voient ce cadeau au premier accès au carnet ou à la fin d'une nouvelle partie.
 
-Le défi Habitué du village propose un portrait au choix parmi Chaman, Sœur de bataille et Hérétique. La sélection est personnelle, permanente et unique. Les autres récompenses sont attribuées automatiquement à l'accomplissement du défi. Les droits sont inscrits dans les tables existantes `avatar_unlocks`, `border_unlocks` et `collection_owned`, avec une provenance `challenge:<identifiant>`.
+Le défi Habitué du village propose un portrait au choix parmi Chaman, Sœur de bataille et Hérétique. Après récupération du cadeau, son bouton **Choisir mon portrait** permet une sélection personnelle, permanente et unique. Les autres récompenses sont ajoutées lors de la réclamation. Les droits sont inscrits dans les tables existantes `avatar_unlocks`, `border_unlocks` et `collection_owned`, avec une provenance `challenge:<identifiant>`.
+
+**Plus tard** ferme le modal sans perdre le cadeau. Un bandeau et les boutons de chaque défi permettent de le retrouver. Un badge persiste dans le profil de communauté, le carnet personnel et l'entrée sociale de l'accueil. Une erreur réseau laisse la récupération disponible ; deux clics simultanés ne créent qu'une attribution. La migration ajoute `claimed_at` aux progrès existants. Les objets déjà reçus avant cette modification restent utilisables et leur confirmation ne les duplique pas.
 
 Les fichiers des avatars, des cadres illustrés et des stickers restent dans leurs packs téléchargeables. **Gagner l'objet accorde le droit ; installer le pack fournit l'image.** Le téléchargement d'un pack seul ne donne aucun déblocage supplémentaire. Certaines images de réserve restent verrouillées pour de prochains défis ou offres.
 
@@ -53,13 +55,14 @@ Une partie commencée pendant une période active conserve son rattachement à c
 
 ## Backend et déploiement
 
-Les nouvelles tables SQLite sont créées au démarrage par `challenges.initialize`. Les récompenses, statistiques et bilans de fin sont validés dans la même transaction. Une même partie ne peut pas être comptée deux fois, même si le serveur reçoit plusieurs instantanés de fin. Chaque bilan est privé et associé au compte ; il inclut les valeurs avant/après afin que l'application puisse animer une progression exacte. La suppression de compte efface aussi ces nouvelles tables personnelles.
+Les nouvelles tables SQLite sont créées au démarrage par `challenges.initialize`. Les progrès, statistiques et bilans de fin sont validés dans la même transaction. La récupération des objets et l'enregistrement de `claimed_at` utilisent ensuite une transaction dédiée, idempotente. Une même partie ne peut pas être comptée deux fois, même si le serveur reçoit plusieurs instantanés de fin. Chaque bilan est privé et associé au compte ; il inclut les valeurs avant/après afin que l'application puisse animer une progression exacte. La suppression de compte efface aussi ces nouvelles tables personnelles.
 
 API :
 
 - `GET /challenges/me` — carnet personnel.
 - `GET /challenges/matches/{match_id}` — bilan d'une partie du compte.
 - `POST /challenges/choices/{challenge_id}` — choix d'un portrait réellement gagné.
+- `POST /challenges/claim` — récupération transactionnelle des cadeaux accomplis, une seule fois.
 - `GET /challenges/admin/events` et `PUT /challenges/admin/events/{id}` — administration protégée.
 
 Sur Contabo, depuis `/var/www/Le-loup`, après le commit/push et le `git pull` habituels :
@@ -73,6 +76,16 @@ Aucune nouvelle dépendance ni variable `.env` n'est requise. Les packs de profi
 
 ## Validation
 
-Tests backend : confidentialité, attribution automatique, une seule attribution, absence de progrès en entraînement, progression 1/2 puis 2/2, droits réels du sticker gagné, choix unique d'avatar, événements et amis. Tests Flutter : remplissage intermédiaire, géométrie d'une jauge à moitié, portrait 320×568 et paysage, entraînement et secret des événements avant la fin. Les scénarios existants des cartes et des profils sont rejoués.
+Tests backend : confidentialité, réclamation unique et transactionnelle, deux clics concurrents, reprise après échec, absence de progrès en entraînement, progression 1/2 puis 2/2, droits réels du sticker récupéré, choix unique d'avatar, événements et amis. Tests Flutter : modal automatique, coffre qui s'ouvre après confirmation, boutons toujours visibles avec vingt cadeaux, erreur réseau et reprise, remplissage intermédiaire, jauge à moitié, portrait 320×568 et paysage, entraînement et secret des événements avant la fin. Les scénarios existants des cartes et des profils sont rejoués.
 
 Aperçu produit par les vrais composants Flutter : `apps/mordeviel/build/previews/challenges-recap.png`.
+
+Aperçus du parcours de récupération : `apps/mordeviel/build/previews/reward-claim-available.png` et `reward-claim-received.png`.
+
+## Accueil et repères (3 novembre 2026)
+
+Le bouton lumineux **Défis & récompenses** se trouve en haut du contenu de l’accueil. Après le hurlement d’entrée, un aperçu refermable présente jusqu’à trois défis : cadeaux disponibles, défis en cours, puis défis à commencer avec une jauge vide. Le Collectionneur conserve sa présentation quotidienne, après cet aperçu. Une absence de réseau ne bloque pas le jeu local. Sans connexion au compte, `GET /challenges/catalog` fournit uniquement les définitions publiques, sans aucun progrès personnel.
+
+La barre supérieure affiche l’avatar équipé (photo ou illustration), sa bordure et ses animations, ainsi que le pseudo du compte. Un menu animé voisin réunit Boutique, Mon cercle, Invitations et Défis. Communauté, téléchargements et son restent accessibles directement. Les demandes d’amis, invitations et cadeaux alimentent les badges lumineux du menu et de ses rubriques ; les packs déjà téléchargés à actualiser et les packs du profil équipé manquants alimentent celui des téléchargements. Après une modification du profil, le portrait est rechargé depuis le serveur. Les effets respectent le réglage de réduction des animations et la mise en arrière-plan.
+
+Vérification supplémentaire : une vraie séquence du moteur Dart (attaque nocturne, vote, victoire du village) est transmise au suivi des comptes, y compris le joueur éliminé et le MDJ. Une deuxième transmission ne recompte pas la partie ; un sticker gagné reste inutilisable avant réclamation et devient envoyable après celle-ci.

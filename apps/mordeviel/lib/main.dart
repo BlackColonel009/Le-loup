@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'lobby.dart';
 import 'audio/classic_audio.dart';
-import 'audio/audio_settings.dart';
 import 'design/game_theme.dart';
 import 'design/opening_screen.dart';
 import 'cards/card_gallery.dart';
-import 'community/community_screen.dart';
-import 'store/store_screen.dart';
 import 'services/maintenance.dart';
-import 'content/downloads_screen.dart';
+import 'services/app_update_gate.dart';
 import 'village/horror_ambience.dart';
 import 'social/online_hub.dart';
-import 'social/social_screens.dart';
 import 'social/admin_bot_launcher.dart';
 import 'store/collector_welcome.dart';
 import 'services/immersion_preferences.dart';
+import 'challenges/challenge_discovery.dart';
+import 'challenges/challenges_screen.dart';
+import 'design/home_top_bar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,10 +66,12 @@ class _EntranceState extends State<_Entrance> {
         ? Duration.zero
         : const Duration(milliseconds: 400),
     child: _opened
-        ? WelcomeScreen(
-            key: const ValueKey('welcome'),
-            checkMaintenance: widget.checkMaintenance,
-            showCollectorOnLaunch: true,
+        ? AppUpdateGate(
+            child: WelcomeScreen(
+              key: const ValueKey('welcome'),
+              checkMaintenance: widget.checkMaintenance,
+              showCollectorOnLaunch: true,
+            ),
           )
         : ListenableBuilder(
             key: const ValueKey('opening'),
@@ -117,7 +118,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future<void> _collectorAfterHowl() async {
     await ClassicAudio.instance.welcomeHowlFinished;
+    if (mounted) await showChallengeDiscovery(context);
     if (mounted) await showDailyCollector(context);
+  }
+
+  Future<void> _openChallenges() async {
+    await Navigator.of(
+      context,
+    ).push<void>(MaterialPageRoute(builder: (_) => const ChallengesScreen()));
+    if (mounted) setState(() => _accountRevision++);
   }
 
   Future<void> _play(
@@ -172,43 +181,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      toolbarHeight: 104,
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            tooltip: 'Communauté',
-            icon: const Icon(Icons.groups_outlined),
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const CommunityScreen(),
-                ),
-              );
-              if (mounted) setState(() => _accountRevision++);
-            },
-          ),
-          IconButton(
-            tooltip: 'Boutique',
-            icon: const Icon(Icons.storefront_outlined),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const StoreScreen()),
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        const SocialActionBar(),
-        IconButton(
-          tooltip: 'Mes téléchargements',
-          icon: const Icon(Icons.download_for_offline_outlined),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => const DownloadsScreen()),
-          ),
-        ),
-        const AudioSettingsButton(),
-      ],
+    appBar: HomeTopBar(
+      onAccountChanged: () {
+        if (mounted) setState(() => _accountRevision++);
+      },
     ),
     body: TavernBackground(
       dim: .35,
@@ -220,6 +196,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             final identity = Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                ChallengesHomeShortcut(onTap: _openChallenges),
+                const SizedBox(height: 12),
                 SizedBox(
                   height: wide ? 12 : (size.maxHeight * .04).clamp(12, 40),
                 ),

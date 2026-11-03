@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 
 /// A room alias is never saved to the community account or reused automatically.
-Future<String?> chooseRoomNickname(BuildContext context) async {
+class RoomIdentity {
+  const RoomIdentity(this.nickname, this.appearance);
+  final String nickname;
+  final String? appearance;
+}
+
+Future<String?> chooseRoomNickname(BuildContext context) async =>
+    (await chooseRoomIdentity(context))?.nickname;
+
+Future<RoomIdentity?> chooseRoomIdentity(
+  BuildContext context, {
+  bool asHost = false,
+}) async {
   final controller = TextEditingController();
+  String? appearance;
   final form = GlobalKey<FormState>();
-  final result = await showDialog<String>(
+  final result = await showDialog<RoomIdentity>(
     context: context,
     builder: (dialog) {
       void submit() {
         if (form.currentState!.validate()) {
-          Navigator.pop(dialog, controller.text.trim());
+          Navigator.pop(
+            dialog,
+            RoomIdentity(controller.text.trim(), appearance),
+          );
         }
       }
 
@@ -32,7 +48,7 @@ Future<String?> chooseRoomNickname(BuildContext context) async {
                   autofocus: true,
                   maxLength: 24,
                   textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Pseudo de partie',
                     border: OutlineInputBorder(),
@@ -45,6 +61,37 @@ Future<String?> chooseRoomNickname(BuildContext context) async {
                       : null,
                   onFieldSubmitted: (_) => submit(),
                 ),
+                if (!asHost) ...[
+                  const SizedBox(height: 14),
+                  DropdownButtonFormField<String>(
+                    key: const ValueKey('room-appearance'),
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Votre carte de village',
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: const Text('Villageois ou Villageoise ?'),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'male',
+                        child: Text('Masculin · Villageois'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'female',
+                        child: Text('Féminin · Villageoise'),
+                      ),
+                    ],
+                    validator: (value) => value == null
+                        ? 'Choisis Villageois ou Villageoise.'
+                        : null,
+                    onChanged: (value) => appearance = value,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Ce choix détermine votre carte de Simple Villageois, sans changer ses pouvoirs.',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
               ],
             ),
           ),

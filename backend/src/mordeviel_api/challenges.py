@@ -32,6 +32,9 @@ def initialize(db):
         CREATE TABLE IF NOT EXISTS challenge_room_events(match_id TEXT NOT NULL,event_id TEXT NOT NULL,PRIMARY KEY(match_id,event_id));
         CREATE INDEX IF NOT EXISTS challenge_match_user ON challenge_matches(user_id,finished);
         ''')
+        columns = {row['name'] for row in c.execute('PRAGMA table_info(challenge_progress)')}
+        if 'claimed_at' not in columns:
+            c.execute('ALTER TABLE challenge_progress ADD COLUMN claimed_at REAL')
 
 
 def reward_data(reward):
@@ -85,12 +88,12 @@ def reconcile(c, uid):
             continue
         completed = time.time() if value >= challenge['target'] else None
         c.execute('INSERT INTO challenge_progress(user_id,challenge_id,value,completed) VALUES(?,?,?,?) ON CONFLICT(user_id,challenge_id) DO UPDATE SET value=excluded.value,completed=excluded.completed', (uid, challenge['id'], value, completed))
-        if completed:
-            grant(c, uid, challenge)
 
 
 def ensure_user(c, uid):
     if not c.execute('SELECT 1 FROM users WHERE id=? AND email_verified=1 AND banned=0', (uid,)).fetchone():
+        return
+    if c.execute('SELECT 1 FROM challenge_users WHERE user_id=?', (uid,)).fetchone():
         return
     if not c.execute('INSERT OR IGNORE INTO challenge_users VALUES(?)', (uid,)).rowcount:
         return
@@ -108,7 +111,17 @@ def list_in(c, uid):
     return [{**challenge, 'rewards': [reward_data(r) for r in challenge['rewards']],
              'progress': progress.get(challenge['id'], {}).get('value', 0),
              'completed_at': progress.get(challenge['id'], {}).get('completed'),
+             'claimed_at': progress.get(challenge['id'], {}).get('claimed_at'),
              'choice': progress.get(challenge['id'], {}).get('choice')} for challenge in CATALOG]
+
+
+def pending_count(c, uid):
+    ensure_user(c, uid)
+    return c.execute('SELECT COUNT(*) FROM challenge_progress WHERE user_id=? AND completed IS NOT NULL AND claimed_at IS NULL', (uid,)).fetchone()[0]
+
+
+def pending_in(c, uid):
+    return [ch for ch in list_in(c, uid) if ch['completed_at'] and not ch['claimed_at']]
 
 
 def capture_events(c, engine):
@@ -266,10 +279,22 @@ def record_match(c, engine, accounts, practice):
         c.execute('INSERT INTO challenge_matches VALUES(?,?,?,?,?,?,?)', (engine.social_id, uid, engine.snapshot.get('code', ''), time.time(), int(eligible), reason, json.dumps(changes, ensure_ascii=False)))
 
 
+@router.get('/catalog')
+def public_catalog():
+    # Only static definitions. Never borrow another account's cached progress.
+    return {'preview': True, 'challenges': [
+        {**ch, 'rewards': [reward_data(r) for r in ch['rewards']],
+         'progress': 0, 'completed_at': None, 'claimed_at': None, 'choice': None}
+        for ch in CATALOG], 'pending_challenges': [], 'pending_count': 0,
+        'rules': 'Connecte ton compte de la communauté pour enregistrer tes progrès et recevoir tes récompenses.'}
+
+
 @router.get('/me')
 def mine(*, user: User, db: DB):
     with db.db() as c:
-        return {'challenges': list_in(c, user['id']), 'rules': 'Parties en ligne terminées entre joueurs humains. Progrès privés, récompenses permanentes. Les parties locales et avec bots restent des entraînements.'}
+        items = list_in(c, user['id'])
+        pending = [ch for ch in items if ch['completed_at'] and not ch['claimed_at']]
+        return {'challenges': items, 'pending_challenges': pending, 'pending_count': len(pending), 'rules': 'Parties en ligne terminées entre joueurs humains. Termine un défi, puis réclame sa récompense. Les parties locales et avec bots restent des entraînements.'}
 
 
 @router.get('/matches/{match_id}')
@@ -280,10 +305,41 @@ def result(match_id: str, *, user: User, db: DB):
             raise HTTPException(404, 'Le bilan des défis n’est pas encore disponible pour ce compte.')
         changes = json.loads(row['changes'])
         for ch in changes:
-            current = c.execute('SELECT choice FROM challenge_progress WHERE user_id=? AND challenge_id=?', (user['id'], ch['id'])).fetchone()
+            current = c.execute('SELECT choice,claimed_at FROM challenge_progress WHERE user_id=? AND challenge_id=?', (user['id'], ch['id'])).fetchone()
             if current:
                 ch['choice'] = current['choice']
-        return {'match_id': match_id, 'eligible': bool(row['eligible']), 'reason': row['reason'], 'changes': changes}
+                ch['claimed_at'] = current['claimed_at']
+        pending = pending_in(c, user['id'])
+        return {'match_id': match_id, 'eligible': bool(row['eligible']), 'reason': row['reason'], 'changes': changes, 'pending_challenges': pending, 'pending_count': len(pending)}
+
+
+class Claim(BaseModel):
+    challenge_ids: list[str] | None = Field(default=None, min_length=1, max_length=42)
+
+
+@router.post('/claim')
+def claim(data: Claim, *, user: User, db: DB):
+    """Completion comes from the server; this only collects earned cosmetics."""
+    db.limit(('challenge_claim', user['id']), 60, 300)
+    with db.db() as c:
+        c.execute('BEGIN IMMEDIATE')
+        ensure_user(c, user['id'])
+        available = {ch['id']: ch for ch in list_in(c, user['id'])}
+        ids = list(dict.fromkeys(data.challenge_ids)) if data.challenge_ids is not None else [ident for ident, ch in available.items() if ch['completed_at'] and not ch['claimed_at']]
+        if any(ident not in available or not available[ident]['completed_at'] for ident in ids):
+            raise HTTPException(403, 'Termine ces défis avant de réclamer leurs récompenses.')
+        claimed, rewards = [], []
+        stamp = time.time()
+        for ident in ids:
+            if available[ident]['claimed_at']:
+                continue
+            definition = next(ch for ch in CATALOG if ch['id'] == ident)
+            grant(c, user['id'], definition)
+            c.execute('UPDATE challenge_progress SET claimed_at=? WHERE user_id=? AND challenge_id=? AND claimed_at IS NULL', (stamp, user['id'], ident))
+            claimed.append(ident)
+            rewards.extend(dict(r, challenge_id=ident, challenge_title=definition['title']) for r in available[ident]['rewards'])
+        return {'user_id': user['id'], 'claimed_ids': claimed, 'claimed_count': len(claimed), 'rewards': rewards,
+                'challenges': list_in(c, user['id']), 'pending_count': pending_count(c, user['id'])}
 
 
 class AvatarChoice(BaseModel):
@@ -299,8 +355,8 @@ def choose_avatar(challenge_id: str, data: AvatarChoice, *, user: User, db: DB):
     with db.db() as c:
         c.execute('BEGIN IMMEDIATE')
         row = c.execute('SELECT * FROM challenge_progress WHERE user_id=? AND challenge_id=?', (user['id'], challenge_id)).fetchone()
-        if not row or not row['completed']:
-            raise HTTPException(403, 'Termine ce défi pour choisir ton portrait.')
+        if not row or not row['completed'] or not row['claimed_at']:
+            raise HTTPException(403, 'Réclame la récompense de ce défi avant de choisir ton portrait.')
         if row['choice'] and row['choice'] != data.avatar_id:
             raise HTTPException(409, 'Le portrait de ce défi a déjà été choisi.')
         c.execute('INSERT OR IGNORE INTO avatar_unlocks VALUES(?,?,?)', (user['id'], data.avatar_id, f'challenge:{challenge_id}'))
