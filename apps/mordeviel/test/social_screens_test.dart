@@ -13,6 +13,7 @@ import 'package:mordeviel/design/game_theme.dart';
 import 'package:mordeviel/social/online_hub.dart';
 import 'package:mordeviel/social/social_api.dart';
 import 'package:mordeviel/social/social_screens.dart';
+import 'package:mordeviel/social/friend_search_screen.dart';
 
 class FakeSocialApi extends SocialApi {
   String visibility = 'public',
@@ -297,6 +298,16 @@ void main() {
     await tester.pumpAndSettle();
     expect(api.visibility, 'friends');
     expect(api.actions, contains('preferences'));
+  });
+  testWidgets('Le cercle ouvre la recherche de joueurs', (tester) async {
+    await tester.pumpWidget(app(const SocialHubScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Rechercher un joueur'));
+    await tester.pumpAndSettle();
+    expect(find.byType(FriendSearchScreen), findsOneWidget);
+    expect(find.byKey(const ValueKey('friend-search-input')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
   });
   testWidgets('Accepter une demande met à jour la relation', (tester) async {
     await tester.pumpWidget(app(const SocialHubScreen()));

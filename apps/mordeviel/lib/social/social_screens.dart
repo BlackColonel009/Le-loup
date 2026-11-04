@@ -7,6 +7,7 @@ import '../profile/avatar_gallery.dart';
 import '../community/community_screen.dart';
 import 'social_api.dart';
 import 'private_chat_screen.dart';
+import 'friend_search_screen.dart';
 import 'presence_badge.dart';
 import 'social_service.dart';
 import 'social_notifications.dart';
@@ -542,6 +543,19 @@ class _SocialHubScreenState extends State<SocialHubScreen> {
                         child: ListView(
                           padding: const EdgeInsets.all(16),
                           children: [
+                            FilledButton.icon(
+                              onPressed: () async {
+                                await Navigator.of(context).push<void>(
+                                  MaterialPageRoute(
+                                    builder: (_) => const FriendSearchScreen(),
+                                  ),
+                                );
+                                if (mounted) await _load();
+                              },
+                              icon: const Icon(Icons.person_search_outlined),
+                              label: const Text('Rechercher un joueur'),
+                            ),
+                            const SizedBox(height: 16),
                             if (_friends.isEmpty)
                               _empty(
                                 Icons.people_outline,

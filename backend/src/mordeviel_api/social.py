@@ -5,7 +5,7 @@ import secrets
 import time
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
 from .community import Store, authenticated, store
@@ -249,6 +249,30 @@ def summary(request: Request, *, user: User, db: Database):
             ),
             "game_notification_sound": preference(c, user["id"])["game_notification_sound"],
         }
+
+
+@router.get('/players/search')
+def search_players(*, user: User, db: Database, q: str = Query(min_length=2, max_length=24)):
+    from .avatars import avatar_in
+    query = q.strip().casefold()
+    if len(query) < 2:
+        return {'players': []}
+    uid = user['id']
+    db.limit(('friend-search', uid), 60, 60)
+    with db.db() as c:
+        rows = c.execute('''SELECT u.id,u.nickname,u.role,f.status,f.sender_id FROM users u
+            LEFT JOIN social_friends f ON f.low_id=MIN(u.id,?) AND f.high_id=MAX(u.id,?)
+            WHERE u.id!=? AND u.banned=0 AND u.email_verified=1 AND INSTR(u.name_key,?)>0
+            AND NOT EXISTS (SELECT 1 FROM social_blocks b
+                WHERE (b.user_id=? AND b.target_id=u.id) OR (b.user_id=u.id AND b.target_id=?))
+            ORDER BY CASE WHEN u.name_key=? THEN 0 WHEN INSTR(u.name_key,?)=1 THEN 1 ELSE 2 END,
+                u.name_key,u.id LIMIT 20''', (uid, uid, uid, query, uid, uid, query, query)).fetchall()
+        return {'players': [{
+            'id': row['id'], 'nickname': row['nickname'], 'avatar': avatar_in(c, row['id']),
+            'verified': row['role'] == 'admin', 'is_friend': row['status'] == 'accepted',
+            'relationship': row['status'] or 'none',
+            'request_incoming': row['status'] == 'pending' and row['sender_id'] != uid,
+        } for row in rows]}
 
 
 @router.get("/friends")

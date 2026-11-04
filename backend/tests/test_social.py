@@ -100,6 +100,53 @@ def prefs(api, user, **changes):
     assert response.status_code == 200, response.text
 
 
+def test_friend_search_uses_account_names_and_respects_blocks_and_privacy(api):
+    viewer = account(api, 'Alice')
+    exact, prefix, contains = [account(api, name) for name in ['Logan', 'LoganRD', 'GrandLogan']]
+    unicode_user = account(api, 'KÖSSI')
+    banned, blocked_user, unverified = [account(api, name) for name in ['LoganBanni', 'LoganCache', 'LoganNonVerifie']]
+    with api.app.state.community.db() as c:
+        c.execute('UPDATE users SET banned=1 WHERE id=?', (banned[0],))
+        c.execute('UPDATE users SET email_verified=0 WHERE id=?', (unverified[0],))
+        c.execute("UPDATE users SET role='admin' WHERE id=?", (prefix[0],))
+    assert api.put(f'/social/blocks/{blocked_user[0]}', headers=viewer[1], json={'blocked': True}).status_code == 200
+    prefs(api, exact, stats_visibility='friends')
+    r = room(api, exact[0])
+    r.snapshot['players'] = [{'id': 'p1', 'nickname': 'LoupTemporaire'}]
+    r.accounts['p1'] = exact[0]
+    response = api.get('/social/players/search', params={'q': 'LoGaN'}, headers=viewer[1])
+    assert response.status_code == 200
+    found = response.json()['players']
+    assert [p['id'] for p in found] == [exact[0], prefix[0], contains[0]]
+    assert found[1]['verified'] is True
+    assert all(set(p) == {'id', 'nickname', 'avatar', 'verified', 'is_friend', 'relationship', 'request_incoming'} for p in found)
+    assert api.get('/social/players/search', params={'q': 'kö'}, headers=viewer[1]).json()['players'][0]['id'] == unicode_user[0]
+    for query in ['LoupTemporaire', 'Alice', '%%', '%_', '  ']:
+        assert api.get('/social/players/search', params={'q': query}, headers=viewer[1]).json()['players'] == []
+    # Blocking in either direction prevents discovery.
+    assert api.put(f'/social/blocks/{viewer[0]}', headers=contains[1], json={'blocked': True}).status_code == 200
+    assert len(api.get('/social/players/search', params={'q': 'logan'}, headers=viewer[1]).json()['players']) == 2
+
+
+def test_friend_search_connects_to_requests_and_reports_the_relationship(api):
+    a, b = account(api, 'Alice'), account(api, 'Logan')
+    path = '/social/players/search'
+    assert api.get(path, params={'q': 'Logan'}).status_code == 401
+    for query in ['', 'L', 'x' * 25]:
+        assert api.get(path, params={'q': query}, headers=a[1]).status_code == 422
+    def find(viewer, name):
+        return api.get(path, params={'q': name}, headers=viewer[1]).json()['players'][0]
+    assert find(a, 'logan')['relationship'] == 'none'
+    assert api.post(f'/social/friends/{b[0]}', headers=a[1], json={'action': 'request'}).status_code == 200
+    sent = find(a, 'logan')
+    assert sent['relationship'] == 'pending' and not sent['request_incoming']
+    assert find(b, 'alice')['request_incoming']
+    assert api.get('/social/summary', headers=b[1]).json()['friend_requests'] == 1
+    assert api.post(f'/social/friends/{a[0]}', headers=b[1], json={'action': 'accept'}).status_code == 200
+    assert find(a, 'logan')['is_friend'] is True
+    assert find(b, 'alice')['relationship'] == 'accepted'
+
+
 def test_game_notification_sound_is_account_bound_and_survives_older_clients(api):
     a, b = account(api, "Alice"), account(api, "Bob")
     assert api.get("/social/me", headers=a[1]).json()["preferences"]["game_notification_sound"] == "game"
