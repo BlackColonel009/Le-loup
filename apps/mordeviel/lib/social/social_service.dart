@@ -13,7 +13,7 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
   int _epoch = 0;
   int _rewardRevision = 0;
   Future<void>? _phoneSync;
-  Future<void> _presenceWrite = Future.value();
+  Future<void>? _presenceWrite;
   final _announcements = <String>[];
   final _presenceAlertIds = <int>{};
   String? _deviceId;
@@ -40,19 +40,26 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> _presence(String state) {
     final epoch = _epoch;
-    return _presenceWrite = _presenceWrite.then((_) async {
-      if (epoch != _epoch || (state == 'online' && !_active)) return;
-      try {
-        _deviceId ??= await socialDeviceId();
-        await SocialApi.instance.request(
-          '/social/presence',
-          method: 'POST',
-          body: {'device_id': _deviceId, 'state': state},
-        );
-      } catch (_) {
-        // A lost connection is handled by the server lease expiry.
-      }
-    });
+    late final Future<void> write;
+    write = (_presenceWrite ?? Future<void>.value())
+        .then((_) async {
+          if (epoch != _epoch || (state == 'online' && !_active)) return;
+          try {
+            _deviceId ??= await socialDeviceId();
+            await SocialApi.instance.request(
+              '/social/presence',
+              method: 'POST',
+              body: {'device_id': _deviceId, 'state': state},
+            );
+          } catch (_) {
+            // A lost connection is handled by the server lease expiry.
+          }
+        })
+        .whenComplete(() {
+          if (identical(_presenceWrite, write)) _presenceWrite = null;
+        });
+    _presenceWrite = write;
+    return write;
   }
 
   Future<void> _presenceAlerts(int epoch) async {

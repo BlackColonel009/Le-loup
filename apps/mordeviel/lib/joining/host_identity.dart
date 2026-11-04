@@ -4,11 +4,11 @@ Map<String, dynamic> hostDisplayRoom(Map<String, dynamic> room) {
   if (names == null || names.isEmpty) return room;
   return {
     ...room,
-    'players': [
+    'players': <Map<String, dynamic>>[
       for (final raw in room['players'] as List? ?? [])
         if (raw is Map)
-          {
-            ...raw,
+          <String, dynamic>{
+            ...Map<String, dynamic>.from(raw),
             'game_nickname': raw['game_nickname'] ?? raw['nickname'],
             'nickname':
                 names[raw['id']] is String &&

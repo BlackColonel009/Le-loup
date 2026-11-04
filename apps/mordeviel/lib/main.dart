@@ -15,6 +15,9 @@ import 'challenges/challenge_discovery.dart';
 import 'challenges/challenges_screen.dart';
 import 'design/home_top_bar.dart';
 import 'design/app_version_label.dart';
+import 'social/friend_messages_overlay.dart';
+
+final _appNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +39,7 @@ class MordevielApp extends StatelessWidget {
     title: 'Mordeviel',
     debugShowCheckedModeBanner: false,
     theme: GameTheme.classic,
+    navigatorKey: _appNavigatorKey,
     builder: (context, child) => ListenableBuilder(
       listenable: ImmersionPreferences.instance,
       builder: (context, _) => MediaQuery(
@@ -44,7 +48,10 @@ class MordevielApp extends StatelessWidget {
               MediaQuery.disableAnimationsOf(context) ||
               ImmersionPreferences.instance.lightEffects,
         ),
-        child: child!,
+        child: FriendMessagesOverlay(
+          navigatorKey: _appNavigatorKey,
+          child: child!,
+        ),
       ),
     ),
     home: _Entrance(ready: ready, checkMaintenance: checkMaintenance),

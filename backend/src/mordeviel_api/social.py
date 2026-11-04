@@ -603,6 +603,13 @@ def notification_active(c, n):
     if n["kind"] == "presence":
         from .presence import alert_active
         return alert_active(c, n)
+    if n['kind'] == 'message':
+        return friends(c, n['user_id'], n['actor_id']) and bool(c.execute('''
+            SELECT 1 FROM friend_chat_messages m JOIN friend_chat_windows w
+                ON w.low_id=m.low_id AND w.high_id=m.high_id
+            WHERE m.id=? AND m.sender_id=? AND (m.low_id=? OR m.high_id=?) AND w.expires>?
+                AND m.id>COALESCE((SELECT last_id FROM friend_chat_reads WHERE user_id=? AND friend_id=?),0)
+            ''', (n['source_id'], n['actor_id'], n['user_id'], n['user_id'], time.time(), n['user_id'], n['actor_id'])).fetchone())
     return bool(
         c.execute(
             "SELECT 1 FROM social_friends WHERE low_id=? AND high_id=? AND status='pending' AND sender_id=?",
@@ -639,17 +646,22 @@ def notifications(request: Request, device_id: str, *, user: User, db: Database)
                     (n["id"], device_id),
                 ).fetchone()
             ):
+                message = c.execute('SELECT text FROM friend_chat_messages WHERE id=?', (n['source_id'],)).fetchone() if n['kind'] == 'message' else None
                 pending.append(
                     {
                         "id": n["id"],
                         "kind": n["kind"],
+                        'friend_id': n['actor_id'] if n['kind'] == 'message' else None,
+                        'payload': f"chat:{n['actor_id']}" if n['kind'] == 'message' else n['kind'],
                         "title": {
                             "presence": "Un ami a rejoint le village",
                             "invitation": "Le village vous attend",
+                            'message': f"Message de {n['nickname']}",
                         }.get(n["kind"], "Une nouvelle amitié ?"),
                         "body": {
                             "presence": f"{n['nickname']} s’est connecté à Mordeviel.",
                             "invitation": f"{n['nickname']} vous invite à jouer.",
+                            'message': 'Un sticker vous attend.' if message and message['text'].startswith('[[sticker:') else message['text'] if message else '',
                         }.get(n["kind"], f"{n['nickname']} souhaite devenir votre ami."),
                     }
                 )

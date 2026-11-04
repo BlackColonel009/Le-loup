@@ -45,4 +45,4 @@ Aucun APK ni exécutable Windows n'a été compilé et aucun serveur distant n'a
 
 ## Prochain concept à discuter
 
-**Soirée de mère-grand** : idée conservée pour une discussion avec Logan. Aucune règle, attribution de rôle ou programmation d'événement n'est activée avant cette discussion.
+**La Soirée de Mère-grand** : la discussion avec Logan a défini un jeu chibi 3D à part entière, avec Rubine, Pèlerine et le Loup, jusqu’à vingt joueurs et un MDJ. Le fonctionnement convenu et les propositions à tester sont décrits dans [le document de conception](soiree-de-mere-grand-fonctionnement.md). Les [prompts de personnages](soiree-de-mere-grand-prompts-chibi.md) préparent leurs références visuelles et leur fabrication 3D. Le développement du mode n’est pas encore engagé.

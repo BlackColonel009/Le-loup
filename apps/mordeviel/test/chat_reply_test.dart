@@ -21,6 +21,9 @@ class ChatApi extends SocialApi {
     String? deviceToken,
   }) async {
     if (path == '/collection/me') return {'products': <Map>[]};
+    if (path.endsWith('/read')) {
+      return {'ok': true, 'notification_ids': <int>[]};
+    }
     if (method == 'POST') {
       sent = body;
       messages.add({

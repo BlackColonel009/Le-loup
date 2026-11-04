@@ -104,6 +104,7 @@ def confirm_deletion(
                 for table, column in [('social_preferences','user_id'),('social_devices','user_id'),('social_match_stats','user_id'),('social_bot_match_stats','user_id'),('social_notifications','user_id')]:
                     connection.execute(f'DELETE FROM {table} WHERE {column}=?',(user_id,))
                 connection.execute('DELETE FROM social_notifications WHERE actor_id=?',(user_id,))
+                connection.execute('DELETE FROM friend_chat_reads WHERE user_id=? OR friend_id=?', (user_id, user_id))
                 for table, first, second in [('social_friends','low_id','high_id'),('social_blocks','user_id','target_id'),('social_recent','user_id','target_id'),('social_invitations','sender_id','target_id'),('friend_chat_messages','low_id','high_id'),('friend_chat_windows','low_id','high_id')]:
                     connection.execute(f'DELETE FROM {table} WHERE {first}=? OR {second}=?',(user_id,user_id))
                 connection.execute('DELETE FROM collection_owned WHERE user_id=?', (user_id,))

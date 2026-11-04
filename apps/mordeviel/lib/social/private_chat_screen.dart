@@ -4,6 +4,7 @@ import '../stickers/chat_stickers.dart';
 import '../chat/message_reply.dart';
 import '../stickers/sticker_suggestions.dart';
 import 'social_api.dart';
+import 'friend_messages_service.dart';
 import 'package:local_host/local_host.dart' show stickerMessage;
 
 class PrivateChatScreen extends StatefulWidget {
@@ -18,7 +19,8 @@ class PrivateChatScreen extends StatefulWidget {
   State<PrivateChatScreen> createState() => _PrivateChatScreenState();
 }
 
-class _PrivateChatScreenState extends State<PrivateChatScreen> {
+class _PrivateChatScreenState extends State<PrivateChatScreen>
+    with WidgetsBindingObserver {
   final _text = TextEditingController();
   final _focus = FocusNode();
   Timer? _poll;
@@ -31,6 +33,8 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    FriendMessagesService.instance.reading(widget.friendId);
     _load();
     _poll = Timer.periodic(const Duration(seconds: 4), (_) {
       if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
@@ -53,6 +57,25 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
           _reset = data['reset_at'] as num?;
           _error = null;
         });
+        if (ModalRoute.of(context)?.isCurrent == true &&
+            (WidgetsBinding.instance.lifecycleState == null ||
+                WidgetsBinding.instance.lifecycleState ==
+                    AppLifecycleState.resumed)) {
+          final ids = _messages
+              .whereType<Map>()
+              .map((m) => m['id'] as int)
+              .toList();
+          if (ids.isNotEmpty) {
+            try {
+              await FriendMessagesService.instance.readThrough(
+                widget.friendId,
+                ids.reduce((a, b) => a > b ? a : b),
+              );
+            } catch (_) {
+              // Keep the conversation usable; the next visible poll retries.
+            }
+          }
+        }
       }
     } catch (error) {
       if (mounted) setState(() => _error = '$error');
@@ -83,7 +106,14 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) unawaited(_load());
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    FriendMessagesService.instance.leave(widget.friendId);
     _poll?.cancel();
     _text.dispose();
     _focus.dispose();

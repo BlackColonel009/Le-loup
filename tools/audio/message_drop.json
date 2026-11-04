@@ -1,0 +1,10 @@
+{
+  "description": "Original two water drops with short cave reflections",
+  "seconds": 1.8,
+  "sample_rate": 44100,
+  "files": [
+    "apps/mordeviel/assets/audio/classic/message_drop.wav",
+    "apps/mordeviel/android/app/src/main/res/raw/mordeviel_message_drop.wav"
+  ],
+  "sha256": "79897da7ca3c456cfb494a285b5926541406830cc00c80c50da04294aaf5c0ae"
+}

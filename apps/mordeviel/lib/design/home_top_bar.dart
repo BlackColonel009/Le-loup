@@ -122,6 +122,7 @@ class _HomeTopBarState extends State<HomeTopBar>
   void _notificationTap() {
     final kind = pendingSocialNotification.value;
     if (!mounted || kind == null) return;
+    if (kind.startsWith('chat:')) return;
     pendingSocialNotification.value = null;
     if (kind.startsWith('game-start:')) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {

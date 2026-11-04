@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,78 @@ String get _deviceUserKey => 'social_background_user_v1:$apiBaseUrl';
 final pendingSocialNotification = ValueNotifier<String?>(null);
 bool _launchRead = false;
 bool _workerStarted = false;
+const _messageChannel = MethodChannel('mordeviel/private_messages');
+String? _nativeMessageSignature;
+bool _messageChannelReady = false;
+
+Future<void> _syncMessageReceiver({required bool enabled}) async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  if (!_messageChannelReady) {
+    _messageChannelReady = true;
+    _messageChannel.setMethodCallHandler((call) async {
+      if (call.method == 'notification' && call.arguments is String) {
+        pendingSocialNotification.value = call.arguments as String;
+      }
+    });
+  }
+  if (!enabled) {
+    _nativeMessageSignature = null;
+    unawaited(
+      _messageChannel.invokeMethod<void>('stop').catchError((Object _) {}),
+    );
+    return;
+  }
+  if (WidgetsBinding.instance.lifecycleState != null &&
+      WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+    return;
+  }
+  final token = await _secure.read(key: _deviceTokenKey);
+  if (token == null) return;
+  final sound = await readGameNotificationSound();
+  final signature = '$token:$sound:$apiBaseUrl';
+  final running = await _messageChannel.invokeMethod<bool>('running') ?? false;
+  if (_nativeMessageSignature != signature || !running) {
+    await _messageChannel.invokeMethod<void>('start', {
+      'base': apiBaseUrl,
+      'token': token,
+      'phoneSound': sound == 'phone',
+    });
+    _nativeMessageSignature = signature;
+  }
+}
+
+Future<void> cancelMessageNotifications(List<int> ids) async {
+  if (ids.isEmpty) return;
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  try {
+    await _initializeNotifications();
+    for (final id in ids) {
+      await _notifications.cancel(id: id);
+    }
+  } catch (_) {}
+}
+
+AndroidNotificationDetails messageSoundDetails(String sound) =>
+    AndroidNotificationDetails(
+      sound == 'phone'
+          ? 'mordeviel_messages_phone_v1'
+          : 'mordeviel_messages_cave_v1',
+      sound == 'phone'
+          ? 'Messages · Son du téléphone'
+          : 'Messages · Goutte Mordeviel',
+      channelDescription: 'Nouveaux messages privés des amis',
+      icon: 'ic_social_wolf',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      sound: sound == 'phone'
+          ? null
+          : const RawResourceAndroidNotificationSound('mordeviel_message_drop'),
+      enableVibration: true,
+      autoCancel: true,
+      category: AndroidNotificationCategory.message,
+      visibility: NotificationVisibility.private,
+    );
 
 /// Separate from social opt-in: local/LAN players need no community account.
 Future<bool> prepareGameNotifications() async {
@@ -96,7 +170,7 @@ void socialNotificationDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     WidgetsFlutterBinding.ensureInitialized();
     try {
-      await fetchPhoneNotifications();
+      await fetchPhoneNotifications(backgroundTask: true);
       return true;
     } catch (_) {
       return false;
@@ -133,6 +207,22 @@ Future<void> initializeSocialNotificationUi() async {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
   try {
     await _initializeNotifications();
+    if (!_messageChannelReady) {
+      _messageChannelReady = true;
+      _messageChannel.setMethodCallHandler((call) async {
+        if (call.method == 'notification' && call.arguments is String) {
+          pendingSocialNotification.value = call.arguments as String;
+        }
+      });
+    }
+    try {
+      final nativePayload = await _messageChannel.invokeMethod<String>(
+        'takePayload',
+      );
+      if (nativePayload != null) {
+        pendingSocialNotification.value = nativePayload;
+      }
+    } catch (_) {}
     if (!_launchRead) {
       _launchRead = true;
       final details = await _notifications.getNotificationAppLaunchDetails();
@@ -164,7 +254,14 @@ Future<void> syncPhoneAccount(int userId, bool enabled) async {
     if (allowed) {
       await registerSocialDevice(userId: userId);
       await _scheduleNotifications();
+      try {
+        await _syncMessageReceiver(enabled: true);
+      } catch (_) {}
     }
+  } else {
+    try {
+      await _syncMessageReceiver(enabled: false);
+    } catch (_) {}
   }
 }
 
@@ -217,6 +314,9 @@ Future<void> registerSocialDevice({bool force = false, int? userId}) async {
 }
 
 Future<void> disablePhoneNotifications({bool revoke = true}) async {
+  try {
+    await _syncMessageReceiver(enabled: false);
+  } catch (_) {}
   _workerStarted = false;
   if (revoke && await _secure.read(key: _deviceTokenKey) != null) {
     try {
@@ -249,7 +349,7 @@ Future<void> disablePhoneNotifications({bool revoke = true}) async {
   await prefs.remove('social_shown_ids');
 }
 
-Future<void> fetchPhoneNotifications() async {
+Future<void> fetchPhoneNotifications({bool backgroundTask = false}) async {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
   final token = await _secure.read(key: _deviceTokenKey);
   if (token == null) return;
@@ -281,24 +381,35 @@ Future<void> fetchPhoneNotifications() async {
   for (final raw in data['notifications'] as List) {
     if (await _secure.read(key: _deviceTokenKey) != token) return;
     final n = raw as Map;
+    if (n['kind'] == 'message' &&
+        !backgroundTask &&
+        (WidgetsBinding.instance.lifecycleState == null ||
+            WidgetsBinding.instance.lifecycleState ==
+                AppLifecycleState.resumed)) {
+      continue;
+    }
     if (!shown.contains('${n['id']}')) {
       await _notifications.show(
         id: n['id'] as int,
         title: n['title'] as String,
         body: n['body'] as String,
-        notificationDetails: const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'mordeviel_social',
-            'Invitations et amis',
-            channelDescription:
-                'Invitations, demandes d’amitié et connexions des amis',
-            importance: Importance.high,
-            priority: Priority.high,
-            icon: 'ic_social_wolf',
-            autoCancel: true,
-          ),
-        ),
-        payload: n['kind'] as String,
+        notificationDetails: n['kind'] == 'message'
+            ? NotificationDetails(
+                android: messageSoundDetails(await readGameNotificationSound()),
+              )
+            : const NotificationDetails(
+                android: AndroidNotificationDetails(
+                  'mordeviel_social',
+                  'Invitations et amis',
+                  channelDescription:
+                      'Invitations, demandes d’amitié et connexions des amis',
+                  importance: Importance.high,
+                  priority: Priority.high,
+                  icon: 'ic_social_wolf',
+                  autoCancel: true,
+                ),
+              ),
+        payload: n['payload'] as String? ?? n['kind'] as String,
       );
       shown.add('${n['id']}');
       await prefs.setStringList('social_shown_ids', shown.toList());

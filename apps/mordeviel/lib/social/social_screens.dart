@@ -77,6 +77,7 @@ class _SocialActionBarState extends State<SocialActionBar> {
   void _notificationTap() {
     final kind = pendingSocialNotification.value;
     if (kind == null) return;
+    if (kind.startsWith('chat:')) return;
     pendingSocialNotification.value = null;
     // Android brings the existing game activity back; do not open social tabs.
     if (kind.startsWith('game-start:')) return;
@@ -730,6 +731,12 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
       if (key == 'phone_notifications' && value == false) {
         await disablePhoneNotifications();
       }
+      if (key == 'phone_notifications' || key == 'game_notification_sound') {
+        await syncPhoneAccount(
+          _data!['id'] as int,
+          body['phone_notifications'] == true,
+        );
+      }
       await _load();
     } catch (e) {
       if (mounted) setState(() => _error = '$e');
@@ -973,7 +980,7 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
                 contentPadding: EdgeInsets.zero,
                 title: const Text('Notifications sur mon téléphone'),
                 subtitle: const Text(
-                  'Sans Firebase. En arrière-plan, Android peut retarder la réception.',
+                  'Messages privés, invitations et amis. Une notification discrète maintient la réception en arrière-plan.',
                 ),
                 value: _yes(pref['phone_notifications']),
                 onChanged: _busy

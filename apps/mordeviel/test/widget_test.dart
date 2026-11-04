@@ -17,6 +17,8 @@ Future<void> openWelcome(WidgetTester tester) async {
   await tester.tap(find.text('Passer'));
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 450));
+  // Let the optional welcome discovery finish before testing navigation.
+  await tester.pump(const Duration(seconds: 3));
 }
 
 void main() {
@@ -48,6 +50,12 @@ void main() {
             .first,
       );
       await tester.enterText(pseudo, 'Alice');
+      final gender = find.byType(DropdownButtonFormField<String>);
+      await tester.ensureVisible(gender);
+      await tester.tap(gender);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Masculin · Villageois').last);
+      await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Scanner pour rejoindre'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Scanner pour rejoindre'));
