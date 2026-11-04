@@ -12,6 +12,8 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
   int _listeners = 0;
   int _epoch = 0;
   int _rewardRevision = 0;
+  int _coinRevision = 0;
+  int coinBalance = 0;
   Future<void>? _phoneSync;
   Future<void>? _presenceWrite;
   final _announcements = <String>[];
@@ -23,6 +25,13 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
   int friendRequests = 0, invitations = 0, challengeRewards = 0;
   int? userId;
   bool get hasNews => friendRequests + invitations + challengeRewards > 0;
+  void updateCoinBalance(int balance, {int? forUser}) {
+    if (forUser != null && forUser != userId) return;
+    _coinRevision++;
+    coinBalance = balance;
+    notifyListeners();
+  }
+
   void updateChallengeRewards(int value, {int? forUser}) {
     if (forUser != null && forUser != userId) return;
     _rewardRevision++;
@@ -131,6 +140,7 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> _refresh() async {
     final epoch = _epoch;
     final rewardRevision = _rewardRevision;
+    final coinRevision = _coinRevision;
     try {
       final session = await SocialApi.instance.session();
       if (epoch != _epoch) return;
@@ -154,6 +164,9 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
       invitations = data['invitations'] as int;
       if (rewardRevision == _rewardRevision) {
         challengeRewards = data['challenge_rewards'] as int? ?? 0;
+      }
+      if (coinRevision == _coinRevision) {
+        coinBalance = data['coin_balance'] as int? ?? 0;
       }
       final sound = data['game_notification_sound'];
       if (sound is String) {
@@ -191,6 +204,7 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
         friendRequests = 0;
         invitations = 0;
         challengeRewards = 0;
+        coinBalance = 0;
       }
     } finally {
       notifyListeners();
@@ -210,6 +224,7 @@ class SocialService extends ChangeNotifier with WidgetsBindingObserver {
     friendRequests = 0;
     invitations = 0;
     challengeRewards = 0;
+    coinBalance = 0;
     notifyListeners();
     try {
       // Presence is advisory: a slow heartbeat must not hold the account open.

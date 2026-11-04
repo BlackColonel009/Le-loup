@@ -33,9 +33,10 @@ def product(state, pid):
 def test_collection_default_classics_free_preview_and_price_gate(collection_api):
     api, user, admin = collection_api
     state = api.get("/collection/me", headers=user).json()
-    assert len(state["products"]) == 128
+    from mordeviel_api.coin_shop import border_products
+    assert len(state["products"]) == 128 + len(border_products())
     assert len([p for p in state["products"] if p["owned"]]) == 20
-    assert all(p["accessible"] == (p["kind"] != "sticker") for p in state["products"])
+    assert all(p["accessible"] == (p["kind"] not in {"sticker", "border"}) for p in state["products"])
     assert not any(p["claimable"] for p in state["products"])
     assert (
         api.post(
@@ -79,14 +80,14 @@ def test_collection_default_classics_free_preview_and_price_gate(collection_api)
         == 200
     )
     assert all(
-        p["accessible"] == (p["kind"] != "sticker")
+        p["accessible"] == (p["kind"] not in {"sticker", "border"})
         for p in api.get("/collection/me", headers=user).json()["products"]
     )
 
 
 def test_free_claim_bonus_persists_once_and_paid_claim_never_charges(collection_api):
     api, user, admin = collection_api
-    pid = "card-intense-seer"
+    pid = "card-horror-seer"
     edit = {"price_minor": 250, "currency": "XOF", "bonus": ["card-horror-witch"]}
     assert (
         api.put(

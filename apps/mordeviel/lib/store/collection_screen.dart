@@ -11,6 +11,8 @@ import '../content/pack_store.dart';
 import '../services/public_content.dart';
 import '../social/social_api.dart';
 import '../stickers/chat_stickers.dart';
+import '../profile/avatar_border.dart';
+import 'coin_purchase.dart';
 import 'package:local_host/local_host.dart' show chatStickerById;
 
 const _gold = Color(0xFFD6B16D);
@@ -154,6 +156,25 @@ class _CollectionScreenState extends State<CollectionScreen>
     }
   }
 
+  Future<void> _buy(Map p, bool collector) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await buyWithCoins(
+        context,
+        p,
+        day: _data!['day'] as String,
+        balance: _data!['coin_balance'] as int? ?? 0,
+        source: collector ? 'collector' : 'shop',
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+        await _load();
+      }
+    }
+  }
+
   Future<void> _hearCollector() async {
     final settings = ClassicAudio.instance;
     if (settings.muted || settings.effectLevel == 0) return;
@@ -279,6 +300,21 @@ class _CollectionScreenState extends State<CollectionScreen>
                           sticker: chatStickerById(id)!,
                           size: 160,
                         )
+                      : p['kind'] == 'border' && avatarBorder(id) != null
+                      ? Center(
+                          child: SizedBox.square(
+                            dimension: 120,
+                            child: AnimatedAvatarBorder(
+                              border: avatarBorder(id)!,
+                              child: const Padding(
+                                padding: EdgeInsets.all(17),
+                                child: CircleAvatar(
+                                  child: Icon(Icons.person, size: 45),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                       : Icon(
                           card
                               ? Icons.style
@@ -320,8 +356,14 @@ class _CollectionScreenState extends State<CollectionScreen>
                     color: _gold,
                     fontWeight: FontWeight.w600,
                   ),
+                ),
+              if (p['coin_price'] != null)
+                Text(
+                  '${p['coin_price']} Lunes d’or · acquisition définitive',
+                  style: const TextStyle(fontSize: 12, color: _gold),
                 )
-              else if (p['price_minor'] != null)
+              else if ((p['free_days_remaining'] as num? ?? 0) <= 0 &&
+                  p['price_minor'] != null)
                 Text(
                   'Prix prévu : ${((p['price_minor'] as num) / (p['currency'] == 'XOF' ? 1 : 100)).toStringAsFixed(p['currency'] == 'XOF' ? 0 : 2)} ${p['currency']}',
                   style: const TextStyle(fontSize: 11),
@@ -342,12 +384,19 @@ class _CollectionScreenState extends State<CollectionScreen>
                 ),
                 onPressed:
                     !_busy &&
-                        p['claimable'] == true &&
+                        (p['claimable'] == true ||
+                            p['coin_purchasable'] == true) &&
                         (collector ? p['collector'] == 1 : p['shop'] == 1)
-                    ? () => _claim(p, collector)
+                    ? () => p['coin_purchasable'] == true
+                          ? _buy(p, collector)
+                          : _claim(p, collector)
                     : null,
                 child: Text(
-                  p['price_minor'] == null
+                  p['coin_price'] != null
+                      ? p['coin_purchasable'] == true
+                            ? 'Acheter en Lunes d’or'
+                            : 'Attendre une offre'
+                      : p['price_minor'] == null
                       ? 'Bientôt disponible'
                       : p['purchase_label'] as String,
                   maxLines: 2,
@@ -423,6 +472,11 @@ class _CollectionScreenState extends State<CollectionScreen>
                           label: const Text('Stickers'),
                           selected: _theme == 'extras',
                           onSelected: (_) => setState(() => _theme = 'extras'),
+                        ),
+                        ChoiceChip(
+                          label: const Text('Bordures'),
+                          selected: _theme == 'borders',
+                          onSelected: (_) => setState(() => _theme = 'borders'),
                         ),
                       ],
                     ),

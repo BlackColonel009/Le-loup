@@ -305,6 +305,9 @@ def result(match_id: str, *, user: User, db: DB):
             raise HTTPException(404, 'Le bilan des défis n’est pas encore disponible pour ce compte.')
         changes = json.loads(row['changes'])
         for ch in changes:
+            definition = next((item for item in CATALOG if item['id'] == ch['id']), None)
+            if definition:
+                ch.update(difficulty=definition['difficulty'], chest_tier=definition['chest_tier'])
             current = c.execute('SELECT choice,claimed_at FROM challenge_progress WHERE user_id=? AND challenge_id=?', (user['id'], ch['id'])).fetchone()
             if current:
                 ch['choice'] = current['choice']

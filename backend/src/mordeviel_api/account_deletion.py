@@ -90,6 +90,10 @@ def confirm_deletion(
                     "challenge_distinct",
                     "challenge_progress",
                     "challenge_matches",
+                    "coin_wallets",
+                    "coin_match_rewards",
+                      "coin_gifts",
+                      "coin_purchases",
                 ):
                     connection.execute(
                         f"DELETE FROM {table} WHERE user_id=?", (user_id,)

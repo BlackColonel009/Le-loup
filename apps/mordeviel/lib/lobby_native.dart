@@ -785,6 +785,9 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             await showVictory(
               context,
               game: ending,
+              matchId: widget.online && _client != null
+                  ? (_room?['match_id'] as String?)
+                  : null,
               players: _room?['players'] as List? ?? [],
               ambience: _ambience,
               onRewardsReady: widget.online && _client != null

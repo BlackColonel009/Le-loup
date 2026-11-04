@@ -230,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Text(
-                'Aucun achat pour le moment. Les achats sont actuellement indisponibles.',
+                'Aucun achat pour le moment. Découvre les offres en Lunes d’or dans la boutique.',
               ),
             ),
           for (final purchase in _purchases)
@@ -247,7 +247,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : 'En attente'}',
                 ),
                 trailing: Text(
-                  '${((purchase['amount_minor'] as num) / (purchase['currency'] == 'XOF' ? 1 : 100)).toStringAsFixed(purchase['currency'] == 'XOF' ? 0 : 2)} ${purchase['currency']}',
+                  purchase['currency'] == 'gold_moons'
+                      ? '${purchase['amount_minor']} Lunes d’or'
+                      : '${((purchase['amount_minor'] as num) / (purchase['currency'] == 'XOF' ? 1 : 100)).toStringAsFixed(purchase['currency'] == 'XOF' ? 0 : 2)} ${purchase['currency']}',
                 ),
               ),
             ),

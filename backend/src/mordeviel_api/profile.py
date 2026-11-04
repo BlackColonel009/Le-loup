@@ -218,4 +218,4 @@ def purchases(
             FROM purchase_history WHERE user_id=? ORDER BY purchased_at DESC,id DESC LIMIT 100""",
             (user["id"],),
         ).fetchall()
-    return {"purchases": [dict(row) for row in rows], "purchases_enabled": False}
+    return {"purchases": [dict(row) for row in rows], "purchases_enabled": True, "payments_enabled": False}

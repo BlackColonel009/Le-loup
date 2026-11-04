@@ -11,6 +11,7 @@ from fastapi import FastAPI
 
 from . import (
     challenges,
+    coins,
     collection,
     community_mail,
     presence,
@@ -56,6 +57,7 @@ async def lifespan(app):
     private_chat.initialize(app.state.community)
     collection.initialize(app.state.community)
     challenges.initialize(app.state.community)
+    coins.initialize(app.state.community)
     app.state.rooms.db = app.state.community
     social_task = asyncio.create_task(social_scheduler.run(app.state.community, app.state.rooms))
     community_mail.initialize(app.state.community)
@@ -92,6 +94,7 @@ app.include_router(social.router)
 app.include_router(private_chat.router)
 app.include_router(collection.router)
 app.include_router(challenges.router)
+app.include_router(coins.router)
 app.include_router(social_scheduler.router)
 app.include_router(shop_router)
 app.include_router(admin_router)

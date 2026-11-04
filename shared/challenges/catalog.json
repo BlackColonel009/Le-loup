@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "challenges": [
     {
       "id": "welcome",
@@ -21,7 +21,9 @@
           "id": "rewards_villager_suspect"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "easy",
+      "chest_tier": "classic"
     },
     {
       "id": "first-night",
@@ -35,7 +37,9 @@
           "id": "rewards_elder_think"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "easy",
+      "chest_tier": "classic"
     },
     {
       "id": "first-win",
@@ -49,7 +53,9 @@
           "id": "amber"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "easy",
+      "chest_tier": "classic"
     },
     {
       "id": "regular",
@@ -67,7 +73,9 @@
           ]
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "veteran",
@@ -81,7 +89,9 @@
           "id": "gold"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "first-fangs",
@@ -95,7 +105,9 @@
           "id": "rewards_wolf_bite"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "easy",
+      "chest_tier": "classic"
     },
     {
       "id": "predator",
@@ -109,7 +121,9 @@
           "id": "ruby"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "champion",
@@ -123,7 +137,9 @@
           "id": "emerald"
         }
       ],
-      "category": "Premiers pas"
+      "category": "Premiers pas",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "keen-eye",
@@ -137,7 +153,9 @@
           "id": "rewards_seer_read"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "second-chance",
@@ -151,7 +169,9 @@
           "id": "classic-witch"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "watchman",
@@ -165,7 +185,9 @@
           "id": "classic-guardian"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "last-bullet",
@@ -179,7 +201,9 @@
           "id": "classic-hunter"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "destiny",
@@ -193,7 +217,9 @@
           "id": "classic-cupid"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "infection",
@@ -207,7 +233,9 @@
           "id": "classic-wolf-father"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "solitary",
@@ -221,7 +249,9 @@
           "id": "classic-white-wolf"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "fatal-melody",
@@ -235,7 +265,9 @@
           "id": "classic-piper"
         }
       ],
-      "category": "Maîtrise"
+      "category": "Maîtrise",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "faces",
@@ -249,7 +281,9 @@
           "id": "rewards_secret"
         }
       ],
-      "category": "Découverte"
+      "category": "Découverte",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "many-lives",
@@ -263,7 +297,9 @@
           "id": "reward-legends-shadow"
         }
       ],
-      "category": "Découverte"
+      "category": "Découverte",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "citizen",
@@ -277,7 +313,9 @@
           "id": "reward-legends-fallen-paladin"
         }
       ],
-      "category": "Découverte"
+      "category": "Découverte",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "both-camps",
@@ -291,7 +329,9 @@
           "id": "rewards_wolf_meeting"
         }
       ],
-      "category": "Découverte"
+      "category": "Découverte",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "universes",
@@ -305,7 +345,9 @@
           "id": "indigo"
         }
       ],
-      "category": "Découverte"
+      "category": "Découverte",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "verdict",
@@ -319,7 +361,9 @@
           "id": "rewards_vote_against"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "night-vision",
@@ -333,7 +377,9 @@
           "id": "azure"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "remedy",
@@ -347,7 +393,9 @@
           "id": "rewards_witch_rescue"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "guarded",
@@ -361,7 +409,9 @@
           "id": "reward-village-guardian"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "rampart",
@@ -375,7 +425,9 @@
           "id": "rewards_vigilance"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "memory",
@@ -389,7 +441,9 @@
           "id": "classic-elder"
         }
       ],
-      "category": "Village"
+      "category": "Village",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "howl",
@@ -403,7 +457,9 @@
           "id": "reward-village-wolf"
         }
       ],
-      "category": "Meute"
+      "category": "Meute",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "long-hunt",
@@ -417,7 +473,9 @@
           "id": "rewards_white_wolf_howl"
         }
       ],
-      "category": "Meute"
+      "category": "Meute",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "new-blood",
@@ -431,7 +489,9 @@
           "id": "reward-village-twin-wolves"
         }
       ],
-      "category": "Meute"
+      "category": "Meute",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "hungry",
@@ -445,7 +505,9 @@
           "id": "rewards_wolf_fierce"
         }
       ],
-      "category": "Meute"
+      "category": "Meute",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "betrayal",
@@ -459,7 +521,9 @@
           "id": "rewards_wolf_stare"
         }
       ],
-      "category": "Meute"
+      "category": "Meute",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "impossible-love",
@@ -473,7 +537,9 @@
           "id": "reward-village-cupid"
         }
       ],
-      "category": "Exploits"
+      "category": "Exploits",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "celestial",
@@ -487,7 +553,9 @@
           "id": "classic-angel"
         }
       ],
-      "category": "Exploits"
+      "category": "Exploits",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "dance",
@@ -501,7 +569,9 @@
           "id": "reward-village-piper"
         }
       ],
-      "category": "Exploits"
+      "category": "Exploits",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "alone",
@@ -515,7 +585,9 @@
           "id": "amethyst"
         }
       ],
-      "category": "Exploits"
+      "category": "Exploits",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "destinies",
@@ -529,7 +601,9 @@
           "id": "rainbow"
         }
       ],
-      "category": "Exploits"
+      "category": "Exploits",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "rendezvous",
@@ -543,7 +617,9 @@
           "id": "rewards_hope"
         }
       ],
-      "category": "Communauté"
+      "category": "Communauté",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "faithful",
@@ -557,7 +633,9 @@
           "id": "reward-legends-night-raven"
         }
       ],
-      "category": "Communauté"
+      "category": "Communauté",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     },
     {
       "id": "friends",
@@ -571,7 +649,9 @@
           "id": "rewards_heroic"
         }
       ],
-      "category": "Communauté"
+      "category": "Communauté",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "festival",
@@ -585,7 +665,9 @@
           "id": "rewards_alpha_howl"
         }
       ],
-      "category": "Événements"
+      "category": "Événements",
+      "difficulty": "medium",
+      "chest_tier": "epic"
     },
     {
       "id": "seasons",
@@ -599,7 +681,9 @@
           "id": "reward-legends-cursed-archivist"
         }
       ],
-      "category": "Événements"
+      "category": "Événements",
+      "difficulty": "hard",
+      "chest_tier": "premium"
     }
   ]
 }

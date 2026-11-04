@@ -69,6 +69,9 @@ function collectionOptions(select, products, selected=[]){
 function fillCollectionProduct(){
   const p=collectionAdmin.products.find(p=>p.id===$('#collection-product').value);if(!p)return;
   $('#collection-price').value=p.price_minor??'';$('#collection-currency').value=p.currency;
+  $('#collection-coins').value=p.coin_price??'';$('#collection-coins').disabled=p.coin_minimum==null;
+  $('#collection-coins').min=p.coin_minimum??0;
+  $('#collection-coins-help').textContent=p.coin_minimum==null?'Cet article n’est pas proposé en Lunes d’or.':'Minimum : '+p.coin_minimum+' Lunes d’or. Les offres de la boutique changent à minuit UTC ; les achats sont définitifs.';
   $('#collection-visible').checked=!!p.visible;$('#collection-shop').checked=!!p.shop;$('#collection-collector').checked=!!p.collector;
   collectionOptions($('#collection-bonus'),collectionAdmin.products.filter(v=>v.id!==p.id&&v.theme!=='classic'),p.bonus);
 }
@@ -96,7 +99,8 @@ $('#collection-restrictions').addEventListener('click',event=>busy(event.target,
 },'#collection-status'));
 $('#collection-product-form').addEventListener('submit',event=>{event.preventDefault();busy(event.target,async()=>{
   const raw=$('#collection-price').value;
-  await api('/community/admin/collection/products/'+$('#collection-product').value,{price_minor:raw===''?null:Number(raw),currency:$('#collection-currency').value,visible:$('#collection-visible').checked,shop:$('#collection-shop').checked,collector:$('#collection-collector').checked,bonus:selection('#collection-bonus')},adminToken,'PUT');await loadCollectionAdmin();setMessage('Produit et bonus enregistrés.',false,'#collection-status');
+  const coins=$('#collection-coins').value;
+  await api('/community/admin/collection/products/'+$('#collection-product').value,{price_minor:raw===''?null:Number(raw),...(!$('#collection-coins').disabled?{coin_price:coins===''?null:Number(coins)}:{}),currency:$('#collection-currency').value,visible:$('#collection-visible').checked,shop:$('#collection-shop').checked,collector:$('#collection-collector').checked,bonus:selection('#collection-bonus')},adminToken,'PUT');await loadCollectionAdmin();setMessage('Produit et bonus enregistrés.',false,'#collection-status');
 },'#collection-status');});
 $('#collection-daily-form').addEventListener('submit',event=>{event.preventDefault();busy(event.target,async()=>{
   await api('/community/admin/collection/daily',{day:$('#collection-day').value,products:selection('#collection-daily')},adminToken,'PUT');await loadCollectionAdmin();setMessage('Offres du Collectionneur enregistrées.',false,'#collection-status');

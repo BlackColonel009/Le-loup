@@ -11,6 +11,9 @@ import '../social/social_notifications.dart';
 import '../social/social_screens.dart';
 import '../social/social_service.dart';
 import '../store/store_screen.dart';
+import '../coins/coin_widgets.dart';
+import '../coins/wallet_screen.dart';
+import '../coins/creator_gift.dart';
 
 const _gold = Color(0xFFE1BA78);
 
@@ -152,6 +155,7 @@ class _HomeTopBarState extends State<HomeTopBar>
     if (!mounted) return;
     await _social.refresh(afterCurrent: true);
     if (mounted) widget.onAccountChanged?.call();
+    if (mounted && _social.signedIn) await showCreatorGift(context);
   }
 
   void _select(_Destination destination) {
@@ -295,6 +299,37 @@ class _HomeTopBarState extends State<HomeTopBar>
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              InkWell(
+                                key: const ValueKey('home-coins'),
+                                onTap: () => _open(
+                                  _social.signedIn
+                                      ? const WalletScreen()
+                                      : const CommunityScreen(),
+                                ),
+                                child: Semantics(
+                                  label:
+                                      'Ma bourse : ${_social.coinBalance} Lunes d’or',
+                                  button: true,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const CoinToken(size: 16),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          compactCoins(_social.coinBalance),
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            color: coinGold,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

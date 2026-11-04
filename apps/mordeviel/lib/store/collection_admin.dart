@@ -119,6 +119,10 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
     final price = TextEditingController(
       text: p['price_minor']?.toString() ?? '',
     );
+    final coins = TextEditingController(
+      text: p['coin_price']?.toString() ?? '',
+    );
+    final floor = p['coin_minimum'] as int?;
     var visible = p['visible'] == 1,
         shop = p['shop'] == 1,
         collector = p['collector'] == 1;
@@ -135,6 +139,16 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (floor != null)
+                    TextField(
+                      controller: coins,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Prix en Lunes d’or',
+                        helperText: 'Minimum $floor · vide = offre désactivée',
+                        helperMaxLines: 2,
+                      ),
+                    ),
                   const Text(
                     'Prix en unité minimale : XOF entier, centimes pour EUR/USD. Vide = aucun ajout possible. Zéro = gratuit.',
                   ),
@@ -196,12 +210,19 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
             ),
             FilledButton(
               onPressed: () {
+                final coinPrice = int.tryParse(coins.text.trim());
+                if (floor != null &&
+                    coins.text.trim().isNotEmpty &&
+                    (coinPrice == null || coinPrice < floor)) {
+                  return;
+                }
                 final number = int.tryParse(price.text.trim());
                 if (price.text.trim().isNotEmpty &&
                     (number == null || number < 0)) {
                   return;
                 }
                 Navigator.pop(context, {
+                  if (floor != null) 'coin_price': coinPrice,
                   'price_minor': number,
                   'currency': currency,
                   'visible': visible,
@@ -218,6 +239,7 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
     );
     await Future<void>.delayed(const Duration(milliseconds: 250));
     price.dispose();
+    coins.dispose();
     if (data != null) await _run('products/${p['id']}', data);
   }
 
@@ -441,13 +463,20 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
               Wrap(
                 spacing: 8,
                 children: [
-                  for (final theme in ['intense', 'horror', 'extras'])
+                  for (final theme in [
+                    'intense',
+                    'horror',
+                    'extras',
+                    'borders',
+                  ])
                     ChoiceChip(
                       label: Text(
                         theme == 'intense'
                             ? 'Intense'
                             : theme == 'horror'
                             ? 'Horreur'
+                            : theme == 'borders'
+                            ? 'Bordures'
                             : 'Accessoires',
                       ),
                       selected: _filter == theme,
@@ -460,7 +489,11 @@ class _CollectionAdminScreenState extends State<CollectionAdminScreen> {
                   child: ListTile(
                     title: Text(p['title'] as String),
                     subtitle: Text(
-                      '${p['kind']} · ${p['price_minor'] == null ? 'Prix non publié' : '${p['price_minor']} ${p['currency']} (unité minimale)'}\n${p['visible'] == 1 ? 'Visible' : 'Masqué'} · ${(p['bonus'] as List).length} bonus',
+                      '${p['kind']} · ${p['coin_price'] != null
+                          ? '${p['coin_price']} Lunes d’or'
+                          : p['price_minor'] == null
+                          ? 'Prix non publié'
+                          : '${p['price_minor']} ${p['currency']} (unité minimale)'}\n${p['visible'] == 1 ? 'Visible' : 'Masqué'} · ${(p['bonus'] as List).length} bonus',
                     ),
                     trailing: const Icon(Icons.edit_outlined),
                     onTap: _busy ? null : () => _edit(p),

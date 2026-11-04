@@ -5,6 +5,7 @@ import '../cards/card_gallery.dart';
 import '../cards/classic_role.dart';
 import 'ending_data.dart';
 import 'game_history.dart';
+import '../coins/coin_reward_scene.dart';
 
 Future<void> showVictory(
   BuildContext context, {
@@ -13,6 +14,7 @@ Future<void> showVictory(
   CardAmbience ambience = CardAmbience.classic,
   String continueLabel = 'Voir les rôles et retourner au village',
   Future<void> Function(BuildContext)? onRewardsReady,
+  String? matchId,
 }) => showGeneralDialog<void>(
   context: context,
   barrierDismissible: false,
@@ -23,6 +25,7 @@ Future<void> showVictory(
     ambience: ambience,
     continueLabel: continueLabel,
     onRewardsReady: onRewardsReady,
+    matchId: matchId,
   ),
 );
 
@@ -34,12 +37,14 @@ class VictoryScene extends StatefulWidget {
     this.ambience = CardAmbience.classic,
     this.continueLabel = 'Voir les rôles et retourner au village',
     this.onRewardsReady,
+    this.matchId,
   });
   final Map<String, dynamic> game;
   final List players;
   final CardAmbience ambience;
   final String continueLabel;
   final Future<void> Function(BuildContext)? onRewardsReady;
+  final String? matchId;
   @override
   State<VictoryScene> createState() => _VictorySceneState();
 }
@@ -52,6 +57,49 @@ class _VictorySceneState extends State<VictoryScene>
   );
   Timer? _rewardsDelay;
   bool _scheduledRewards = false;
+  Map<String, dynamic>? _coins;
+  bool _loadingCoins = false, _openingCoins = false;
+  String? _coinError;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.matchId != null) unawaited(_loadCoins());
+  }
+
+  Future<void> _loadCoins() async {
+    setState(() => _loadingCoins = true);
+    try {
+      final reward = await loadMatchCoins(widget.matchId!);
+      if (mounted) {
+        setState(() {
+          _coins = reward;
+          _coinError = null;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _coinError = 'Tes gains restent disponibles dans ta bourse.',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loadingCoins = false);
+    }
+  }
+
+  Future<void> _continue() async {
+    if (_openingCoins) return;
+    setState(() => _openingCoins = true);
+    final reward = _coins;
+    if (reward != null &&
+        reward['eligible'] == true &&
+        reward['claimed_at'] == null &&
+        (reward['amount'] as int) > 0) {
+      await showCoinReward(context, reward);
+    }
+    if (mounted) Navigator.pop(context);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -185,10 +233,28 @@ class _VictorySceneState extends State<VictoryScene>
                       label: const Text('Revivre toutes les manches'),
                     ),
                     FilledButton.icon(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.cottage_outlined),
-                      label: Text(widget.continueLabel),
+                      onPressed: _loadingCoins || _openingCoins
+                          ? null
+                          : _continue,
+                      icon:
+                          _coins?['eligible'] == true &&
+                              _coins?['claimed_at'] == null
+                          ? const ShakingChest()
+                          : const Icon(Icons.cottage_outlined),
+                      label: Text(
+                        _loadingCoins
+                            ? 'Préparation de ton coffre…'
+                            : _coins?['eligible'] == true &&
+                                  _coins?['claimed_at'] == null
+                            ? 'Continuer · ouvrir mon coffre'
+                            : widget.continueLabel,
+                      ),
                     ),
+                    if (_coinError != null)
+                      TextButton(
+                        onPressed: _loadCoins,
+                        child: Text('$_coinError Réessayer'),
+                      ),
                   ],
                 ),
               ],

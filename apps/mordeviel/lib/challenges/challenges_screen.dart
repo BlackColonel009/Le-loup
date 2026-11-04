@@ -32,6 +32,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   bool _requiresLogin = false;
   bool _rewardsOffered = false, _claimDialogOpen = false;
   String _filter = 'Tous';
+  RewardChestTier? _tier;
   bool get _recap => widget.matchId != null && !_all;
   @override
   void initState() {
@@ -245,6 +246,11 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
               (_filter == 'Accomplis'
                   ? c['completed_at'] != null
                   : c['completed_at'] == null),
+        )
+        .where(
+          (c) =>
+              _tier == null ||
+              (explicitChallengeTier(c) ?? RewardChestTier.classic) == _tier,
         )
         .toList();
     return Scaffold(
@@ -467,6 +473,28 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                               selected: _filter == filter,
                               onSelected: (_) =>
                                   setState(() => _filter = filter),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Tous les coffres'),
+                            selected: _tier == null,
+                            onSelected: (_) => setState(() => _tier = null),
+                          ),
+                          for (final tier in RewardChestTier.values)
+                            ChoiceChip(
+                              label: Text(switch (tier) {
+                                RewardChestTier.classic => 'Classique · facile',
+                                RewardChestTier.epic => 'Épique · moyen',
+                                RewardChestTier.premium => 'Premium · élevé',
+                              }),
+                              selected: _tier == tier,
+                              onSelected: (_) => setState(() => _tier = tier),
                             ),
                         ],
                       ),

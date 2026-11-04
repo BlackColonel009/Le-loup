@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../content/content_image.dart';
 import '../profile/player_avatar.dart';
 import '../profile/avatar_border.dart';
+import 'challenge_tier.dart';
 
 const challengeGold = Color(0xFFE5C385);
 
@@ -179,6 +180,25 @@ class _ChallengeCardState extends State<ChallengeCard>
             ],
           ),
           const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: rewardChestLight(
+                explicitChallengeTier(c) ?? RewardChestTier.classic,
+              ).withValues(alpha: .12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              challengeTierLabel(c),
+              style: TextStyle(
+                fontSize: 11,
+                color: rewardChestLight(
+                  explicitChallengeTier(c) ?? RewardChestTier.classic,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             c['description'] as String,
             style: const TextStyle(color: Color(0xFFCDD6D9), height: 1.45),

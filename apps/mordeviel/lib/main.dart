@@ -10,6 +10,7 @@ import 'village/horror_ambience.dart';
 import 'social/online_hub.dart';
 import 'social/admin_bot_launcher.dart';
 import 'store/collector_welcome.dart';
+import 'coins/creator_gift.dart';
 import 'services/immersion_preferences.dart';
 import 'challenges/challenge_discovery.dart';
 import 'challenges/challenges_screen.dart';
@@ -126,6 +127,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future<void> _collectorAfterHowl() async {
     await ClassicAudio.instance.welcomeHowlFinished;
+    if (mounted) await showCreatorGift(context);
     if (mounted) await showChallengeDiscovery(context);
     if (mounted) await showDailyCollector(context);
   }

@@ -220,6 +220,7 @@ def preferences(data: Preferences, *, user: User, db: Database):
 
 @router.get("/summary")
 def summary(request: Request, *, user: User, db: Database):
+    from .coins import balance_in
     expire_invitations(db, request.app.state.rooms)
     with db.db() as c:
         from .avatars import avatar_in
@@ -243,6 +244,7 @@ def summary(request: Request, *, user: User, db: Database):
             "avatar": avatar_in(c, user["id"]),
             "friend_requests": pending,
             "challenge_rewards": pending_count(c, user['id']),
+            "coin_balance": balance_in(c, user['id']),
             "invitations": invitations,
             "phone_notifications": bool(
                 preference(c, user["id"])["phone_notifications"]
@@ -927,6 +929,8 @@ def sync_match(db, engine):
                 ),
             )
         challenges.record_match(c, engine, valid_accounts, practice)
+        from . import coins
+        coins.record_match(c, engine, valid_accounts, practice)
 
 
 def close_room(db, engine):

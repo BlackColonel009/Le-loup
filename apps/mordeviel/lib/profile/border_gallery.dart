@@ -57,7 +57,7 @@ class _AvatarBorderGalleryState extends State<AvatarBorderGallery> {
             const Text('Bordure à débloquer', textAlign: TextAlign.center),
             const SizedBox(height: 8),
             const Text(
-              'Consulte les récompenses du carnet des défis dans ton profil. D’autres offres seront annoncées dans la boutique.',
+              'Retrouve les récompenses du carnet des défis ou les offres quotidiennes de la boutique en Lunes d’or.',
               textAlign: TextAlign.center,
             ),
           ],

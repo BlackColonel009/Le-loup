@@ -10,6 +10,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from .administration import audit
+from .coin_shop import border_products, daily_ids, grant, minimum_price, owned_ids
+from .coins import balance_in
 from .community import Store, administrator, authenticated, store
 
 router = APIRouter(tags=["collection"])
@@ -84,6 +86,8 @@ def initialize(db):
               day TEXT PRIMARY KEY,products TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS collection_visits(user_id INTEGER PRIMARY KEY,day TEXT NOT NULL);
         """)
+        if 'coin_price' not in {r[1] for r in c.execute('PRAGMA table_info(collection_products)')}:
+            c.execute('ALTER TABLE collection_products ADD COLUMN coin_price INTEGER')
         c.execute("INSERT OR IGNORE INTO settings VALUES('collection_free_access','1')")
         c.execute("INSERT OR IGNORE INTO settings VALUES('collection_free_days','30')")
         c.execute(
@@ -93,7 +97,7 @@ def initialize(db):
         for theme in ["classic", "intense", "horror"]:
             for role, name in ROLES.items():
                 c.execute(
-                    "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,collector,shop) VALUES(?,'card',?,?,?,?,?)",
+                    "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,collector,shop,coin_price) VALUES(?,'card',?,?,?,?,?,?)",
                     (
                         f"card-{theme}-{role}",
                         theme,
@@ -101,6 +105,7 @@ def initialize(db):
                         name,
                         int(theme != "classic"),
                         int(theme != "classic"),
+                        900 if theme == 'intense' else None,
                     ),
                 )
         for voice in VOICES:
@@ -123,9 +128,21 @@ def initialize(db):
             if sticker.get('pack') != 'rewards':
                 continue
             c.execute(
-                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title) VALUES(?,'sticker','extras',?,?)",
+                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,coin_price) VALUES(?,'sticker','extras',?,?,200)",
                 (f"sticker-{sticker['id']}", sticker['id'], f"{sticker['role']} · {sticker['emotion']}"),
             )
+        for border in border_products():
+            c.execute(
+                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,collector,coin_price) VALUES(?,'border','borders',?,?,0,500)",
+                (f"border-{border['id']}", border['id'], border['title']),
+            )
+        # Migration is applied once: later restarts preserve admin prices, including disabled offers.
+        if not c.execute("SELECT 1 FROM settings WHERE key='coin_shop_seeded'").fetchone():
+            for p in products(c):
+                price = minimum_price(p)
+                if price is not None:
+                    c.execute('UPDATE collection_products SET coin_price=? WHERE id=?', (price, p['id']))
+            c.execute("INSERT INTO settings VALUES('coin_shop_seeded','1')")
 
 
 def free_access(c):
@@ -193,17 +210,9 @@ def view(c, uid=None):
     day = datetime.now(UTC).date().isoformat()
     free = free_access(c)
     trials = trial_ids(c, day)
-    owned = (
-        {
-            r[0]
-            for r in c.execute(
-                "SELECT product_id FROM collection_owned WHERE user_id=?", (uid,)
-            )
-        }
-        if uid
-        else set()
-    )
+    owned = owned_ids(c, uid)
     offers = day_offers(c, day)
+    shop_offers = daily_ids(products(c), day)
     until = c.execute(
         "SELECT value FROM settings WHERE key='collection_free_until'"
     ).fetchone()[0]
@@ -228,7 +237,7 @@ def view(c, uid=None):
     for p in products(c):
         baseline = p["theme"] == "classic" and p["kind"] == "card"
         possessed = baseline or p["id"] in owned
-        preview = free and p["kind"] != "sticker"
+        preview = free and p["kind"] not in {"sticker", "border"}
         access = possessed or preview or p["id"] in trials
         ends = [end for ids, end in active_trials if not ids or p["id"] in ids]
         if preview:
@@ -241,6 +250,9 @@ def view(c, uid=None):
         result.append(
             {
                 **p,
+                "coin_minimum": minimum_price(p),
+                "coin_purchasable": bool(uid and not possessed and p['visible'] and p['coin_price'] is not None
+                    and ((p['shop'] and p['id'] in shop_offers) or (p['collector'] and p['id'] in offers))),
                 "owned": possessed,
                 "accessible": access,
                 "locked": not access,
@@ -258,6 +270,7 @@ def view(c, uid=None):
                     and p["visible"]
                     and (p["shop"] or (p["collector"] and p["id"] in offers))
                     and p["price_minor"] is not None
+                    and minimum_price(p) is None
                     and (free or p["price_minor"] == 0)
                 ),
                 "purchase_label": "Ajouter gratuitement"
@@ -271,6 +284,8 @@ def view(c, uid=None):
         "free_days_remaining": remaining,
         "free_days_configured": configured_days,
         "payments_enabled": False,
+        "coin_purchases_enabled": True,
+        "coin_balance": balance_in(c, uid) if uid else None,
         "day": day,
         "rotation_timezone": "UTC",
         "products": result,
@@ -315,6 +330,8 @@ def claim(data: Claim, *, user: User, db: Database):
             )
         if item["owned"]:
             return {"ok": True, "already_owned": True, "granted": []}
+        if minimum_price(item) is not None:
+            raise HTTPException(409, "Cet article s’acquiert en Lunes d’or dans les offres du jour.")
         if item["price_minor"] is None:
             raise HTTPException(
                 409, "L’administrateur doit publier un prix avant cet ajout."
@@ -323,18 +340,7 @@ def claim(data: Claim, *, user: User, db: Database):
             raise HTTPException(
                 409, "Paiements indisponibles. Aucun montant n’a été débité."
             )
-        granted = []
-        for pid in dict.fromkeys([item["id"], *item["bonus"]]):
-            if not c.execute(
-                "SELECT 1 FROM collection_products WHERE id=?", (pid,)
-            ).fetchone():
-                continue
-            c.execute(
-                "INSERT OR IGNORE INTO collection_owned VALUES(?,?,?,?)",
-                (user["id"], pid, data.source, time.time()),
-            )
-            if c.execute("SELECT changes()").fetchone()[0]:
-                granted.append(pid)
+        granted = grant(c, user['id'], [item['id'], *item['bonus']], data.source)
         if granted:
             c.execute(
                 "INSERT INTO purchase_history(user_id,product_id,title,amount_minor,currency,status,purchased_at,receipt_reference) VALUES(?,?,?,?,?,?,?,?)",
@@ -427,6 +433,7 @@ class ProductEdit(BaseModel):
     shop: bool = True
     collector: bool = True
     bonus: list[str] = Field(default_factory=list, max_length=10)
+    coin_price: int | None = Field(default=None, ge=0, le=100000000)
 
 
 @router.put("/community/admin/collection/products/{pid}")
@@ -441,6 +448,11 @@ def edit_product(pid: str, data: ProductEdit, *, admin: Admin, db: Database):
             raise HTTPException(
                 409, "Les cartes classiques restent acquises automatiquement."
             )
+        if 'coin_price' in data.model_fields_set:
+            floor = minimum_price(row)
+            if data.coin_price is not None and (floor is None or data.coin_price < floor):
+                raise HTTPException(422, f"Prix minimum : {floor} Lunes d’or." if floor else "Cet article n’est pas proposé en Lunes d’or.")
+            c.execute('UPDATE collection_products SET coin_price=? WHERE id=?', (data.coin_price, pid))
         if pid in data.bonus or len(data.bonus) != len(set(data.bonus)):
             raise HTTPException(422, "Bonus dupliqué ou identique au produit.")
         for bid in data.bonus:
@@ -519,7 +531,7 @@ def edit_daily(data: Daily, *, admin: Admin, db: Database):
             ).fetchone()
             for pid in data.products
         ]
-        if len(set(data.products)) != len(items) or any(p is None for p in items):
+        if len(set(data.products)) != len(items) or any(p is None or p['kind'] not in {'card','voice','theme','sticker'} for p in items):
             raise HTTPException(422, "Sélection invalide.")
         counts = {
             kind: sum(p["kind"] == kind for p in items)

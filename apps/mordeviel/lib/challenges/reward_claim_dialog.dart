@@ -5,14 +5,36 @@ import 'challenge_sounds.dart';
 import '../social/social_api.dart';
 import '../social/social_service.dart';
 import '../profile/avatar_border.dart';
+import 'challenge_tier.dart';
+export 'challenge_tier.dart';
 
-enum RewardChestTier { classic, epic, premium }
+RewardChestTier challengeChestTier(Iterable<Map> challenges) {
+  var tier = RewardChestTier.classic;
+  for (final challenge in challenges) {
+    final current =
+        explicitChallengeTier(challenge) ??
+        rewardChestTier((challenge['rewards'] as List? ?? []).cast<Map>());
+    if (current.index > tier.index) tier = current;
+  }
+  return tier;
+}
 
-Color rewardChestLight(RewardChestTier tier) => switch (tier) {
-  RewardChestTier.classic => const Color(0xFFFFD995),
-  RewardChestTier.epic => const Color(0xFFD1A1FF),
-  RewardChestTier.premium => const Color(0xFF79EBF4),
-};
+class RewardChestIllustration extends StatelessWidget {
+  const RewardChestIllustration({
+    super.key,
+    this.motion = 0,
+    this.opening = 0,
+    this.tier = RewardChestTier.classic,
+    this.reduced = false,
+  });
+  final double motion, opening;
+  final RewardChestTier tier;
+  final bool reduced;
+  @override
+  Widget build(BuildContext context) => CustomPaint(
+    painter: _RewardChest(motion, opening, opening > 0, reduced, tier),
+  );
+}
 
 /// A batch uses the most prestigious cosmetic it contains.
 RewardChestTier rewardChestTier(Iterable<Map> rewards) {
@@ -342,7 +364,7 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
                                         _opening.value,
                                         _received,
                                         _reduced,
-                                        rewardChestTier(_rewards),
+                                        challengeChestTier(widget.challenges),
                                       ),
                                     ),
                                   ),
@@ -352,7 +374,9 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
                                       ? _revealed
                                             ? 'Ces trésors sont à vous !'
                                             : 'Le coffre s’ouvre…'
-                                      : switch (rewardChestTier(_rewards)) {
+                                      : switch (challengeChestTier(
+                                          widget.challenges,
+                                        )) {
                                           RewardChestTier.classic =>
                                             'Un coffre classique vous attend',
                                           RewardChestTier.epic =>

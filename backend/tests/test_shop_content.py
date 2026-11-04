@@ -5,7 +5,7 @@ from mordeviel_api.main import app
 from .helpers import post_verified
 
 
-def test_official_content_and_disabled_purchases(tmp_path, monkeypatch):
+def test_official_content_and_public_coin_shop(tmp_path, monkeypatch):
     monkeypatch.setenv("MORDEVIEL_COMMUNITY_DB", str(tmp_path / "content.sqlite3"))
     monkeypatch.setenv("MORDEVIEL_SUPPORT_TOKEN", "admin-test-content")
     with TestClient(app) as api:
@@ -46,12 +46,12 @@ def test_official_content_and_disabled_purchases(tmp_path, monkeypatch):
             for row in api.get("/community/info").json()["announcements"]
         )
         catalog = api.get("/shop/catalog").json()
-        assert catalog["purchases_enabled"] is False
-        assert len(catalog["products"]) == 6
+        assert catalog["purchases_enabled"] is True
+        assert catalog["payments_enabled"] is False
+        assert len(catalog["products"]) == 9
         for product in catalog["products"]:
             assert product["purchasable"] is False
-            result = post_verified(
-                api, "/shop/purchase", json={"product_id": product["id"]}
-            )
-            assert result.status_code == 409
-            assert "Non disponible" in result.json()["detail"]
+        assert api.post('/shop/purchase', json={
+            'product_id': catalog['products'][0]['id'], 'day': catalog['day'],
+            'expected_price': catalog['products'][0]['coin_price'],
+        }).status_code == 401
