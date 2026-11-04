@@ -16,6 +16,58 @@ Future<void> waitUntil(bool Function() condition) async {
 }
 
 void main() {
+  for (final explicitEvent in [false, true]) {
+    test(
+      'Un salon fermé ne déclenche aucune reprise (événement : $explicitEvent)',
+      () async {
+        final server = await HttpServer.bind('127.0.0.1', 0);
+        final client = LobbyClient();
+        final closed = Completer<Map<String, dynamic>>();
+        var connections = 0, closures = 0;
+        final sockets = <WebSocket>[];
+        final subscription = client.events.listen((event) {
+          if (event['type'] == 'room.closed') {
+            closures++;
+            if (!closed.isCompleted) closed.complete(event);
+          }
+        });
+        server.listen((request) async {
+          connections++;
+          final socket = await WebSocketTransformer.upgrade(request);
+          sockets.add(socket);
+          socket.listen((raw) {
+            if ((jsonDecode(raw as String) as Map)['type'] != 'room.join')
+              return;
+            if (explicitEvent)
+              socket.add(
+                jsonEncode({
+                  'type': 'room.closed',
+                  'message': 'Le MDJ a fermé le salon.',
+                }),
+              );
+            socket.close(4004, 'Le MDJ a fermé le salon.');
+          });
+        });
+        addTearDown(() async {
+          await subscription.cancel();
+          await client.dispose();
+          for (final socket in sockets) {
+            await socket.close();
+          }
+          await server.close(force: true);
+        });
+        await client.connect('127.0.0.1:${server.port}', '123456', 'Joueur');
+        expect(
+          (await closed.future.timeout(const Duration(seconds: 3)))['message'],
+          contains('fermé'),
+        );
+        await expectLater(client.reconnect(), throwsStateError);
+        await Future<void>.delayed(const Duration(milliseconds: 2200));
+        expect(connections, 1);
+        expect(closures, 1);
+      },
+    );
+  }
   test(
     'La reprise automatique réutilise le jeton après une vraie fermeture du transport',
     () async {

@@ -14,6 +14,7 @@ import 'services/game_background_session.dart';
 import 'social/social_notifications.dart';
 import 'content/prepare_room_content.dart';
 import 'social/social_api.dart';
+import 'social/online_hub.dart';
 import 'night_panel.dart';
 import 'village/village_map.dart';
 import 'village/village_navigation.dart';
@@ -50,12 +51,18 @@ class LocalLobbyScreen extends StatefulWidget {
     this.publicRoom = false,
     this.roomTitle = 'Le village de la nuit',
     this.initialTheme = 'classic',
+    this.hostFactory,
+    this.clientFactory,
   });
   final bool online;
   final String? initialCode, initialNickname, communityToken;
   final String? initialAppearance;
   final bool autoStart, publicRoom;
   final String roomTitle, initialTheme;
+  @visibleForTesting
+  final GameHost Function()? hostFactory;
+  @visibleForTesting
+  final LobbyClient Function()? clientFactory;
   @override
   State<LocalLobbyScreen> createState() => _LocalLobbyScreenState();
 }
@@ -1155,17 +1162,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     try {
       if (hosting) {
         final selectedNarrator = ClassicAudio.instance.voiceProfile.id;
-        final GameHost host = widget.online
-            ? OnlineHost(
-                _address.text,
-                communityToken:
-                    widget.communityToken ??
-                    (await SocialApi.instance.session())?.token,
-                publicRoom: widget.publicRoom,
-                title: widget.roomTitle,
-                initialTheme: widget.initialTheme,
-              )
-            : LocalHost();
+        final GameHost host =
+            widget.hostFactory?.call() ??
+            (widget.online
+                ? OnlineHost(
+                    _address.text,
+                    communityToken:
+                        widget.communityToken ??
+                        (await SocialApi.instance.session())?.token,
+                    publicRoom: widget.publicRoom,
+                    title: widget.roomTitle,
+                    initialTheme: widget.initialTheme,
+                  )
+                : LocalHost());
         _host = host;
         if (!widget.online) unawaited(_checkBotAdmin());
         await host.start(nickname: _name.text, port: 0);
@@ -1214,11 +1223,13 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         });
         _refreshVillage();
       } else {
-        final client = LobbyClient();
+        final client = widget.clientFactory?.call() ?? LobbyClient();
         _client = client;
         _subscription = client.events.listen((event) {
           if (!mounted) return;
-          if (event['type'] == 'room.snapshot') {
+          if (event['type'] == 'room.closed' && widget.online) {
+            unawaited(_returnToOnlineVillages(closedByHost: true));
+          } else if (event['type'] == 'room.snapshot') {
             _joinTimeout?.cancel();
             setState(() {
               _room = event;
@@ -1366,6 +1377,40 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     return true;
   }
 
+  bool _returningToVillages = false;
+
+  Future<void> _returnToOnlineVillages({bool closedByHost = false}) async {
+    if (_returningToVillages || !mounted) return;
+    _returningToVillages = true;
+    final navigator = Navigator.of(context);
+    final roomRoute = ModalRoute.of(context);
+    await _reset();
+    if (!mounted) return;
+    // Remove the room and any sheet, ceremony or conversation covering it.
+    // Recreate discovery so a closed room cannot remain in its cached list.
+    unawaited(
+      navigator.pushAndRemoveUntil<void>(
+        MaterialPageRoute(builder: (_) => const OnlineHubScreen()),
+        (route) => route.isFirst && !identical(route, roomRoute),
+      ),
+    );
+    if (closedByHost) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Le MDJ a fermé le salon.')));
+    }
+  }
+
+  Future<void> _leaveRoom({bool popLocal = false}) async {
+    if (!await _confirmLeave() || !mounted) return;
+    if (widget.online) {
+      await _returnToOnlineVillages();
+    } else {
+      await _reset();
+      if (popLocal && mounted) Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => PopScope(
     canPop: _room == null && !_busy,
@@ -1375,10 +1420,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         setState(() => _destination = VillageDestination.village);
         return;
       }
-      if (await _confirmLeave()) {
-        await _reset();
-        if (context.mounted) Navigator.pop(context);
-      }
+      await _leaveRoom(popLocal: true);
     },
     child: Scaffold(
       appBar: _room != null && hasRoomConfiguration(_room!)
@@ -1701,13 +1743,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   List<Widget> _lobby(VillageDestination section, {double? mapHeight}) {
     if (!hasRoomConfiguration(_room!)) {
-      return [
-        IncompatibleRoomNotice(
-          onLeave: () async {
-            if (await _confirmLeave()) await _reset();
-          },
-        ),
-      ];
+      return [IncompatibleRoomNotice(onLeave: _leaveRoom)];
     }
     final players = (_room!['players'] as List).cast<Map<String, dynamic>>();
     final self = players.where((p) => p['id'] == _client?.id).firstOrNull;
@@ -1723,13 +1759,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
                 (role) => role.id == assignments[player['id']],
               ),
             ))) {
-      return [
-        IncompatibleRoomNotice(
-          onLeave: () async {
-            if (await _confirmLeave()) await _reset();
-          },
-        ),
-      ];
+      return [IncompatibleRoomNotice(onLeave: _leaveRoom)];
     }
     final total = deck.values.fold(0, (a, b) => a + b);
     final game = _room!['game'] as Map?;
@@ -1771,6 +1801,23 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         .whereType<Map>()
         .toList();
     return [
+      if (_canAddBots &&
+          !started &&
+          [
+            VillageDestination.village,
+            VillageDestination.preparation,
+            VillageDestination.actions,
+          ].contains(section))
+        OutlinedButton.icon(
+          key: const ValueKey('add-room-bots'),
+          onPressed: _addingBots || !_connected ? null : _addTestBots,
+          icon: const Icon(Icons.smart_toy_outlined),
+          label: Text(
+            _addingBots
+                ? 'Connexion des bots…'
+                : 'Ajouter des joueurs virtuels',
+          ),
+        ),
       if (section == VillageDestination.preparation) ...[
         Text(
           !started
@@ -1878,16 +1925,6 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
           section == VillageDestination.preparation ||
           section == VillageDestination.actions) ...[
         if (_canAddBots) ...[
-          if (!started)
-            OutlinedButton.icon(
-              onPressed: _addingBots || !_connected ? null : _addTestBots,
-              icon: const Icon(Icons.smart_toy_outlined),
-              label: Text(
-                _addingBots
-                    ? 'Connexion des bots…'
-                    : 'Ajouter des joueurs virtuels',
-              ),
-            ),
           if (_testBots != null || (_room?['bot_count'] as int? ?? 0) > 0)
             Card(
               child: Padding(
@@ -2423,9 +2460,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         ),
         const SizedBox(height: 16),
         OutlinedButton(
-          onPressed: () async {
-            if (await _confirmLeave()) await _reset();
-          },
+          onPressed: _leaveRoom,
           child: Text(_host != null ? 'Fermer le salon' : 'Quitter le salon'),
         ),
       ],

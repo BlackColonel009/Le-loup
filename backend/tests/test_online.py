@@ -173,9 +173,15 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect(close_via
             mdj.send_json({"action": "room.close"})
         # Wait for the server shutdown handshake before cancelling TestClient tasks.
         for player in [*players[1:], resumed]:
-            with pytest.raises(WebSocketDisconnect):
+            closed_event = False
+            with pytest.raises(WebSocketDisconnect) as disconnected:
                 for _ in range(100):
-                    player.receive_json()
+                    event = player.receive_json()
+                    if event.get('type') == 'room.closed':
+                        closed_event = True
+                        assert 'fermé' in event['message']
+            assert closed_event
+            assert disconnected.value.code == 4004
 
 
 def test_room_validation_and_unknown_rooms():

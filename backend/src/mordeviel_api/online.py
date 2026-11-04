@@ -423,7 +423,11 @@ async def player_socket(socket: WebSocket, code: str):
                         if event.get('token'):
                             engine.player_tokens[hashlib.sha256(event['token'].encode()).hexdigest()]=event['id']
                     await socket.send_text(text)
-                await socket.close(code=1001)
+                if engine.closed:
+                    await socket.send_json({'type': 'room.closed', 'message': 'Le MDJ a fermé le salon.'})
+                    await socket.close(code=4004, reason='Le MDJ a fermé le salon.')
+                else:
+                    await socket.close(code=1001)
 
             tasks = [
                 asyncio.create_task(from_player()),
@@ -439,7 +443,11 @@ async def player_socket(socket: WebSocket, code: str):
                 await asyncio.gather(*tasks, return_exceptions=True)
     except (WebSocketDisconnect, ConnectionClosed, ValueError, TypeError, OSError):
         with contextlib.suppress(RuntimeError, WebSocketDisconnect):
-            await socket.close(code=1008)
+            if engine.closed:
+                await socket.send_json({'type': 'room.closed', 'message': 'Le MDJ a fermé le salon.'})
+                await socket.close(code=4004, reason='Le MDJ a fermé le salon.')
+            else:
+                await socket.close(code=1008)
     finally:
         engine.connections -= 1
 

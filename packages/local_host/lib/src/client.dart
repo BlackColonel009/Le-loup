@@ -16,6 +16,7 @@ class LobbyClient {
   String? _accountToken;
   String? _accountNickname;
   bool _closed = false;
+  bool _roomClosed = false;
   bool _inGame = false;
   bool _background = false;
   bool _manualDisconnect = false;
@@ -25,6 +26,7 @@ class LobbyClient {
 
   Future<void> reconnect() async {
     if (_closed || _reconnecting) return;
+    if (_roomClosed) throw StateError('Ce salon est fermé.');
     if (_address == null || (_inGame && _token == null))
       throw StateError('Aucune session à reprendre.');
     _retry?.cancel();
@@ -45,7 +47,8 @@ class LobbyClient {
   }
 
   void _retryConnection() {
-    if (_closed || _manualDisconnect || _retryCount >= 12) return;
+    if (_closed || _roomClosed || _manualDisconnect || _retryCount >= 12)
+      return;
     _retry?.cancel();
     final delay = Duration(seconds: (++_retryCount * 2).clamp(2, 10));
     _retry = Timer(delay, () async {
@@ -112,6 +115,15 @@ class LobbyClient {
       disconnectReported = true;
       final reason = socket.closeReason;
       final status = socket.closeCode;
+      if (status == 4004) {
+        _roomClosed = true;
+        _retry?.cancel();
+        _events.add({
+          'type': 'room.closed',
+          'message': reason ?? 'Le MDJ a fermé le salon.',
+        });
+        return;
+      }
       final terminal =
           status == 1008 ||
           status == 4001 ||
@@ -137,9 +149,14 @@ class LobbyClient {
 
     socket.listen(
       (raw) {
-        if (_closed || !identical(_socket, socket)) return;
+        if (_closed || _roomClosed || !identical(_socket, socket)) return;
         try {
           final data = jsonDecode(raw as String) as Map<String, dynamic>;
+          if (data['type'] == 'room.closed') {
+            _roomClosed = true;
+            disconnectReported = true;
+            _retry?.cancel();
+          }
           if (data['type'] == 'error' && data['code'] == 'resume_busy') {
             // The previous transport may still be completing its close handshake.
             socket.close(1000, 'Reprise différée');
