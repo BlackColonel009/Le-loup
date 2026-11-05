@@ -79,7 +79,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/chibis/victory/
     - assets/cards/
     - assets/store/
     - assets/events/mere_grand_poster.png

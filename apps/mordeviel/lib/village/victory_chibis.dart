@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'ending_data.dart';
+import '../content/content_image.dart';
 
 const victoryChibiAssets = <String, String>{
   'villager': 'villageois',
@@ -149,16 +150,11 @@ class VictoryChibiGroup extends StatelessWidget {
           child: Transform.flip(
             key: ValueKey('victory-facing-${figure.id}'),
             flipX: mirrorVictoryFigure(index, count),
-            child: Image.asset(
+            child: ContentImage(
               figure.asset,
               fit: BoxFit.contain,
-              cacheHeight: 720,
+              cacheWidth: 512,
               excludeFromSemantics: true,
-              errorBuilder: (_, _, _) => const Icon(
-                Icons.emoji_events,
-                color: Color(0xFFE5C078),
-                size: 64,
-              ),
             ),
           ),
         ),

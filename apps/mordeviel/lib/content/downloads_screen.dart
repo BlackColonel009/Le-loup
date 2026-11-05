@@ -204,6 +204,10 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                           'Nécessaire pour ton action',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
+                      if (pack['id'] == 'victory-poses')
+                        const Text(
+                          'Facultatif · Ajoute les poses illustrées en fin de partie. Sans ce pack, le résultat et les vainqueurs restent affichés.',
+                        ),
                       Text(
                         '${((pack['size'] as num) / 1048576).toStringAsFixed(1)} Mo · ${store.installed(pack['id'] as String) ? 'Installé' : 'À télécharger / mettre à jour'}',
                       ),

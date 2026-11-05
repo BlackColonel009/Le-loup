@@ -1,5 +1,6 @@
 String packLabel(String id) =>
     const {
+      'victory-poses': 'Victoires · Poses des personnages',
       'stickers-classic': 'Stickers · Émotions du village',
       'stickers-rewards': 'Stickers · Curiosités à collectionner',
       'avatars-classic': 'Avatars · Visages classiques',
@@ -21,6 +22,7 @@ String packLabel(String id) =>
     'Pack supplémentaire';
 
 String? downloadablePackForAsset(String asset) {
+  if (asset.startsWith('assets/chibis/victory/')) return 'victory-poses';
   if (asset.contains('/avatars/rewards/')) return 'avatars-rewards';
   if (asset.contains('/borders/rewards/')) return 'borders-rewards';
   if (asset.contains('/avatars/classic/')) return 'avatars-classic';

@@ -291,6 +291,24 @@ class PackStore extends ChangeNotifier {
           continue;
         }
         await file.parent.create(recursive: true);
+        // Versions have separate directories. Reuse an unchanged installed
+        // asset locally, keeping its previous file readable during the update.
+        final cachedPath = _paths[f['asset']];
+        if (cachedPath != null && cachedPath != file.path) {
+          final cached = File(cachedPath);
+          if (await cached.exists() &&
+              await cached.length() == expected &&
+              (await sha256.bind(cached.openRead()).first).toString() ==
+                  f['sha256']) {
+            await cached.copy(file.path);
+            _paths[f['asset'] as String] = file.path;
+            await _saveIndex();
+            done += expected;
+            progress[id] = done / total;
+            notifyListeners();
+            continue;
+          }
+        }
         final part = File('${file.path}.part');
         var offset = await part.exists() ? await part.length() : 0;
         if (offset > expected) {

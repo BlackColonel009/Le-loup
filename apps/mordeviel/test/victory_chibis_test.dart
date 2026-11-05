@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mordeviel/village/victory_chibis.dart';
+import 'package:mordeviel/content/pack_messages.dart';
 
 void main() {
+  test('Victory poses are downloadable and excluded from the app bundle', () {
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    expect(pubspec, isNot(contains('    - assets/chibis/')));
+    final catalog =
+        jsonDecode(File('../../shared/content/catalog.json').readAsStringSync())
+            as Map;
+    final pack =
+        (catalog['packs'] as List).singleWhere(
+              (p) => p['id'] == 'victory-poses',
+            )
+            as Map;
+    final assets = (pack['files'] as List).map((f) => f['asset']).toSet();
+    for (final role in victoryChibiAssets.keys) {
+      final figure = VictoryFigure('test', role, 'Joueur', true);
+      expect(assets, contains(figure.asset));
+      expect(downloadablePackForAsset(figure.asset), 'victory-poses');
+    }
+    expect(pack['size'], greaterThan(0));
+  });
   test('Only winners, final roles, survivors and eliminated allies', () {
     final figures = victoryFigures(
       {

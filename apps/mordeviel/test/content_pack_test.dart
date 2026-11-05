@@ -10,6 +10,7 @@ void main() {
   late Map<String, dynamic> manifest;
   var corrupt = false;
   String? range;
+  var fileRequests = 0;
   final payload = utf8.encode('A verified downloadable sticker payload');
   final digest = sha256.convert(payload).toString();
   setUp(() async {
@@ -17,6 +18,7 @@ void main() {
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     corrupt = false;
     range = null;
+    fileRequests = 0;
     manifest = {
       'packs': [
         {
@@ -40,6 +42,7 @@ void main() {
         request.response.headers.contentType = ContentType.json;
         request.response.write(jsonEncode(manifest));
       } else {
+        fileRequests++;
         range = request.headers.value('range');
         final offset = range == null
             ? 0
@@ -130,4 +133,48 @@ void main() {
       expect(restarted.pathFor('assets/stickers/classic/test.png'), previous);
     },
   );
+  test(
+    'Ajouter une carte réutilise les fichiers inchangés du même pack',
+    () async {
+      final s = store();
+      await s.refresh();
+      await s.install('test-pack');
+      final previous = s.pathFor('assets/stickers/classic/test.png')!;
+      final p = manifest['packs'][0] as Map;
+      p['version'] = 'abcdef1234567890';
+      p['files'][0]['url'] =
+          '/content/packs/test-pack/abcdef1234567890/$digest';
+      p['files'].add(<String, Object>{
+        ...Map<String, Object>.from(p['files'][0] as Map),
+        'asset': 'assets/stickers/classic/new.png',
+      });
+      p['size'] = payload.length * 2;
+      await s.refresh();
+      expect(s.pathFor('assets/stickers/classic/test.png'), previous);
+      await s.install('test-pack');
+      expect(fileRequests, 2); // Initial installation + the new asset only.
+      expect(s.installed('test-pack'), isTrue);
+      expect(await File(previous).readAsBytes(), payload);
+      final restarted = store();
+      await restarted.initialize();
+      expect(restarted.installed('test-pack'), isTrue);
+      expect(restarted.pathFor('assets/stickers/classic/new.png'), isNotNull);
+    },
+  );
+  test('Une mise à jour corrompue conserve la carte déjà installée', () async {
+    final s = store();
+    await s.refresh();
+    await s.install('test-pack');
+    final previous = s.pathFor('assets/stickers/classic/test.png')!;
+    final p = manifest['packs'][0] as Map;
+    final changed = sha256.convert(List.filled(payload.length, 42)).toString();
+    p['version'] = 'abcdef1234567890';
+    p['files'][0]['sha256'] = changed;
+    p['files'][0]['url'] = '/content/packs/test-pack/abcdef1234567890/$changed';
+    await s.refresh();
+    await expectLater(s.install('test-pack'), throwsFormatException);
+    expect(s.pathFor('assets/stickers/classic/test.png'), previous);
+    expect(await File(previous).readAsBytes(), payload);
+    expect(s.installed('test-pack'), isFalse);
+  });
 }

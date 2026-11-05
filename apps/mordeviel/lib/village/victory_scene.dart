@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../cards/card_gallery.dart';
-import '../cards/classic_role.dart';
+import '../content/pack_store.dart';
 import 'ending_data.dart';
 import 'game_history.dart';
 import '../coins/coin_reward_scene.dart';
@@ -64,6 +64,7 @@ class _VictorySceneState extends State<VictoryScene>
   @override
   void initState() {
     super.initState();
+    unawaited(PackStore.instance.initialize().catchError((Object _) {}));
     if (widget.matchId != null) unawaited(_loadCoins());
   }
 
@@ -190,21 +191,17 @@ class _VictorySceneState extends State<VictoryScene>
                           child: child,
                         ),
                       ),
-                      child: Center(
-                        child: figures.isNotEmpty
-                            ? VictoryChibiGroup(figures: figures)
-                            : SizedBox(
-                                height: (size.maxHeight * .40).clamp(140, 310),
-                                child: AspectRatio(
-                                  aspectRatio: .7,
-                                  child: RoleCardFront(
-                                    role: configuredRole(
-                                      ending?.role ?? 'villager',
-                                    ),
-                                    ambience: widget.ambience,
-                                  ),
-                                ),
-                              ),
+                      child: ListenableBuilder(
+                        listenable: PackStore.instance,
+                        builder: (_, _) =>
+                            figures.isNotEmpty &&
+                                figures.every(
+                                  (f) =>
+                                      PackStore.instance.pathFor(f.asset) !=
+                                      null,
+                                )
+                            ? Center(child: VictoryChibiGroup(figures: figures))
+                            : const SizedBox.shrink(),
                       ),
                     ),
                     const SizedBox(height: 22),
@@ -236,7 +233,7 @@ class _VictorySceneState extends State<VictoryScene>
                       onPressed: () =>
                           showGameHistory(context, widget.game, widget.players),
                       icon: const Icon(Icons.history_edu),
-                        label: const Text('Voir les joueurs et l’historique'),
+                      label: const Text('Voir les joueurs et l’historique'),
                     ),
                     FilledButton.icon(
                       onPressed: _loadingCoins || _openingCoins

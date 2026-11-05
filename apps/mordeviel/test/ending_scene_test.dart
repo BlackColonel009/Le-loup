@@ -10,6 +10,7 @@ import 'package:mordeviel/design/game_theme.dart';
 import 'package:mordeviel/village/ceremonies.dart';
 import 'package:mordeviel/village/ending_data.dart';
 import 'package:mordeviel/village/victory_scene.dart';
+import 'package:mordeviel/village/victory_chibis.dart';
 
 const capture = bool.fromEnvironment('CAPTURE_ENDINGS');
 
@@ -117,6 +118,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(gameEndings[winner]!.title), findsOneWidget);
       expect(find.text('À l’honneur : Logan'), findsOneWidget);
+      expect(find.byType(VictoryChibiGroup), findsNothing);
+      expect(find.byType(RoleCardFront), findsNothing);
       expect(tester.takeException(), isNull);
       if (capture && (winner == 'village' || winner == 'wolves')) {
         await tester.runAsync(() async {

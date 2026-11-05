@@ -113,6 +113,136 @@
       ]
     },
     {
+      "id": "victory-poses",
+      "title": "Victoires · Poses des personnages",
+      "kind": "illustrations",
+      "theme": null,
+      "version": "a897c0eb9dfadbcd",
+      "size": 36081216,
+      "files": [
+        {
+          "asset": "assets/chibis/victory/alpha-v1.png",
+          "size": 2093283,
+          "sha256": "883363a7f22c5872d1180c72e5aecb0428dad898c6fa5431612963cfd2eaa306",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/883363a7f22c5872d1180c72e5aecb0428dad898c6fa5431612963cfd2eaa306"
+        },
+        {
+          "asset": "assets/chibis/victory/ancien-v1.png",
+          "size": 1905877,
+          "sha256": "88186bb0d5608d4dd358065b92c2b3ae43edb87252514ee821c0b3fc55ed0e27",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/88186bb0d5608d4dd358065b92c2b3ae43edb87252514ee821c0b3fc55ed0e27"
+        },
+        {
+          "asset": "assets/chibis/victory/ange-v1.png",
+          "size": 2260098,
+          "sha256": "0fb0f1b279f918c0270fcb677078d5ee9766fceaf4eab48e74c5f969f7f39040",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/0fb0f1b279f918c0270fcb677078d5ee9766fceaf4eab48e74c5f969f7f39040"
+        },
+        {
+          "asset": "assets/chibis/victory/bouc-emissaire-v1.png",
+          "size": 1467750,
+          "sha256": "4500c2d1bd7eedb3a71f91570ea07976e6ca02fdf430f979642440ee7598cc2b",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/4500c2d1bd7eedb3a71f91570ea07976e6ca02fdf430f979642440ee7598cc2b"
+        },
+        {
+          "asset": "assets/chibis/victory/chasseur-v1.png",
+          "size": 1694644,
+          "sha256": "959092a121402446c4a7e8599c0d8a020ba7af97eaa4e3a31e9885a6ecaa9a67",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/959092a121402446c4a7e8599c0d8a020ba7af97eaa4e3a31e9885a6ecaa9a67"
+        },
+        {
+          "asset": "assets/chibis/victory/cupidon-v1.png",
+          "size": 1893158,
+          "sha256": "6a08cfabaa292091cb8d435e49fd498293811b5bfde55789227859acea7a9533",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/6a08cfabaa292091cb8d435e49fd498293811b5bfde55789227859acea7a9533"
+        },
+        {
+          "asset": "assets/chibis/victory/deux-soeurs-v1.png",
+          "size": 2043834,
+          "sha256": "c33acad854f5452609bd24182f8f40fe60ac6a7c227b61a7c13d3d9373e78f3c",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/c33acad854f5452609bd24182f8f40fe60ac6a7c227b61a7c13d3d9373e78f3c"
+        },
+        {
+          "asset": "assets/chibis/victory/idiot-du-village-v1.png",
+          "size": 1473348,
+          "sha256": "c04d07c91e470496af16767d8079eb9bb19a9e9ceeacd9876dde122bd313632e",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/c04d07c91e470496af16767d8079eb9bb19a9e9ceeacd9876dde122bd313632e"
+        },
+        {
+          "asset": "assets/chibis/victory/joueur-de-flute-v1.png",
+          "size": 1744161,
+          "sha256": "4eb04fa37675448b66a91fe6b283fd67fc7520c7fa27e254d339342795d02529",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/4eb04fa37675448b66a91fe6b283fd67fc7520c7fa27e254d339342795d02529"
+        },
+        {
+          "asset": "assets/chibis/victory/loup-blanc-v1.png",
+          "size": 1509334,
+          "sha256": "faf215e540cf2f962c5f87b25c7063f9a3a8296392a5223bc4a0725737dcb77b",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/faf215e540cf2f962c5f87b25c7063f9a3a8296392a5223bc4a0725737dcb77b"
+        },
+        {
+          "asset": "assets/chibis/victory/loup-garou-v1.png",
+          "size": 1874053,
+          "sha256": "0c3662868b2a697ff20f10eb709556c652a9112064dc2dda8aea9b0df4071bb0",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/0c3662868b2a697ff20f10eb709556c652a9112064dc2dda8aea9b0df4071bb0"
+        },
+        {
+          "asset": "assets/chibis/victory/maire-v1.png",
+          "size": 1885396,
+          "sha256": "4e791fb87d6c16b4df1e03e2790c6738f3ad8ca2d7acc78e98f9f84757aa7b82",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/4e791fb87d6c16b4df1e03e2790c6738f3ad8ca2d7acc78e98f9f84757aa7b82"
+        },
+        {
+          "asset": "assets/chibis/victory/metamorphe-v1.png",
+          "size": 1552279,
+          "sha256": "1254aaa9db41a7380c6d17d3776d61e3bc98605c8fb20b8321192e5afda7fb72",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/1254aaa9db41a7380c6d17d3776d61e3bc98605c8fb20b8321192e5afda7fb72"
+        },
+        {
+          "asset": "assets/chibis/victory/pere-des-loups-v1.png",
+          "size": 2174280,
+          "sha256": "369a913d6bb974d5425f8ee479b55d49ea674fe1a83f69ab8ffd887e151a3fc5",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/369a913d6bb974d5425f8ee479b55d49ea674fe1a83f69ab8ffd887e151a3fc5"
+        },
+        {
+          "asset": "assets/chibis/victory/petite-fille-v1.png",
+          "size": 1498148,
+          "sha256": "fbcfda5c8cab55d32724ef01663fdd3e741d895dbb3ee630463be406affbd52c",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/fbcfda5c8cab55d32724ef01663fdd3e741d895dbb3ee630463be406affbd52c"
+        },
+        {
+          "asset": "assets/chibis/victory/salvateur-v1.png",
+          "size": 2019877,
+          "sha256": "7e7eccc6f62896ca0ef525c6fcff55e7bf72bc8efef04ef638d37d17c47ce42d",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/7e7eccc6f62896ca0ef525c6fcff55e7bf72bc8efef04ef638d37d17c47ce42d"
+        },
+        {
+          "asset": "assets/chibis/victory/sorciere-v1.png",
+          "size": 1871222,
+          "sha256": "8dd4d49908b21f2230947203612864eb8075a19929ad8ac8463a816505e2dd6c",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/8dd4d49908b21f2230947203612864eb8075a19929ad8ac8463a816505e2dd6c"
+        },
+        {
+          "asset": "assets/chibis/victory/sulfuron-v1.png",
+          "size": 1344029,
+          "sha256": "3f9c587c4641fc660fa1e696532a78e51eaa4b2919088dd853ee2c09e527daa0",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/3f9c587c4641fc660fa1e696532a78e51eaa4b2919088dd853ee2c09e527daa0"
+        },
+        {
+          "asset": "assets/chibis/victory/villageois-v1.png",
+          "size": 1573989,
+          "sha256": "9d2f641c5000deaa799477708e0d0e3882c03173347d6e74181e9ae21073998b",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/9d2f641c5000deaa799477708e0d0e3882c03173347d6e74181e9ae21073998b"
+        },
+        {
+          "asset": "assets/chibis/victory/voyante-v1.png",
+          "size": 2202456,
+          "sha256": "4ad43ca8833f25656ee160255451b81d8ff2d649e5d284f96e76081f578eccd3",
+          "url": "/content/packs/victory-poses/a897c0eb9dfadbcd/4ad43ca8833f25656ee160255451b81d8ff2d649e5d284f96e76081f578eccd3"
+        }
+      ]
+    },
+    {
       "id": "stickers-rewards",
       "title": "Curiosités du village · Stickers à collectionner",
       "kind": "stickers",

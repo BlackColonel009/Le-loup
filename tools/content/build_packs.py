@@ -35,6 +35,8 @@ def pack(pack_id, title, files, kind, theme=None, asset_prefix=None):
 
 
 pack('stickers-classic', 'Émotions du village', (ASSETS / 'stickers/classic').glob('*.png'), 'stickers')
+pack('victory-poses', 'Victoires · Poses des personnages',
+     (ASSETS / 'chibis/victory').glob('*.png'), 'illustrations')
 pack('stickers-rewards', 'Curiosités du village · Stickers à collectionner', (ASSETS / 'stickers/rewards').glob('*.png'), 'stickers')
 avatars = json.loads((ROOT / 'shared/avatars/catalog.json').read_text(encoding='utf-8'))['avatars']
 pack('avatars-classic', 'Visages du village · Classique',
