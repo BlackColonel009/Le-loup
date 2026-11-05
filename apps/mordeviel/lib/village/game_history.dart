@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../cards/classic_role.dart';
 import 'narrative_journal.dart';
+import '../profile/player_avatar.dart';
 
 Future<void> showGameHistory(BuildContext context, Map game, List players) =>
     Navigator.of(context).push<void>(
@@ -51,6 +52,16 @@ class GameHistoryScreen extends StatelessWidget {
         }}.';
       case 'effect':
         return switch (e['effect']) {
+          'sulfuron_bluff' =>
+            '$actor annonce ${role(e['announced_role'])} pour $target. Vrai rôle : ${role(e['true_role'])}.',
+          'sulfuron_reveal' =>
+            '$actor révèle la carte de $target : ${role(e['true_role'])}.',
+          'sulfuron_revenge' =>
+            '$actor révèle son accusateur $target : ${role(e['true_role'])}.',
+          'sulfuron_revived' =>
+            '$actor ressuscite après ${e['cause'] == 'vote' ? 'sa première sentence' : 'l’attaque de la meute'}. Vies restantes : ${e['remaining_lives']}.',
+          'sulfuron_soul_gained' =>
+            '$actor gagne une vie après la condamnation de $target.',
           'infection' => '$target rejoint la meute.',
           'angel_becomes_villager' =>
             '$target devient ${e['edition'] == 'intense' ? 'Éclaireur Intense' : 'Simple Villageois'} après son épreuve.',
@@ -199,6 +210,10 @@ class GameHistoryScreen extends StatelessWidget {
       'white_wolf.choose' => '$actor attaque $selected.',
       'infection.convert' => '$actor tente d’infecter $selected.',
       'piper.charm' => '$actor charme $selected.',
+      'sulfuron.bluff' => '$actor choisit $selected pour son Bluff.',
+      'sulfuron.reveal' => '$actor lance une Révélation-piège aléatoire.',
+      'sulfuron.mark' =>
+        '$actor marque son accusateur $selected pour le prochain appel.',
       'scapegoat.voters' =>
         '$actor autorise à voter le lendemain : ${selected.isEmpty ? 'personne' : selected}.',
       'little_girl.peek' =>
@@ -212,22 +227,108 @@ class GameHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ended = game['phase'] == 'ended';
     final events = ended ? game['history'] as List? ?? [] : [];
-    return Scaffold(
-      appBar: AppBar(title: const Text('Historique de la partie')),
-      body: !ended
-          ? const Center(
-              child: Text('Le bilan sera disponible à la fin de la partie.'),
-            )
-          : events.isEmpty
-          ? const Center(
-              child: Padding(
-                padding: EdgeInsets.all(24),
-                child: Text(
-                  'Aucun historique détaillé disponible pour cette partie. Les nouvelles parties l’enregistreront après la mise à jour du serveur.',
-                ),
+    final cast = game['final_players'] as List? ?? players;
+    final roles = game['revealed_roles'] as Map? ?? {};
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Historique de la partie'),
+          bottom: ended
+              ? const TabBar(
+                  tabs: [
+                    Tab(text: 'Les joueurs'),
+                    Tab(text: 'Les manches'),
+                  ],
+                )
+              : null,
+        ),
+        body: !ended
+            ? const Center(
+                child: Text('Le bilan sera disponible à la fin de la partie.'),
+              )
+            : TabBarView(
+                children: [
+                  GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 240,
+                          mainAxisExtent: 240,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                        ),
+                    itemCount: cast.length,
+                    itemBuilder: (context, index) {
+                      final p = cast[index] as Map;
+                      final r = roles[p['id']];
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              PlayerAvatar(
+                                avatar: p['avatar'] as Map?,
+                                nickname: p['nickname'] as String? ?? '',
+                                size: 74,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                p['nickname'] as String? ?? 'Joueur',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (p['account_nickname'] is String)
+                                Text(
+                                  '@${p['account_nickname']}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              const SizedBox(height: 8),
+                              Text(
+                                r is String
+                                    ? configuredRole(
+                                        r,
+                                        edition:
+                                            (game['revealed_editions']
+                                                    as Map?)?[p['id']]
+                                                as String? ??
+                                            'classic',
+                                      ).name
+                                    : 'Rôle non enregistré',
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if ((game['winner_ids'] as List? ?? []).contains(
+                                p['id'],
+                              ))
+                                const Text(
+                                  '✦ Victoire',
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  events.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Text(
+                              'Aucun historique détaillé disponible pour cette partie. Les nouvelles parties l’enregistreront après la mise à jour du serveur.',
+                            ),
+                          ),
+                        )
+                      : NarrativeJournal(events: events, describe: describe),
+                ],
               ),
-            )
-          : NarrativeJournal(events: events, describe: describe),
+      ),
     );
   }
 }

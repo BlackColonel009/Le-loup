@@ -34,8 +34,8 @@ def test_collection_default_classics_free_preview_and_price_gate(collection_api)
     api, user, admin = collection_api
     state = api.get("/collection/me", headers=user).json()
     from mordeviel_api.coin_shop import border_products
-    assert len(state["products"]) == 128 + len(border_products())
-    assert len([p for p in state["products"] if p["owned"]]) == 20
+    assert len(state["products"]) == 131 + len(border_products())
+    assert len([p for p in state["products"] if p["owned"]]) == 21
     assert all(p["accessible"] == (p["kind"] not in {"sticker", "border"}) for p in state["products"])
     assert not any(p["claimable"] for p in state["products"])
     assert (

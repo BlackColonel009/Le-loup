@@ -90,6 +90,8 @@ class FakeSocialApi extends SocialApi {
         'id': 1,
         'nickname': 'Alice',
         'is_self': true,
+        'coin_balance': 2345,
+        'bronze_balance': 0,
         'verified': false,
         'stats_visible': true,
         'stats': stats,
@@ -288,6 +290,8 @@ void main() {
   ) async {
     await tester.pumpWidget(app(const SocialProfileScreen()));
     await tester.pumpAndSettle();
+    expect(find.text('0 Lunes bronze'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Victimes en loup'), 180);
     expect(find.text('Victimes en loup'), findsOneWidget);
     final dropdown = find.byKey(const ValueKey('profile-stats-visibility'));
     await tester.scrollUntilVisible(dropdown, 250);

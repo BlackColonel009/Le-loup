@@ -599,7 +599,9 @@ class _NightPanelState extends State<NightPanel> {
               'scapegoat' =>
                 '${name((state['vote_result'] as Map)['eliminated'])}, le Bouc émissaire, est éliminé à cause de l’égalité.',
               _ =>
-                '${name((state['vote_result'] as Map)['eliminated'])} est éliminé par le village.',
+                (state['vote_result'] as Map)['resurrected'] != null
+                    ? '${name((state['vote_result'] as Map)['resurrected'])} est condamné, mais une vie volée lui permet de revenir après la sentence.'
+                    : '${name((state['vote_result'] as Map)['eliminated'])} est éliminé par le village.',
             }),
           ],
           if (daytime && widget.showDayChat) ...[
@@ -892,6 +894,25 @@ class _NightPanelState extends State<NightPanel> {
                 'Le voile se dissipe : ${name(entry.key)} était ${configuredRole(entry.value as String).name}.',
               ),
             if (matching) ...[
+              if (private?['sulfuron_lives'] is int)
+                Card(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.local_fire_department,
+                      color: Color(0xFFFFBB65),
+                    ),
+                    title: Text(
+                      '${private!['sulfuron_lives']} vie(s) volée(s)',
+                    ),
+                    subtitle: Text(
+                      '${private['sulfuron_bluff_ready'] == true ? 'Bluff disponible.' : 'Bluff en recharge jusqu’à la nuit suivante.'} ${private['edition'] == 'classic'
+                          ? 'Le vote reste mortel.'
+                          : private['sulfuron_vote_used'] == true
+                          ? 'Protection au vote déjà consommée.'
+                          : 'Une vie protège aussi de votre première condamnation.'}',
+                    ),
+                  ),
+                ),
               if (private?['variant'] is Map)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),

@@ -45,7 +45,7 @@ def main():
     parser.add_argument('mode', choices=['auditions', 'cues'])
     parser.add_argument('--profile')
     parser.add_argument('--limit', type=int)
-    parser.add_argument('--cue', help='Render only this logical cue')
+    parser.add_argument('--cue', help='Render these logical cues (comma separated)')
     parser.add_argument('--events', action='store_true', help='Render only extra character/event lines')
     parser.add_argument('--narration', action='store_true', help='Render the complete shared MDJ announcements')
     parser.add_argument('--batch-size', type=int, default=1)
@@ -128,7 +128,7 @@ def main():
                 from batch_neural import generate_batch
                 pending = [(cue, text) for cue, text in lines.items()
                     if cue != 'preview' and cue not in manifest['cues']
-                    and (not args.cue or cue == args.cue)
+                    and (not args.cue or cue in args.cue.split(','))
                     and (not args.events or cue in extra)]
                 if args.limit: pending = pending[:args.limit - count]
                 for offset in range(0, len(pending), args.batch_size):
@@ -152,7 +152,7 @@ def main():
             for cue, text in lines.items():
                 if args.events and cue not in extra:
                     continue
-                if args.cue and cue != args.cue:
+                if args.cue and cue not in args.cue.split(','):
                     continue
                 if cue == 'preview' or cue in manifest['cues']:
                     continue

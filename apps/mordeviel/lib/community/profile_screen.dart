@@ -5,6 +5,8 @@ import '../store/collection_screen.dart';
 import '../profile/player_avatar.dart';
 import '../profile/avatar_border.dart';
 import '../profile/avatar_gallery.dart';
+import '../coins/coin_widgets.dart';
+import '../coins/wallet_screen.dart';
 
 typedef ProfileRequest =
     Future<Map<String, dynamic>> Function(
@@ -166,6 +168,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           const SizedBox(height: 20),
+          CoinBalanceCard(
+            balance: _profile!['coin_balance'] as int?,
+            bronzeBalance: _profile!['bronze_balance'] as int?,
+            onTap: () async {
+              await Navigator.push<void>(
+                context,
+                MaterialPageRoute(builder: (_) => const WalletScreen()),
+              );
+              if (mounted) await _load();
+            },
+          ),
+          const SizedBox(height: 16),
           if (_profile!['id'] is int) const ProfileSocialCard(),
           ListTile(
             leading: const Icon(Icons.collections_bookmark_outlined),

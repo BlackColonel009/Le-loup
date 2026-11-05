@@ -15,11 +15,13 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
   bool _foreground = true;
   final _dismissed = <int, int>{};
   List<Map<String, dynamic>> _items = [];
+  Map<String, dynamic>? _community;
+  int? _communityCursor;
   int? previewId;
   AudioPlayer? _sound;
   DateTime? _lastSound;
 
-  List<Map<String, dynamic>> get alerts => _items
+  List<Map<String, dynamic>> get alerts => [..._items, ?_community]
       .where(
         (m) =>
             m['friend_id'] != activeFriend &&
@@ -61,6 +63,8 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
     _viewer = null;
     activeFriend = null;
     _items = [];
+    _community = null;
+    _communityCursor = null;
     _dismissed.clear();
     previewId = null;
     notifyListeners();
@@ -80,6 +84,8 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
       if (epoch != _epoch) return;
       if (_viewer != data['viewer_id']) {
         _items = [];
+        _community = null;
+        _communityCursor = null;
         _dismissed.clear();
         if (_viewer != null) activeFriend = null;
       }
@@ -89,6 +95,21 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
             .map((m) => Map<String, dynamic>.from(m as Map))
             .toList(),
       );
+      try {
+        final community = await SocialApi.instance.request(
+          _communityCursor == null
+              ? '/community/messages'
+              : '/community/messages?after=$_communityCursor',
+        );
+        if (epoch != _epoch) return;
+        acceptCommunity(
+          (community['messages'] as List)
+              .map((m) => Map<String, dynamic>.from(m as Map))
+              .toList(),
+        );
+      } catch (_) {
+        // Community availability must not interrupt private message alerts.
+      }
     } on SocialError catch (error) {
       if (error.status == 401 || error.status == 403) clear();
     } catch (_) {
@@ -103,13 +124,52 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
     };
     _items = conversations;
     final fresh = alerts
-        .where((m) => (m['last_id'] as int) > (previous[m['friend_id']] ?? 0))
+        .where(
+          (m) =>
+              m['friend_id'] != -1 &&
+              (m['last_id'] as int) > (previous[m['friend_id']] ?? 0),
+        )
         .firstOrNull;
     if (fresh != null) {
       previewId = fresh['last_id'] as int;
       _playSound();
     } else if (preview == null) {
       previewId = null;
+    }
+    notifyListeners();
+  }
+
+  /// The first page is a baseline; only subsequent messages produce alerts.
+  void acceptCommunity(List<Map<String, dynamic>> messages) {
+    if (messages.isEmpty) {
+      _communityCursor ??= 0;
+      return;
+    }
+    messages.sort((a, b) => (a['id'] as int).compareTo(b['id'] as int));
+    final latest = messages.last['id'] as int;
+    final cursor = _communityCursor;
+    if (cursor == null || latest > cursor) _communityCursor = latest;
+    if (cursor == null) return;
+    final fresh = messages
+        .where((m) => (m['id'] as int) > cursor && m['user_id'] != _viewer)
+        .toList();
+    if (activeFriend == -1) {
+      _community = null;
+    } else if (fresh.isNotEmpty) {
+      final message = fresh.last;
+      final text = message['text'] as String;
+      _community = {
+        'friend_id': -1,
+        'last_id': 1000000000000 + (message['id'] as int),
+        'nickname': 'Communauté',
+        'text':
+            '${message['nickname']} : ${text.startsWith('[[sticker:') ? 'Sticker reçu' : text}',
+        'unread_count':
+            (_community?['unread_count'] as int? ?? 0) + fresh.length,
+        'avatar': null,
+      };
+      previewId = _community!['last_id'] as int;
+      _playSound();
     }
     notifyListeners();
   }
@@ -131,7 +191,7 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void dismiss(int friendId) {
-    final message = _items.where((m) => m['friend_id'] == friendId).firstOrNull;
+    final message = alerts.where((m) => m['friend_id'] == friendId).firstOrNull;
     if (message != null) _dismissed[friendId] = message['last_id'] as int;
     if (preview?['friend_id'] == friendId) previewId = null;
     notifyListeners();
@@ -145,6 +205,10 @@ class FriendMessagesService extends ChangeNotifier with WidgetsBindingObserver {
 
   void reading(int friendId) {
     activeFriend = friendId;
+    if (friendId == -1) {
+      _community = null;
+      if (preview == null) previewId = null;
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
   }
 

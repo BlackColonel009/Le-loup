@@ -2,6 +2,16 @@
 // Only draft text is persisted; credentials remain in memory in admin.js.
 let announcementEditing = null, announcementDraftLoaded = false;
 let announcementWorking = false;
+let announcementImages = [];
+const announcementImagePreviews = new Map();
+function renderAnnouncementImages() {
+  const root=$('#announcement-images'); root.replaceChildren();
+  for(const url of announcementImages) {
+    const button=document.createElement('button');button.type='button';button.title='Retirer cette carte';
+    const image=document.createElement('img');image.src=announcementImagePreviews.get(url)||url;image.alt='Carte jointe · cliquer pour retirer';image.style.cssText='width:90px;height:130px;object-fit:contain';
+    button.append(image);button.onclick=()=>{announcementImages=announcementImages.filter(x=>x!==url);renderAnnouncementImages();saveAnnouncementDraft();};root.append(button);
+  }
+}
 let announcementAccountId = null, announcementAccountRequest = null;
 async function ensureAnnouncementAccount() {
   if (announcementAccountId !== null) return;
@@ -34,6 +44,7 @@ function saveAnnouncementDraft() {
     localStorage.setItem(draftKey(), JSON.stringify({
       id: announcementEditing, title: $('#announcement-title').value,
       body: $('#announcement-body').value,
+      images: announcementImages,
     }));
     localStorage.setItem(draftPrefix() + 'last', String(announcementEditing ?? 'new'));
     $('#announcement-draft-status').textContent = 'Brouillon enregistré dans ce navigateur, sans publication.';
@@ -47,6 +58,7 @@ function openAnnouncementEditor(item=null) {
   try { draft = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch (_) {}
   $('#announcement-title').value = draft?.title ?? item?.title ?? '';
   $('#announcement-body').value = draft?.body ?? item?.body ?? '';
+  announcementImages = [...(draft?.images ?? item?.images ?? [])];renderAnnouncementImages();
   $('#announcement-editor-title').textContent = item ? 'Modifier une annonce publiée' : 'Nouvelle annonce';
   $('#announcement-form button[type=submit]').textContent = item ? 'Enregistrer sur le site et dans le jeu' : 'Publier sur le site et dans le jeu';
   $('#announcement-draft-status').textContent = draft ? 'Brouillon restauré. Aucun changement publié.' : 'Les brouillons restent dans ce navigateur, sans être publiés.';
@@ -104,7 +116,7 @@ $('#announcement-form').addEventListener('submit',event=>{
     const title=$('#announcement-title').value.trim(),body=$('#announcement-body').value.trim();
     if(!title||!body)throw Error('Titre et texte requis.');
     const oldKey=draftKey(),id=announcementEditing;
-    await api('/community/admin/content'+(id===null?'':'/'+id),{kind:'announcement',title,body},adminToken,id===null?'POST':'PUT');
+    await api('/community/admin/content'+(id===null?'':'/'+id),{kind:'announcement',title,body,images:announcementImages},adminToken,id===null?'POST':'PUT');
     // Reset only after confirmed publication; email remains a separate action.
     try { localStorage.removeItem(oldKey); localStorage.removeItem(draftPrefix()+'last'); } catch (_) {}
     openAnnouncementEditor();
@@ -121,6 +133,26 @@ $('#announcement-discard').onclick=()=>{
   announcementEditing=null;$('#announcement-form').reset();openAnnouncementEditor();
 };
 $('#announcement-refresh').onclick=()=>announcementAction(loadAnnouncementsAdmin);
+$('#announcement-files').onchange=()=>announcementAction(async()=>{
+  const files=[...$('#announcement-files').files];
+  if(files.length+announcementImages.length>8)throw Error('8 images maximum par annonce.');
+  for(const file of files){
+    if(file.size>4*1024*1024)throw Error('Chaque carte doit peser moins de 4 Mo.');
+    const encoded=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=reject;reader.readAsDataURL(file);});
+    const result=await api('/community/admin/content-images',{image_base64:encoded},adminToken,'POST');
+    announcementImages.push(result.url);
+    announcementImagePreviews.set(result.url,URL.createObjectURL(file));
+  }
+  $('#announcement-files').value=''; renderAnnouncementImages();
+  announcementMessage('Cartes ajoutées au brouillon. Publiez pour les rendre visibles.');
+});
+$('#announcement-gallery').onclick=()=>announcementAction(async()=>{
+  const data=await api('/gallery/cards',undefined,adminToken,'GET');
+  const dialog=document.createElement('dialog');dialog.style.cssText='max-width:90vw;max-height:80vh;overflow:auto;background:#171e27;color:#f4dfb5';
+  const close=document.createElement('button');close.textContent='Terminer';close.onclick=()=>{dialog.close();dialog.remove();renderAnnouncementImages();saveAnnouncementDraft();};dialog.append(close);
+  for(const card of data.cards){const button=document.createElement('button');button.type='button';button.style.margin='8px';const img=document.createElement('img');img.src=card.image_url;img.alt=card.title;img.style.cssText='width:90px;height:130px;object-fit:contain';button.append(img);button.title=card.title+' · '+card.edition;button.onclick=()=>{if(announcementImages.includes(card.image_url)){announcementImages=announcementImages.filter(x=>x!==card.image_url);button.style.opacity='1';}else if(announcementImages.length<8){announcementImages.push(card.image_url);button.style.opacity='.4';}};dialog.append(button);}
+  document.body.append(dialog);dialog.showModal();
+});
 $('#logout').addEventListener('click',()=>{
   announcementDraftLoaded=false;announcementEditing=null;announcementAccountId=null;
   $('#announcement-form').reset();$('#admin-announcements').replaceChildren();

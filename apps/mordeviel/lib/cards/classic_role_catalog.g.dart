@@ -132,4 +132,14 @@ const additionalClassicRoles = [
     implemented: true,
     assetExtension: 'png',
   ),
+  ClassicRole(
+    "sulfuron",
+    "Sulfuron · Le Fourbe",
+    "Solitaire",
+    "Nuit",
+    "Choisissez un piège à chaque appel : un Bluff une nuit sur deux, ou une révélation aléatoire pour voler une vie au prochain vote.",
+    "Vous gagnez seul si vous êtes vivant et qu’il ne reste avec vous que des membres du camp Village. À chaque appel nocturne, choisissez un seul pouvoir, ou passez. Le Bluff : choisissez un autre joueur vivant. Sa carte annoncée au village est fausse dans 90 % des cas et vraie dans 10 % des cas. Vous devez attendre deux nuits entre deux Bluffs. Ces annonces ne changent jamais les véritables rôles. La Révélation-piège : le jeu tire au hasard un autre survivant et montre sa vraie carte à tous, sans vous identifier. S’il meurt directement au prochain scrutin de condamnation, vous gagnez une vie. Une grâce, un vote blanc, une égalité sans sa mort ou une autre cause de mort ne rapporte rien. Les vies se cumulent. Une vie est automatiquement consommée pour ressusciter après une attaque de la meute. En Classique, elles ne protègent jamais du vote, du poison, du tir du Chasseur ou de la mort des amoureux. La carte d’une cible dévoilée par Sulfuron brûle si le prochain vote l’élimine. En partie mixte, seule l’édition de votre propre carte détermine vos protections supplémentaires.",
+    implemented: true,
+    assetExtension: 'png',
+  ),
 ];

@@ -5,14 +5,15 @@ import 'package:mordeviel/cards/classic_role.dart';
 
 void main() {
   test(
-    'Intense utilise les mêmes 18 rôles, avec leurs 18 illustrations disponibles',
+    'Intense propose une illustration pour chaque rôle, y compris Sulfuron',
     () {
       expect(
         classicRoles.where((r) => RoleCardFront.hasIntense(r.id)).length,
-        18,
+        classicRoles.length,
       );
       expect(RoleCardFront.hasIntense('metamorph'), isTrue);
       expect(RoleCardFront.hasIntense('scapegoat'), isTrue);
+      expect(RoleCardFront.hasIntense('sulfuron'), isTrue);
     },
   );
   testWidgets('Les camps et pouvoirs Intense viennent des fiches communes', (

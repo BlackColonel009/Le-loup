@@ -9,6 +9,7 @@ import 'sentence_separation.dart';
 import 'electricity.dart';
 import 'blood_splatter.dart';
 import 'mayor_shatter.dart';
+import 'sulfuron_scene.dart';
 
 const sentenceIllustrations = [
   'assets/village/intense/sentences/guillotine.jpg',
@@ -362,6 +363,7 @@ Future<void> showElimination(
   required String name,
   String? role,
   required String cause,
+  String? effect,
   CardAmbience ambience = CardAmbience.classic,
   bool feminine = false,
   bool cursed = false,
@@ -380,6 +382,7 @@ Future<void> showElimination(
     name: name,
     role: role,
     cause: cause,
+    effect: effect,
     ambience: ambience,
     feminine: feminine,
     cursed: cursed,
@@ -397,6 +400,7 @@ class _DeathCard extends StatefulWidget {
     required this.name,
     this.role,
     required this.cause,
+    this.effect,
     required this.ambience,
     required this.feminine,
     required this.cursed,
@@ -418,6 +422,7 @@ class _DeathCard extends StatefulWidget {
   final String name;
   final String? role;
   final String cause;
+  final String? effect;
   @override
   State<_DeathCard> createState() => _DeathCardState();
 }
@@ -438,7 +443,9 @@ class _DeathCardState extends State<_DeathCard>
       ),
     ),
   );
-  int get _baseMilliseconds => widget.cause == 'poison'
+  int get _baseMilliseconds => widget.effect == 'sulfuron_fire'
+      ? 4300
+      : widget.cause == 'poison'
       ? 4000
       : widget.cause == 'hunter'
       ? 4400
@@ -466,7 +473,12 @@ class _DeathCardState extends State<_DeathCard>
           ),
           child: child,
         );
-  Widget _sentenceCard(Widget child) => widget.cause != 'vote'
+  Widget _sentenceCard(Widget child) => widget.effect == 'sulfuron_fire'
+      ? BurningCard(
+          progress: ((_deathProgress - .55) / .45).clamp(0.0, 1.0),
+          child: child,
+        )
+      : widget.cause != 'vote'
       ? child
       : SentenceSeparation(
           progress: ((_deathProgress - .55) / .45).clamp(0.0, 1.0),
@@ -738,7 +750,8 @@ class _DeathCardState extends State<_DeathCard>
               ),
             ),
             if (widget.ambience == CardAmbience.horror &&
-                widget.cause == 'vote')
+                widget.cause == 'vote' &&
+                widget.effect != 'sulfuron_fire')
               _bloodScreen(),
           ],
         ),

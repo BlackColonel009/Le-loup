@@ -141,6 +141,10 @@ void main() {
         ),
       ),
     );
+    expect(find.text('Alice'), findsOneWidget);
+    expect(find.text('Basile'), findsOneWidget);
+    await tester.tap(find.text('Les manches'));
+    await tester.pumpAndSettle();
     expect(find.text('Nuit 1'), findsOneWidget);
     expect(
       find.textContaining('Alice (Voyante) observe Basile'),

@@ -38,6 +38,7 @@ ROLES = {
     "piper": "Joueur de Flûte",
     "angel": "Ange",
     "sisters": "Sœurs",
+    "sulfuron": "Sulfuron · Le Fourbe",
     "mayor": "Maire",
 }
 VOICES = [

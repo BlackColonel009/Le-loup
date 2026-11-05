@@ -49,7 +49,10 @@ void main() {
     expect(events, ['parole:seer']);
     expect(find.text('« ${deathSpeeches['seer']!.text} »'), findsOneWidget);
     expect(find.text('Carte suivante'), findsOneWidget);
-    await tester.drag(find.byType(RoleCardFront), const Offset(0, 170));
+    await tester.drag(
+      find.byType(RoleCardFront).hitTestable().last,
+      const Offset(0, 170),
+    );
     await tester.pumpAndSettle();
     expect(events, ['parole:seer', 'stop:seer', 'parole:guardian']);
     expect(find.text('« ${deathSpeeches['guardian']!.text} »'), findsOneWidget);
@@ -160,6 +163,12 @@ void main() {
     await tester.scrollUntilVisible(
       find.text('Voir les rôles et retourner au village'),
       150,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
     );
     expect(tester.takeException(), isNull);
   });

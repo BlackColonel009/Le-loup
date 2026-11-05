@@ -6,6 +6,7 @@ import '../cards/classic_role.dart';
 import 'ending_data.dart';
 import 'game_history.dart';
 import '../coins/coin_reward_scene.dart';
+import 'victory_chibis.dart';
 
 Future<void> showVictory(
   BuildContext context, {
@@ -136,6 +137,7 @@ class _VictorySceneState extends State<VictoryScene>
     final dark = widget.game['winner'] == 'wolves';
     final accent = dark ? const Color(0xFFB9C4F0) : const Color(0xFFE5C078);
     final ids = (widget.game['winner_ids'] as List? ?? []).toSet();
+    final figures = victoryFigures(widget.game, widget.players);
     final names = widget.players
         .where((p) => ids.contains(p['id']))
         .map((p) => p['nickname'] as String)
@@ -189,16 +191,20 @@ class _VictorySceneState extends State<VictoryScene>
                         ),
                       ),
                       child: Center(
-                        child: SizedBox(
-                          height: (size.maxHeight * .40).clamp(140, 310),
-                          child: AspectRatio(
-                            aspectRatio: .7,
-                            child: RoleCardFront(
-                              role: configuredRole(ending?.role ?? 'villager'),
-                              ambience: widget.ambience,
-                            ),
-                          ),
-                        ),
+                        child: figures.isNotEmpty
+                            ? VictoryChibiGroup(figures: figures)
+                            : SizedBox(
+                                height: (size.maxHeight * .40).clamp(140, 310),
+                                child: AspectRatio(
+                                  aspectRatio: .7,
+                                  child: RoleCardFront(
+                                    role: configuredRole(
+                                      ending?.role ?? 'villager',
+                                    ),
+                                    ambience: widget.ambience,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 22),
@@ -230,7 +236,7 @@ class _VictorySceneState extends State<VictoryScene>
                       onPressed: () =>
                           showGameHistory(context, widget.game, widget.players),
                       icon: const Icon(Icons.history_edu),
-                      label: const Text('Revivre toutes les manches'),
+                        label: const Text('Voir les joueurs et l’historique'),
                     ),
                     FilledButton.icon(
                       onPressed: _loadingCoins || _openingCoins

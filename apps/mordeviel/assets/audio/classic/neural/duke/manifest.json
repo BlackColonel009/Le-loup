@@ -668,6 +668,42 @@
       "generated_locally": true,
       "precision": "int4",
       "batch_size": 4
+    },
+    "mdj_sulfuron": {
+      "seconds": 4.4,
+      "sha256": "4d1f6a64040e7cca4283d04a5c55bc09e49f76e1c15357fbbe0923e5dc3fd2bf",
+      "text": "Sulfuron, réveille-toi. Quel piège souhaites-tu tendre au village ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
+    },
+    "mdj_close_sulfuron": {
+      "seconds": 3.44,
+      "sha256": "6dfddbde814ec59c6ff65339588110cb8f8c0e313239fb5644a9b148914cd7e2",
+      "text": "Sulfuron, referme les yeux et rendors-toi.",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "Original reference used for preview and wolves call; other cues generated from this reference."

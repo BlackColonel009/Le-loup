@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.3.5+5
+version: 0.3.6+6
 
 environment:
   sdk: ^3.12.2
@@ -72,14 +72,20 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  # Shared character lines remain available in local Classic games.
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/chibis/victory/
     - assets/cards/
     - assets/store/
+    - assets/events/mere_grand_poster.png
+    - assets/audio/classic/mere_grand_opening.wav
+    - assets/audio/classic/characters/sulfuron/
+    - assets/audio/classic/sulfuron_fire.wav
     - assets/frames/
     - assets/backgrounds/
     - assets/village/
@@ -114,6 +120,7 @@ flutter:
     - assets/audio/classic/neural/classic_male/mdj_close_piper.wav
     - assets/audio/classic/neural/classic_male/mdj_close_seer.wav
     - assets/audio/classic/neural/classic_male/mdj_close_sisters.wav
+    - assets/audio/classic/neural/classic_male/mdj_close_sulfuron.wav
     - assets/audio/classic/neural/classic_male/mdj_close_white_wolf.wav
     - assets/audio/classic/neural/classic_male/mdj_close_witch.wav
     - assets/audio/classic/neural/classic_male/mdj_close_wolves.wav
@@ -132,6 +139,7 @@ flutter:
     - assets/audio/classic/neural/classic_male/mdj_seer.wav
     - assets/audio/classic/neural/classic_male/mdj_sisters.wav
     - assets/audio/classic/neural/classic_male/mdj_sleep.wav
+    - assets/audio/classic/neural/classic_male/mdj_sulfuron.wav
     - assets/audio/classic/neural/classic_male/mdj_vote_result.wav
     - assets/audio/classic/neural/classic_male/mdj_voting.wav
     - assets/audio/classic/neural/classic_male/mdj_white_wolf.wav
@@ -154,6 +162,7 @@ flutter:
     - assets/audio/classic/neural/classic_female/mdj_close_piper.wav
     - assets/audio/classic/neural/classic_female/mdj_close_seer.wav
     - assets/audio/classic/neural/classic_female/mdj_close_sisters.wav
+    - assets/audio/classic/neural/classic_female/mdj_close_sulfuron.wav
     - assets/audio/classic/neural/classic_female/mdj_close_white_wolf.wav
     - assets/audio/classic/neural/classic_female/mdj_close_witch.wav
     - assets/audio/classic/neural/classic_female/mdj_close_wolves.wav
@@ -172,6 +181,7 @@ flutter:
     - assets/audio/classic/neural/classic_female/mdj_seer.wav
     - assets/audio/classic/neural/classic_female/mdj_sisters.wav
     - assets/audio/classic/neural/classic_female/mdj_sleep.wav
+    - assets/audio/classic/neural/classic_female/mdj_sulfuron.wav
     - assets/audio/classic/neural/classic_female/mdj_vote_result.wav
     - assets/audio/classic/neural/classic_female/mdj_voting.wav
     - assets/audio/classic/neural/classic_female/mdj_white_wolf.wav
@@ -191,6 +201,8 @@ flutter:
     - assets/branding/opening/intro_gemini.mp4
     - assets/rewards/coin_rain.mp4
     - assets/rewards/coin_impacts.json
+    - assets/rewards/gold_moon.webp
+    - assets/rewards/bronze_moon.webp
     - assets/effects/
   fonts:
     - family: VillageSans

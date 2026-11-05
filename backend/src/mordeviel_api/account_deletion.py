@@ -91,6 +91,7 @@ def confirm_deletion(
                     "challenge_progress",
                     "challenge_matches",
                     "coin_wallets",
+                      "bronze_wallets",
                     "coin_match_rewards",
                       "coin_gifts",
                       "coin_purchases",

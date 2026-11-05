@@ -30,17 +30,30 @@ class _PrivateChatScreenState extends State<PrivateChatScreen>
   num? _reset;
   String? _error;
   bool _sending = false, _loading = false;
+  bool _reading = false;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    FriendMessagesService.instance.reading(widget.friendId);
     _load();
     _poll = Timer.periodic(const Duration(seconds: 4), (_) {
       if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
         _load();
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final visible = ModalRoute.of(context)?.isCurrent ?? true;
+    if (_reading == visible) return;
+    _reading = visible;
+    if (visible) {
+      FriendMessagesService.instance.reading(widget.friendId);
+    } else {
+      FriendMessagesService.instance.leave(widget.friendId);
+    }
   }
 
   Future<void> _load() async {
@@ -113,7 +126,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    FriendMessagesService.instance.leave(widget.friendId);
+    if (_reading) FriendMessagesService.instance.leave(widget.friendId);
     _poll?.cancel();
     _text.dispose();
     _focus.dispose();

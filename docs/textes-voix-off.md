@@ -18,6 +18,8 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | Père des Loups | « Père des Loups, réveille-toi. Veux-tu infecter la victime ? » |
 | Loup Blanc | « Loup Blanc, réveille-toi. Choisis ta cible. » |
 | Joueur de Flûte | « Joueur de Flûte, réveille-toi. Qui veux-tu charmer ? » |
+| Sulfuron | « Sulfuron, réveille-toi. Quel piège souhaites-tu tendre au village ? » |
+| Rendormissement : Sulfuron | « Sulfuron, referme les yeux et rendors-toi. » |
 | Bouc émissaire | « Bouc émissaire, désigne les joueurs qui pourront voter demain. » |
 | Lever du jour | « Le jour se lève. Le village découvre les événements de la nuit. » |
 | Dernier tir du Chasseur | « Chasseur, ton dernier souffle te laisse un dernier tir. » |
@@ -51,6 +53,7 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | Villageoise | Féminine | « Je pars… ouvrez les yeux avant la prochaine nuit. » |
 | Petite Fille | Féminine | « J’ai vu des ombres… elles sont encore parmi vous. » |
 | Cupidon | Féminine | « Mes flèches se taisent… que l’amour vous survive. » |
+| Deux Sœurs | Féminine | « Ma sœur… garde les yeux ouverts. La nuit n’a pas livré tous ses secrets. » |
 | Dernier tir du Chasseur | Masculine grave | « Je tombe… mais mon fusil parle encore. » |
 | Salvateur | Masculine grave | « Ma garde s’achève… veillez les uns sur les autres. » |
 | Ancien | Vieux sorcier | « La mémoire du village… s’éteint avec moi. » |
@@ -80,8 +83,21 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | --- | --- | --- |
 | Potion confirmée | Vieille sorcière | « Alors mon mignon… un petit remontant, ou un aller simple au cimetière ? Héhéhé ! » |
 | horror_laugh | Vieille sorcière | « Ha ha ha ! Hi hi hi… » |
+| revival | Vieille sorcière | « La Sorcière vous a donné une chance. À vous de choisir votre destin. » |
 | Malédiction de l’Ancien | Vieux sorcier | « Que le ciel vous pardonne… et vous prive de vos pouvoirs. » |
 
 La malédiction nécessite la perte réelle des pouvoirs du Village. Les dernières paroles identifiantes ne sont jouées que pour un rôle révélé publiquement.
 
 En local, le MDJ diffuse les sons sur son appareil. En ligne, chaque appareil utilise le profil du salon et respecte ses volumes et son silence général.
+
+## Sulfuron · voix du personnage
+
+Répliques du Fourbe, distinctes de la voix du MDJ choisie pour le salon.
+
+| Événement | Texte |
+| --- | --- |
+| bluff | « Vous serez désorientés, mais vous ne me trouverez pas. Héhéhé ! » |
+| reveal | « Un petit mouton conduit à l’abattoir… héhéhé ! » |
+| revive | « Vous croyiez en avoir fini avec moi ? Encore une petite vie… héhéhé ! » |
+| death | « Vous m’avez trouvé… mais qui rira le dernier ? » |
+| ended | « Vous avez chassé les loups… et livré le village au Fourbe. Héhéhé ! » |

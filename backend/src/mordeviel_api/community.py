@@ -1,6 +1,7 @@
 """Persistent community accounts, public discussion and private support tickets."""
 
 import hashlib
+import json
 import hmac
 import os
 import secrets
@@ -40,6 +41,7 @@ class OfficialContent(BaseModel):
     kind: Literal["announcement", "faq"]
     title: str = Field(min_length=1, max_length=160)
     body: str = Field(min_length=1, max_length=6000)
+    images: list[str] = Field(default_factory=list, max_length=8)
 
 
 class Store:
@@ -113,6 +115,8 @@ class Store:
                     "INSERT OR IGNORE INTO offers(id,title,category,description) VALUES(?,?,?,?)",
                     (item["id"], item["title"], item["category"], item["description"]),
                 )
+            if 'images' not in {r[1] for r in db.execute('PRAGMA table_info(official_content)')}:
+                db.execute("ALTER TABLE official_content ADD COLUMN images TEXT NOT NULL DEFAULT '[]'")
             if not db.execute("SELECT id FROM official_content LIMIT 1").fetchone():
                 for kind, title, body in [
                     (
@@ -577,9 +581,11 @@ def public_info(response: Response, *, db: Annotated[Store, Depends(store)]):
         rows = [
             dict(row)
             for row in connection.execute(
-                "SELECT id,kind,title,body,published FROM official_content WHERE visible=1 ORDER BY published DESC,id DESC LIMIT 200"
+                "SELECT id,kind,title,body,published,images FROM official_content WHERE visible=1 ORDER BY published DESC,id DESC LIMIT 200"
             )
         ]
+    for row in rows:
+        row['images'] = json.loads(row['images'])
     return {
         "announcements": [r for r in rows if r["kind"] == "announcement"],
         "faq": [r for r in rows if r["kind"] == "faq"],
@@ -588,26 +594,60 @@ def public_info(response: Response, *, db: Annotated[Store, Depends(store)]):
 
 @router.post("/admin/content", status_code=201, dependencies=[Depends(administrator)])
 def create_content(*, data: OfficialContent, db: Annotated[Store, Depends(store)]):
+    validate_content_images(data.images)
     if not data.title.strip() or not data.body.strip():
         raise HTTPException(422, "Titre et texte requis.")
     with db.db() as connection:
         result = connection.execute(
-            "INSERT INTO official_content(kind,title,body,published) VALUES(?,?,?,?)",
-            (data.kind, data.title.strip(), data.body.strip(), time.time()),
+            "INSERT INTO official_content(kind,title,body,published,images) VALUES(?,?,?,?,?)",
+            (data.kind, data.title.strip(), data.body.strip(), time.time(), json.dumps(data.images)),
         )
     return {"id": result.lastrowid}
+
+
+def validate_content_images(images):
+    import re
+    if any(not re.fullmatch(r'/(?:site-assets/[a-zA-Z0-9_.-]+|gallery/images/[a-f0-9]{32}\.(?:png|jpg|webp)|community/content-images/[a-f0-9]{32}\.webp)', image) for image in images):
+        raise HTTPException(422, 'Sélectionnez une image du jeu ou téléversez une carte.')
+
+
+class ContentImageUpload(BaseModel):
+    image_base64: str = Field(max_length=5_600_000)
+
+
+@router.post('/admin/content-images', dependencies=[Depends(administrator)])
+def upload_content_image(*, data: ContentImageUpload, db: Annotated[Store, Depends(store)]):
+    from .gallery import save_image
+    db.limit(('announcement_upload', 'admin'), 30, 300)
+    return {'url': '/community/content-images/' + save_image(db, data.image_base64)}
+
+
+@router.get('/content-images/{filename}')
+def content_image(*, filename: str, db: Annotated[Store, Depends(store)]):
+    import re
+    from fastapi.responses import FileResponse
+    from .gallery import upload_directory
+    if not re.fullmatch(r'[a-f0-9]{32}\.webp', filename):
+        raise HTTPException(404, 'Image introuvable.')
+    with db.db() as c:
+        visible = any('/community/content-images/' + filename in json.loads(r[0]) for r in c.execute('SELECT images FROM official_content WHERE visible=1'))
+    path = upload_directory(db) / filename
+    if not visible or not path.is_file():
+        raise HTTPException(404, 'Image introuvable.')
+    return FileResponse(path, media_type='image/webp')
 
 
 @router.put("/admin/content/{content_id}", dependencies=[Depends(administrator)])
 def update_content(
     *, content_id: int, data: OfficialContent, db: Annotated[Store, Depends(store)]
 ):
+    validate_content_images(data.images)
     if not data.title.strip() or not data.body.strip():
         raise HTTPException(422, "Titre et texte requis.")
     with db.db() as connection:
         result = connection.execute(
-            "UPDATE official_content SET kind=?,title=?,body=?,published=? WHERE id=? AND visible=1",
-            (data.kind, data.title.strip(), data.body.strip(), time.time(), content_id),
+            "UPDATE official_content SET kind=?,title=?,body=?,published=?,images=? WHERE id=? AND visible=1",
+            (data.kind, data.title.strip(), data.body.strip(), time.time(), json.dumps(data.images), content_id),
         )
         if result.rowcount == 0:
             raise HTTPException(404, "Publication introuvable.")

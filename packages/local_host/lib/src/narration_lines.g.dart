@@ -12,6 +12,8 @@ const mdjNarrationLines = <String, String>{
   "infection": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
   "white_wolf": "Loup Blanc, réveille-toi. Choisis ta cible.",
   "piper": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
+  "sulfuron": "Sulfuron, réveille-toi. Quel piège souhaites-tu tendre au village ?",
+  "close_sulfuron": "Sulfuron, referme les yeux et rendors-toi.",
   "scapegoat": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
   "dawn": "Le jour se lève. Le village découvre les événements de la nuit.",
   "hunter": "Chasseur, ton dernier souffle te laisse un dernier tir.",
@@ -30,8 +32,6 @@ const mdjNarrationLines = <String, String>{
   "close_piper": "Joueur de Flûte, referme les yeux et rendors-toi.",
   "sisters": "Deux Sœurs, ouvrez les yeux et reconnaissez-vous.",
   "close_sisters": "Deux Sœurs, refermez les yeux et rendormez-vous.",
-  "mayor_election":
-      "Le village élit son Maire. Désignez la personne qui portera votre voix.",
-  "mayor_succession":
-      "Maire, ton dernier devoir est de choisir ton successeur.",
+  "mayor_election": "Le village élit son Maire. Désignez la personne qui portera votre voix.",
+  "mayor_succession": "Maire, ton dernier devoir est de choisir ton successeur.",
 };

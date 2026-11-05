@@ -64,6 +64,27 @@ class CreateRoom(BaseModel):
     theme: Literal['classic','intense','horror','mixed'] = 'classic'
 
 
+def final_player_profiles(engine, snapshot):
+    game = snapshot.get('game') or {}
+    if game.get('phase') != 'ended' or not engine.db:
+        return
+    cached = getattr(engine, '_final_players', None)
+    if cached is None:
+        from .avatars import avatar_in
+        cached = []
+        with engine.db.db() as c:
+            for player in snapshot.get('players', []):
+                uid = engine.accounts.get(player['id'])
+                account = c.execute('SELECT nickname FROM users WHERE id=?', (uid,)).fetchone() if uid else None
+                cached.append({
+                    'id': player['id'], 'nickname': player['nickname'],
+                    'account_nickname': account['nickname'] if account else None,
+                    'avatar': avatar_in(c, uid) if account else None,
+                })
+        engine._final_players = cached
+    game['final_players'] = cached
+
+
 class Engine:
     def __init__(self, process):
         self.social_id = secrets.token_hex(16)
@@ -119,6 +140,7 @@ class Engine:
                 if "room" in event:
                     self.snapshot = event["room"]
                     self.snapshot['match_id'] = self.social_id
+                    final_player_profiles(self, self.snapshot)
                     if self.voice:
                         self.voice.state_changed(self)
                     if self.snapshot.get('phase')=='lobby':
@@ -416,6 +438,7 @@ async def player_socket(socket: WebSocket, code: str):
                     event=json.loads(text)
                     if event.get('type') == 'room.snapshot':
                         event['match_id'] = engine.social_id
+                        final_player_profiles(engine, event)
                         text = json.dumps(event)
                     if event.get('type')=='room.joined' and authenticated_join:
                         from .social import claim_player

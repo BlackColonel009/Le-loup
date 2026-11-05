@@ -2,6 +2,8 @@
 
 Direction artistique préparée le 3 novembre 2026 pour Mordeviel Legendary, par Roland DJAGBA, alias Logan.
 
+Complétée le 5 novembre 2026 pour la capuche enchantée, les cœurs en acier, la Lance de canne et le boost Loup Alpha. Les silhouettes de base restent celles décrites ci-dessous ; les pouvoirs nécessitent des effets et animations supplémentaires.
+
 Les prompts visuels ci-dessous servent à produire les références des personnages. Une image ressemblant à un rendu 3D n’est pas un modèle 3D jouable. Après validation de ces références, il faudra créer les maillages, textures, squelettes et animations.
 
 ## Ordre recommandé
@@ -94,9 +96,23 @@ Ce brief s’adresse à un outil de production de modèles 3D ou à un modeleur,
 >
 > Animations de Rubine : repos, marche, course, interaction courte, entrée dans une cachette, attente cachée, sortie de cachette, utilisation d’objet, peur et réaction de capture.
 >
+> Adapter les animations de cachette aux armoires et frigos, au passage sous les tables, les lits et les draps, aux rideaux, aux buissons, aux tonneaux et aux troncs creux. Prévoir les accessoires mobiles correspondants, notamment les portes et les draps, sans révéler une Rubine cachée aux Loups. Le sous-sol de la maison possède ses propres emplacements de cachette à aménager dans la carte.
+>
+> Pour le frigo, prévoir Rubine qui subit le froid et perd progressivement sa vie, sans rendre sa présence visible au Loup. Pour sa version piégée, prévoir la poussée du Loup dans le frigo, son enfermement et ses efforts pendant les appuis rapides sur Attaque : il doit atteindre 20 appuis avant la fin d’une jauge circulaire de 5 secondes. Prévoir deux sorties : libération réussie au seuil de 20, ou sortie gelée dans un glaçon pendant 5 secondes en cas d’échec, avec perte d’un cœur. Le glaçon doit rester lisible dans le style cartoon.
+>
 > Animations de Pèlerine : apparition de transformation, repos, marche, course, préparation de coup, coup de canne, coup de marteau, réaction et retour vers Rubine.
 >
 > Animations du Loup : repos quadrupède, marche, course, virage, préparation de bond, attaque, réaction au coup de Pèlerine et élimination cartoon.
+>
+> Ajouts du 5 novembre : prévoir pour Rubine l’activation de la capuche enchantée, l’entrée et la sortie de l’invisibilité de dix secondes et les réactions aux blessures non mortelles. Séparer les effets et accessoires pour qu’aucun élément ne révèle sa position aux Loups pendant l’invisibilité.
+>
+> Pour Pèlerine, prévoir la préparation et le lancement de la Lance de canne, une canne détachable utilisable comme projectile guidé, un effet de propulsion de fusée, une traînée et un impact cartoon. Accompagner le lancement de la réplique « Sale imposteur, mange-toi ça ! ». Le retour de l’accessoire reste à définir. Prévoir un effet de résistance aux coups cohérent avec ses cœurs en acier et son invulnérabilité, sans imposer une armure physique à sa tenue.
+>
+> Pour le Loup Alpha, prévoir l’activation et l’expiration du bonus temporaire, une attaque renforcée et les animations permettant d’escalader ou de traverser les pièges de Rubine. Le bonus conserve l’identité du Loup ; son apparence précise reste à valider. Prévoir aussi les réactions aux dégâts non mortels du Loup ordinaire.
+>
+> Le boost Alpha dure 20 secondes. Prévoir les réactions aux pièges : barrages de bois et d’épines, trous d’épines, plantes sauvages, gel temporaire par bain glacé et fuite en criant après un bain chaud. Prévoir les attaques du Loup contre un piège repéré, les réactions du piège aux coups et sa disparition à résistance nulle. Les pièges retardent principalement le Loup ; subir trois pièges différents lui retire un demi-cœur. La remise à zéro du compteur reste à fixer.
+>
+> Accompagner la transformation Rubine–Pèlerine de la phrase « Sauve-moi, Pèlerine ! ». La forme Pèlerine dure 10 secondes, ou 15 secondes selon des critères de compte à définir. La Lance de canne est réutilisable toutes les 7 secondes pour le moment ; ses animations doivent permettre de respecter ce délai sans en imposer le retour visuel avant décision de conception.
 >
 > Prévois également l’apparition de l’âme et le flottement du fantôme. Le matériau spectral pourra réutiliser le modèle du joueur au lieu de nécessiter un personnage entièrement distinct.
 >

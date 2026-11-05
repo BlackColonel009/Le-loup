@@ -10,6 +10,7 @@ import 'village/horror_ambience.dart';
 import 'social/online_hub.dart';
 import 'social/admin_bot_launcher.dart';
 import 'store/collector_welcome.dart';
+import 'events/mere_grand_screen.dart';
 import 'coins/creator_gift.dart';
 import 'services/immersion_preferences.dart';
 import 'challenges/challenge_discovery.dart';
@@ -303,6 +304,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         icon: const Icon(Icons.style_outlined),
                         label: const Text('Découvrir les cartes'),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: () async {
+                          ClassicAudio.instance.silence();
+                          await Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const MereGrandPosterScreen(),
+                            ),
+                          );
+                          if (mounted) ClassicAudio.instance.welcome();
+                        },
+                        icon: const Icon(Icons.auto_stories_outlined),
+                        label: const Text('Soirée de Mère-Grand'),
                       ),
                       const SizedBox(height: 20),
                       const Row(

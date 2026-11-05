@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from . import email_security
+from .coins import balance_in, bronze_balance_in
 from .community import Store, authenticated, identity, store
 
 router = APIRouter(prefix="/community", tags=["profile"])
@@ -24,11 +25,15 @@ def profile(
     from .avatars import avatar_in
     with db.db() as c:
         avatar = avatar_in(c, user['id'])
+        coin_balance = balance_in(c, user['id'])
+        bronze_balance = bronze_balance_in(c, user['id'])
     restricted = user["muted_until"] > time.time()
     return {
         "id": user["id"],
         "nickname": user["nickname"],
         "avatar": avatar,
+        "coin_balance": coin_balance,
+        "bronze_balance": bronze_balance,
         "role": user["role"],
         "verified": user["role"] == "admin",
         "email": user["email"],

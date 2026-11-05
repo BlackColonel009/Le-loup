@@ -69,6 +69,7 @@ function renderAnnouncements() {
       time.textContent = 'Publié le ' + new Intl.DateTimeFormat('fr-FR', {day:'numeric',month:'long',year:'numeric'}).format(date); article.append(time);
     }
     const title = document.createElement('h3'); title.textContent = item.title;
+    if(Array.isArray(item.images)){const gallery=document.createElement('div');gallery.style.cssText='display:flex;gap:12px;overflow:auto';for(const url of item.images){if(!url.startsWith('/')||url.startsWith('//'))continue;const image=document.createElement('img');image.src=url;image.alt=item.title;image.loading='lazy';image.style.cssText='width:130px;height:185px;object-fit:contain;border-radius:10px';gallery.append(image);}article.append(gallery);}
     const body = item.body; const preview = document.createElement('p');
     preview.textContent = body.length > 280 ? body.slice(0,280) + '…' : body; article.append(title, preview);
     if (body.length > 280) {

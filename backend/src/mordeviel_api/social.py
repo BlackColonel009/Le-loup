@@ -162,6 +162,9 @@ def profile_data(c, viewer, target):
         )
     if mine:
         from .challenges import pending_count
+        from .coins import balance_in, bronze_balance_in
+        result['coin_balance'] = balance_in(c, target)
+        result['bronze_balance'] = bronze_balance_in(c, target)
         result['challenge_rewards'] = pending_count(c, target)
         result["practice_stats"] = dict(c.execute(
             "SELECT COUNT(*) AS games,COALESCE(SUM(wins),0) AS wins,COALESCE(SUM(wolf_victims),0) AS wolf_victims,COALESCE(SUM(devoured),0) AS devoured,COALESCE(SUM(executed),0) AS executed FROM social_bot_match_stats WHERE user_id=?",

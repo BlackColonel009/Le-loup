@@ -20,6 +20,7 @@ import 'village/village_map.dart';
 import 'village/village_navigation.dart';
 import 'village/village_chat.dart';
 import 'village/ceremonies.dart';
+import 'village/sulfuron_scene.dart';
 import 'village/phase_transition_banner.dart';
 import 'village/revival_scene.dart';
 import 'joining/host_identity.dart';
@@ -631,6 +632,16 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   final _villageFeed = ValueNotifier<Map<String, dynamic>>({});
   final _seenDeaths = <String>{};
+  final _seenSulfuron = <String>{};
+  final _sulfuronQueue = <Map<String, dynamic>>[];
+  int get _readySulfuronIndex => _sulfuronQueue.indexWhere((e) {
+    final game = _room?['game'] as Map?;
+    if (e['kind'] != 'resurrection' || game?['phase'] != 'vote_result') {
+      return true;
+    }
+    final sentence = game?['sentence'] as Map?;
+    return sentence != null && (sentence['remaining_ms'] as num? ?? 0) <= 0;
+  });
   final _deathQueue = <Map<String, dynamic>>[];
   final _rescueQueue = <Map<String, dynamic>>[];
   final _seenRescues = <String>{};
@@ -690,16 +701,27 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
 
   void _receiveDeaths(Map<String, dynamic> room) {
     final game = room['game'] as Map?;
+    final sulfuronEvents = [
+      ...(game?['sulfuron_events'] as List? ?? const []),
+      ...(_nightPrivate?['sulfuron_events'] as List? ?? const []),
+    ].whereType<Map>();
     final events = ((room['game'] as Map?)?['death_events'] as List? ?? [])
         .cast<Map<String, dynamic>>();
     if (!_deathFeedInitialized) {
       _seenDeaths.addAll(events.map((event) => event['id'] as String));
+      _seenSulfuron.addAll(sulfuronEvents.map((e) => e['id'] as String));
       _deathFeedInitialized = room['game'] != null;
       _elderCursed = game?['village_powers_lost'] == true;
       if (game?['phase'] == 'ended') {
         _endingShown = '${room['code']}:${game?['night']}:${game?['winner']}';
       }
       return;
+    }
+    for (final e in sulfuronEvents) {
+      if (_seenSulfuron.add(e['id'] as String) &&
+          !(e['kind'] == 'revived' && e['cause'] == 'vote')) {
+        _sulfuronQueue.add(Map<String, dynamic>.from(e));
+      }
     }
     final curse = !_elderCursed && game?['village_powers_lost'] == true;
     _elderCursed = game?['village_powers_lost'] == true;
@@ -726,6 +748,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     }
     if ((_deathQueue.isEmpty &&
             _rescueQueue.isEmpty &&
+            _readySulfuronIndex < 0 &&
             !_anonymousCurse &&
             _pendingEnding == null) ||
         _showingDeaths) {
@@ -737,6 +760,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         while (mounted &&
             (_deathQueue.isNotEmpty ||
                 _rescueQueue.isNotEmpty ||
+                _readySulfuronIndex >= 0 ||
                 _anonymousCurse ||
                 _pendingEnding != null)) {
           if (_rescueQueue.isNotEmpty) {
@@ -773,6 +797,26 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
                   ClassicAudio.instance.deathSpeech(null, cursed: true),
               onDismissed: ClassicAudio.instance.stopDeathSpeech,
               hasNext: _pendingEnding != null,
+            );
+            continue;
+          }
+          if (_deathQueue.isEmpty && _readySulfuronIndex >= 0) {
+            if (!mounted) break;
+            final event = _sulfuronQueue.removeAt(_readySulfuronIndex);
+            final player = (_room?['players'] as List? ?? [])
+                .where((p) => p['id'] == event['player'])
+                .firstOrNull;
+            await showSulfuronScene(
+              context,
+              event: event,
+              playerName: player?['nickname'] as String? ?? 'Joueur',
+              ambience: _styleFor(
+                event['role'] as String?,
+                edition:
+                    event['edition'] as String? ??
+                    _nightPrivate?['edition'] as String?,
+              ),
+              voteUsed: _nightPrivate?['sulfuron_vote_used'] == true,
             );
             continue;
           }
@@ -825,6 +869,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             name: player?['nickname'] as String? ?? 'Joueur',
             role: role,
             cause: event['cause'] as String,
+            effect: event['effect'] as String?,
             wasMayor: event['was_mayor'] == true,
             mayorAmbience: _styleFor('mayor'),
             feminine: _femaleFor(event['player']),
@@ -839,7 +884,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
               event['role'] as String?,
               feminine: _femaleFor(event['player']),
               cursed: event['elder_curse'] == true,
-              cause: event['cause'] as String?,
+              cause: event['effect'] as String? ?? event['cause'] as String?,
               edition: event['edition'] as String? ?? _ambience.asset,
             ),
             onDismissed: ClassicAudio.instance.stopDeathSpeech,
@@ -1131,6 +1176,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
         _busy = false;
       });
       _seenDeaths.clear();
+      _seenSulfuron.clear();
+      _sulfuronQueue.clear();
       _deathQueue.clear();
       _rescueQueue.clear();
       _seenRescues.clear();
@@ -1251,6 +1298,19 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
                 }
               });
             }
+          } else if (event['type'] == 'room.ready_reminder') {
+            unawaited(
+              showReadyReminderNotification(
+                _room?['code'] as String? ?? _code.text,
+              ).catchError((Object _) {}),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'On vous attend pour débuter le jeu. Indiquez que vous êtes prêt.',
+                ),
+              ),
+            );
           } else if (event['type'] == 'game.role') {
             setState(() => _role = event['role'] as String);
             _refreshVillage();
@@ -2262,7 +2322,15 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
               Text(_room!['launch_error'] as String),
             const SizedBox(height: 12),
             FilledButton.icon(
-              onPressed: _room!['launch_error'] == null
+              onPressed: players.any((p) => p['ready'] != true)
+                  ? () {
+                      try {
+                        _host!.startGame();
+                      } catch (error) {
+                        setState(() => _error = error.toString());
+                      }
+                    }
+                  : _room!['launch_error'] == null
                   ? () async {
                       final confirm = await showDialog<bool>(
                         context: context,

@@ -11,6 +11,8 @@
   "infection": "Père des Loups, réveille-toi. Veux-tu infecter la victime ?",
   "white_wolf": "Loup Blanc, réveille-toi. Choisis ta cible.",
   "piper": "Joueur de Flûte, réveille-toi. Qui veux-tu charmer ?",
+  "sulfuron": "Sulfuron, réveille-toi. Quel piège souhaites-tu tendre au village ?",
+  "close_sulfuron": "Sulfuron, referme les yeux et rendors-toi.",
   "scapegoat": "Bouc émissaire, désigne les joueurs qui pourront voter demain.",
   "dawn": "Le jour se lève. Le village découvre les événements de la nuit.",
   "hunter": "Chasseur, ton dernier souffle te laisse un dernier tir.",

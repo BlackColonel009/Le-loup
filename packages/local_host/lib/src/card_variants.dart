@@ -17,6 +17,7 @@ const variantRoleIds = {
   'piper',
   'angel',
   'sisters',
+  'sulfuron',
 };
 const cardEditions = {'classic', 'intense', 'horror'};
 
@@ -28,6 +29,16 @@ String cardEdition(
 ) => styles['$role#$copy'] ?? styles[role] ?? fallback;
 
 const cardVariantRules = <String, Map<String, String>>{
+  'sulfuron:intense': {
+    'name': 'Sulfuron · Voleur de vies',
+    'rules':
+        'Conservez le Bluff et la Révélation-piège classiques. Vos vies volées protègent des attaques de la meute. En plus, une vie peut vous ressusciter après votre première condamnation par le vote. La sentence a lieu mais vous restez en jeu. Toute condamnation suivante est définitive, même avec des vies restantes. Aucune protection contre le poison, le Chasseur ou le chagrin.',
+  },
+  'sulfuron:horror': {
+    'name': 'Sulfuron · Le Fourbe',
+    'rules':
+        'Conservez les deux pièges classiques et les vies contre la meute. Avec une vie disponible, ressuscitez après votre première condamnation par vote, une seule fois. Marquez alors un survivant ayant voté contre vous : sa vraie carte sera révélée à tous à votre prochain appel nocturne. Sans choix, le jeu tire un accusateur vivant au hasard. Cette révélation est supplémentaire : vous gardez votre choix de piège habituel. Le second vote est définitif. Poison, Chasseur et chagrin ignorent vos vies.',
+  },
   'cupid:intense': {
     'name': 'Tisseur de liens',
     'rules':

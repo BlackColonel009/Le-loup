@@ -18,6 +18,8 @@ def initialize(db):
         c.executescript('''
         CREATE TABLE IF NOT EXISTS coin_wallets (
             user_id INTEGER PRIMARY KEY, balance INTEGER NOT NULL DEFAULT 0 CHECK(balance>=0));
+        CREATE TABLE IF NOT EXISTS bronze_wallets (
+            user_id INTEGER PRIMARY KEY, balance INTEGER NOT NULL DEFAULT 0 CHECK(balance>=0));
         CREATE TABLE IF NOT EXISTS coin_match_rewards (
             match_id TEXT NOT NULL, user_id INTEGER NOT NULL, amount INTEGER NOT NULL,
             won INTEGER NOT NULL, theme TEXT NOT NULL, nights INTEGER NOT NULL,
@@ -31,11 +33,18 @@ def initialize(db):
             user_id INTEGER NOT NULL, gift_id TEXT NOT NULL, amount INTEGER NOT NULL,
             created REAL NOT NULL, PRIMARY KEY(user_id,gift_id));
         ''')
+        c.execute('INSERT OR IGNORE INTO bronze_wallets(user_id) SELECT id FROM users')
 
 
 def balance_in(c, uid):
     row = c.execute('SELECT balance FROM coin_wallets WHERE user_id=?', (uid,)).fetchone()
     return row['balance'] if row else 0
+
+
+def bronze_balance_in(c, uid):
+    # New accounts receive the same zero balance at their first wallet/profile read.
+    c.execute('INSERT OR IGNORE INTO bronze_wallets(user_id) VALUES(?)', (uid,))
+    return c.execute('SELECT balance FROM bronze_wallets WHERE user_id=?', (uid,)).fetchone()['balance']
 
 
 def amount_for(theme, nights, won):
@@ -82,6 +91,7 @@ def wallet(*, user: User, db: DB):
     with db.db() as c:
         rows = c.execute('SELECT * FROM coin_match_rewards WHERE user_id=? AND amount>0 ORDER BY created DESC LIMIT 50', (user['id'],)).fetchall()
         return {'user_id': user['id'], 'balance': balance_in(c, user['id']), 'currency': CURRENCY,
+                'bronze_balance': bronze_balance_in(c, user['id']),
                 'rewards': [receipt(c, row) for row in rows],
                 'gifts': [dict(r) for r in c.execute('SELECT * FROM coin_gifts WHERE user_id=? ORDER BY created DESC', (user['id'],))],
                 'creator_gift': creator_gift(c, user['id']),

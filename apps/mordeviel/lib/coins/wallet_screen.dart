@@ -84,6 +84,14 @@ class _WalletScreenState extends State<WalletScreen> {
             style: TextStyle(color: coinGold, fontSize: 20),
           ),
           const SizedBox(height: 18),
+          Card(
+            child: ListTile(
+              leading: const CoinToken(size: 44, metal: MoonMetal.bronze),
+              title: Text('${_data?['bronze_balance'] ?? 0} Lunes bronze'),
+              subtitle: const Text('Gains et utilisation à venir'),
+            ),
+          ),
+          const SizedBox(height: 16),
           const Text(
             'Tes Lunes d’or sont conservées sur ton compte. Échange-les dans la boutique contre des articles pour ta collection.',
             textAlign: TextAlign.center,

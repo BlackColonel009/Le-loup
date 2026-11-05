@@ -89,6 +89,33 @@ def test_real_online_game_private_roles_host_permissions_and_reconnect(close_via
             player.send_json({"version": 1, "type": "player.ready", "ready": True})
             receive(player, "room.snapshot")
             players.append(player)
+        # An unsuccessful start must remind the unready player through FastAPI
+        # without distributing any role or ending the room.
+        players[0].send_json({'version': 1, 'type': 'player.ready', 'ready': False})
+        for _ in range(100):
+            waiting = receive(players[0], 'room.snapshot')
+            if waiting['players'][0]['ready'] is False:
+                break
+        else:
+            raise AssertionError('The player did not become unready')
+        mdj.send_json({'action': 'start'})
+        for _ in range(100):
+            refused = mdj.receive_json()
+            if refused.get('type') == 'error':
+                break
+        else:
+            raise AssertionError('An unready game start was not refused')
+        assert 'prêts' in refused['message']
+        assert api.app.state.rooms.get(code).snapshot['phase'] == 'lobby'
+        reminder = receive(players[0], 'room.ready_reminder')
+        assert 'On vous attend' in reminder['message']
+        players[0].send_json({'version': 1, 'type': 'player.ready', 'ready': True})
+        for _ in range(100):
+            ready = receive(players[0], 'room.snapshot')
+            if all(p['ready'] for p in ready['players']):
+                break
+        else:
+            raise AssertionError('The player did not become ready again')
         mdj.send_json({"action": "start"})
         receive(mdj, "command.ok")
         dealt = []

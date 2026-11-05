@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../social/friend_messages_service.dart';
 import '../profile/player_avatar.dart';
 import '../profile/avatar_border.dart';
 import '../stickers/chat_stickers.dart';
@@ -41,8 +42,36 @@ class CommunityConversation extends StatefulWidget {
 
 class _CommunityConversationState extends State<CommunityConversation> {
   final _focus = FocusNode();
+  TabController? _tabs;
+  bool _reading = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final tabs = DefaultTabController.maybeOf(context);
+    if (!identical(tabs, _tabs)) {
+      _tabs?.removeListener(_syncReading);
+      _tabs = tabs;
+      _tabs?.addListener(_syncReading);
+    }
+    _syncReading();
+  }
+
+  void _syncReading() {
+    final visible =
+        (_tabs?.index ?? 0) == 0 && (ModalRoute.of(context)?.isCurrent ?? true);
+    if (_reading == visible) return;
+    _reading = visible;
+    if (visible) {
+      FriendMessagesService.instance.reading(-1);
+    } else {
+      FriendMessagesService.instance.leave(-1);
+    }
+  }
+
   @override
   void dispose() {
+    _tabs?.removeListener(_syncReading);
+    if (_reading) FriendMessagesService.instance.leave(-1);
     _focus.dispose();
     super.dispose();
   }

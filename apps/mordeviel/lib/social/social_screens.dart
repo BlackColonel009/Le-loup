@@ -13,6 +13,8 @@ import 'social_service.dart';
 import 'social_notifications.dart';
 import 'online_navigation.dart';
 import '../services/game_notification_sound.dart';
+import '../coins/coin_widgets.dart';
+import '../coins/wallet_screen.dart';
 
 const _gold = Color(0xFFE1BA78);
 String _date(dynamic value) {
@@ -876,6 +878,18 @@ class _SocialProfileScreenState extends State<SocialProfileScreen> {
               ),
             const SizedBox(height: 24),
             if (p['is_self'] == true) ...[
+              CoinBalanceCard(
+                balance: p['coin_balance'] as int?,
+                bronzeBalance: p['bronze_balance'] as int?,
+                onTap: () async {
+                  await Navigator.push<void>(
+                    context,
+                    MaterialPageRoute(builder: (_) => const WalletScreen()),
+                  );
+                  if (mounted) await _load();
+                },
+              ),
+              const SizedBox(height: 16),
               Card(
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(

@@ -212,6 +212,12 @@ void main() {
         expect(tester.takeException(), isNull);
         if (const bool.fromEnvironment('CAPTURE_COINS') &&
             size.width < size.height) {
+          await tester.runAsync(() async {
+            for (final image in tester.widgetList<Image>(find.byType(Image))) {
+              await precacheImage(image.image, boundary.currentContext!);
+            }
+          });
+          await tester.pump();
           await tester.pump(const Duration(milliseconds: 300));
           await tester.runAsync(() async {
             final image =
@@ -246,6 +252,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('1073'), findsOneWidget);
+    expect(find.text('0 Lunes bronze'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Ouvrir le coffre'), 180);
     expect(find.text('Ouvrir le coffre'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());

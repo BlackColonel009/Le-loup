@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/public_content.dart';
+import '../services/server_config.dart';
 
 class OfficialContentPage extends StatefulWidget {
   const OfficialContentPage({
@@ -125,6 +126,32 @@ class _OfficialContentPageState extends State<OfficialContentPage> {
                         ),
                         const SizedBox(height: 12),
                         SelectableText(item['body'] as String),
+                        if ((item['images'] as List? ?? []).isNotEmpty)
+                          SizedBox(
+                            height: 220,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (final url in item['images'] as List)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 12,
+                                      right: 12,
+                                    ),
+                                    child: Image.network(
+                                      Uri.parse(
+                                        apiBaseUrl,
+                                      ).resolve(url as String).toString(),
+                                      width: 145,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (_, _, _) => const Icon(
+                                        Icons.image_not_supported_outlined,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),

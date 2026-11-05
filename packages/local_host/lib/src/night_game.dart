@@ -13,6 +13,7 @@ part 'night_solitary_variants.dart';
 part 'night_village_variants.dart';
 part 'night_voting_variants.dart';
 part 'night_bond_variants.dart';
+part 'night_sulfuron.dart';
 
 /// Moteur autoritaire, indépendant du transport et de Flutter.
 class NightGame {
@@ -66,6 +67,7 @@ class NightGame {
   Map<String, String> get roles => UnmodifiableMapView(_roles);
   final _RoleState _extra = _RoleState();
   final _ExpandedVariantState _expanded = _ExpandedVariantState();
+  final _SulfuronState _sulfuron = _SulfuronState();
   final int Function(int) _chanceDraw;
   final Set<String> alive;
   final bool campOnly;
@@ -201,6 +203,8 @@ class NightGame {
       'night': night,
       'was_mayor': _pendingMayor == id || _mayor == id,
       'batch': _deathBatch,
+      if (cause == 'vote' && _sulfuron.burnVotes[id] == _expanded.voteRounds)
+        'effect': 'sulfuron_fire',
     });
   }
 
@@ -275,6 +279,7 @@ class NightGame {
         roles.keys.where((id) => roles[id] == 'sisters'),
       );
     _enter(action);
+    if (action == 'sulfuron') _openSulfuronCall();
     _openInitialLoversMeeting(action);
   }
 
@@ -375,6 +380,7 @@ class NightGame {
       };
 
   Map<String, dynamic> get publicState => {
+    'sulfuron_events': [for (final e in _sulfuron.publicEvents) Map.of(e)],
     ..._expandedPublic,
     'mayor': _mayor,
     'mayor_edition': mayorEdition,
@@ -463,6 +469,7 @@ class NightGame {
     final canAct =
         alive.contains(id) && !closed && !paused && remainingMilliseconds > 0;
     return {
+      ..._sulfuronPrivate(id),
       if (_latestSelection(id) != null)
         'confirmed_selection': _latestSelection(id),
       'id': id,
@@ -819,6 +826,10 @@ class NightGame {
     _dayComplete = true;
     _afterReactions = 'vote_result';
     _finishVoteVariants();
+    _sulfuron.stakes.removeWhere(
+      (_, stake) => stake.vote <= _expanded.voteRounds,
+    );
+    _sulfuron.burnVotes.removeWhere((_, vote) => vote <= _expanded.voteRounds);
     _beginReactions();
   }
 

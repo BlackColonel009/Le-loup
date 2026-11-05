@@ -10,6 +10,13 @@ class GameEnding {
 }
 
 const gameEndings = {
+  'sulfuron': GameEnding(
+    'Sulfuron a dupé le village !',
+    'Honneur au Fourbe. Lui seul remporte la partie.',
+    'sulfuron',
+    'sulfuron',
+    'ended.wav',
+  ),
   'village': GameEnding(
     'Le village est sauvé !',
     'Honneur aux villageois.',
@@ -62,6 +69,11 @@ const gameEndings = {
 };
 
 const deathSpeeches = {
+  'sulfuron': DeathSpeech(
+    'sulfuron',
+    'death.wav',
+    'Vous m’avez trouvé… mais qui rira le dernier ?',
+  ),
   'sisters': DeathSpeech(
     'classic_female',
     'death_sisters.wav',

@@ -15,7 +15,7 @@
 </script>
 <script src="/site-assets/admin.js?v=20261103-annonces-2" defer>
 </script>
-<script src="/site-assets/admin-announcements.js?v=20261103-annonces-2" defer></script>
+<script src="/site-assets/admin-announcements.js?v=20261105-cartes" defer></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -71,6 +71,10 @@
 <input id="announcement-title" maxlength="160" required>
 <label for="announcement-body">Texte de l’annonce</label>
 <textarea id="announcement-body" rows="7" maxlength="6000" required></textarea>
+  <label for="announcement-files">Images de cartes (8 maximum, PNG/JPEG/WebP, 4 Mo chacune)</label>
+  <input id="announcement-files" type="file" accept="image/png,image/jpeg,image/webp" multiple>
+  <button id="announcement-gallery" type="button" class="text-button">Choisir dans les cartes publiées</button>
+  <div id="announcement-images" style="display:flex;gap:12px;flex-wrap:wrap" aria-live="polite"></div>
 <p id="announcement-draft-status" class="admin-hint" role="status">Les brouillons restent dans ce navigateur, sans être publiés.</p>
 <button class="button" type="submit">Publier sur le site et dans le jeu</button>
 <button id="announcement-new" class="text-button" type="button">Nouvelle annonce</button>

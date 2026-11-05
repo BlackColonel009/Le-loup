@@ -127,6 +127,34 @@ Future<void> main() async {
       () => (host.snapshot['game_host'] as Map)['protected'] == ids[village],
     );
     host.advanceNight();
+    // Bond and Elder calls must precede the pack, even when their powers pass.
+    for (final call in ['sisters', 'lovers', 'elder_watch']) {
+      host.callNight(call);
+      host.advanceNight();
+    }
+    host.callNight('sulfuron');
+    final sulfuron = actor('sulfuron');
+    await until(() => private[sulfuron]?['can_act'] == true);
+    clients[sulfuron].gameAction(
+      'sulfuron.reveal',
+      (host.snapshot['game'] as Map)['phase_revision'] as int,
+      targets: [],
+    );
+    await until(
+      () => ((host.snapshot['game'] as Map)['sulfuron_events'] as List)
+          .isNotEmpty,
+    );
+    final publicTrap =
+        ((host.snapshot['game'] as Map)['sulfuron_events'] as List).last as Map;
+    check(
+      !publicTrap.containsKey('actor') && !publicTrap.containsKey('true_role'),
+      'Sulfuron identity leaked',
+    );
+    check(
+      !private[wolf]!.containsKey('sulfuron_lives'),
+      'Sulfuron charges leaked to pack',
+    );
+    host.advanceNight();
     host.callNight('wolves');
     await until(
       () =>
@@ -140,7 +168,7 @@ Future<void> main() async {
     }
     check(!leak, 'Private state leaked on public transport');
     print(
-      '18-role network OK: paired sisters, composition, private exchanges, lovers, guardian and all wolf variants.',
+      'Network OK: all roles including Sulfuron, private exchanges, bonds, guardian and all wolf variants.',
     );
   } finally {
     for (final sub in subscriptions) {

@@ -46,6 +46,8 @@ void main() {
       if (path == 'profile')
         return {
           'nickname': 'Alice',
+          'coin_balance': 2345,
+          'bronze_balance': 0,
           'role': 'player',
           'verified': false,
           'email': 'alice@example.test',
@@ -58,18 +60,26 @@ void main() {
 
     await tester.pumpWidget(MaterialApp(home: ProfileScreen(request: request)));
     await tester.pumpAndSettle();
+    expect(find.text('2345'), findsOneWidget);
+    expect(find.text('Lunes d’or'), findsOneWidget);
+    expect(find.text('0 Lunes bronze'), findsOneWidget);
     expect(find.text('Compte actif'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('alice@example.test'),
+      150,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('alice@example.test'), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text(
-        'Aucun achat pour le moment. Les achats sont actuellement indisponibles.',
+        'Aucun achat pour le moment. Découvre les offres en Lunes d’or dans la boutique.',
       ),
       150,
       scrollable: find.byType(Scrollable).first,
     );
     expect(
       find.text(
-        'Aucun achat pour le moment. Les achats sont actuellement indisponibles.',
+        'Aucun achat pour le moment. Découvre les offres en Lunes d’or dans la boutique.',
       ),
       findsOneWidget,
     );

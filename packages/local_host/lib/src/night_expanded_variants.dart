@@ -56,6 +56,7 @@ extension _ExpandedVariants on NightGame {
       if (_powerEnabled(id)) ...[
         ..._predatorAbilities(id),
         ..._solitaryAbilities(id),
+        ..._sulfuronAbilities(id),
         ..._villageAbilities(id),
         ..._bondAbilities(id),
         ..._coreExpandedAbilities(id),
@@ -121,6 +122,7 @@ extension _ExpandedVariants on NightGame {
   }
 
   bool _actExpanded(String id, Map<String, dynamic> action) {
+    if (_actSulfuron(id, action)) return true;
     if (_actVotingVariant(id, action)) return true;
     if (_actPredatorVariant(id, action)) return true;
     if (_actSolitaryVariant(id, action)) return true;

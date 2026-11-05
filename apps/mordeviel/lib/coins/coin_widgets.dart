@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 const coinName = 'Lunes d’or';
@@ -17,93 +16,129 @@ int coinsAtImpact(int amount, int milliseconds, List<int> impacts) {
   return amount * hits ~/ impacts.length;
 }
 
+// The supplied artwork is kept intact. Crop its white margins in the widget,
+// then mask only its outer silhouette; all coin displays share this asset.
+const goldMoonAsset = 'assets/rewards/gold_moon.webp';
+const bronzeMoonAsset = 'assets/rewards/bronze_moon.webp';
+
+enum MoonMetal { gold, bronze }
+
 class CoinToken extends StatelessWidget {
-  const CoinToken({super.key, this.size = 28});
+  const CoinToken({super.key, this.size = 28, this.metal = MoonMetal.gold});
   final double size;
+  final MoonMetal metal;
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Pièce Lune d’or, tête de loup',
+    label: metal == MoonMetal.gold
+        ? 'Pièce Lune d’or, tête de loup'
+        : 'Pièce Lune bronze, tête de loup',
     image: true,
     child: SizedBox.square(
       dimension: size,
-      child: CustomPaint(painter: _CoinPainter()),
+      child: ClipOval(
+        child: FittedBox(
+          fit: BoxFit.fill,
+          child: ClipRect(
+            child: Align(
+              alignment: Alignment(0, metal == MoonMetal.gold ? -.025 : 0),
+              widthFactor: metal == MoonMetal.gold ? 1 : 1570 / 1792,
+              heightFactor: metal == MoonMetal.gold ? 1840 / 2400 : 1636 / 2400,
+              child: Image.asset(
+                metal == MoonMetal.gold ? goldMoonAsset : bronzeMoonAsset,
+                width: 448,
+                height: 600,
+                cacheWidth: (size * MediaQuery.devicePixelRatioOf(context))
+                    .ceil()
+                    .clamp(32, 512),
+                fit: BoxFit.fill,
+                filterQuality: FilterQuality.high,
+                excludeFromSemantics: true,
+              ),
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }
 
-class _CoinPainter extends CustomPainter {
+class CoinBalanceCard extends StatelessWidget {
+  const CoinBalanceCard({
+    super.key,
+    required this.balance,
+    this.bronzeBalance,
+    required this.onTap,
+  });
+  final int? balance;
+  final int? bronzeBalance;
+  final VoidCallback onTap;
   @override
-  void paint(Canvas canvas, Size size) {
-    canvas.save();
-    canvas.scale(size.width / 100);
-    final paint = Paint();
-    paint.color = Colors.black.withValues(alpha: .5);
-    canvas.drawCircle(const Offset(51, 53), 46, paint);
-    paint.shader = const LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        Color(0xFFFFF0A7),
-        Color(0xFFA97525),
-        Color(0xFFE4BB5C),
-        Color(0xFF6E451D),
-      ],
-    ).createShader(const Rect.fromLTWH(4, 4, 92, 92));
-    canvas.drawCircle(const Offset(50, 50), 46, paint);
-    paint.shader = null;
-    paint
-      ..color = const Color(0xFF634018)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawCircle(const Offset(50, 50), 39, paint);
-    paint
-      ..color = const Color(0xFFFFE7A1)
-      ..strokeWidth = 1.2;
-    canvas.drawCircle(const Offset(50, 50), 44, paint);
-    for (var i = 0; i < 24; i++) {
-      final a = i * math.pi / 12;
-      canvas.drawLine(
-        Offset(50 + 41 * math.cos(a), 50 + 41 * math.sin(a)),
-        Offset(50 + 43 * math.cos(a), 50 + 43 * math.sin(a)),
-        paint,
-      );
-    }
-    final wolf = Path()
-      ..moveTo(25, 23)
-      ..lineTo(39, 32)
-      ..lineTo(50, 29)
-      ..lineTo(61, 32)
-      ..lineTo(75, 23)
-      ..lineTo(71, 58)
-      ..lineTo(61, 73)
-      ..lineTo(50, 83)
-      ..lineTo(39, 73)
-      ..lineTo(29, 58)
-      ..close();
-    paint
-      ..style = PaintingStyle.fill
-      ..color = const Color(0xFF674318);
-    canvas.drawPath(wolf, paint);
-    canvas.save();
-    canvas.translate(-1.3, -1.3);
-    paint.color = const Color(0xFFF4D67D);
-    canvas.drawPath(wolf, paint);
-    canvas.restore();
-    paint
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round
-      ..color = const Color(0xFF6E491D);
-    canvas.drawLine(const Offset(36, 46), const Offset(44, 51), paint);
-    canvas.drawLine(const Offset(64, 46), const Offset(56, 51), paint);
-    final muzzle = Path()
-      ..moveTo(44, 63)
-      ..lineTo(50, 68)
-      ..lineTo(56, 63);
-    canvas.drawPath(muzzle, paint);
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _CoinPainter oldDelegate) => false;
+  Widget build(BuildContext context) => Card(
+    color: const Color(0xFF282419),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: BorderSide(color: coinGold.withValues(alpha: .4)),
+    ),
+    clipBehavior: Clip.antiAlias,
+    child: InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                const CoinToken(size: 54),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        balance == null ? '—' : '$balance',
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: coinGold,
+                        ),
+                      ),
+                      const Text(
+                        'Lunes d’or',
+                        style: TextStyle(color: coinGold),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Ma bourse · gains et achats',
+                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: coinGold),
+              ],
+            ),
+            const Divider(height: 28),
+            Row(
+              children: [
+                const CoinToken(size: 32, metal: MoonMetal.bronze),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    '${bronzeBalance ?? '—'} Lunes bronze',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'À venir',
+                  style: TextStyle(fontSize: 12, color: Colors.white60),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

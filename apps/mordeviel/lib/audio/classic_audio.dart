@@ -581,6 +581,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     );
     if (!_audible || scene != AudioScene.host) return;
     if (speech == null &&
+        cause != 'sulfuron_fire' &&
         cause != 'hunter' &&
         !(cause == 'vote' && edition == 'intense')) {
       return;
@@ -588,6 +589,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     stopDeathSpeech();
     final ticket = _deathTicket;
     _story([
+      if (cause == 'sulfuron_fire') (asset: 'sulfuron_fire.wav', profile: null),
       if (cause == 'hunter') (asset: 'hunter_volley.wav', profile: null),
       if (cause == 'hunter' && wolfRoleIds.contains(publicRole))
         (asset: 'wolf_fall.wav', profile: null),
@@ -603,6 +605,18 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     _story(
       [(asset: 'revival.wav', profile: 'old_witch')],
       privateCue: true,
+      isCurrent: () => ticket == _deathTicket,
+    );
+  }
+
+  void sulfuronSpeech(String cue, {bool private = false}) {
+    // Local players stay silent: a private sound would identify the Fourbe.
+    if (private && scene == AudioScene.silent) return;
+    stopDeathSpeech();
+    final ticket = _deathTicket;
+    _story(
+      [(asset: '$cue.wav', profile: 'sulfuron')],
+      privateCue: private,
       isCurrent: () => ticket == _deathTicket,
     );
   }
@@ -647,7 +661,9 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
             break;
           }
           final voice = cue.profile != null;
-          final profile = voice
+          final profile = cue.profile == 'sulfuron'
+              ? sulfuronCharacterVoice
+              : voice
               ? _profiles.where((p) => p.id == cue.profile).firstOrNull
               : null;
           if (voice &&

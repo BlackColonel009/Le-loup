@@ -1,0 +1,92 @@
+[
+  {
+    "id": "voyante",
+    "title": "Voyante",
+    "prompt": "Adult female seer, large expressive violet eyes, long chestnut waves, luxurious violet hooded medieval cloak with embroidered gold celestial hems, lilac layered dress, small leather belt, both shoes visible below dress. She holds ONE luminous cyan crystal ball between two anatomically coherent hands at chest level, confident knowing victorious smile. Complete hood and cloak visible."
+  },
+  {
+    "id": "sorciere",
+    "title": "Sorcière",
+    "prompt": "Adult charming witch, wavy dark hair, violet eyes, broad tall crooked plum witch hat with small brass crescent, deep aubergine medieval dress, leather belt with exactly TWO small different colored potions securely attached, sturdy ankle boots. Proud playful victory stance holding up a green glass potion in one hand, other hand resting on hip. Entire hat, potion and boots visible. Clearly distinct from hooded seer, no crystal ball."
+  },
+  {
+    "id": "chasseur",
+    "title": "Chasseur",
+    "prompt": "Adult male medieval fantasy hunter, thick brown mustache and short beard, strong warm eyes, olive coat, leather cross belts with discreet pouches, brown broad brim feathered hat, rugged boots. Holds a single old-fashioned flintlock hunting long gun pointing safely upward beside shoulder, other fist raised triumphantly. Confident relieved victorious smile. No modern military gear. Whole hat barrel stock hands feet visible."
+  },
+  {
+    "id": "petite-fille",
+    "title": "Petite Fille",
+    "prompt": "Young village girl in rust-red hood with cream shearling edge, blue medieval coat-dress, wool stockings, brown boots; short chestnut hair and bright blue eyes. Childlike chibi, innocent delighted victorious smile. Hugs one small honey-brown teddy bear against chest, other hand waves joyfully. Fully clothed, modest child character, complete hood teddy and both boots visible."
+  },
+  {
+    "id": "metamorphe",
+    "title": "Voleur / Métamorphe",
+    "prompt": "Adult male cunning rogue, tousled brown hair, expressive hazel eyes, dark charcoal scarf covering lower face, medieval layered dark leather outfit, flowing short cape, belt and small pouches, soft boots. One hand proudly lifts a carved theatrical half-mask slightly away from head, the other hand on hip. Mischievous victorious eye expression. No knives required. Whole cape mask head hands boots visible, readable silhouette."
+  },
+  {
+    "id": "cupidon",
+    "title": "Cupidon",
+    "prompt": "A charming winged young male cupid portrayed modestly in a complete ivory and blush medieval tunic, short gold-edged capelet, belt, brown sandals, blond curls and bright blue eyes, two white feathered wings completely visible. Holding a graceful wooden bow lowered at his side and one heart-tipped arrow in the other hand. Joyful victorious smile, both feet visible, no nudity, no diaper, no text. Wings and bow fully within frame."
+  },
+  {
+    "id": "salvateur",
+    "title": "Salvateur / Gardien",
+    "prompt": "Adult stout chibi guardian knight, polished cool silver medieval plate armor with restrained brass edging, blue tabard, helmet with raised visor revealing warm determined eyes and short beard. Large kite shield held to one side, sword held vertically pointing upward in other hand, proud protective victory pose. Both armored boots, whole shield and sword tip fully visible. Elegant etched leaf motif, no crosses or text."
+  },
+  {
+    "id": "ancien",
+    "title": "Ancien",
+    "prompt": "Elderly male village elder, kindly wise blue eyes, bald crown with white side hair, long beautifully groomed white beard, layered earth-brown and moss robes, leather belt, sturdy brown ankle boots. Complete curved wooden walking staff with carved spiral top held in one hand, other hand raised in a warm congratulatory greeting. Dignified relieved victory smile, full staff and both boots visible below robes."
+  },
+  {
+    "id": "bouc-emissaire",
+    "title": "Bouc émissaire",
+    "prompt": "Adult male humble medieval villager, tousled black hair, short dark beard, large sympathetic brown eyes, patched ochre linen tunic, worn leather belt, brown trousers and boots. No ropes, no restraint. Relieved joyful victorious expression as he holds a broken loose rope loop in one hand lowered at his side and gives a modest thumbs-up with the other, escaped accusation theme. Whole body and boots visible, charming not humiliated."
+  },
+  {
+    "id": "alpha",
+    "title": "Grand Méchant Loup / Alpha",
+    "prompt": "Powerful charcoal-black anthropomorphic wolf Alpha king, standing proudly on TWO digitigrade legs, broad muscular compact chibi body, large mane with subtle silver streaks, amber eyes, strong wolf muzzle and confident victorious fang smile. Regal small antique gold crown with one red gemstone, short burgundy fur-edged cape, dark medieval belt and brown breeches. One clawed fist raised, other on hip, big tail fully visible. Both clawed feet, crown and cape entirely visible. More imposing than ordinary gray werewolf, no weapon."
+  },
+  {
+    "id": "loup-blanc",
+    "title": "Loup Blanc / Solitaire",
+    "prompt": "Elegant solitary anthropomorphic white wolf, standing proudly on TWO digitigrade hind legs, compact full-body chibi, thick ivory-white fur with cool silver shadows, luminous icy blue eyes, pointed ears, graceful large fluffy tail, subtle midnight blue short scarf and leather belt with slate trousers. A restrained confident victorious smile, one open clawed hand on chest and other hand relaxed at side, regal lone survivor posture but NO crown. Whole ears tail hands and both feet visible. No gray king wolf."
+  },
+  {
+    "id": "pere-des-loups",
+    "title": "Père des Loups",
+    "prompt": "Older wise alpha-like anthropomorphic wolf patriarch distinct from crowned Alpha: silver-gray shaggy fur, heavier pale beard-like muzzle, one subtle healed brow scar, amber eyes with calm commanding victorious expression. Standing on TWO digitigrade legs, dark moss weathered medieval cloak with bronze wolf-head clasp, brown leather belt and trousers, simple carved wooden staff held to side, other hand extended in welcoming leadership gesture. No crown. Entire staff, tail, ears and both clawed feet visible."
+  },
+  {
+    "id": "idiot-du-village",
+    "title": "Idiot du Village",
+    "prompt": "Adult male goodhearted village jester, round expressive face, warm brown eyes and cheerful clever smile, short brown hair, three-point medieval jester cap in muted burgundy mustard and teal with tiny brass bells. Matching textured patchwork tunic with simple belt, olive trousers and curled leather ankle boots, one hand holding a red apple and other hand raised in playful triumphant greeting. Full adult chibi body with both legs feet and complete hat, NOT a head-and-shoulders portrait. Kind humorous characterization."
+  },
+  {
+    "id": "joueur-de-flute",
+    "title": "Joueur de Flûte",
+    "prompt": "Adult male mysterious wandering piper, brown beard and mustache, expressive teal eyes, deep forest-green medieval long coat with brass buttons and belt, dark trousers and boots, brown wide-brim feathered hat, burgundy short cape. Holds one elegant wooden transverse flute naturally in both hands at mouth, fingers coherently placed; triumphant mesmerizing gentle smile visible around flute, subtle victorious stance. Complete flute, hat feather, cape, both legs and boots visible; no floating musical-note graphics or background."
+  },
+  {
+    "id": "ange",
+    "title": "Ange",
+    "prompt": "Radiant adult female angel chibi with blond flowing hair, clear blue eyes, joyful serene victorious smile, modest long-sleeved ivory medieval robe with gold trim and belt, both sandaled feet visible beneath hem. Two beautifully painted white feathered wings fully visible, delicate small gold halo entirely inside canvas. Hands clasped gratefully at chest with coherent fingers, complete full figure, no floating cropped robe, no text or scenery."
+  },
+  {
+    "id": "deux-soeurs",
+    "title": "Deux Sœurs",
+    "prompt": "EXCEPTION: TWO complete coordinated sister characters together in ONE isolated asset for the paired role. Two distinct young adult medieval women with warm expressive blue eyes and blond shoulder-length hair, both fully visible head to toe and standing side by side holding their inner hands. One wears dusty rose medieval dress with cream blouse and brown boots, the other powder blue medieval dress and matching boots. Other outer hands make small joyful victory gestures, affectionate triumphant smiles. Exactly TWO women, no children or third person. Both heads, FOUR feet, and hands fully visible with generous margins; no overlap that hides legs. Same polished chibi style."
+  },
+  {
+    "id": "maire",
+    "title": "Maire",
+    "prompt": "Adult cheerful stout medieval mayor, brown curled mustache, expressive blue eyes, distinguished burgundy broad brim hat with feather, midnight blue velvet coat over taupe vest, brass buttons, brown trousers and fine leather boots, ceremonial burgundy and gold sash without text. One hand holding rolled parchment bearing a large antique brass key, other hand proudly lifted in victory greeting. Complete hat feather scroll key and both boots visible. No modern tricolor flag sash."
+  },
+  {
+    "id": "sulfuron",
+    "title": "Sulfuron",
+    "prompt": "Original mischievous adult male small infernal medieval fantasy creature, rich red skin, swept black hair, two polished curved dark horns, long pointed ears, amber-yellow eyes, smug playful victorious fang grin. Fully clothed in cream shirt, burgundy leather waistcoat, dark brown breeches, belt and rugged boots. Slim curling pointed tail completely visible to side. Hands posed confidently on hips with coherent fingers. Chibi polished fantasy, non-gory, no fire background, full horns tail head and both feet visible."
+  }
+]

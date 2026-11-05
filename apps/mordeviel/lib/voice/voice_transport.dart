@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart';
+// LiveKit 2.13 exposes audio-focus sharing through its experimental session API.
+// This explicit policy is required to mix WebRTC with the game's narrator.
+// ignore_for_file: experimental_member_use
 import 'package:livekit_client/livekit_client.dart' as lk;
 
 abstract class VoiceTransport extends ChangeNotifier {
@@ -27,6 +30,27 @@ class LiveKitVoiceTransport extends VoiceTransport {
   Future<void> connect(String url, String token) async {
     if (_disposed) return;
     await disconnect();
+    // Share output with the game's narrator; never request exclusive focus.
+    await lk.AudioManager.instance.setAudioSessionOptions(
+      const lk.AudioSessionOptions.communication(
+        apple: lk.AppleAudioSessionConfiguration(
+          category: lk.AppleAudioCategory.playAndRecord,
+          mode: lk.AppleAudioMode.voiceChat,
+          categoryOptions: {
+            lk.AppleAudioCategoryOption.mixWithOthers,
+            lk.AppleAudioCategoryOption.defaultToSpeaker,
+            lk.AppleAudioCategoryOption.allowBluetooth,
+          },
+        ),
+        android: lk.AndroidAudioSessionConfiguration(
+          audioMode: lk.AndroidAudioMode.inCommunication,
+          manageAudioFocus: false,
+          streamType: lk.AndroidAudioStreamType.music,
+          usageType: lk.AndroidAudioAttributesUsageType.media,
+          contentType: lk.AndroidAudioAttributesContentType.speech,
+        ),
+      ),
+    );
     final room = lk.Room(
       roomOptions: const lk.RoomOptions(
         defaultAudioPublishOptions: lk.AudioPublishOptions(
@@ -38,7 +62,7 @@ class LiveKitVoiceTransport extends VoiceTransport {
     _room = room;
     room.addListener(_changed);
     try {
-      await room.connect(url, token);
+      await room.connect(url, token).timeout(const Duration(seconds: 12));
     } catch (_) {
       await disconnect();
       rethrow;
@@ -120,12 +144,14 @@ class LiveKitVoiceTransport extends VoiceTransport {
     _room = null;
     _track = null;
     room?.removeListener(_changed);
-    await track?.stop();
+    try {
+      await track?.stop().timeout(const Duration(seconds: 3));
+    } catch (_) {}
     if (room != null) {
       try {
-        await room.disconnect();
+        await room.disconnect().timeout(const Duration(seconds: 3));
       } finally {
-        await room.dispose();
+        await room.dispose().timeout(const Duration(seconds: 3));
       }
     }
     if (!_disposed) notifyListeners();

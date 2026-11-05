@@ -12,6 +12,7 @@ const _nightCalls = {
   'witch': ('witch', 'la Sorcière'),
   'white_wolf': ('white_wolf', 'le Loup Blanc'),
   'piper': ('piper', 'le Joueur de Flûte'),
+  'sulfuron': ('sulfuron', 'Sulfuron'),
   'village_watch': ('villager', 'les Veilleurs du village'),
   'elder_watch': ('elder', 'les Anciens du village'),
   'lovers': ('bond', 'les Amoureux'),
@@ -57,7 +58,9 @@ extension _AdditionalRoles on NightGame {
     if (_roles[id] == 'white_wolf' && !_extra.infected.contains(id))
       return 'white_wolf';
     if (_isWolf(id)) return 'wolves';
-    return ['piper', 'angel'].contains(_roles[id]) ? _roles[id]! : 'village';
+    return ['piper', 'angel', 'sulfuron'].contains(_roles[id])
+        ? _roles[id]!
+        : 'village';
   }
 
   bool _powerEnabled(String id) =>
@@ -217,6 +220,8 @@ extension _AdditionalRoles on NightGame {
       'Le Joueur de Flûte a charmé tous les autres survivants et remporte la partie.',
     'angel' => 'L’Ange a atteint son objectif au vote et remporte la partie.',
     'lovers' => 'Les amoureux de camps opposés remportent ensemble la partie.',
+    'sulfuron' =>
+      'Sulfuron a piégé le village. Le Fourbe remporte seul la partie !',
     _ => '',
   };
 
@@ -255,11 +260,20 @@ extension _AdditionalRoles on NightGame {
     } else if (_winningPipers.isNotEmpty) {
       winner = 'piper';
       _extra.winners.addAll(_winningPipers);
+    } else if (alive.any(
+      (id) =>
+          _camp(id) == 'sulfuron' &&
+          alive.every((p) => p == id || _camp(p) == 'village'),
+    )) {
+      winner = 'sulfuron';
+      _extra.winners.add(alive.firstWhere((id) => _camp(id) == 'sulfuron'));
     } else {
       final friendly = alive.where((id) => _camp(id) == 'wolves').length;
       final white = alive.any((id) => _camp(id) == 'white_wolf');
       final piper = alive.any((id) => _camp(id) == 'piper');
-      if (!alive.any(_isWolf) && !piper) {
+      if (!alive.any(_isWolf) &&
+          !piper &&
+          !alive.any((id) => _camp(id) == 'sulfuron')) {
         winner = 'village';
         _extra.winners.addAll(roles.keys.where((id) => _camp(id) == 'village'));
       } else if (!white && friendly > 0 && friendly * 2 >= alive.length) {
@@ -289,6 +303,7 @@ extension _AdditionalRoles on NightGame {
       for (final e in primary.entries)
         if (alive.contains(e.key)) e.key: e.value,
     };
+    victims.removeWhere((id, cause) => _sulfuronPreventsDeath(id, cause));
     for (var index = 0; index < victims.length; index++) {
       final lover = _extra.lovers[victims.keys.elementAt(index)];
       if (lover != null && alive.contains(lover))
@@ -312,6 +327,7 @@ extension _AdditionalRoles on NightGame {
       if (_isWolf(id)) _extra.packBroken = true;
       alive.remove(id);
       _recordDeath(id, entry.value);
+      _sulfuronVictimDied(id, entry.value);
       if (!deaths.contains(id)) deaths.add(id);
       if (roles[id] == 'hunter' && _powerEnabled(id)) {
         if (_hunter == null) {
@@ -475,6 +491,15 @@ extension _AdditionalRoles on NightGame {
     }
     if (!alive.contains(id) || !_powerEnabled(id) || _done(id)) return null;
     final all = alive.toList();
+    if (phase == 'sulfuron' && role == 'sulfuron') {
+      return choice(
+        'sulfuron.reveal',
+        'Révélation-piège · dévoiler une carte au hasard pour gagner une vie si le prochain vote la condamne',
+        [],
+        0,
+        0,
+      );
+    }
     if (phase == 'metamorph' && role == 'metamorph') {
       if (_metaPeek.containsKey(id))
         return choice(

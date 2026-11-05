@@ -404,6 +404,23 @@ class LocalHost implements GameHost {
   }
 
   void startGame() {
+    if (!started) {
+      for (final entry in _peers.entries) {
+        final player = _players[entry.value['id']];
+        if (player != null &&
+            player['ready'] != true &&
+            entry.key.readyState == WebSocket.open) {
+          entry.key.add(
+            jsonEncode({
+              'version': 1,
+              'type': 'room.ready_reminder',
+              'message':
+                  'On vous attend pour débuter le jeu. Revenez dans le salon et indiquez que vous êtes prêt.',
+            }),
+          );
+        }
+      }
+    }
     final error = launchError;
     if (error != null) throw StateError(error);
     final cards = [

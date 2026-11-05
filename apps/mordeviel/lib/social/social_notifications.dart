@@ -120,6 +120,21 @@ Future<void> showGameStartedNotification(String code) async {
   );
 }
 
+Future<void> showReadyReminderNotification(String code) async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  await _initializeNotifications();
+  await _notifications.show(
+    id: 940003,
+    title: 'On vous attend !',
+    body:
+        'On vous attend pour débuter le jeu. Revenez dans le salon et indiquez que vous êtes prêt.',
+    notificationDetails: NotificationDetails(
+      android: messageSoundDetails(await readGameNotificationSound()),
+    ),
+    payload: 'game-start:$code',
+  );
+}
+
 /// Distinct channels keep Android from retaining the previous sound choice.
 AndroidNotificationDetails gameStartSoundDetails(String sound) =>
     sound == 'phone'

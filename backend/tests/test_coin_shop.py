@@ -157,3 +157,19 @@ def test_creator_gift_is_exactly_100_once_per_account_even_concurrently(collecti
     assert api.post(endpoint+'/claim',headers=headers).json()['amount_credited']==0
     other = account(api,'SecondCompte')[1]
     assert api.post(endpoint+'/claim',headers=other).json()['balance']==100
+
+
+def test_personal_profiles_show_authoritative_balance_without_exposing_it_to_visitors(collection_api):
+    api, auth, _ = collection_api
+    uid = api.get('/shop/me', headers=auth).json()['user_id']
+    fund(api, uid, 2345)
+    assert api.get('/community/profile', headers=auth).json()['coin_balance'] == 2345
+    assert api.get('/community/profile', headers=auth).json()['bronze_balance'] == 0
+    assert api.get('/coins/me', headers=auth).json()['bronze_balance'] == 0
+    assert api.get('/social/me', headers=auth).json()['coin_balance'] == 2345
+    assert api.get('/social/me', headers=auth).json()['bronze_balance'] == 0
+    assert api.get(f'/social/profiles/{uid}', headers=auth).json()['coin_balance'] == 2345
+    other = account(api, 'Visiteur')[1]
+    assert 'coin_balance' not in api.get(f'/social/profiles/{uid}', headers=other).json()
+    assert 'bronze_balance' not in api.get(f'/social/profiles/{uid}', headers=other).json()
+    assert api.get('/coins/me', headers=other).json()['bronze_balance'] == 0

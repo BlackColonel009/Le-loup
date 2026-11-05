@@ -1,0 +1,37 @@
+{
+  "id": "sulfuron",
+  "engine": "Qwen3-TTS local ONNX",
+  "direction": "Native French male adult imp disguised as an ordinary villager. A nimble light tenor, slightly nasal and lightly raspy, sly cunning goblin-like charm with a smiling mischievous voice, quick playful inflections, secretive pauses and a short natural impish chuckle. Clearly intelligible expressive French character acting. Not a child, no shouting, no monstrous growl, no robotic or flat delivery, no singing.",
+  "cues": {
+    "bluff": {
+      "seconds": 6.48,
+      "sha256": "7814bd592df04140d7bd80e1bc88bea83934b401e9160090d3cbfb0012a0119f",
+      "text": "Vous serez désorientés, mais vous ne me trouverez pas. Héhéhé !"
+    },
+    "reveal": {
+      "seconds": 3.12,
+      "sha256": "ce61f4eec68f4fcc63fa11259602f9952f0a2def9b6fe6360c0358dd048b18b8",
+      "text": "Un petit mouton conduit à l’abattoir… héhéhé !"
+    },
+    "revive": {
+      "seconds": 6.24,
+      "sha256": "9766866ad123e32aba54b549bd54480bbb42300326ce48e3c5bb0ce0bdca9a84",
+      "text": "Vous croyiez en avoir fini avec moi ? Encore une petite vie… héhéhé !"
+    },
+    "death": {
+      "seconds": 3.12,
+      "sha256": "408774da24babd845d6ba7b2ae3bbf659cec4f69ce0112230cf1a7b34d43d0e5",
+      "text": "Vous m’avez trouvé… mais qui rira le dernier ?"
+    },
+    "ended": {
+      "seconds": 5.28,
+      "sha256": "76ca2d996e7d5089e4c14077903001cf501d44f4b6091ae2abd1aa46c8d83bea",
+      "text": "Vous avez chassé les loups… et livré le village au Fourbe. Héhéhé !"
+    }
+  },
+  "reference_text": "Vous serez désorientés, mais vous ne me trouverez pas. Héhéhé !",
+  "reference": {
+    "seconds": 6.48,
+    "sha256": "7814bd592df04140d7bd80e1bc88bea83934b401e9160090d3cbfb0012a0119f"
+  }
+}

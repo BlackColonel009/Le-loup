@@ -5,6 +5,7 @@ import 'friend_messages_service.dart';
 import 'private_chat_screen.dart';
 import 'social_api.dart';
 import 'social_notifications.dart';
+import '../community/community_screen.dart';
 
 class FriendMessagesOverlay extends StatefulWidget {
   const FriendMessagesOverlay({
@@ -54,6 +55,14 @@ class _FriendMessagesOverlayState extends State<FriendMessagesOverlay> {
     if (_opening) return;
     _opening = true;
     try {
+      if (id == -1) {
+        setState(() => _expanded = false);
+        await widget.navigatorKey.currentState?.push<void>(
+          MaterialPageRoute(builder: (_) => const CommunityScreen()),
+        );
+        await _messages.refresh();
+        return;
+      }
       if (nickname == null) {
         final history = await SocialApi.instance.request('/social/chats/$id');
         nickname = (history['friend'] as Map)['nickname'] as String;
@@ -103,11 +112,17 @@ class _FriendMessagesOverlayState extends State<FriendMessagesOverlay> {
               label: Text('${message['unread_count']}'),
               backgroundColor: const Color(0xFFE1BA78),
               textColor: const Color(0xFF18232E),
-              child: PlayerAvatar(
-                avatar: message['avatar'] as Map?,
-                nickname: message['nickname'] as String,
-                size: 52,
-              ),
+              child: id == -1
+                  ? const SizedBox(
+                      width: 52,
+                      height: 52,
+                      child: Icon(Icons.forum, color: Color(0xFFE1BA78)),
+                    )
+                  : PlayerAvatar(
+                      avatar: message['avatar'] as Map?,
+                      nickname: message['nickname'] as String,
+                      size: 52,
+                    ),
             ),
           ),
         ),

@@ -73,6 +73,8 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
   bool wanted = false, busy = false, locked = false, transmitting = false;
   bool _publish = false, _held = false, _foreground = true, _disposed = false;
   bool _refreshing = false, _refreshQueued = false;
+  DateTime? _retryAfter;
+  int _failures = 0;
   int _generation = 0;
   Timer? _poll;
   Future<void> _writes = Future.value();
@@ -104,6 +106,8 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
     _cut();
     _publish = false;
     if (changedCredential || next == null) {
+      _retryAfter = null;
+      _failures = 0;
       _epoch = null;
       unawaited(_disconnect());
     }
@@ -111,6 +115,7 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> join() async {
+    _retryAfter = null;
     wanted = true;
     error = null;
     _poll ??= Timer.periodic(pollInterval, (_) => unawaited(refresh()));
@@ -145,6 +150,7 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> refresh() async {
+    if (_retryAfter != null && DateTime.now().isBefore(_retryAfter!)) return;
     if (_disposed ||
         !wanted ||
         !_foreground ||
@@ -162,7 +168,10 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
     if (busy) notifyListeners();
     final generation = _generation;
     try {
-      final grant = await _loader(_code!, _credential!);
+      final grant = await _loader(
+        _code!,
+        _credential!,
+      ).timeout(const Duration(seconds: 8));
       if (_disposed || generation != _generation || !wanted || !_foreground) {
         return;
       }
@@ -210,8 +219,14 @@ class GameVoice extends ChangeNotifier with WidgetsBindingObserver {
         });
       }
       error = null;
+      _failures = 0;
+      _retryAfter = null;
     } catch (failure) {
       if (!_disposed && generation == _generation) {
+        _failures = (_failures + 1).clamp(1, 4);
+        _retryAfter = DateTime.now().add(
+          Duration(seconds: 2 * (1 << _failures)),
+        );
         _cut();
         _publish = false;
         error = failure is StateError

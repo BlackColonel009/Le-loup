@@ -1,6 +1,6 @@
 # Boutique en Lunes d’or — 0.3.5
 
-La boutique propose chaque jour trois stickers, trois cartes Intenses et trois bordures. La sélection, identique pour tous les comptes, change à minuit UTC (heure du Togo). L’application affiche le décompte et recharge les offres au changement de jour ou à son retour au premier plan. Un produit masqué ou désactivé peut réduire le nombre d’offres.
+La boutique propose chaque jour trois stickers, trois cartes Intenses et trois bordures. La sélection, identique pour tous les comptes, change à 00 h 00 UTC. L’application affiche le décompte et recharge les offres au changement de jour ou à son retour au premier plan. Un produit masqué ou désactivé peut réduire le nombre d’offres.
 
 Prix initiaux et minimums imposés par le serveur : sticker 200, carte Intense 900, bordure 500 Lunes d’or. Les cartes classiques restent acquises automatiquement. Les cartes Horreur, thèmes complets et voix ne sont pas ajoutés à ces ventes en monnaie virtuelle.
 

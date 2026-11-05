@@ -105,7 +105,7 @@ ClassicRole configuredRole(
   if (variant != null) {
     return ClassicRole(
       role.id,
-      '${role.name} · ${variant['name']}',
+      id == 'sulfuron' ? variant['name']! : '${role.name} · ${variant['name']}',
       role.camp,
       role.phase,
       variant['summary']!,
