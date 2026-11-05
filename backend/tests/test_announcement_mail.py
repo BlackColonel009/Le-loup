@@ -1,7 +1,12 @@
+import base64
+import io
 import json
+from email import policy
+from email.parser import BytesParser
 
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from mordeviel_api import announcement_mail
 from mordeviel_api.main import app
@@ -185,3 +190,51 @@ def test_failed_or_uncertain_sends_are_not_retried(setup, monkeypatch):
     announcement_mail.tick(api.app.state.community)
     assert len(outbox) == 1
     assert api.get(endpoint, headers=admin).json()["deliveries"] == {"failed": 1}
+
+
+def test_images_are_embedded_in_email_and_image_update_is_a_new_revision(setup):
+    api, admin, outbox = setup
+    content = publish(api, admin)
+    endpoint = f'/community/admin/content/{content}/email'
+    api.post(endpoint, headers=admin)
+    announcement_mail.tick(api.app.state.community)
+    assert len(outbox) == 1
+    images = []
+    for color in ['gold', 'darkred']:
+        output = io.BytesIO()
+        Image.new('RGBA', (80,120), color).save(output, format='PNG')
+        response = api.post('/community/admin/content-images', headers=admin,
+            json={'image_base64':base64.b64encode(output.getvalue()).decode()})
+        assert response.status_code == 200
+        images.append(response.json()['url'])
+    api.put(f'/community/admin/content/{content}', headers=admin, json={
+        'kind':'announcement','title':'Nouvelle soirée','body':'Le village vous attend.','images':images})
+    assert api.post(endpoint, headers=admin).json()['already_queued'] is False
+    assert api.post(endpoint, headers=admin).json()['already_queued'] is True
+    announcement_mail.tick(api.app.state.community)
+    assert len(outbox) == 2
+    # Verify the serialized MIME message, as received by a mail client.
+    message = BytesParser(policy=policy.default).parsebytes(outbox[-1].as_bytes())
+    html = message.get_body(preferencelist=('html',)).get_content()
+    cards = [part for part in message.walk() if part.get_content_type() == 'image/jpeg']
+    assert len(cards) == 2
+    for card in cards:
+        cid = str(card['Content-ID']).strip('<>')
+        assert f'cid:{cid}' in html
+        assert card.get_content_disposition() == 'inline'
+        with Image.open(io.BytesIO(card.get_payload(decode=True))) as image:
+            assert image.format == 'JPEG' and image.size == (80,120)
+    assert 'Le village vous attend.' in html and 'LEGENDARY' in html
+
+
+def test_changed_images_cancel_the_old_pending_email(setup):
+    api, admin, outbox = setup
+    content = publish(api, admin, images=['/site-assets/seer.jpg'])
+    endpoint = f'/community/admin/content/{content}/email'
+    api.post(endpoint, headers=admin)
+    api.put(f'/community/admin/content/{content}', headers=admin, json={
+        'kind':'announcement','title':'Nouvelle soirée','body':'Le village vous attend.',
+        'images':['/site-assets/witch.jpg']})
+    announcement_mail.tick(api.app.state.community)
+    assert not outbox
+    assert api.get(endpoint, headers=admin).json()['deliveries'] == {'cancelled':1}

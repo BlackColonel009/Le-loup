@@ -1,11 +1,15 @@
 """Explicit, persistent email campaigns for visible community announcements."""
 
 import hashlib
+import io
+import json
 import logging
 import os
+import re
 import secrets
 import time
 from email.message import EmailMessage
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -18,8 +22,39 @@ router = APIRouter()
 log = logging.getLogger(__name__)
 
 
-def revision(title, body):
-    return hashlib.sha256((title + "\0" + body).encode()).hexdigest()
+def revision(title, body, images=()):
+    text = title + '\0' + body
+    if images:
+        text += '\0' + json.dumps(list(images), ensure_ascii=False)
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def inline_cards(db, images):
+    """Read trusted local artwork, never fetch arbitrary network URLs."""
+    from PIL import Image
+
+    from .gallery import upload_directory
+    result = []
+    for index, url in enumerate(images):
+        if re.fullmatch(r'/site-assets/[a-zA-Z0-9_.-]+', url):
+            path = Path(__file__).parent / 'web/assets' / url.rsplit('/', 1)[1]
+        elif re.fullmatch(r'/(?:gallery/images|community/content-images)/[a-f0-9]{32}\.(?:png|jpg|webp)', url):
+            path = upload_directory(db) / url.rsplit('/', 1)[1]
+        else:
+            raise ValueError('Invalid announcement artwork')
+        if path.stat().st_size > 8 * 1024 * 1024:
+            raise ValueError('Announcement artwork too large')
+        with Image.open(path) as original:
+            original.thumbnail((800, 1200))
+            pixels = original.convert('RGBA')
+            background = Image.new('RGB', pixels.size, '#152232')
+            background.paste(pixels, mask=pixels.getchannel('A'))
+            output = io.BytesIO()
+            background.save(output, format='JPEG', quality=85, optimize=True)
+        data = output.getvalue()
+        cid = f'card-{index}-{hashlib.sha256(data).hexdigest()[:16]}@mordeviel'
+        result.append((cid, data))
+    return result
 
 
 def initialize(db):
@@ -36,6 +71,8 @@ def initialize(db):
                 status TEXT NOT NULL DEFAULT 'pending',
                 UNIQUE(campaign_id,user_id));
         """)
+        if 'images' not in {r[1] for r in c.execute('PRAGMA table_info(announcement_campaigns)')}:
+            c.execute("ALTER TABLE announcement_campaigns ADD COLUMN images TEXT NOT NULL DEFAULT '[]'")
 
 
 def summary(c, content_id):
@@ -75,7 +112,8 @@ def queue(
             raise HTTPException(
                 409, "Seule une annonce publiée et visible peut être envoyée par email."
             )
-        digest = revision(content["title"], content["body"])
+        images = json.loads(content['images'])
+        digest = revision(content["title"], content["body"], images)
         previous = c.execute(
             "SELECT id FROM announcement_campaigns WHERE content_id=? AND revision=?",
             (content_id, digest),
@@ -85,7 +123,7 @@ def queue(
         require_mailer()
         campaign = c.execute(
             """INSERT INTO announcement_campaigns
-            (content_id,revision,title,body,actor,created) VALUES(?,?,?,?,?,?)""",
+            (content_id,revision,title,body,actor,created,images) VALUES(?,?,?,?,?,?,?)""",
             (
                 content_id,
                 digest,
@@ -93,6 +131,7 @@ def queue(
                 content["body"],
                 admin["id"],
                 time.time(),
+                json.dumps(images),
             ),
         ).lastrowid
         count = 0
@@ -128,7 +167,7 @@ def tick(db):
     for _ in range(100):
         with db.db() as c:
             c.execute("BEGIN IMMEDIATE")
-            delivery = c.execute("""SELECT d.*, a.content_id,a.revision,a.title,a.body
+            delivery = c.execute("""SELECT d.*, a.content_id,a.revision,a.title,a.body,a.images
                 FROM announcement_deliveries d JOIN announcement_campaigns a ON a.id=d.campaign_id
                 WHERE d.status='pending' ORDER BY d.id LIMIT 1""").fetchone()
             if delivery is None:
@@ -154,7 +193,7 @@ def tick(db):
                 and content
                 and content["visible"]
                 and content["kind"] == "announcement"
-                and revision(content["title"], content["body"]) == delivery["revision"]
+                and revision(content["title"], content["body"], json.loads(content['images'])) == delivery["revision"]
             )
             if valid:
                 require_mailer()
@@ -174,6 +213,7 @@ def tick(db):
             message["To"] = normalize_email(delivery["address"])
             message["Subject"] = "Mordeviel · " + " ".join(delivery["title"].split())
             message["List-Unsubscribe"] = f"<{unsubscribe}>"
+            cards = inline_cards(db, json.loads(delivery['images']))
             message.set_content(
                 f"{delivery['title']}\n\n{delivery['body']}\n\nAnnonce publiée dans la communauté Mordeviel et sur la vitrine.\n{base}/#annonces\n\nNe plus recevoir les emails de la communauté : {unsubscribe}\n\nby Logan R.D"
             )
@@ -183,9 +223,13 @@ def tick(db):
                     base,
                     unsubscribe,
                     announcement_title=delivery["title"],
+                    announcement_images=[{'src': 'cid:' + cid, 'alt': f'Carte {index + 1} · ' + delivery['title']} for index, (cid, _) in enumerate(cards)],
                 ),
                 subtype="html",
             )
+            html = message.get_payload()[-1]
+            for index, (cid, data) in enumerate(cards):
+                html.add_related(data, maintype='image', subtype='jpeg', cid=f'<{cid}>', disposition='inline', filename=f'carte-{index + 1}.jpg')
             send_message(message)
             outcome = "sent"
         except Exception:  # noqa: BLE001 -- worker boundary; never expose SMTP secrets in logs.

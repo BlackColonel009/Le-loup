@@ -12,7 +12,9 @@
   Le serveur réencode les fichiers, filtre les chemins et réserve la publication
   aux administrateurs. Le site et l’application affichent les mêmes pièces
   jointes. Une image téléversée n’est accessible publiquement qu’une fois publiée.
-  Les emails gardent leur bouton de diffusion existant et renvoient vers le site.
+  Les emails gardent leur bouton de diffusion existant, intègrent les cartes en
+  images JPEG incorporées au message (CID), et renvoient également vers le site.
+  Ajouter ou changer des images constitue une nouvelle version pour la diffusion.
 * Vocal : session audio partagée Android/iOS afin de préserver les sons du jeu,
   débit vocal « speech » avec DTX conservé. Les requêtes d’accès et connexions
   vocales sont bornées ; après échec, reprise progressive espacée de 4 à 32 s.

@@ -2,7 +2,7 @@
 from html import escape
 
 
-def reminder_html(text, base, unsubscribe, *, announcement_title=None):
+def reminder_html(text, base, unsubscribe, *, announcement_title=None, announcement_images=()):
     body = escape(text).replace('\n', '<br>')
     site, optout = escape(base, quote=True), escape(unsubscribe, quote=True)
     destination = site + '/#annonces' if announcement_title is not None else site
@@ -11,6 +11,11 @@ def reminder_html(text, base, unsubscribe, *, announcement_title=None):
                if announcement_title is not None else '')
     followup = ('Cette annonce est également visible dans la partie Annonces de la communauté du jeu.'
                 if announcement_title is not None else 'Retrouvez vos compagnons, partagez vos soupçons et préparez votre prochaine partie. Une nouvelle histoire vous attend.')
+    illustrations = ''.join(
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:20px 0 0;">'
+        f'<img src="{escape(image["src"], quote=True)}" alt="{escape(image["alt"], quote=True)}" width="360" style="display:block;width:100%;max-width:360px;height:auto;border:1px solid #b38b4d;border-radius:10px;">'
+        '</td></tr></table>' for image in announcement_images
+    )
     return f'''<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Le village vous attend</title></head>
 <body style="margin:0;padding:0;background-color:#0b111a;color:#f2eadc;font-family:Arial,Helvetica,sans-serif;">
@@ -27,6 +32,7 @@ def reminder_html(text, base, unsubscribe, *, announcement_title=None):
 <p style="margin:0 0 20px;color:#d8e0e9;">Bonsoir, âme du village,</p>
 {heading}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#1c2e40" style="background-color:#1c2e40;border-left:3px solid #d7ae6b;"><tr><td style="padding:20px;color:#fff3d9;font-family:Georgia,serif;font-size:21px;line-height:1.6;">{body}</td></tr></table>
+{illustrations}
 <p style="margin:24px 0 0;color:#d8e0e9;">{followup}</p>
 </td></tr>
 <tr><td align="center" style="padding:16px 28px 32px;">
