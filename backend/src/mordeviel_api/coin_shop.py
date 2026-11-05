@@ -9,11 +9,11 @@ from .avatar_styles import BORDERS
 
 def minimum_price(product):
     if product['kind'] == 'sticker':
-        return 200
+        return 400
     if product['kind'] == 'card' and product['theme'] == 'intense':
-        return 900
+        return 1800
     if product['kind'] == 'border':
-        return 500
+        return 1000
     return None
 
 

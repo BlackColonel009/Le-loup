@@ -2,6 +2,7 @@
 
 import json
 import re
+import secrets
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -11,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, model_validator
 
 from .community import Store, administrator, authenticated, store
+from .coins import balance_in
 
 router = APIRouter(prefix='/challenges', tags=['challenges'])
 DB = Annotated[Store, Depends(store)]
@@ -35,9 +37,13 @@ def initialize(db):
         columns = {row['name'] for row in c.execute('PRAGMA table_info(challenge_progress)')}
         if 'claimed_at' not in columns:
             c.execute('ALTER TABLE challenge_progress ADD COLUMN claimed_at REAL')
+        c.execute('CREATE TABLE IF NOT EXISTS challenge_coin_rewards(user_id INTEGER NOT NULL, challenge_id TEXT NOT NULL, amount INTEGER NOT NULL CHECK(amount>0), created REAL NOT NULL, PRIMARY KEY(user_id,challenge_id))')
 
 
 def reward_data(reward):
+    if reward['kind'] == 'gold_moons':
+        low, high = reward['min'], reward['max']
+        return {**reward, 'title': (str(low) if low == high else f'{low} à {high}') + ' Lunes d’or'}
     from .avatar_styles import BORDERS
     from .avatars import CATALOG as avatars
     from .stickers import STICKERS
@@ -54,11 +60,25 @@ def reward_data(reward):
     return result
 
 
+def earned_reward(c, uid, ident, reward):
+    result = reward_data(reward)
+    if reward['kind'] == 'gold_moons':
+        row = c.execute('SELECT amount FROM challenge_coin_rewards WHERE user_id=? AND challenge_id=?', (uid, ident)).fetchone()
+        if row:
+            result.update(amount=row['amount'], title=f"+{row['amount']} Lunes d’or")
+    return result
+
+
 def grant(c, uid, challenge):
     for reward in challenge['rewards']:
         kind, ident = reward['kind'], reward.get('id')
         source = f"challenge:{challenge['id']}"
-        if kind == 'avatar':
+        if kind == 'gold_moons':
+            amount = reward['min'] + secrets.randbelow(reward['max'] - reward['min'] + 1)
+            created = c.execute('INSERT OR IGNORE INTO challenge_coin_rewards VALUES(?,?,?,?)', (uid, challenge['id'], amount, time.time())).rowcount
+            if created:
+                c.execute('INSERT INTO coin_wallets VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET balance=balance+excluded.balance', (uid, amount))
+        elif kind == 'avatar':
             c.execute('INSERT OR IGNORE INTO avatar_unlocks VALUES(?,?,?)', (uid, ident, source))
         elif kind == 'border':
             c.execute('INSERT OR IGNORE INTO border_unlocks VALUES(?,?,?)', (uid, ident, source))
@@ -108,7 +128,7 @@ def ensure_user(c, uid):
 def list_in(c, uid):
     ensure_user(c, uid)
     progress = {r['challenge_id']: dict(r) for r in c.execute('SELECT * FROM challenge_progress WHERE user_id=?', (uid,))}
-    return [{**challenge, 'rewards': [reward_data(r) for r in challenge['rewards']],
+    return [{**challenge, 'rewards': [earned_reward(c, uid, challenge['id'], r) for r in challenge['rewards']],
              'progress': progress.get(challenge['id'], {}).get('value', 0),
              'completed_at': progress.get(challenge['id'], {}).get('completed'),
              'claimed_at': progress.get(challenge['id'], {}).get('claimed_at'),
@@ -322,7 +342,7 @@ class Claim(BaseModel):
 
 @router.post('/claim')
 def claim(data: Claim, *, user: User, db: DB):
-    """Completion comes from the server; this only collects earned cosmetics."""
+    """Collect server-verified cosmetics and coins in one transaction."""
     db.limit(('challenge_claim', user['id']), 60, 300)
     with db.db() as c:
         c.execute('BEGIN IMMEDIATE')
@@ -340,8 +360,9 @@ def claim(data: Claim, *, user: User, db: DB):
             grant(c, user['id'], definition)
             c.execute('UPDATE challenge_progress SET claimed_at=? WHERE user_id=? AND challenge_id=? AND claimed_at IS NULL', (stamp, user['id'], ident))
             claimed.append(ident)
-            rewards.extend(dict(r, challenge_id=ident, challenge_title=definition['title']) for r in available[ident]['rewards'])
+            rewards.extend(dict(earned_reward(c, user['id'], ident, r), challenge_id=ident, challenge_title=definition['title']) for r in definition['rewards'])
         return {'user_id': user['id'], 'claimed_ids': claimed, 'claimed_count': len(claimed), 'rewards': rewards,
+                'coin_balance': balance_in(c, user['id']),
                 'challenges': list_in(c, user['id']), 'pending_count': pending_count(c, user['id'])}
 
 

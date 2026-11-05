@@ -134,6 +134,7 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
   );
   bool _reduced = false, _celebrated = false, _busy = false, _received = false;
   bool _revealed = false;
+  List<Map>? _confirmedChallenges;
   String? _error;
   List<Map> get _rewards => widget.challenges
       .expand((c) => (c['rewards'] as List? ?? []).cast<Map>())
@@ -177,10 +178,21 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
       );
       // Apply the confirmed server result even if the route was removed.
       widget.onClaimed(data);
+      if (data['coin_balance'] is int) {
+        SocialService.instance.updateCoinBalance(
+          data['coin_balance'] as int,
+          forUser: data['user_id'] as int?,
+        );
+      }
       if (!mounted) return;
       setState(() {
         _busy = false;
         _received = true;
+        final ids = widget.challenges.map((c) => c['id']).toSet();
+        _confirmedChallenges = (data['challenges'] as List?)
+            ?.where((c) => ids.contains(c['id']))
+            .cast<Map>()
+            .toList();
       });
       ChallengeSounds.play(completed: true);
       if (_reduced) {
@@ -440,7 +452,15 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
                                           ),
                                           const SizedBox(height: 8),
                                           for (final reward
-                                              in (challenge['rewards'] as List)
+                                              in (((_confirmedChallenges ?? [])
+                                                              .where(
+                                                                (c) =>
+                                                                    c['id'] ==
+                                                                    challenge['id'],
+                                                              )
+                                                              .firstOrNull ??
+                                                          challenge)['rewards']
+                                                      as List)
                                                   .cast<Map>())
                                             Padding(
                                               padding:
@@ -475,6 +495,8 @@ class _RewardClaimDialogState extends State<RewardClaimDialog>
                                                         ),
                                                         Text(
                                                           switch (reward['kind']) {
+                                                            'gold_moons' =>
+                                                              'Ajoutées à ta bourse à la récupération',
                                                             'avatar' =>
                                                               'Portrait de profil',
                                                             'avatar_choice' =>

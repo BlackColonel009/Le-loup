@@ -89,6 +89,9 @@ def initialize(db):
         """)
         if 'coin_price' not in {r[1] for r in c.execute('PRAGMA table_info(collection_products)')}:
             c.execute('ALTER TABLE collection_products ADD COLUMN coin_price INTEGER')
+        if not c.execute("SELECT 1 FROM settings WHERE key='coin_prices_doubled_v1'").fetchone():
+            c.execute('UPDATE collection_products SET coin_price=coin_price*2 WHERE coin_price IS NOT NULL')
+            c.execute("INSERT INTO settings VALUES('coin_prices_doubled_v1','1')")
         c.execute("INSERT OR IGNORE INTO settings VALUES('collection_free_access','1')")
         c.execute("INSERT OR IGNORE INTO settings VALUES('collection_free_days','30')")
         c.execute(
@@ -106,7 +109,7 @@ def initialize(db):
                         name,
                         int(theme != "classic"),
                         int(theme != "classic"),
-                        900 if theme == 'intense' else None,
+                        1800 if theme == 'intense' else None,
                     ),
                 )
         for voice in VOICES:
@@ -129,12 +132,12 @@ def initialize(db):
             if sticker.get('pack') != 'rewards':
                 continue
             c.execute(
-                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,coin_price) VALUES(?,'sticker','extras',?,?,200)",
+                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,coin_price) VALUES(?,'sticker','extras',?,?,400)",
                 (f"sticker-{sticker['id']}", sticker['id'], f"{sticker['role']} · {sticker['emotion']}"),
             )
         for border in border_products():
             c.execute(
-                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,collector,coin_price) VALUES(?,'border','borders',?,?,0,500)",
+                "INSERT OR IGNORE INTO collection_products(id,kind,theme,role_id,title,collector,coin_price) VALUES(?,'border','borders',?,?,0,1000)",
                 (f"border-{border['id']}", border['id'], border['title']),
             )
         # Migration is applied once: later restarts preserve admin prices, including disabled offers.

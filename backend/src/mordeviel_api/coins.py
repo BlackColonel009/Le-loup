@@ -33,6 +33,8 @@ def initialize(db):
             user_id INTEGER NOT NULL, gift_id TEXT NOT NULL, amount INTEGER NOT NULL,
             created REAL NOT NULL, PRIMARY KEY(user_id,gift_id));
         ''')
+        if 'participant_role' not in {row['name'] for row in c.execute('PRAGMA table_info(coin_match_rewards)')}:
+            c.execute("ALTER TABLE coin_match_rewards ADD COLUMN participant_role TEXT NOT NULL DEFAULT 'player'")
         c.execute('INSERT OR IGNORE INTO bronze_wallets(user_id) SELECT id FROM users')
 
 
@@ -55,7 +57,12 @@ def amount_for(theme, nights, won):
     return low + (high - low) * min(5, max(0, nights - 1)) // 5
 
 
-def record_match(c, engine, accounts, practice):
+def mdj_amount_for(theme, nights):
+    # Hosting has no losing camp. No night played means no hosting payment.
+    return amount_for(theme, nights, True) if int(nights) > 0 else 0
+
+
+def record_match(c, engine, accounts, practice, *, host_id=None):
     game = engine.snapshot.get('game') or {}
     if game.get('phase') != 'ended' or not game.get('history'):
         return
@@ -79,6 +86,18 @@ def record_match(c, engine, accounts, practice):
         if created and amount:
             c.execute('''INSERT INTO coin_wallets VALUES(?,?)
                 ON CONFLICT(user_id) DO UPDATE SET balance=balance+excluded.balance''', (uid, amount))
+    if host_id is not None and host_id not in accounts.values() and c.execute(
+        'SELECT 1 FROM users WHERE id=? AND email_verified=1 AND banned=0', (host_id,)
+    ).fetchone():
+        amount = mdj_amount_for(theme, nights)
+        created = c.execute('''INSERT OR IGNORE INTO coin_match_rewards
+            (match_id,user_id,amount,won,theme,nights,eligible,reason,created,participant_role)
+            VALUES(?,?,?,0,?,?,?,?,?,'mdj')''',
+            (engine.social_id, host_id, amount, theme, nights, int(amount > 0),
+             '' if amount > 0 else 'Aucune nuit jouée : aucune rémunération du MDJ.', time.time())).rowcount
+        if created and amount:
+            c.execute('''INSERT INTO coin_wallets VALUES(?,?)
+                ON CONFLICT(user_id) DO UPDATE SET balance=balance+excluded.balance''', (host_id, amount))
 
 
 def receipt(c, row):
@@ -102,17 +121,20 @@ def creator_gift(c, uid):
     row = c.execute("SELECT * FROM coin_gifts WHERE user_id=? AND gift_id='creator-0.3.5'", (uid,)).fetchone()
     return {'id': 'creator-0.3.5', 'version': '0.3.5', 'amount': 100,
             'title': 'Un cadeau du Créateur',
-            'message': 'Merci de faire vivre Mordeviel ! Pour la mise à jour 0.3.5, le Créateur t’offre 100 Lunes d’or. — Logan R.D',
+            'minimum_version': '0.3.5',
+            'message': 'Merci de faire vivre Mordeviel ! À partir de la version 0.3.5 et dans les suivantes, le Créateur t’offre 100 Lunes d’or, une seule fois par compte. — Logan R.D',
             'claimed': row is not None, 'user_id': uid, 'balance': balance_in(c, uid)}
 
 
 @router.get('/gifts/0.3.5')
+@router.get('/gifts/creator')
 def gift_status(*, user: User, db: DB):
     with db.db() as c:
         return creator_gift(c, user['id'])
 
 
 @router.post('/gifts/0.3.5/claim')
+@router.post('/gifts/creator/claim')
 def claim_creator_gift(*, user: User, db: DB):
     with db.db() as c:
         c.execute('BEGIN IMMEDIATE')

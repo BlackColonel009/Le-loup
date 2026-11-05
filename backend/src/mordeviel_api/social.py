@@ -933,7 +933,8 @@ def sync_match(db, engine):
             )
         challenges.record_match(c, engine, valid_accounts, practice)
         from . import coins
-        coins.record_match(c, engine, valid_accounts, practice)
+        coins.record_match(c, engine, valid_accounts, practice,
+                           host_id=engine.owner_id if owner and owner['optout'] == engine.owner_stamp else None)
 
 
 def close_room(db, engine):

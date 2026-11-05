@@ -89,6 +89,7 @@ def confirm_deletion(
                     "challenge_metrics",
                     "challenge_distinct",
                     "challenge_progress",
+                    "challenge_coin_rewards",
                     "challenge_matches",
                     "coin_wallets",
                       "bronze_wallets",

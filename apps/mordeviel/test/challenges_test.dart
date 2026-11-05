@@ -4,6 +4,7 @@ import 'package:local_host/src/night_game.dart';
 import 'package:mordeviel/audio/classic_audio.dart';
 import 'package:mordeviel/challenges/challenge_card.dart';
 import 'package:mordeviel/challenges/challenges_screen.dart';
+import 'package:mordeviel/coins/coin_widgets.dart';
 
 Map<String, dynamic> challenge({
   int before = 1,
@@ -41,6 +42,29 @@ void action(
 });
 
 void main() {
+  testWidgets('Les Lunes des coffres sont visibles avant de réaliser le défi', (
+    tester,
+  ) async {
+    final c = challenge();
+    c['rewards'] = [
+      {
+        'kind': 'gold_moons',
+        'min': 25,
+        'max': 50,
+        'title': '25 à 50 Lunes d’or',
+      },
+    ];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(child: ChallengeCard(challenge: c)),
+        ),
+      ),
+    );
+    expect(find.text('25 à 50 Lunes d’or'), findsOneWidget);
+    expect(find.byType(CoinToken), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets(
     'La jauge progresse depuis la valeur précédente puis révèle le palier',
     (tester) async {

@@ -106,7 +106,41 @@ class CoinVideoPlatform extends VideoPlayerPlatform {
   Widget buildView(int id) => const ColoredBox(color: Colors.black);
 }
 
+class MdjCoinApi extends CoinApi {
+  @override
+  Map<String, dynamic> get reward => {
+    ...super.reward,
+    'participant_role': 'mdj',
+    'won': false,
+  };
+}
+
 void main() {
+  testWidgets('Le MDJ ouvre son coffre sans être présenté comme perdant', (
+    tester,
+  ) async {
+    final old = SocialApi.instance;
+    final api = MdjCoinApi();
+    SocialApi.instance = api;
+    addTearDown(() => SocialApi.instance = old);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CoinRewardScene(receipt: api.reward, videoEnabled: false),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.text('Passer'));
+    await tester.pump();
+    expect(find.text('Récompense du MDJ'), findsOneWidget);
+    expect(
+      find.text('3 nuit(s) guidée(s) · indépendant du camp gagnant'),
+      findsOneWidget,
+    );
+    expect(find.text('Défaite'), findsNothing);
+    expect(api.claims, 1);
+    await tester.pumpWidget(const SizedBox());
+  });
   setUp(() => rootBundle.evict('assets/rewards/coin_impacts.json'));
   setUpAll(() async {
     if (const bool.fromEnvironment('CAPTURE_COINS')) {

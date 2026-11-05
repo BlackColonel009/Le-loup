@@ -44,17 +44,40 @@ def entries(api, user):
     return {c['id']: c for c in response.json()['challenges']}
 
 
+def test_chest_coins_ranges_and_once_only_credit(api):
+    user=account(api,'ChasseurDeLunes')
+    definitions=entries(api,user)
+    ranges={'classic':(15,15),'epic':(25,50),'premium':(80,150)}
+    for ch in definitions.values():
+        reward=next(r for r in ch['rewards'] if r['kind']=='gold_moons')
+        assert (reward['min'],reward['max']) == ranges[ch['chest_tier']]
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        replies=list(pool.map(lambda _:api.post('/challenges/claim',headers=user[1],json={'challenge_ids':['welcome']}).json(),range(3)))
+    assert sum(r['claimed_count'] for r in replies)==1
+    assert api.get('/coins/me',headers=user[1]).json()['balance']==15
+    selected=[next(ch for ch in challenges.CATALOG if ch['chest_tier']==tier) for tier in ['epic','premium']]
+    with api.app.state.community.db() as c:
+        for ch in selected:
+            c.execute('INSERT OR REPLACE INTO challenge_progress(user_id,challenge_id,value,completed) VALUES(?,?,?,?)',(user[0],ch['id'],ch['target'],time.time()))
+    result=api.post('/challenges/claim',headers=user[1],json={'challenge_ids':[ch['id'] for ch in selected]}).json()
+    amounts=[r['amount'] for r in result['rewards'] if r['kind']=='gold_moons']
+    assert 25<=amounts[0]<=50 and 80<=amounts[1]<=150
+    assert result['coin_balance']==15+sum(amounts)
+    again=api.post('/challenges/claim',headers=user[1],json={'challenge_ids':[ch['id'] for ch in selected]}).json()
+    assert again['claimed_count']==0 and again['coin_balance']==result['coin_balance']
+
+
 def test_welcome_is_permanent_and_does_not_equip_or_replace_starters(api):
     user = account(api, 'Bienvenue')
     before = api.get('/community/avatars', headers=user[1]).json()['avatar']
     data = entries(api, user)
     assert len(data) == 42 and data['welcome']['progress'] == 1
-    assert len(data['welcome']['rewards']) == 3
+    assert len(data['welcome']['rewards']) == 4
     assert data['welcome']['claimed_at'] is None
     assert next(a for a in api.get('/community/avatars', headers=user[1]).json()['avatars'] if a['id'] == 'classic-sisters')['locked'] is True
     claimed = api.post('/challenges/claim', headers=user[1], json={'challenge_ids': ['welcome']})
     assert claimed.status_code == 200 and claimed.json()['claimed_count'] == 1
-    assert len(claimed.json()['rewards']) == 3
+    assert len(claimed.json()['rewards']) == 4
     after = api.get('/community/avatars', headers=user[1]).json()
     assert after['avatar'] == before
     assert next(a for a in after['avatars'] if a['id'] == 'classic-sisters')['locked'] is False

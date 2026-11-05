@@ -28,7 +28,7 @@ def test_daily_shop_is_shared_changes_daily_and_never_sells_creator(collection_a
     assert first['balance'] == 0 and public['balance'] is None
     assert [p['id'] for p in first['products']] == [p['id'] for p in public['products']]
     assert all(not p['purchasable'] for p in public['products'])
-    for kind, minimum in [('sticker',200), ('card',900), ('border',500)]:
+    for kind, minimum in [('sticker',400), ('card',1800), ('border',1000)]:
         offers = [p for p in first['products'] if p['kind'] == kind]
         assert len(offers) == 3 and all(p['coin_price'] >= minimum for p in offers)
         if kind == 'card':
@@ -114,7 +114,7 @@ def test_concurrent_purchases_cannot_overdraw_or_duplicate(collection_api):
     catalog = api.get('/shop/me',headers=headers).json()
     p,q = [p for p in catalog['products'] if p['kind']=='sticker'][:2]
     uid = catalog['user_id']
-    fund(api,uid,300)
+    fund(api,uid,500)
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda p: api.post('/shop/purchase',headers=headers,json=payload(catalog,p)),[p,q]))
     assert sorted(r.status_code for r in results)==[200,409]
@@ -133,12 +133,12 @@ def test_collector_coin_purchase_includes_admin_bonus(collection_api):
     pid = 'card-intense-seer'
     selected = [pid]+['card-horror-'+r for r in ['witch','werewolf','hunter','elder']]
     assert api.put('/community/admin/collection/daily',headers=admin,json={'day':state['day'],'products':selected}).status_code == 200
-    assert api.put('/community/admin/collection/products/'+pid,headers=admin,json={'coin_price':950,'bonus':['card-horror-witch']}).status_code == 200
+    assert api.put('/community/admin/collection/products/'+pid,headers=admin,json={'coin_price':1900,'bonus':['card-horror-witch']}).status_code == 200
     state = api.get('/collection/me',headers=headers).json()
     p = next(p for p in state['products'] if p['id']==pid)
-    assert p['coin_purchasable'] and p['coin_price']==950
+    assert p['coin_purchasable'] and p['coin_price']==1900
     uid = api.get('/shop/me',headers=headers).json()['user_id']
-    fund(api,uid,1000)
+    fund(api,uid,1950)
     result = api.post('/shop/purchase',headers=headers,json=payload(state,p,source='collector')).json()
     assert result['balance']==50 and set(result['granted'])=={pid,'card-horror-witch'}
 
@@ -154,9 +154,24 @@ def test_creator_gift_is_exactly_100_once_per_account_even_concurrently(collecti
     assert sum(r['amount_credited'] for r in receipts)==100
     assert api.get('/coins/me',headers=headers).json()['balance']==100
     assert api.get(endpoint,headers=headers).json()['claimed']
+    assert api.get('/coins/gifts/creator',headers=headers).json()['claimed']
+    assert api.post('/coins/gifts/creator/claim',headers=headers).json()['amount_credited']==0
     assert api.post(endpoint+'/claim',headers=headers).json()['amount_credited']==0
     other = account(api,'SecondCompte')[1]
     assert api.post(endpoint+'/claim',headers=other).json()['balance']==100
+
+
+def test_price_doubling_migration_runs_once_and_preserves_custom_prices(collection_api):
+    from mordeviel_api import collection
+    api, _, _ = collection_api
+    db=api.app.state.community
+    with db.db() as c:
+        c.execute("DELETE FROM settings WHERE key='coin_prices_doubled_v1'")
+        c.execute("UPDATE collection_products SET coin_price=1234 WHERE id='card-intense-seer'")
+    collection.initialize(db)
+    collection.initialize(db)
+    with db.db() as c:
+        assert c.execute("SELECT coin_price FROM collection_products WHERE id='card-intense-seer'").fetchone()[0]==2468
 
 
 def test_personal_profiles_show_authoritative_balance_without_exposing_it_to_visitors(collection_api):

@@ -10,7 +10,7 @@ Future<void> showCreatorGift(BuildContext context) async {
   if (_showingGift || ModalRoute.of(context)?.isCurrent != true) return;
   _showingGift = true;
   try {
-    final gift = await SocialApi.instance.request('/coins/gifts/0.3.5');
+    final gift = await SocialApi.instance.request('/coins/gifts/creator');
     if (gift['claimed'] == true ||
         !context.mounted ||
         ModalRoute.of(context)?.isCurrent != true ||
@@ -47,7 +47,7 @@ class _CreatorGiftDialogState extends State<CreatorGiftDialog> {
     });
     try {
       final result = await SocialApi.instance.request(
-        '/coins/gifts/0.3.5/claim',
+        '/coins/gifts/creator/claim',
         method: 'POST',
       );
       SocialService.instance.updateCoinBalance(

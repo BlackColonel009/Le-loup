@@ -331,7 +331,9 @@ class _CoinRewardSceneState extends State<CoinRewardScene>
                       const CoinToken(size: 112),
                       const SizedBox(height: 26),
                       Text(
-                        'Vous avez gagné',
+                        widget.receipt['participant_role'] == 'mdj'
+                            ? 'Récompense du MDJ'
+                            : 'Vous avez gagné',
                         style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
@@ -415,6 +417,13 @@ class _CoinRewardSceneState extends State<CoinRewardScene>
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 24),
+                      if (widget.receipt['participant_role'] == 'mdj') ...[
+                        Text(
+                          '${widget.receipt['nights']} nuit(s) guidée(s) · indépendant du camp gagnant',
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                       FilledButton(
                         onPressed: () => Navigator.pop(context),
                         child: const Text('Continuer'),

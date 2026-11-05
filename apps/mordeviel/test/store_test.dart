@@ -61,8 +61,8 @@ class ShopApi extends SocialApi {
         'already_owned': false,
       };
     }
-    if (path == '/coins/gifts/0.3.5') return gift;
-    if (path == '/coins/gifts/0.3.5/claim') {
+    if (path == '/coins/gifts/creator') return gift;
+    if (path == '/coins/gifts/creator/claim') {
       gifts++;
       balance += 100;
       return gift;

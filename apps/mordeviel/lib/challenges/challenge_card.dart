@@ -4,6 +4,7 @@ import '../content/content_image.dart';
 import '../profile/player_avatar.dart';
 import '../profile/avatar_border.dart';
 import 'challenge_tier.dart';
+import '../coins/coin_widgets.dart';
 
 const challengeGold = Color(0xFFE5C385);
 
@@ -14,6 +15,7 @@ class ChallengeReward extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kind = reward['kind'];
+    if (kind == 'gold_moons') return CoinToken(size: size);
     if (kind == 'avatar') {
       return PlayerAvatar(
         size: size,

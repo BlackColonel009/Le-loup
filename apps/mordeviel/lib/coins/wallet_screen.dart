@@ -114,7 +114,9 @@ class _WalletScreenState extends State<WalletScreen> {
               child: ListTile(
                 leading: const Icon(Icons.card_giftcard, color: coinGold),
                 title: const Text('Le Créateur t’offre 100 lunes'),
-                subtitle: const Text('Cadeau de la version 0.3.5'),
+                subtitle: const Text(
+                  'Depuis la version 0.3.5 · Une fois par compte',
+                ),
                 onTap: () async {
                   await showDialog<void>(
                     context: context,
@@ -131,7 +133,7 @@ class _WalletScreenState extends State<WalletScreen> {
           for (final gift in (_data?['gifts'] as List? ?? []).cast<Map>())
             ListTile(
               leading: const Icon(Icons.redeem, color: coinGold),
-              title: const Text('Cadeau du Créateur · 0.3.5'),
+              title: const Text('Cadeau unique du Créateur'),
               trailing: Text(
                 '+${gift['amount']}',
                 style: const TextStyle(color: coinGold),
@@ -171,7 +173,11 @@ class _WalletScreenState extends State<WalletScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            '${reward['won'] == true ? 'Victoire' : 'Défaite'} · ${switch (reward['theme']) {
+                            '${reward['participant_role'] == 'mdj'
+                                ? 'Récompense du MDJ'
+                                : reward['won'] == true
+                                ? 'Victoire'
+                                : 'Défaite'} · ${switch (reward['theme']) {
                               'horror' => 'Horreur',
                               'intense' => 'Intense',
                               _ => 'Classique',
