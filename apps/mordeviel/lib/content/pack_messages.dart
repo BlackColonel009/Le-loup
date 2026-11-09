@@ -33,7 +33,7 @@ String? downloadablePackForAsset(String asset) {
   if (asset.contains('/cards/intense/')) return 'intense-cards';
   if (asset == 'assets/village/horror/wolf_devour_clean.mp4' ||
       asset == 'assets/village/horror/wolf_devour.mp4' ||
-      asset == 'assets/village/horror/white_wolf_devour.mp4') {
+      asset == 'assets/village/horror/white_wolf_devour_clean.mp4') {
     return 'horror-devour';
   }
   if (asset.contains('/village/horror/')) return 'horror-village';

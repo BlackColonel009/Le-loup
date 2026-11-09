@@ -53,14 +53,15 @@ for directory in sorted((ASSETS / 'audio/classic/neural').iterdir()):
 pack('intense-cards', 'Intense · Cartes',
      (p for p in (ASSETS / 'cards/intense').rglob('*') if p.is_file()), 'cards', 'intense')
 devour_videos = {ASSETS / 'village/horror' / name
-                 for name in ('wolf_devour_clean.mp4', 'white_wolf_devour.mp4')}
-legacy_devour = ASSETS / 'village/horror/wolf_devour.mp4'
+                 for name in ('wolf_devour_clean.mp4', 'white_wolf_devour_clean.mp4')}
+legacy_devour = {ASSETS / 'village/horror' / name
+                for name in ('wolf_devour.mp4', 'white_wolf_devour.mp4')}
 pack('horror-devour', 'Horreur · Vidéos de dévoration',
      (p for p in devour_videos if p.is_file()), 'video', 'horror')
 for kind, directory in [('cards', 'cards/horror'), ('village', 'village/horror'), ('ambience', 'audio/horror')]:
     pack('horror-' + kind, 'Horreur · ' + {'cards': 'Cartes', 'village': 'Village et sentences', 'ambience': 'Ambiances'}[kind],
          (p for p in (ASSETS / directory).rglob('*')
-          if p.is_file() and p not in devour_videos and p != legacy_devour), kind, 'horror')
+          if p.is_file() and p not in devour_videos and p not in legacy_devour), kind, 'horror')
 (OUT / 'catalog.json').write_text(json.dumps({'packs': packs}, ensure_ascii=False, indent=2), encoding='utf-8')
 shared = ROOT / 'shared/content/catalog.json'
 shared.parent.mkdir(parents=True, exist_ok=True)

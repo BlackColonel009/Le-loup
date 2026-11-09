@@ -493,8 +493,6 @@ class _DeathCardState extends State<_DeathCard>
                   _mayorIntroMilliseconds) /
               _baseMilliseconds)
           .clamp(0.0, 1.0);
-  double get _cardRevealProgress =>
-      _usesWolfDevourVideo ? wolfDevourCardRevealProgress(_deathProgress) : 0;
   Widget _mayorLayer(Widget child) =>
       !widget.wasMayor || _usesWolfDevourVideo || _concealed
       ? child
@@ -676,23 +674,18 @@ class _DeathCardState extends State<_DeathCard>
                           child: AspectRatio(
                             aspectRatio: _usesWolfDevourVideo ? 9 / 16 : .7,
                             child: _usesWolfDevourVideo
-                                ? AnimatedBuilder(
-                                    animation: _animation,
-                                    builder: (context, _) => WolfDevourVideo(
-                                      role: configuredRole(
-                                        widget.role!,
-                                        feminine: widget.feminine,
-                                        edition: widget.ambience.asset,
-                                      ),
-                                      videoPath: widget.videoPath!,
-                                      whiteWolfFinishing:
-                                          widget.whiteWolfFinishing,
-                                      revealProgress: _cardRevealProgress,
-                                      concealed: _concealed,
-                                      onPlaybackStarted:
-                                          _handleWolfVideoStarted,
-                                      onPlaybackFailed: _handleWolfVideoFailed,
+                                ? WolfDevourVideo(
+                                    role: configuredRole(
+                                      widget.role!,
+                                      feminine: widget.feminine,
+                                      edition: widget.ambience.asset,
                                     ),
+                                    videoPath: widget.videoPath!,
+                                    whiteWolfFinishing:
+                                        widget.whiteWolfFinishing,
+                                    concealed: _concealed,
+                                    onPlaybackStarted: _handleWolfVideoStarted,
+                                    onPlaybackFailed: _handleWolfVideoFailed,
                                   )
                                 : AnimatedBuilder(
                                     animation: _animation,

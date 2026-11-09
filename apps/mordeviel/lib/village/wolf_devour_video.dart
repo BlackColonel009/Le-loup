@@ -8,7 +8,8 @@ import '../cards/classic_role.dart';
 import '../content/content_image.dart';
 
 const wolfDevourVideoAsset = 'assets/village/horror/wolf_devour_clean.mp4';
-const whiteWolfDevourVideoAsset = 'assets/village/horror/white_wolf_devour.mp4';
+const whiteWolfDevourVideoAsset =
+    'assets/village/horror/white_wolf_devour_clean.mp4';
 const wolfDevourVideoDurationMilliseconds = 10030;
 const wolfRoleCardIds = {'werewolf', 'alpha_wolf', 'wolf_father', 'white_wolf'};
 
@@ -36,7 +37,6 @@ class WolfDevourVideo extends StatefulWidget {
     required this.role,
     required this.videoPath,
     required this.whiteWolfFinishing,
-    required this.revealProgress,
     required this.concealed,
     required this.onPlaybackStarted,
     required this.onPlaybackFailed,
@@ -45,7 +45,6 @@ class WolfDevourVideo extends StatefulWidget {
   final ClassicRole role;
   final String videoPath;
   final bool whiteWolfFinishing;
-  final double revealProgress;
   final bool concealed;
   final VoidCallback onPlaybackStarted;
   final VoidCallback onPlaybackFailed;
@@ -168,11 +167,9 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
       value.position,
       whiteWolfFinishing: widget.whiteWolfFinishing,
     );
-    final reveal = widget.whiteWolfFinishing
-        ? Curves.easeInOut.transform(widget.revealProgress.clamp(0.0, 1.0))
-        : wolfDevourCardRevealProgress(
-            value.position.inMilliseconds / wolfDevourVideoDurationMilliseconds,
-          );
+    final reveal = wolfDevourCardRevealProgress(
+      value.position.inMilliseconds / wolfDevourVideoDurationMilliseconds,
+    );
     final front = RoleCardFront(
       role: widget.role,
       ambience: CardAmbience.horror,
@@ -210,21 +207,17 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
                           ),
                           Opacity(
                             opacity: reveal,
-                            child: widget.whiteWolfFinishing
-                                ? Transform.scale(scaleX: 1.08, child: front)
-                                : CustomPaint(
-                                    foregroundPainter: _CrushedPaperFold(
-                                      pose.bite,
-                                    ),
-                                    child: FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: SizedBox(
-                                        width: 200,
-                                        height: 300,
-                                        child: front,
-                                      ),
-                                    ),
-                                  ),
+                            child: CustomPaint(
+                              foregroundPainter: _CrushedPaperFold(pose.bite),
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 300,
+                                  child: front,
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -271,17 +264,19 @@ class _WolfDevourPose {
   ];
 
   static const whiteWolfKeyframes = [
-    (0.0, .246, .387, .528, .430, 0.0, 1.0, 0.0),
-    (2.0, .246, .387, .528, .430, 0.0, 1.0, 0.0),
-    (4.5, .243, .414, .556, .455, 0.0, 1.0, 0.0),
-    (5.0, .243, .414, .556, .455, 0.0, 1.0, 0.0),
-    (5.4, .250, .425, .540, .440, 0.0, 1.0, 0.0),
-    (5.8, .270, .470, .490, .360, 0.0, 1.0, 0.0),
-    (6.2, .280, .500, .460, .310, 0.0, .95, 0.0),
-    (6.6, .290, .520, .440, .270, 0.0, .72, 0.0),
-    (7.0, .300, .540, .420, .230, 0.0, .30, 0.0),
-    (7.4, .305, .550, .400, .200, 0.0, 0.0, 0.0),
-    (10.03, .305, .550, .400, .200, 0.0, 0.0, 0.0),
+    (0.0, .280, .460, .440, .330, 0.0, 1.0, -.023),
+    (2.5, .275, .453, .450, .338, 0.0, 1.0, .012),
+    (2.77, .298, .472, .426, .317, 0.0, 1.0, .105),
+    (3.3, .281, .457, .438, .329, 0.0, 1.0, .024),
+    (3.78, .275, .479, .430, .312, 0.0, 1.0, -.122),
+    (4.55, .284, .468, .432, .324, 0.0, 1.0, -.026),
+    (6.50, .286, .445, .428, .321, 0.0, 1.0, .015),
+    (7.40, .294, .439, .412, .309, 0.0, 1.0, -.021),
+    // The burst begins inside the open jaws at about 7.7 s.
+    (7.57, .322, .463, .356, .216, .12, 1.0, .065),
+    (7.67, .361, .501, .278, .103, .36, 1.0, -.075),
+    (7.73, .411, .527, .164, .036, .60, .68, .095),
+    (7.81, .457, .542, .070, .010, .88, 0.0, -.041),
   ];
 }
 
