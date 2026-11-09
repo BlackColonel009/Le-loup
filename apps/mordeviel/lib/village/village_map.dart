@@ -907,7 +907,7 @@ class _PeekingEyeState extends State<_PeekingEye>
     with SingleTickerProviderStateMixin {
   late final _motion = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 2400),
+    duration: const Duration(milliseconds: 9600),
   );
 
   @override
@@ -943,8 +943,16 @@ class _PeekingEyePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final phase = motion.value;
-    final blink = ((phase - .91).abs() / .055).clamp(.08, 1.0);
+    final sweep = motion.value * 3;
+    final phase = sweep % 1;
+    final blinkAt = const [.24, .63, .91][sweep.floor() % 3];
+    final blink = ((phase - blinkAt).abs() / .044).clamp(.08, 1.0);
+    final lookRight = Curves.easeInOut.transform(
+      ((phase - .19) / .25).clamp(0.0, 1.0),
+    );
+    final lookLeft = Curves.easeInOut.transform(
+      ((phase - .66) / .27).clamp(0.0, 1.0),
+    );
     final center = size.center(Offset.zero);
     canvas.save();
     canvas.translate(center.dx, center.dy);
@@ -962,7 +970,7 @@ class _PeekingEyePainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.8,
     );
-    final pupil = Offset(7 * math.sin(phase * 2 * math.pi), 0);
+    final pupil = Offset(7 * (2 * (lookRight - lookLeft) - 1), 0);
     canvas.drawCircle(pupil, 5, Paint()..color = const Color(0xFFFFC16F));
     canvas.drawCircle(pupil, 2.4, Paint()..color = const Color(0xFF252031));
     canvas.restore();

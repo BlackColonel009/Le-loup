@@ -60,6 +60,58 @@ void main() {
     expect(wolfDevourCardRevealProgress(1), 1);
   });
 
+  testWidgets('La carte se comprime à la morsure puis disparaît', (
+    tester,
+  ) async {
+    final previous = VideoPlayerPlatform.instance;
+    final platform = CoinVideoPlatform();
+    VideoPlayerPlatform.instance = platform;
+    addTearDown(() async {
+      VideoPlayerPlatform.instance = previous;
+      await platform.events.close();
+    });
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Center(
+          child: SizedBox(
+            width: 300,
+            height: 533,
+            child: WolfDevourVideo(
+              role: configuredRole('seer'),
+              videoPath: wolfDevourVideoAsset,
+              whiteWolfFinishing: false,
+              revealProgress: 1,
+              concealed: false,
+              onPlaybackStarted: () {},
+              onPlaybackFailed: () => fail('Lecture simulée impossible'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    final cardFrame = find.ancestor(
+      of: find.byType(RoleCardFront),
+      matching: find.byType(FittedBox),
+    );
+    Future<void> position(int milliseconds) async {
+      platform.position = Duration(milliseconds: milliseconds);
+      await tester.pump(const Duration(milliseconds: 150));
+      await tester.pump();
+    }
+
+    await position(4550);
+    final before = tester.getSize(cardFrame);
+    await position(4750);
+    final crushed = tester.getSize(cardFrame);
+    expect(crushed.height, lessThan(before.height / 2));
+    expect(crushed.width, greaterThan(before.width / 2));
+    await position(5000);
+    expect(find.byType(RoleCardFront), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   test('La vidéo dépend du prédateur et de la carte dévorée', () {
     expect(
       wolfDevourVideoFor(

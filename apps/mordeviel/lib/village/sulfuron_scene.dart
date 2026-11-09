@@ -413,12 +413,14 @@ class BottomUpGifBurningCard extends StatelessWidget {
   );
 }
 
-double _edge(double x, Size s, double p) =>
-    s.height * (1.08 - 1.2 * p) +
-    (math.sin(x * .083 + 2) * 8 +
-            math.sin(x * .23) * 3 +
-            math.sin(x * .041) * 12) *
-        math.sin(math.pi * p);
+double _edge(double x, Size s, double p) {
+  final across = x / s.width;
+  final burn = math.sin(math.pi * p);
+  final faster = math.sin(across * 13 + p * 4) + .46 * math.cos(across * 29);
+  final torn = math.sin(across * 62 + p * 9);
+  return s.height * (1.08 - 1.2 * p + (.056 * faster + .008 * torn) * burn);
+}
+
 Path _front(Size s, double p, [double shift = 0]) {
   final path = Path()..moveTo(0, _edge(0, s, p) + shift);
   for (double x = 3; x < s.width + 3; x += 3) {
@@ -496,16 +498,24 @@ class _BurnPainter extends CustomPainter {
       edge,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 12
-        ..color = const Color(0xFFFF5E08)
+        ..strokeWidth = 8
+        ..color = const Color(0x95F45B1A)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7),
     );
     c.drawPath(
       edge,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 3
-        ..color = const Color(0xFFFFD18B),
+        ..strokeWidth = 1.5
+        ..shader = const LinearGradient(
+          colors: [
+            Color(0x25FF7023),
+            Color(0xCDFFD19B),
+            Color(0x29FF7023),
+            Color(0xAFFF9A53),
+            Color(0x39CB4C13),
+          ],
+        ).createShader(Offset.zero & s),
     );
     _drawFallingAsh(c, s, p);
     for (var i = 0; i < 42; i++) {

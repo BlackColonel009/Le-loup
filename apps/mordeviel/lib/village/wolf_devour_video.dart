@@ -7,7 +7,7 @@ import '../cards/card_gallery.dart';
 import '../cards/classic_role.dart';
 import '../content/content_image.dart';
 
-const wolfDevourVideoAsset = 'assets/village/horror/wolf_devour.mp4';
+const wolfDevourVideoAsset = 'assets/village/horror/wolf_devour_clean.mp4';
 const whiteWolfDevourVideoAsset = 'assets/village/horror/white_wolf_devour.mp4';
 const wolfDevourVideoDurationMilliseconds = 10030;
 const wolfRoleCardIds = {'werewolf', 'alpha_wolf', 'wolf_father', 'white_wolf'};
@@ -168,8 +168,14 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
       value.position,
       whiteWolfFinishing: widget.whiteWolfFinishing,
     );
-    final reveal = Curves.easeInOut.transform(
-      widget.revealProgress.clamp(0.0, 1.0),
+    final reveal = widget.whiteWolfFinishing
+        ? Curves.easeInOut.transform(widget.revealProgress.clamp(0.0, 1.0))
+        : wolfDevourCardRevealProgress(
+            value.position.inMilliseconds / wolfDevourVideoDurationMilliseconds,
+          );
+    final front = RoleCardFront(
+      role: widget.role,
+      ambience: CardAmbience.horror,
     );
 
     return LayoutBuilder(
@@ -204,13 +210,21 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
                           ),
                           Opacity(
                             opacity: reveal,
-                            child: Transform.scale(
-                              scaleX: 1.08,
-                              child: RoleCardFront(
-                                role: widget.role,
-                                ambience: CardAmbience.horror,
-                              ),
-                            ),
+                            child: widget.whiteWolfFinishing
+                                ? Transform.scale(scaleX: 1.08, child: front)
+                                : CustomPaint(
+                                    foregroundPainter: _CrushedPaperFold(
+                                      pose.bite,
+                                    ),
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: SizedBox(
+                                        width: 200,
+                                        height: 300,
+                                        child: front,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -245,19 +259,15 @@ class _WolfDevourPose {
   final double rotation;
 
   static const keyframes = [
-    (0.0, .224, .390, .552, .430, 0.0, 1.0, 0.0),
-    (1.5, .224, .390, .552, .430, 0.0, 1.0, 0.0),
-    (3.0, .198, .390, .604, .476, 0.0, 1.0, 0.0),
-    (4.6, .180, .390, .640, .500, 0.0, 1.0, 0.0),
-    (5.0, .180, .390, .640, .500, 0.0, 1.0, 0.0),
-    (5.2, .180, .390, .640, .500, 0.0, 1.0, 0.0),
-    (5.45, .230, .455, .540, .340, .16, 1.0, .015),
-    (5.7, .270, .500, .460, .240, .32, 1.0, .025),
-    (5.9, .295, .525, .415, .180, .42, .94, .012),
-    (6.2, .300, .545, .405, .120, .50, 1.0, 0.0),
-    (6.35, .305, .550, .395, .105, .55, .65, 0.0),
-    (6.5, .310, .555, .380, .090, .60, 0.0, 0.0),
-    (10.03, .310, .555, .380, .090, .60, 0.0, 0.0),
+    (0.0, .278, .462, .444, .333, 0.0, 1.0, -.030),
+    (1.6, .266, .441, .468, .351, 0.0, 1.0, .020),
+    (3.55, .278, .419, .444, .333, 0.0, 1.0, -.020),
+    (4.60, .295, .410, .410, .308, 0.0, 1.0, .015),
+    // The teeth start to close around 4.65 s. Keep the fold at their contact point.
+    (4.67, .310, .475, .380, .217, .10, 1.0, -.062),
+    (4.75, .341, .542, .318, .112, .28, 1.0, .093),
+    (4.83, .392, .580, .216, .043, .55, .82, -.085),
+    (4.98, .443, .591, .114, .012, .86, 0.0, .040),
   ];
 
   static const whiteWolfKeyframes = [
@@ -320,6 +330,40 @@ _WolfDevourPose _poseFrom(
 
 double _lerp(double start, double end, double progress) =>
     start + (end - start) * progress;
+
+class _CrushedPaperFold extends CustomPainter {
+  const _CrushedPaperFold(this.pressure);
+  final double pressure;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (pressure == 0) return;
+    final crease = Path()
+      ..moveTo(0, size.height * .42)
+      ..lineTo(size.width * .41, size.height * .67)
+      ..lineTo(size.width * .67, size.height * .51)
+      ..lineTo(size.width, size.height * .72);
+    canvas.drawPath(
+      crease,
+      Paint()
+        ..color = Colors.black.withValues(alpha: pressure * .88)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = size.height * .17
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2),
+    );
+    canvas.drawPath(
+      crease,
+      Paint()
+        ..color = const Color(0xFFF3C392).withValues(alpha: pressure * .48)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _CrushedPaperFold old) =>
+      old.pressure != pressure;
+}
 
 class _WolfBiteClipper extends CustomClipper<Path> {
   const _WolfBiteClipper(this.progress);

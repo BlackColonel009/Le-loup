@@ -7,6 +7,7 @@ import '../content/pack_store.dart';
 
 const revivalText =
     'La Sorcière vous a donné une chance. À vous de choisir votre destin.';
+const _faceRevealProgress = .40;
 Future<void> showRevival(
   BuildContext context, {
   required String role,
@@ -127,10 +128,14 @@ class _RevivalState extends State<_Revival>
                       animation: _motion,
                       builder: (context, _) {
                         final progress = _motion.value;
-                        final lift = Curves.easeOutBack
-                            .transform(((progress - .08) / .64).clamp(0, 1))
-                            .clamp(0, 1)
-                            .toDouble();
+                        const turnStart = .08;
+                        final turn = Curves.easeInOut.transform(
+                          ((progress - turnStart) /
+                                  (2 * (_faceRevealProgress - turnStart)))
+                              .clamp(0.0, 1.0),
+                        );
+                        final faceUp = progress >= _faceRevealProgress;
+                        final lift = Curves.easeOutCubic.transform(progress);
                         final opacity = Curves.easeOut
                             .transform(((progress - .02) / .48).clamp(0, 1))
                             .clamp(0, 1)
@@ -158,7 +163,9 @@ class _RevivalState extends State<_Revival>
                                       transform: Matrix4.identity()
                                         ..setEntry(3, 2, .0014)
                                         ..rotateX(.12 * (1 - lift))
-                                        ..rotateY(.92 * (1 - lift))
+                                        ..rotateY(
+                                          math.pi * (faceUp ? 1 - turn : -turn),
+                                        )
                                         ..rotateZ(.055 * (1 - lift)),
                                       child: Container(
                                         width: 200,
@@ -183,14 +190,20 @@ class _RevivalState extends State<_Revival>
                                             ),
                                           ],
                                         ),
-                                        child: RoleCardFront(
-                                          role: configuredRole(
-                                            widget.role,
-                                            feminine: widget.feminine,
-                                            edition: widget.ambience.asset,
-                                          ),
-                                          ambience: widget.ambience,
-                                        ),
+                                        child: faceUp
+                                            ? RoleCardFront(
+                                                role: configuredRole(
+                                                  widget.role,
+                                                  feminine: widget.feminine,
+                                                  edition:
+                                                      widget.ambience.asset,
+                                                ),
+                                                ambience: widget.ambience,
+                                              )
+                                            : Image.asset(
+                                                'assets/village/card_back.png',
+                                                fit: BoxFit.contain,
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -323,28 +336,35 @@ class _RevivalSpiral extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final visible = Curves.easeOutCubic.transform(progress);
     if (visible <= 0) return;
-    const steps = 112;
+    const steps = 96;
     final centerX = size.width / 2;
     final path = Path();
-    for (var i = 0; i < steps; i++) {
-      final t0 = visible * i / steps;
-      final t1 = visible * (i + 1) / steps;
-      final angle0 = t0 * math.pi * 5 + progress * math.pi * 1.4;
-      final angle1 = t1 * math.pi * 5 + progress * math.pi * 1.4;
-      final depth = math.cos((angle0 + angle1) / 2);
-      if ((depth >= 0) != foreground) continue;
-
-      final p0 = _point(size, centerX, t0, angle0);
-      final p1 = _point(size, centerX, t1, angle1);
-      path
-        ..moveTo(p0.dx, p0.dy)
-        ..lineTo(p1.dx, p1.dy);
+    for (final offset in [0.0, math.pi]) {
+      var connected = false;
+      for (var i = 0; i <= steps; i++) {
+        final t = visible * i / steps;
+        final angle = offset + t * math.pi * 3.8 - progress * math.pi * 1.7;
+        if ((math.cos(angle) >= 0) != foreground) {
+          connected = false;
+          continue;
+        }
+        final point = _point(size, centerX, t, angle);
+        if (connected) {
+          path.lineTo(point.dx, point.dy);
+        } else {
+          path.moveTo(point.dx, point.dy);
+          connected = true;
+        }
+      }
     }
     final phase = Curves.easeOut.transform(progress);
-    final opacity = .3 + .62 * phase;
+    final opacity =
+        (.18 + .75 * phase) *
+        (1 - Curves.easeIn.transform(((progress - .79) / .21).clamp(0.0, 1.0)));
     canvas.drawPath(
       path,
       Paint()
+        ..style = PaintingStyle.stroke
         ..color = Color.fromRGBO(255, 190, 55, opacity * .42)
         ..strokeWidth = 10
         ..strokeCap = StrokeCap.round
@@ -353,6 +373,7 @@ class _RevivalSpiral extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
+        ..style = PaintingStyle.stroke
         ..color = Color.fromRGBO(255, 203, 91, opacity * .8)
         ..strokeWidth = 3.2
         ..strokeCap = StrokeCap.round
@@ -361,9 +382,27 @@ class _RevivalSpiral extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
+        ..style = PaintingStyle.stroke
         ..color = Color.fromRGBO(255, 246, 202, opacity)
         ..strokeWidth = 1.15
         ..strokeCap = StrokeCap.round,
+    );
+    if (!foreground) return;
+    final pulse = ((progress - _faceRevealProgress) / .24).clamp(0.0, 1.0);
+    if (progress < _faceRevealProgress || pulse >= 1) return;
+    final light = Rect.fromCircle(
+      center: Offset(centerX, size.height * .47),
+      radius: size.width * (.22 + pulse * .66),
+    );
+    canvas.drawOval(
+      light,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [
+            const Color(0xFFFFEBB0).withValues(alpha: .46 * (1 - pulse)),
+            const Color(0x00FFBB58),
+          ],
+        ).createShader(light),
     );
   }
 

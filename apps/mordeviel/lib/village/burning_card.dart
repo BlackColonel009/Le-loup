@@ -42,7 +42,7 @@ class BurningCard extends StatelessWidget {
             holeHeight * fireAspect * .78,
           );
           final fireHeight = fireWidth / fireAspect;
-          final fireOpacity = (1 - _ease((p - .965) / .035)).clamp(0.0, 1.0);
+          final fireOpacity = 1 - _ease((p - .81) / .15);
 
           return Stack(
             fit: StackFit.expand,
@@ -55,7 +55,7 @@ class BurningCard extends StatelessWidget {
                   child: child,
                 ),
               ),
-              if (p >= .06 && p < 1 && fireWidth > 0)
+              if (p >= .06 && fireOpacity > 0 && fireWidth > 0)
                 Positioned(
                   left: center.dx - fireWidth / 2,
                   top:
@@ -141,11 +141,28 @@ class _FallingShard extends StatelessWidget {
           angle: spin,
           child: Transform.translate(
             offset: -center,
-            child: Opacity(
-              opacity: 1 - phase,
-              child: ClipPath(
-                clipper: _ShardClipper(shard.points, amount, time),
-                child: child,
+            child: Transform(
+              alignment: Alignment(
+                2 * shard.points.first.dx / size.width - 1,
+                2 * shard.points.first.dy / size.height - 1,
+              ),
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, .0016)
+                ..rotateX(phase * (index.isEven ? 1.45 : -1.45)),
+              child: Opacity(
+                opacity: 1 - phase,
+                child: ClipPath(
+                  clipper: _ShardClipper(shard.points, amount, time),
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      const Color(
+                        0xFF241A16,
+                      ).withValues(alpha: .3 + .66 * phase),
+                      BlendMode.srcATop,
+                    ),
+                    child: child,
+                  ),
+                ),
               ),
             ),
           ),
@@ -309,13 +326,15 @@ class _CenterBurnPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (amount < .018 || progress >= 1) return;
     final path = _burnPath(size, amount, time);
-    final opacity = math.max(.18, 1 - math.max(0, progress - .7) * 2.8);
+    final opacity = 1 - _ease((progress - .76) / .18);
+    canvas.save();
+    canvas.clipPath(_remainingCardPath(size, amount, time));
     canvas.drawPath(
       path,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = size.shortestSide * .026
-        ..color = const Color(0xFF24140F).withValues(alpha: opacity)
+        ..strokeWidth = size.shortestSide * .070
+        ..color = const Color(0xFF120D0C).withValues(alpha: opacity * .93)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
     );
     canvas.drawPath(
@@ -323,7 +342,7 @@ class _CenterBurnPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = size.shortestSide * .012
-        ..color = const Color(0xFFFF5B0A).withValues(alpha: opacity * .72)
+        ..color = const Color(0xFFFF5B0A).withValues(alpha: opacity * .49)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5),
     );
     canvas.drawPath(
@@ -331,8 +350,9 @@ class _CenterBurnPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = size.shortestSide * .004
-        ..color = const Color(0xFFFFB329).withValues(alpha: opacity * .72),
+        ..color = const Color(0xFFFFB329).withValues(alpha: opacity * .62),
     );
+    canvas.restore();
 
     final center = Offset(size.width / 2, size.height / 2);
     for (var index = 0; index < 24; index++) {
@@ -342,7 +362,7 @@ class _CenterBurnPainter extends CustomPainter {
       final point =
           center +
           Offset(math.cos(angle), math.sin(angle)) * radius +
-          Offset(math.sin(age * 5 + index) * 5, age * size.height * .17);
+          Offset(math.sin(age * 5 + index) * 7, age * age * size.height * .27);
       final alpha = (1 - age) * math.sin(math.pi * progress) * .72;
       canvas.drawCircle(
         point,

@@ -3077,20 +3077,20 @@
       "title": "Horreur · Vidéos de dévoration",
       "kind": "video",
       "theme": "horror",
-      "version": "47ccced1b8719ca0",
-      "size": 13487926,
+      "version": "e85d33937628a37b",
+      "size": 12345335,
       "files": [
         {
           "asset": "assets/village/horror/white_wolf_devour.mp4",
           "size": 6930659,
           "sha256": "ce1ad0f09d414d05c0d61d5da39ebe230e59a7a5fecb3bb149dd1c96ca4e58bb",
-          "url": "/content/packs/horror-devour/47ccced1b8719ca0/ce1ad0f09d414d05c0d61d5da39ebe230e59a7a5fecb3bb149dd1c96ca4e58bb"
+          "url": "/content/packs/horror-devour/e85d33937628a37b/ce1ad0f09d414d05c0d61d5da39ebe230e59a7a5fecb3bb149dd1c96ca4e58bb"
         },
         {
-          "asset": "assets/village/horror/wolf_devour.mp4",
-          "size": 6557267,
-          "sha256": "14600ce045533a2db14c954cbd8ab5900f64df0c1d22cd0ee0211b8a95f06c5f",
-          "url": "/content/packs/horror-devour/47ccced1b8719ca0/14600ce045533a2db14c954cbd8ab5900f64df0c1d22cd0ee0211b8a95f06c5f"
+          "asset": "assets/village/horror/wolf_devour_clean.mp4",
+          "size": 5414676,
+          "sha256": "d2ffb36e0ef076922be6910f1fde05f281aa071def65dd141a9d32ab70b082a0",
+          "url": "/content/packs/horror-devour/e85d33937628a37b/d2ffb36e0ef076922be6910f1fde05f281aa071def65dd141a9d32ab70b082a0"
         }
       ]
     },

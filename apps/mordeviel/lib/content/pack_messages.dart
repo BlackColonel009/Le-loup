@@ -31,7 +31,8 @@ String? downloadablePackForAsset(String asset) {
   if (asset.contains('/stickers/')) return 'stickers-classic';
   if (asset.contains('/cards/horror/')) return 'horror-cards';
   if (asset.contains('/cards/intense/')) return 'intense-cards';
-  if (asset == 'assets/village/horror/wolf_devour.mp4' ||
+  if (asset == 'assets/village/horror/wolf_devour_clean.mp4' ||
+      asset == 'assets/village/horror/wolf_devour.mp4' ||
       asset == 'assets/village/horror/white_wolf_devour.mp4') {
     return 'horror-devour';
   }
