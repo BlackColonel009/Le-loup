@@ -66,6 +66,7 @@ void main() {
     testWidgets('$name : la carte se comprime puis disparaît', (tester) async {
       final previous = VideoPlayerPlatform.instance;
       final platform = CoinVideoPlatform();
+      var completions = 0;
       VideoPlayerPlatform.instance = platform;
       addTearDown(() async {
         VideoPlayerPlatform.instance = previous;
@@ -87,6 +88,7 @@ void main() {
                 concealed: false,
                 onPlaybackStarted: () {},
                 onPlaybackFailed: () => fail('Lecture simulée impossible'),
+                onPlaybackCompleted: () => completions++,
               ),
             ),
           ),
@@ -111,6 +113,10 @@ void main() {
       expect(crushed.width, greaterThan(before.width / 2));
       await position(after);
       expect(find.byType(RoleCardFront), findsNothing);
+      expect(completions, 0);
+      platform.events.add(VideoEvent(eventType: VideoEventType.completed));
+      await tester.pump();
+      expect(completions, 1);
       await tester.pumpWidget(const SizedBox.shrink());
     });
   }

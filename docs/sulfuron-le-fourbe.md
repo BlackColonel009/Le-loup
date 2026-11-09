@@ -16,14 +16,13 @@ adulte, générée avec le moteur neuronal local déjà utilisé par le jeu.
   utilisations. Le vrai rôle, le camp, les pouvoirs et le résultat de la Voyante
   ne sont jamais modifiés. Le responsable n’est pas identifié dans l’annonce.
 * **La Révélation-piège** : le serveur tire un autre survivant au hasard et montre
-  sa vraie carte à tous. S’il meurt directement au prochain scrutin de
-  condamnation, Sulfuron reçoit **+1 vie**. Une grâce, un vote blanc, une égalité
-  sans sa mort ou une autre cause de mort ne rapporte rien. Le piège expire à la
+  sa vraie carte à tous. Si les loups tuent la cible avant le prochain scrutin
+  ou si ce scrutin l’élimine, Sulfuron reçoit **+1 vie**. Le piège expire à la
   fin de ce scrutin. Les vies se cumulent et sont consommées automatiquement.
 
-Les cartes dévoilées par un piège de Sulfuron brûlent comme du papier si le
-scrutin suivant les élimine. Cette présentation ne change pas la cause « vote »
-utilisée pour les statistiques, les réactions du Chasseur et les autres règles.
+Après l’élimination, tout le monde voit brûler la carte qui avait été révélée.
+Sulfuron voit ensuite son gain en privé. Les statistiques et les réactions
+continuent d’utiliser la cause réelle de l’élimination.
 
 ## Vies et éditions
 

@@ -186,7 +186,11 @@ class NightGame {
     });
   }
 
-  void _recordDeath(String id, String cause) {
+  void _recordDeath(
+    String id,
+    String cause,
+    Iterable<String> simultaneousDeaths,
+  ) {
     _log('death', {
       'target': id,
       'cause': cause,
@@ -196,6 +200,7 @@ class NightGame {
       if (cause == 'night') 'pack_ids': alive.where(_isWolf).toList(),
       ...?_deathOrigins[id],
     });
+    final burnedCard = _sulfuronVictimDied(id, cause, simultaneousDeaths);
     _deathEvents.add({
       'id': 'death-${_deathEvents.length + 1}',
       'player': id,
@@ -203,8 +208,10 @@ class NightGame {
       'night': night,
       'was_mayor': _pendingMayor == id || _mayor == id,
       'batch': _deathBatch,
-      if (cause == 'vote' && _sulfuron.burnVotes[id] == _expanded.voteRounds)
+      if (burnedCard != null) ...{
         'effect': 'sulfuron_fire',
+        'sulfuron_card': burnedCard,
+      },
     });
   }
 
@@ -829,7 +836,6 @@ class NightGame {
     _sulfuron.stakes.removeWhere(
       (_, stake) => stake.vote <= _expanded.voteRounds,
     );
-    _sulfuron.burnVotes.removeWhere((_, vote) => vote <= _expanded.voteRounds);
     _beginReactions();
   }
 

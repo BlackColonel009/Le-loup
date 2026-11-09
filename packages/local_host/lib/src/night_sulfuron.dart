@@ -3,8 +3,8 @@ part of 'night_game.dart';
 class _SulfuronState {
   final souls = <String, int>{}, bluffNight = <String, int>{};
   final survivedVote = <String>{};
-  final stakes = <String, ({String target, int vote})>{};
-  final burnVotes = <String, int>{};
+  final stakes =
+      <String, ({String target, int vote, String role, String edition})>{};
   final revengeVoters = <String, List<String>>{};
   final revengeTarget = <String, String>{};
   final publicEvents = <Map<String, dynamic>>[];
@@ -159,9 +159,13 @@ extension _SulfuronRole on NightGame {
       _variantTargets(action, const [], 0);
       target = others[_chanceDraw(others.length)];
       announced = roles[target]!;
-      _sulfuron.stakes[key] = (target: target, vote: _expanded.voteRounds + 1);
+      _sulfuron.stakes[key] = (
+        target: target,
+        vote: _expanded.voteRounds + 1,
+        role: announced,
+        edition: editionOf(target),
+      );
     }
-    _sulfuron.burnVotes[target] = _expanded.voteRounds + 1;
     _publishSulfuronCard(
       id,
       target,
@@ -220,16 +224,23 @@ extension _SulfuronRole on NightGame {
     return true;
   }
 
-  void _sulfuronVictimDied(String target, String cause) {
-    if (cause != 'vote') return;
+  Map<String, String>? _sulfuronVictimDied(
+    String target,
+    String cause,
+    Iterable<String> simultaneousDeaths,
+  ) {
+    if (!['vote', 'night', 'white_wolf'].contains(cause)) return null;
+    final vote = _expanded.voteRounds + (cause == 'vote' ? 0 : 1);
+    Map<String, String>? burnedCard;
     for (final entry in _sulfuron.stakes.entries.toList()) {
-      if (entry.value.target != target ||
-          entry.value.vote != _expanded.voteRounds)
-        continue;
+      final stake = entry.value;
+      if (stake.target != target || stake.vote != vote) continue;
       final owner = _sulfuronOwner(entry.key);
       _sulfuron.stakes.remove(entry.key);
-      if (owner == null) continue;
+      if (owner == null || simultaneousDeaths.contains(owner)) continue;
       _sulfuron.souls[entry.key] = _sulfuronLives(owner) + 1;
+      // Reuse the public revelation, including if the victim's role changed.
+      burnedCard = {'role': stake.role, 'edition': stake.edition};
       _sulfuronEvent({
         'kind': 'soul_gained',
         'player': owner,
@@ -246,6 +257,7 @@ extension _SulfuronRole on NightGame {
         'target': target,
       });
     }
+    return burnedCard;
   }
 
   Map<String, dynamic> _sulfuronPrivate(String id) => roles[id] != 'sulfuron'

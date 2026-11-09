@@ -12,6 +12,39 @@ import 'package:mordeviel/village/elimination_damage.dart';
 import 'package:mordeviel/village/sulfuron_scene.dart';
 
 void main() {
+  testWidgets('La combustion publique se ferme à la fin de l’animation', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showElimination(
+              context,
+              name: 'Alice',
+              role: 'seer',
+              cause: 'sulfuron_fire',
+              effect: 'sulfuron_fire',
+              autoAdvance: true,
+            ),
+            child: const Text('Ouvrir'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Ouvrir'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.byType(BottomUpGifBurningCard), findsOneWidget);
+    expect(
+      find.text('Sulfuron consume cette carte et gagne une vie.'),
+      findsOneWidget,
+    );
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.byType(BottomUpGifBurningCard), findsNothing);
+  });
+
   test(
     'Trois perforations successives, réellement découpées dans la carte',
     () {

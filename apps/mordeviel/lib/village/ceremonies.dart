@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import '../services/immersion_preferences.dart';
 import 'package:flutter/material.dart';
@@ -373,6 +374,7 @@ Future<void> showElimination(
   VoidCallback? onRevealed,
   VoidCallback? onDismissed,
   bool hasNext = false,
+  bool autoAdvance = false,
   bool wasMayor = false,
   CardAmbience? mayorAmbience,
 }) async {
@@ -409,6 +411,7 @@ Future<void> showElimination(
       onRevealed: onRevealed,
       onDismissed: onDismissed,
       hasNext: hasNext,
+      autoAdvance: autoAdvance,
       wasMayor: wasMayor,
       mayorAmbience: mayorAmbience,
       videoPath: videoPath,
@@ -430,6 +433,7 @@ class _DeathCard extends StatefulWidget {
     this.onRevealed,
     this.onDismissed,
     this.hasNext = false,
+    this.autoAdvance = false,
     this.wasMayor = false,
     this.mayorAmbience,
     this.videoPath,
@@ -438,6 +442,7 @@ class _DeathCard extends StatefulWidget {
   final String? lastWords;
   final VoidCallback? onRevealed, onDismissed;
   final bool hasNext;
+  final bool autoAdvance;
   final bool wasMayor;
   final CardAmbience? mayorAmbience;
   final bool feminine;
@@ -535,6 +540,17 @@ class _DeathCardState extends State<_DeathCard>
   bool _concealed = false;
   bool _spoken = false, _leaving = false;
   double _dragDistance = 0;
+
+  void _advanceAfterAnimation() {
+    if (mounted &&
+        widget.autoAdvance &&
+        !_concealed &&
+        !_reducedAnimations &&
+        ModalRoute.of(context)?.isCurrent == true) {
+      unawaited(_dismiss());
+    }
+  }
+
   void _revealSpeech() {
     final revealThreshold = _usesWolfDevourVideo ? .16 : .55;
     if (_deathProgress >= revealThreshold &&
@@ -590,6 +606,13 @@ class _DeathCardState extends State<_DeathCard>
     _concealed = lifecycle != null && lifecycle != AppLifecycleState.resumed;
     WidgetsBinding.instance.addObserver(this);
     _animation.addListener(_revealSpeech);
+    if (widget.autoAdvance) {
+      _animation.addStatusListener((status) {
+        if (status == AnimationStatus.completed && !_usesWolfDevourVideo) {
+          _advanceAfterAnimation();
+        }
+      });
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (!_usesWolfDevourVideo) _startDeathAnimation();
@@ -654,6 +677,8 @@ class _DeathCardState extends State<_DeathCard>
                       Text(
                         widget.cursed
                             ? 'Les pouvoirs du camp Village sont désactivés.'
+                            : widget.cause == 'sulfuron_fire'
+                            ? 'Sulfuron consume cette carte et gagne une vie.'
                             : widget.cause == 'poison'
                             ? 'Éliminé par une potion'
                             : widget.cause == 'love'
@@ -686,6 +711,7 @@ class _DeathCardState extends State<_DeathCard>
                                     concealed: _concealed,
                                     onPlaybackStarted: _handleWolfVideoStarted,
                                     onPlaybackFailed: _handleWolfVideoFailed,
+                                    onPlaybackCompleted: _advanceAfterAnimation,
                                   )
                                 : AnimatedBuilder(
                                     animation: _animation,
@@ -751,6 +777,7 @@ class _DeathCardState extends State<_DeathCard>
                                                     'hunter',
                                                     'poison',
                                                     'vote',
+                                                    'sulfuron_fire',
                                                   ].contains(widget.cause))
                                                     ClipRect(
                                                       clipper: _ScratchClipper(

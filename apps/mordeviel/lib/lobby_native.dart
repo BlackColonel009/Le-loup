@@ -699,6 +699,24 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     _host?.setNarration(profile: profile, automatic: automatic);
   }
 
+  Future<void> _showQueuedSulfuron(int index) {
+    final event = _sulfuronQueue.removeAt(index);
+    final player = (_room?['players'] as List? ?? [])
+        .where((p) => p['id'] == event['player'])
+        .firstOrNull;
+    return showSulfuronScene(
+      context,
+      event: event,
+      playerName: player?['nickname'] as String? ?? 'Joueur',
+      ambience: _styleFor(
+        event['role'] as String?,
+        edition:
+            event['edition'] as String? ?? _nightPrivate?['edition'] as String?,
+      ),
+      voteUsed: _nightPrivate?['sulfuron_vote_used'] == true,
+    );
+  }
+
   void _receiveDeaths(Map<String, dynamic> room) {
     final game = room['game'] as Map?;
     final sulfuronEvents = [
@@ -728,7 +746,10 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
     var illustratedCurse = false;
     final batch = game?['death_batch'];
     bool stale(Map event) =>
-        batch != null && event['batch'] != null && event['batch'] != batch;
+        event['sulfuron_card'] == null &&
+        batch != null &&
+        event['batch'] != null &&
+        event['batch'] != batch;
     _deathQueue.removeWhere(stale);
     for (final event in events) {
       if (_seenDeaths.add(event['id'] as String)) {
@@ -801,23 +822,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             continue;
           }
           if (_deathQueue.isEmpty && _readySulfuronIndex >= 0) {
-            if (!mounted) break;
-            final event = _sulfuronQueue.removeAt(_readySulfuronIndex);
-            final player = (_room?['players'] as List? ?? [])
-                .where((p) => p['id'] == event['player'])
-                .firstOrNull;
-            await showSulfuronScene(
-              context,
-              event: event,
-              playerName: player?['nickname'] as String? ?? 'Joueur',
-              ambience: _styleFor(
-                event['role'] as String?,
-                edition:
-                    event['edition'] as String? ??
-                    _nightPrivate?['edition'] as String?,
-              ),
-              voteUsed: _nightPrivate?['sulfuron_vote_used'] == true,
-            );
+            await _showQueuedSulfuron(_readySulfuronIndex);
             continue;
           }
           if (_deathQueue.isEmpty && _pendingEnding != null) {
@@ -857,6 +862,7 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             }
             continue;
           }
+          if (!mounted) break;
           final event = _deathQueue.removeAt(0);
           final player = (_room?['players'] as List? ?? [])
               .where((p) => p['id'] == event['player'])
@@ -864,36 +870,73 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
           final role =
               event['role'] as String? ??
               (event['player'] == _client?.id ? _role : null);
+          final burnedCard = event['sulfuron_card'] as Map?;
+          final name = player?['nickname'] as String? ?? 'Joueur';
+          final feminine = _femaleFor(event['player']);
           await showElimination(
             context,
-            name: player?['nickname'] as String? ?? 'Joueur',
+            name: name,
             role: role,
             cause: event['cause'] as String,
-            effect: event['effect'] as String?,
+            effect: burnedCard == null ? event['effect'] as String? : null,
             wasMayor: event['was_mayor'] == true,
             mayorAmbience: _styleFor('mayor'),
-            feminine: _femaleFor(event['player']),
+            feminine: feminine,
             ambience: _styleFor(role, edition: event['edition'] as String?),
             cursed: event['elder_curse'] == true,
             lastWords: deathSpeechFor(
               event['role'] as String?,
-              feminine: _femaleFor(event['player']),
+              feminine: feminine,
               cursed: event['elder_curse'] == true,
             )?.text,
             onRevealed: () => ClassicAudio.instance.deathSpeech(
               event['role'] as String?,
-              feminine: _femaleFor(event['player']),
+              feminine: feminine,
               cursed: event['elder_curse'] == true,
-              burning: event['effect'] == 'sulfuron_fire',
+              burning: burnedCard == null && event['effect'] == 'sulfuron_fire',
               cause: event['cause'] as String?,
               edition: event['edition'] as String? ?? _ambience.asset,
             ),
             onDismissed: ClassicAudio.instance.stopDeathSpeech,
+            autoAdvance: burnedCard != null,
             hasNext:
+                burnedCard != null ||
                 _deathQueue.isNotEmpty ||
                 _anonymousCurse ||
                 _pendingEnding != null,
           );
+          if (burnedCard != null && mounted && _room?['code'] == room['code']) {
+            final burnedRole = burnedCard['role'] as String;
+            await showElimination(
+              context,
+              name: name,
+              role: burnedRole,
+              cause: 'sulfuron_fire',
+              effect: 'sulfuron_fire',
+              feminine: feminine,
+              ambience: _styleFor(
+                burnedRole,
+                edition: burnedCard['edition'] as String?,
+              ),
+              onRevealed: () => ClassicAudio.instance.deathSpeech(
+                null,
+                cause: 'sulfuron_fire',
+              ),
+              onDismissed: ClassicAudio.instance.stopDeathSpeech,
+              autoAdvance: true,
+              hasNext:
+                  _readySulfuronIndex >= 0 ||
+                  _deathQueue.isNotEmpty ||
+                  _pendingEnding != null,
+            );
+            if (!mounted || _room?['code'] != room['code']) break;
+            final gainIndex = _sulfuronQueue.indexWhere(
+              (gain) =>
+                  gain['kind'] == 'soul_gained' &&
+                  gain['victim'] == event['player'],
+            );
+            if (gainIndex >= 0) await _showQueuedSulfuron(gainIndex);
+          }
         }
       } finally {
         _showingDeaths = false;

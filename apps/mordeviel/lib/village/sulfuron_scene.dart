@@ -67,10 +67,12 @@ class _SulfuronSceneState extends State<_SulfuronScene>
     }
     if (!_announced) {
       _announced = true;
-      ClassicAudio.instance.sulfuronSpeech(
-        _revelation ? (_bluff ? 'bluff' : 'reveal') : 'revive',
-        private: !_revelation && widget.event['kind'] != 'resurrection',
-      );
+      if (!_gain) {
+        ClassicAudio.instance.sulfuronSpeech(
+          _revelation ? (_bluff ? 'bluff' : 'reveal') : 'revive',
+          private: !_revelation && widget.event['kind'] != 'resurrection',
+        );
+      }
     }
   }
 
@@ -130,7 +132,28 @@ class _SulfuronSceneState extends State<_SulfuronScene>
               ),
               child: Column(
                 children: [
-                  if (!_revelation)
+                  if (_gain)
+                    AnimatedBuilder(
+                      animation: _motion,
+                      child: Text(
+                        _title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(color: const Color(0xFFFFC76B)),
+                      ),
+                      builder: (_, child) {
+                        final gain = (_motion.value / .24).clamp(0.0, 1.0);
+                        return Opacity(
+                          opacity: gain,
+                          child: Transform.scale(
+                            scale:
+                                .58 + .42 * Curves.easeOutBack.transform(gain),
+                            child: child,
+                          ),
+                        );
+                      },
+                    )
+                  else if (!_revelation)
                     Text(
                       _title,
                       textAlign: TextAlign.center,
@@ -224,13 +247,21 @@ class _SulfuronSceneState extends State<_SulfuronScene>
                     ),
                   ] else ...[
                     if (lives is int)
-                      Text(
-                        '$lives vie${lives > 1 ? 's' : ''} en réserve',
-                        style: Theme.of(context).textTheme.titleMedium,
+                      AnimatedBuilder(
+                        animation: _motion,
+                        builder: (context, _) {
+                          final count = _gain && _motion.value < .24
+                              ? math.max(0, lives - 1)
+                              : lives;
+                          return Text(
+                            '$count vie${count > 1 ? 's' : ''} en réserve',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          );
+                        },
                       ),
                     Text(
                       _gain
-                          ? 'La cible révélée a été condamnée. Une vie vous ramènera après une attaque de la meute.'
+                          ? 'La carte révélée a été consumée. Une vie vous ramènera après une attaque de la meute.'
                           : widget.event['cause'] == 'vote'
                           ? 'La première sentence n’a pas suffi. Un second vote sera définitif.'
                           : 'Une vie volée vous a ramené après l’attaque de la meute.',

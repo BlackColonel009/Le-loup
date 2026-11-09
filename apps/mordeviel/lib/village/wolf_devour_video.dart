@@ -40,6 +40,7 @@ class WolfDevourVideo extends StatefulWidget {
     required this.concealed,
     required this.onPlaybackStarted,
     required this.onPlaybackFailed,
+    this.onPlaybackCompleted,
   });
 
   final ClassicRole role;
@@ -48,6 +49,7 @@ class WolfDevourVideo extends StatefulWidget {
   final bool concealed;
   final VoidCallback onPlaybackStarted;
   final VoidCallback onPlaybackFailed;
+  final VoidCallback? onPlaybackCompleted;
 
   @override
   State<WolfDevourVideo> createState() => _WolfDevourVideoState();
@@ -59,6 +61,7 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
   bool _ready = false;
   bool _failed = false;
   bool _needsReveal = false;
+  bool _completionNotified = false;
   late bool _foreground;
   Future<void> _playback = Future<void>.value();
 
@@ -102,6 +105,7 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
       );
     } else {
       setState(() {});
+      if (value.isCompleted) _notifyCompletion();
     }
   }
 
@@ -130,11 +134,21 @@ class _WolfDevourVideoState extends State<WolfDevourVideo>
 
   bool get _canPlay => _foreground && !widget.concealed && !_needsReveal;
 
+  void _notifyCompletion() {
+    if (_completionNotified || !_canPlay) return;
+    _completionNotified = true;
+    widget.onPlaybackCompleted?.call();
+  }
+
   void _syncPlayback() {
     _playback = _playback
         .then((_) async {
           if (!mounted || !_ready || _failed) return;
-          final play = _canPlay && !_controller.value.isCompleted;
+          if (_controller.value.isCompleted) {
+            _notifyCompletion();
+            return;
+          }
+          final play = _canPlay;
           if (play == _controller.value.isPlaying) return;
           if (play) {
             await _controller.play();

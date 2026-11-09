@@ -345,8 +345,7 @@ extension _AdditionalRoles on NightGame {
       }
       if (_isWolf(id)) _extra.packBroken = true;
       alive.remove(id);
-      _recordDeath(id, entry.value);
-      _sulfuronVictimDied(id, entry.value);
+      _recordDeath(id, entry.value, victims.keys);
       if (!deaths.contains(id)) deaths.add(id);
       if (roles[id] == 'hunter' && _powerEnabled(id)) {
         if (_hunter == null) {
@@ -513,7 +512,7 @@ extension _AdditionalRoles on NightGame {
     if (phase == 'sulfuron' && role == 'sulfuron') {
       return choice(
         'sulfuron.reveal',
-        'Révélation-piège · dévoiler une carte au hasard pour gagner une vie si le prochain vote la condamne',
+        'Révélation-piège · gagnez une vie si les loups ou le prochain vote éliminent la cible révélée',
         [],
         0,
         0,

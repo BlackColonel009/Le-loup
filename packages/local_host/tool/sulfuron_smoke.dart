@@ -36,6 +36,7 @@ NightGame game(
   String edition, {
   Map<String, String> extra = const {},
   int Function(int)? draw,
+  bool revealOnDeath = true,
 }) => NightGame(
   {
     's': 'sulfuron',
@@ -50,6 +51,7 @@ NightGame game(
   },
   editions: {'s': edition},
   chanceDraw: draw ?? (_) => 0,
+  revealOnDeath: revealOnDeath,
 );
 void day(NightGame g) {
   g.finishNight();
@@ -133,6 +135,37 @@ void main() {
     !classic.privateState('w').containsKey('sulfuron_lives'),
     'Private charge leaked',
   );
+  check(
+    (classic.privateState('s')['sulfuron_events'] as List).last['kind'] ==
+        'soul_gained',
+    'Missing private vote gain ceremony',
+  );
+
+  final hunted = game('classic', revealOnDeath: false);
+  hunted.startNight();
+  final huntedTarget = reveal(hunted);
+  hunt(hunted, huntedTarget);
+  day(hunted);
+  final wolfDeath = (hunted.publicState['death_events'] as List).single as Map;
+  check(
+    wolfDeath['cause'] == 'night' &&
+        wolfDeath['effect'] == 'sulfuron_fire' &&
+        wolfDeath['sulfuron_card']['role'] == 'villager' &&
+        !wolfDeath.containsKey('role') &&
+        lives(hunted) == 1,
+    'Wolf kill must keep its cause and grant a single burn and life',
+  );
+  check(
+    (hunted.privateState('s')['sulfuron_events'] as List).single['kind'] ==
+            'soul_gained' &&
+        !(hunted.publicState['sulfuron_events'] as List).any(
+          (event) => event['kind'] == 'soul_gained',
+        ),
+    'Life gain must be private',
+  );
+  vote(hunted, 'b');
+  check(lives(hunted) == 1, 'A later vote must not grant the same soul twice');
+
   classic.startNight();
   hunt(classic, 's');
   day(classic);
@@ -216,13 +249,13 @@ void main() {
     'Poison must bypass souls, including when attacked by pack',
   );
 
-  final win = game('classic');
-  win.startNight();
-  day(win);
-  vote(win, 'w');
+  final win = game('classic', draw: (max) => max - 1);
+  gain(win);
   check(
     win.winner == 'sulfuron' &&
-        (win.publicState['winner_ids'] as List).single == 's',
+        (win.publicState['winner_ids'] as List).single == 's' &&
+        (win.publicState['death_events'] as List).last['effect'] ==
+            'sulfuron_fire',
     'Sulfuron must win alone ahead of Village',
   );
   final hunter = game('classic', extra: {'h': 'hunter'});
@@ -253,6 +286,14 @@ void main() {
     (truthful.publicState['sulfuron_events'] as List).last['role'] ==
         'villager',
     'Rare truthful announcement missing',
+  );
+  truthful.advance();
+  day(truthful);
+  vote(truthful, 'a');
+  check(
+    lives(truthful) == 0 &&
+        (truthful.publicState['death_events'] as List).last['effect'] == null,
+    'A truthful bluff must not grant a soul or burn',
   );
 
   final graced = NightGame({
