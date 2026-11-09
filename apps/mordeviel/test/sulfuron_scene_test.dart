@@ -221,10 +221,16 @@ void main() {
       ),
     );
     await tester.tap(find.text('Ouvrir'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('+1'), findsOneWidget);
+    expect(find.text('1 vie en réserve'), findsOneWidget);
     await tester.pumpAndSettle();
+    expect(find.text('+2'), findsOneWidget);
     expect(find.text('+1 vie volée'), findsOneWidget);
     expect(find.text('2 vies en réserve'), findsOneWidget);
     expect(find.textContaining('Le vote, le poison'), findsOneWidget);
+    expect(find.byType(RoleCardFront), findsNothing);
     expect(find.byType(BurningCard), findsNothing);
     expect(find.byType(BottomUpGifBurningCard), findsNothing);
     expect(tester.takeException(), isNull);

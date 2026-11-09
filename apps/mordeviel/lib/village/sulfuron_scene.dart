@@ -132,28 +132,7 @@ class _SulfuronSceneState extends State<_SulfuronScene>
               ),
               child: Column(
                 children: [
-                  if (_gain)
-                    AnimatedBuilder(
-                      animation: _motion,
-                      child: Text(
-                        _title,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(color: const Color(0xFFFFC76B)),
-                      ),
-                      builder: (_, child) {
-                        final gain = (_motion.value / .24).clamp(0.0, 1.0);
-                        return Opacity(
-                          opacity: gain,
-                          child: Transform.scale(
-                            scale:
-                                .58 + .42 * Curves.easeOutBack.transform(gain),
-                            child: child,
-                          ),
-                        );
-                      },
-                    )
-                  else if (!_revelation)
+                  if (!_gain && !_revelation)
                     Text(
                       _title,
                       textAlign: TextAlign.center,
@@ -180,55 +159,64 @@ class _SulfuronSceneState extends State<_SulfuronScene>
                   ),
                   const SizedBox(height: 12),
                   Expanded(
-                    child: AnimatedBuilder(
-                      animation: _motion,
-                      builder: (_, _) {
-                        final p = Curves.easeOutCubic.transform(_motion.value);
-                        return Opacity(
-                          opacity: p,
-                          child: Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.identity()
-                              ..setEntry(3, 2, .001)
-                              ..rotateY((1 - p) * math.pi * .7)
-                              ..scaleByDouble(
-                                .85 + .15 * p,
-                                .85 + .15 * p,
-                                1,
-                                1,
-                              ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFFFF881B).withValues(
-                                      alpha: .25 * math.sin(math.pi * p),
+                    child: _gain
+                        ? _StolenLifeCard(
+                            motion: _motion,
+                            lives: lives is int ? lives : 1,
+                          )
+                        : AnimatedBuilder(
+                            animation: _motion,
+                            builder: (_, _) {
+                              final p = Curves.easeOutCubic.transform(
+                                _motion.value,
+                              );
+                              return Opacity(
+                                opacity: p,
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.identity()
+                                    ..setEntry(3, 2, .001)
+                                    ..rotateY((1 - p) * math.pi * .7)
+                                    ..scaleByDouble(
+                                      .85 + .15 * p,
+                                      .85 + .15 * p,
+                                      1,
+                                      1,
                                     ),
-                                    blurRadius: 60,
-                                  ),
-                                ],
-                              ),
-                              child: role == null
-                                  ? const Icon(
-                                      Icons.local_fire_department,
-                                      size: 150,
-                                      color: Colors.amber,
-                                    )
-                                  : AspectRatio(
-                                      aspectRatio: .7,
-                                      child: RoleCardFront(
-                                        role: configuredRole(
-                                          role,
-                                          edition: widget.ambience.asset,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFFFF881B)
+                                              .withValues(
+                                                alpha:
+                                                    .25 * math.sin(math.pi * p),
+                                              ),
+                                          blurRadius: 60,
                                         ),
-                                        ambience: widget.ambience,
-                                      ),
+                                      ],
                                     ),
-                            ),
+                                    child: role == null
+                                        ? const Icon(
+                                            Icons.local_fire_department,
+                                            size: 150,
+                                            color: Colors.amber,
+                                          )
+                                        : AspectRatio(
+                                            aspectRatio: .7,
+                                            child: RoleCardFront(
+                                              role: configuredRole(
+                                                role,
+                                                edition: widget.ambience.asset,
+                                              ),
+                                              ambience: widget.ambience,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                   const SizedBox(height: 16),
                   if (_revelation) ...[
@@ -246,11 +234,18 @@ class _SulfuronSceneState extends State<_SulfuronScene>
                       style: const TextStyle(color: Color(0xFFFFC76B)),
                     ),
                   ] else ...[
+                    if (_gain)
+                      Text(
+                        _title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(color: const Color(0xFFFFC76B)),
+                      ),
                     if (lives is int)
                       AnimatedBuilder(
                         animation: _motion,
                         builder: (context, _) {
-                          final count = _gain && _motion.value < .24
+                          final count = _gain && _motion.value < .27
                               ? math.max(0, lives - 1)
                               : lives;
                           return Text(
@@ -289,6 +284,108 @@ class _SulfuronSceneState extends State<_SulfuronScene>
       ),
     );
   }
+}
+
+class _StolenLifeCard extends StatelessWidget {
+  const _StolenLifeCard({required this.motion, required this.lives});
+
+  final Animation<double> motion;
+  final int lives;
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 280),
+      child: AspectRatio(
+        aspectRatio: .74,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(color: const Color(0xFF9F663E), width: 2),
+            gradient: const RadialGradient(
+              radius: .8,
+              colors: [Color(0xFF48251B), Color(0xFF1A1116)],
+            ),
+            boxShadow: const [
+              BoxShadow(color: Color(0x544C2311), blurRadius: 32),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(9),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(11),
+                border: Border.all(color: const Color(0xFF684433)),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: AnimatedBuilder(
+                      animation: motion,
+                      builder: (context, _) {
+                        final roll = Curves.easeInOutCubic.transform(
+                          ((motion.value - .19) / .16).clamp(0.0, 1.0),
+                        );
+                        final pop = Curves.easeOutBack.transform(
+                          (motion.value / .11).clamp(0.0, 1.0),
+                        );
+                        final style = Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(
+                              fontFamily: 'VillageSans',
+                              fontSize: 112,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0,
+                              height: 1,
+                              color: const Color(0xFFFFDB8C),
+                              shadows: const [
+                                Shadow(
+                                  color: Color(0xB9F49839),
+                                  blurRadius: 22,
+                                ),
+                              ],
+                            );
+                        return Transform.scale(
+                          scale: .65 + .35 * pop,
+                          child: ClipRect(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                if (lives > 1 && roll < 1)
+                                  FractionalTranslation(
+                                    translation: Offset(0, -roll),
+                                    child: Opacity(
+                                      opacity: 1 - roll,
+                                      child: Text('+1', style: style),
+                                    ),
+                                  ),
+                                if (lives == 1 || roll > 0)
+                                  FractionalTranslation(
+                                    translation: Offset(
+                                      0,
+                                      lives == 1 ? 0 : 1 - roll,
+                                    ),
+                                    child: Opacity(
+                                      opacity: lives == 1 ? 1 : roll,
+                                      child: Text('+$lives', style: style),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class RevelationParchment extends StatelessWidget {
