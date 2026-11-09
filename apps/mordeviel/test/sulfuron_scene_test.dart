@@ -10,6 +10,8 @@ import 'package:mordeviel/village/sulfuron_scene.dart';
 
 void main() {
   test('Chaque édition possède ses règles et son illustration', () {
+    expect(File('assets/village/fire.gif').existsSync(), isTrue);
+    expect(File('assets/village/fire-65.gif').existsSync(), isTrue);
     expect(File('assets/cards/sulfuron.png').existsSync(), isTrue);
     expect(
       File('assets/cards/intense/sulfuron_intense.jpg').existsSync(),
@@ -26,10 +28,52 @@ void main() {
       contains('définitive'),
     );
   });
+  testWidgets('Le Test réussi 1 place le GIF animé sur le haut de la cavité', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SizedBox(
+          width: 280,
+          height: 400,
+          child: BurningCard(
+            progress: .5,
+            child: const ColoredBox(color: Colors.amber),
+          ),
+        ),
+      ),
+    );
+    final fire = tester.widget<Image>(find.byType(Image));
+    expect(fire.image, isA<AssetImage>());
+    expect((fire.image as AssetImage).assetName, 'assets/village/fire-65.gif');
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(tester.takeException(), isNull);
+  });
+  testWidgets(
+    'Le feu montant conserve le GIF fourni à la place des flammes dessinées',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SizedBox(
+            width: 280,
+            height: 400,
+            child: BottomUpGifBurningCard(
+              progress: .5,
+              child: const ColoredBox(color: Colors.amber),
+            ),
+          ),
+        ),
+      );
+      final fire = tester.widget<Image>(find.byType(Image));
+      expect((fire.image as AssetImage).assetName, 'assets/village/fire.gif');
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets(
     'La combustion retire progressivement le papier jusqu’à la cendre',
     (tester) async {
-      for (final progress in [0.0, .5, 1.0]) {
+      for (final progress in [0.0, .2, .4, .6, 1.0]) {
         await tester.pumpWidget(
           MaterialApp(
             home: Center(
@@ -45,11 +89,11 @@ void main() {
           ),
         );
         final path = tester
-            .widget<ClipPath>(find.byType(ClipPath))
+            .widget<ClipPath>(find.byType(ClipPath).first)
             .clipper!
             .getClip(const Size(280, 400));
-        expect(path.contains(const Offset(140, 100)), progress < 1);
-        expect(path.contains(const Offset(140, 350)), progress == 0);
+        expect(path.contains(const Offset(140, 200)), progress == 0);
+        expect(path.contains(const Offset(20, 20)), progress < 1);
         expect(tester.takeException(), isNull);
       }
     },
@@ -181,6 +225,8 @@ void main() {
     expect(find.text('+1 vie volée'), findsOneWidget);
     expect(find.text('2 vies en réserve'), findsOneWidget);
     expect(find.textContaining('Le vote, le poison'), findsOneWidget);
+    expect(find.byType(BurningCard), findsNothing);
+    expect(find.byType(BottomUpGifBurningCard), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.tap(find.text('Continuer'));
     await tester.pumpAndSettle();

@@ -13,6 +13,7 @@ print('Shared MDJ texts synchronized.')
 
 labels = {
     'sulfuron': 'Sulfuron',
+    'village_watch': 'Éclaireurs et Veilleurs',
     'sisters': 'Deux Sœurs', 'mayor_election': 'Élection du Maire', 'mayor_succession': 'Succession du Maire',
     'role_reveal': 'Découverte du rôle', 'sleep': 'Le village s’endort',
     'seer': 'Voyante', 'wolves': 'Loups-Garous', 'witch': 'Sorcière',

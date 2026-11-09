@@ -1,0 +1,349 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:math' as math;
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import '../cards/card_gallery.dart';
+import '../cards/classic_role.dart';
+import '../content/content_image.dart';
+
+const wolfDevourVideoAsset = 'assets/village/horror/wolf_devour.mp4';
+const whiteWolfDevourVideoAsset = 'assets/village/horror/white_wolf_devour.mp4';
+const wolfDevourVideoDurationMilliseconds = 10030;
+const wolfRoleCardIds = {'werewolf', 'alpha_wolf', 'wolf_father', 'white_wolf'};
+
+double wolfDevourCardRevealProgress(double deathProgress) =>
+    Curves.easeInOut.transform(((deathProgress - .04) / .12).clamp(0.0, 1.0));
+
+String? wolfDevourVideoFor({
+  required String cause,
+  required CardAmbience ambience,
+  required String? role,
+}) {
+  if (ambience != CardAmbience.horror || role == null) return null;
+  if (cause == 'white_wolf' && wolfRoleCardIds.contains(role)) {
+    return whiteWolfDevourVideoAsset;
+  }
+  if (cause == 'night' || cause == 'white_wolf') {
+    return wolfDevourVideoAsset;
+  }
+  return null;
+}
+
+class WolfDevourVideo extends StatefulWidget {
+  const WolfDevourVideo({
+    super.key,
+    required this.role,
+    required this.videoPath,
+    required this.whiteWolfFinishing,
+    required this.revealProgress,
+    required this.concealed,
+    required this.onPlaybackStarted,
+    required this.onPlaybackFailed,
+  });
+
+  final ClassicRole role;
+  final String videoPath;
+  final bool whiteWolfFinishing;
+  final double revealProgress;
+  final bool concealed;
+  final VoidCallback onPlaybackStarted;
+  final VoidCallback onPlaybackFailed;
+
+  @override
+  State<WolfDevourVideo> createState() => _WolfDevourVideoState();
+}
+
+class _WolfDevourVideoState extends State<WolfDevourVideo>
+    with WidgetsBindingObserver {
+  late final VideoPlayerController _controller;
+  bool _ready = false;
+  bool _failed = false;
+  bool _needsReveal = false;
+  late bool _foreground;
+  Future<void> _playback = Future<void>.value();
+
+  @override
+  void initState() {
+    super.initState();
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _foreground = lifecycle == null || lifecycle == AppLifecycleState.resumed;
+    WidgetsBinding.instance.addObserver(this);
+    _controller = VideoPlayerController.file(
+      File(widget.videoPath),
+      // This widget controls pause and resume, including the privacy mask.
+      videoPlayerOptions: VideoPlayerOptions(
+        mixWithOthers: true,
+        allowBackgroundPlayback: true,
+      ),
+    )..addListener(_onVideoChanged);
+    unawaited(_prepareVideo());
+  }
+
+  Future<void> _prepareVideo() async {
+    try {
+      await _controller.initialize().timeout(const Duration(seconds: 8));
+      if (!mounted) return;
+      await _controller.setLooping(false);
+      if (!mounted) return;
+      setState(() => _ready = true);
+      _syncPlayback();
+    } catch (error, stackTrace) {
+      _fail(error, stackTrace);
+    }
+  }
+
+  void _onVideoChanged() {
+    if (!mounted) return;
+    final value = _controller.value;
+    if (value.hasError) {
+      _fail(
+        StateError(value.errorDescription ?? 'Lecture vidéo impossible.'),
+        StackTrace.current,
+      );
+    } else {
+      setState(() {});
+    }
+  }
+
+  void _fail(Object error, StackTrace stackTrace) {
+    if (_failed) return;
+    _failed = true;
+    debugPrint('Vidéo de dévoration indisponible : $error\n$stackTrace');
+    if (mounted) widget.onPlaybackFailed();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _foreground = state == AppLifecycleState.resumed;
+    if (!_foreground) _needsReveal = true;
+    _syncPlayback();
+  }
+
+  @override
+  void didUpdateWidget(covariant WolfDevourVideo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.concealed != oldWidget.concealed) {
+      if (!widget.concealed) _needsReveal = false;
+      _syncPlayback();
+    }
+  }
+
+  bool get _canPlay => _foreground && !widget.concealed && !_needsReveal;
+
+  void _syncPlayback() {
+    _playback = _playback
+        .then((_) async {
+          if (!mounted || !_ready || _failed) return;
+          final play = _canPlay && !_controller.value.isCompleted;
+          if (play == _controller.value.isPlaying) return;
+          if (play) {
+            await _controller.play();
+            if (mounted && _canPlay && !_failed) widget.onPlaybackStarted();
+          } else {
+            await _controller.pause();
+          }
+        })
+        .catchError((Object error, StackTrace stackTrace) {
+          if (mounted) _fail(error, stackTrace);
+        });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.removeListener(_onVideoChanged);
+    unawaited(_controller.dispose());
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_failed) return const SizedBox.expand();
+    if (!_ready || widget.concealed) {
+      return const ColoredBox(color: Color(0xFF080B10));
+    }
+    final value = _controller.value;
+    final pose = _wolfDevourPose(
+      value.position,
+      whiteWolfFinishing: widget.whiteWolfFinishing,
+    );
+    final reveal = Curves.easeInOut.transform(
+      widget.revealProgress.clamp(0.0, 1.0),
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            VideoPlayer(_controller),
+            if (pose.opacity > 0)
+              Positioned(
+                left: size.width * pose.left,
+                top: size.height * pose.top,
+                width: size.width * pose.width,
+                height: size.height * pose.height,
+                child: Transform.rotate(
+                  angle: pose.rotation,
+                  child: Opacity(
+                    opacity: pose.opacity,
+                    child: ClipPath(
+                      clipper: _WolfBiteClipper(pose.bite),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Opacity(
+                            opacity: 1 - reveal,
+                            child: const ContentImage(
+                              'assets/village/horror/card_back.png',
+                              fit: BoxFit.fill,
+                              fallbackAsset: 'assets/village/card_back.png',
+                            ),
+                          ),
+                          Opacity(
+                            opacity: reveal,
+                            child: Transform.scale(
+                              scaleX: 1.08,
+                              child: RoleCardFront(
+                                role: widget.role,
+                                ambience: CardAmbience.horror,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _WolfDevourPose {
+  const _WolfDevourPose({
+    required this.left,
+    required this.top,
+    required this.width,
+    required this.height,
+    required this.bite,
+    required this.opacity,
+    required this.rotation,
+  });
+
+  final double left;
+  final double top;
+  final double width;
+  final double height;
+  final double bite;
+  final double opacity;
+  final double rotation;
+
+  static const keyframes = [
+    (0.0, .224, .390, .552, .430, 0.0, 1.0, 0.0),
+    (1.5, .224, .390, .552, .430, 0.0, 1.0, 0.0),
+    (3.0, .198, .390, .604, .476, 0.0, 1.0, 0.0),
+    (4.6, .180, .390, .640, .500, 0.0, 1.0, 0.0),
+    (5.0, .180, .390, .640, .500, 0.0, 1.0, 0.0),
+    (5.2, .180, .390, .640, .500, 0.0, 1.0, 0.0),
+    (5.45, .230, .455, .540, .340, .16, 1.0, .015),
+    (5.7, .270, .500, .460, .240, .32, 1.0, .025),
+    (5.9, .295, .525, .415, .180, .42, .94, .012),
+    (6.2, .300, .545, .405, .120, .50, 1.0, 0.0),
+    (6.35, .305, .550, .395, .105, .55, .65, 0.0),
+    (6.5, .310, .555, .380, .090, .60, 0.0, 0.0),
+    (10.03, .310, .555, .380, .090, .60, 0.0, 0.0),
+  ];
+
+  static const whiteWolfKeyframes = [
+    (0.0, .246, .387, .528, .430, 0.0, 1.0, 0.0),
+    (2.0, .246, .387, .528, .430, 0.0, 1.0, 0.0),
+    (4.5, .243, .414, .556, .455, 0.0, 1.0, 0.0),
+    (5.0, .243, .414, .556, .455, 0.0, 1.0, 0.0),
+    (5.4, .250, .425, .540, .440, 0.0, 1.0, 0.0),
+    (5.8, .270, .470, .490, .360, 0.0, 1.0, 0.0),
+    (6.2, .280, .500, .460, .310, 0.0, .95, 0.0),
+    (6.6, .290, .520, .440, .270, 0.0, .72, 0.0),
+    (7.0, .300, .540, .420, .230, 0.0, .30, 0.0),
+    (7.4, .305, .550, .400, .200, 0.0, 0.0, 0.0),
+    (10.03, .305, .550, .400, .200, 0.0, 0.0, 0.0),
+  ];
+}
+
+_WolfDevourPose _wolfDevourPose(
+  Duration position, {
+  required bool whiteWolfFinishing,
+}) {
+  final seconds = position.inMicroseconds / Duration.microsecondsPerSecond;
+  final frames = whiteWolfFinishing
+      ? _WolfDevourPose.whiteWolfKeyframes
+      : _WolfDevourPose.keyframes;
+  if (seconds <= frames.first.$1) return _poseFrom(frames.first);
+  for (var index = 1; index < frames.length; index++) {
+    final previous = frames[index - 1];
+    final next = frames[index];
+    if (seconds > next.$1) continue;
+    final progress = ((seconds - previous.$1) / (next.$1 - previous.$1)).clamp(
+      0.0,
+      1.0,
+    );
+    final eased = Curves.easeInOut.transform(progress);
+    return _WolfDevourPose(
+      left: _lerp(previous.$2, next.$2, eased),
+      top: _lerp(previous.$3, next.$3, eased),
+      width: _lerp(previous.$4, next.$4, eased),
+      height: _lerp(previous.$5, next.$5, eased),
+      bite: _lerp(previous.$6, next.$6, eased),
+      opacity: _lerp(previous.$7, next.$7, eased),
+      rotation: _lerp(previous.$8, next.$8, eased),
+    );
+  }
+  return _poseFrom(frames.last);
+}
+
+_WolfDevourPose _poseFrom(
+  (double, double, double, double, double, double, double, double) frame,
+) => _WolfDevourPose(
+  left: frame.$2,
+  top: frame.$3,
+  width: frame.$4,
+  height: frame.$5,
+  bite: frame.$6,
+  opacity: frame.$7,
+  rotation: frame.$8,
+);
+
+double _lerp(double start, double end, double progress) =>
+    start + (end - start) * progress;
+
+class _WolfBiteClipper extends CustomClipper<Path> {
+  const _WolfBiteClipper(this.progress);
+
+  final double progress;
+
+  @override
+  Path getClip(Size size) {
+    final bite = progress.clamp(0.0, 1.0);
+    if (bite == 0) return Path()..addRect(Offset.zero & size);
+    if (bite == 1) return Path();
+    final path = Path()..moveTo(0, size.height * bite);
+    for (var index = 1; index <= 40; index++) {
+      final x = size.width * index / 40;
+      final teeth = math.sin(index * 2.71) * size.height * .012 * bite;
+      path.lineTo(x, (size.height * bite + teeth).clamp(0.0, size.height));
+    }
+    return path
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(covariant _WolfBiteClipper oldClipper) =>
+      oldClipper.progress != progress;
+}

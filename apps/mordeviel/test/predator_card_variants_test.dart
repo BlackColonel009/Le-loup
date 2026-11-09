@@ -1,15 +1,31 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:local_host/local_host.dart';
 import 'card_variants_test.dart' show make, act, wolves, nextNight;
 
 void main() {
+  test('La Sorcière reste appelable si l’Alpha n’a pas de seconde cible', () {
+    final g = NightGame({'w': 'alpha_wolf', 's': 'witch'});
+    g.startNight();
+    wolves(g, 's');
+    final alpha = (g.hostState['night_actions'] as List).cast<Map>().firstWhere(
+      (action) => action['action'] == 'alpha',
+    );
+    expect(alpha['available'], isFalse);
+    expect(alpha['reason'], contains('seconde cible'));
+    g.callNight('witch');
+    expect(g.phase, 'witch');
+  });
+
   test(
     'Alpha tenace : une dernière seconde attaque après la perte d’un loup',
     () {
-      final g = make(
-        roles: {
+      final g = NightGame(
+        {
           'a': 'alpha_wolf',
           'w2': 'werewolf',
           'x': 'witch',
+          'b': 'villager',
+          'c': 'villager',
           'e': 'villager',
           'f': 'villager',
           'g': 'villager',
@@ -24,10 +40,18 @@ void main() {
       nextNight(g);
       wolves(g, 'b');
       g.callNight('alpha');
+      expect(
+        BotDecisions().next('a', g.publicState, g.privateState('a'))?['action'],
+        'alpha.choose',
+      );
       act(g, 'a', 'alpha.choose', targets: ['c']);
       g.advance();
       nextNight(g);
       expect(() => g.callNight('alpha'), throwsStateError);
+      expect(
+        g.nightActions.singleWhere((a) => a['action'] == 'alpha')['reason'],
+        contains('déjà été utilisée'),
+      );
       expect(g.alive, isNot(contains('b')));
       expect(g.alive, isNot(contains('c')));
     },
@@ -145,12 +169,46 @@ void main() {
       expect(g.privateState('a')['infected'], isFalse);
       wolves(g, null);
       g.callNight('infection');
+      expect(
+        BotDecisions().next('p', g.publicState, g.privateState('p'))?['action'],
+        'infection.activate',
+      );
       act(g, 'p', 'infection.activate', targets: ['a']);
       expect(g.privateState('a')['infected'], isTrue);
       expect(
         () => act(g, 'p', 'infection.convert', targets: ['b']),
         throwsStateError,
       );
+    },
+  );
+  test(
+    'Le Père des Loups bot peut infecter la victime de sa chasse en solitaire',
+    () {
+      for (final edition in ['intense', 'horror']) {
+        final g = NightGame(
+          {
+            'p': 'wolf_father',
+            'a': 'villager',
+            'b': 'villager',
+            'c': 'villager',
+            'd': 'villager',
+          },
+          editions: {'p': edition},
+        );
+        g.startNight();
+        wolves(g, 'a');
+        g.callNight('infection');
+        final move = BotDecisions().next(
+          'p',
+          g.publicState,
+          g.privateState('p'),
+        );
+        expect(move?['action'], startsWith('infection.'));
+        g.act('p', move!);
+        g.advance();
+        g.finishNight();
+        expect(g.alive, contains('a'));
+      }
     },
   );
 }

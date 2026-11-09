@@ -13,7 +13,7 @@ const _nightCalls = {
   'white_wolf': ('white_wolf', 'le Loup Blanc'),
   'piper': ('piper', 'le Joueur de Flûte'),
   'sulfuron': ('sulfuron', 'Sulfuron'),
-  'village_watch': ('villager', 'les Veilleurs du village'),
+  'village_watch': ('villager', 'les Éclaireurs et Veilleurs'),
   'elder_watch': ('elder', 'les Anciens du village'),
   'lovers': ('bond', 'les Amoureux'),
 };
@@ -164,6 +164,7 @@ extension _AdditionalRoles on NightGame {
       for (final preceding in ['alpha', 'infection']) {
         if (_callExists(preceding) &&
             _attack != null &&
+            _dependency(preceding) == null &&
             !_nightCompleted.contains(preceding)) {
           return 'Terminez ou passez ${_nightCalls[preceding]!.$2} avant la Sorcière.';
         }
@@ -174,24 +175,44 @@ extension _AdditionalRoles on NightGame {
         !(action == 'infection' &&
             alive.any((id) => _dormantTargets(id).isNotEmpty)))
       return 'Aucune victime de la meute cette nuit.';
+    if (action == 'alpha' &&
+        alive.every((id) => _isWolf(id) || id == _attack)) {
+      return 'Aucune seconde cible vivante hors de la meute.';
+    }
     return null;
   }
 
-  List<Map<String, dynamic>> _buildNightActions() => [
-    for (final action in _nightCalls.keys)
-      if (_callExists(action) || _nightCompleted.contains(action))
-        {
-          'action': action,
-          'label': 'Appeler ${_nightCalls[action]!.$2}',
-          'completed': _nightCompleted.contains(action),
-          'available':
-              phase == 'sleep' &&
-              !_nightCompleted.contains(action) &&
-              _dependency(action) == null,
-          if (!_nightCompleted.contains(action) && _dependency(action) != null)
-            'reason': _dependency(action),
-        },
-  ];
+  List<Map<String, dynamic>> _buildNightActions() {
+    final actions = <Map<String, dynamic>>[];
+    for (final entry in _nightCalls.entries) {
+      final action = entry.key;
+      final exists = _callExists(action);
+      final completed = _nightCompleted.contains(action);
+      String? reason;
+      if (!exists && !completed) {
+        if (action == 'alpha' && _hasLivingRole('alpha_wolf')) {
+          final alpha = alive.firstWhere((id) => roles[id] == 'alpha_wolf');
+          reason = editionOf(alpha) == 'intense'
+              ? 'L’ultime seconde attaque a déjà été utilisée.'
+              : 'La seconde attaque est perdue depuis la mort d’un loup.';
+        } else if (action == 'infection' && _hasLivingRole('wolf_father')) {
+          reason = 'L’infection unique a déjà été utilisée.';
+        } else {
+          continue;
+        }
+      } else if (!completed) {
+        reason = _dependency(action);
+      }
+      actions.add({
+        'action': action,
+        'label': 'Appeler ${entry.value.$2}',
+        'completed': completed,
+        'available': phase == 'sleep' && exists && !completed && reason == null,
+        if (reason != null) 'reason': reason,
+      });
+    }
+    return actions;
+  }
 
   String _extraAnnouncement() => phase == 'mayor_election'
       ? 'Le village élit son Maire. Chaque bulletin compte pour une voix.'
@@ -203,8 +224,6 @@ extension _AdditionalRoles on NightGame {
       ? 'Bouc émissaire, désigne les joueurs qui pourront voter demain.'
       : phase == 'lovers'
       ? 'Amoureux, ouvrez les yeux. Votre rencontre commence.'
-      : phase == 'village_watch'
-      ? 'Éclaireurs et Veilleurs, ouvrez les yeux. Quelle maison souhaitez-vous observer ?'
       : phase == 'elder_watch'
       ? 'Ancien, ouvre les yeux. Souhaites-tu transmettre ta résistance ou annoncer ton présage ?'
       : _nightCalls.containsKey(phase)
@@ -632,8 +651,12 @@ extension _AdditionalRoles on NightGame {
           _extra.protected != null &&
           (id == _extra.protected || roles[id] == 'guardian'))
         'guardian_protected_id': _extra.protected,
-      if (_isWolf(id) && phase == 'wolves')
+      if (phase == 'wolves' && alive.contains(id) && _isWolf(id))
         'spotted_girls': _extra.spotted.toList(),
+      if (phase == 'wolves' &&
+          roles[id] == 'little_girl' &&
+          _extra.spotted.contains(id))
+        'peek_spotted': true,
       if (ability != null) ...{'ability': ability, 'can_act': ready},
       if (_expandedAbilities(id).isNotEmpty) ...{
         'can_act':
@@ -651,6 +674,7 @@ extension _AdditionalRoles on NightGame {
   }
 
   Map<String, dynamic> get _additionalHost => {
+    if (phase == 'wolves') 'spotted_girls': _extra.spotted.toList(),
     'editions': Map.of(_editions),
     'variant_results': {
       for (final entry in _variantInfo.entries) entry.key: entry.value,

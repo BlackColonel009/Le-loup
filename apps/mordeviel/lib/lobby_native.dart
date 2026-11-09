@@ -884,7 +884,8 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
               event['role'] as String?,
               feminine: _femaleFor(event['player']),
               cursed: event['elder_curse'] == true,
-              cause: event['effect'] as String? ?? event['cause'] as String?,
+              burning: event['effect'] == 'sulfuron_fire',
+              cause: event['cause'] as String?,
               edition: event['edition'] as String? ?? _ambience.asset,
             ),
             onDismissed: ClassicAudio.instance.stopDeathSpeech,
@@ -1916,6 +1917,25 @@ class _LocalLobbyScreenState extends State<LocalLobbyScreen>
             reactions: mapReactions,
             onPointerActivity: _mapPointerActivity,
             protectedPlayerId: _protectedPlayerId(game),
+            spyingHouses: {
+              if (game?['phase'] == 'wolves') ...[
+                if (_host != null)
+                  ...((_room?['game_host'] as Map?)?['spotted_girls']
+                              as List? ??
+                          const [])
+                      .whereType<String>()
+                else if (_nightPrivate?['phase_revision'] ==
+                    game?['phase_revision']) ...[
+                  ...(_nightPrivate?['spotted_girls'] as List? ?? const [])
+                      .whereType<String>(),
+                  if (_nightPrivate?['role'] == 'little_girl' &&
+                      _nightPrivate?['alive'] == true &&
+                      _nightPrivate?['is_pack'] != true &&
+                      _client?.id != null)
+                    _client!.id!,
+                ],
+              ],
+            },
             displayHeight: mapHeight,
             room: _room!,
             selfId: _client?.id,

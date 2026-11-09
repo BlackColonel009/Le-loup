@@ -4,6 +4,8 @@ import '../audio/classic_audio.dart';
 import '../cards/card_gallery.dart';
 import '../cards/classic_role.dart';
 
+export 'burning_card.dart' show BurningCard;
+
 /// Public announcements contain the announced card only, never the caster.
 Future<void> showSulfuronScene(
   BuildContext context, {
@@ -31,11 +33,13 @@ class _SulfuronScene extends StatefulWidget {
 }
 
 class _SulfuronSceneState extends State<_SulfuronScene>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final _motion = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 4800),
   );
+  bool _concealed = false;
+  bool _announced = false;
   bool get _revelation => widget.event['kind'] == 'revelation';
   bool get _gain => widget.event['kind'] == 'soul_gained';
   bool get _bluff => widget.event['power'] == 'bluff';
@@ -47,20 +51,39 @@ class _SulfuronSceneState extends State<_SulfuronScene>
   @override
   void initState() {
     super.initState();
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _concealed = lifecycle != null && lifecycle != AppLifecycleState.resumed;
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      MediaQuery.disableAnimationsOf(context)
-          ? _motion.value = 1
-          : _motion.forward();
+      if (mounted && !_concealed) _reveal();
+    });
+  }
+
+  void _reveal() {
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _motion.value = 1;
+    } else if (!_motion.isCompleted) {
+      _motion.forward();
+    }
+    if (!_announced) {
+      _announced = true;
       ClassicAudio.instance.sulfuronSpeech(
         _revelation ? (_bluff ? 'bluff' : 'reveal') : 'revive',
         private: !_revelation && widget.event['kind'] != 'resurrection',
       );
-    });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed || _concealed) return;
+    _motion.stop();
+    setState(() => _concealed = true);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     ClassicAudio.instance.stopDeathSpeech();
     _motion.dispose();
     super.dispose();
@@ -68,6 +91,24 @@ class _SulfuronSceneState extends State<_SulfuronScene>
 
   @override
   Widget build(BuildContext context) {
+    if (_concealed) {
+      return AlertDialog(
+        title: const Text('Carte masquée'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Continuer'),
+          ),
+          FilledButton(
+            onPressed: () {
+              setState(() => _concealed = false);
+              _reveal();
+            },
+            child: const Text('Afficher la carte'),
+          ),
+        ],
+      );
+    }
     final role =
         widget.event['role'] as String? ??
         (_revelation || widget.event['kind'] == 'resurrection'
@@ -316,18 +357,56 @@ class RevelationParchment extends StatelessWidget {
   }
 }
 
-/// A ragged advancing combustion front with ember cores, char and rising ash.
-class BurningCard extends StatelessWidget {
-  const BurningCard({super.key, required this.progress, required this.child});
+/// The previous rising-fire effect, retained with the supplied animated GIF.
+class BottomUpGifBurningCard extends StatelessWidget {
+  const BottomUpGifBurningCard({
+    super.key,
+    required this.progress,
+    required this.child,
+  });
+
   final double progress;
   final Widget child;
+
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'La carte brûle et devient cendre',
+    label: 'La carte brûle du bas vers le haut',
     child: Stack(
       fit: StackFit.expand,
       children: [
         ClipPath(clipper: _BurnClipper(progress), child: child),
+        if (progress > .03 && progress < 1)
+          IgnorePointer(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = constraints.biggest;
+                final fireWidth = size.width * 1.08;
+                final fireHeight = size.height * .52;
+                final edge = _edge(size.width / 2, size, progress);
+                final opacity = math.sin(math.pi * progress).clamp(0.0, 1.0);
+                return Stack(
+                  children: [
+                    Positioned(
+                      left: (size.width - fireWidth) / 2,
+                      top: edge - fireHeight * .76,
+                      width: fireWidth,
+                      height: fireHeight,
+                      child: Opacity(
+                        opacity: opacity,
+                        child: Image.asset(
+                          'assets/village/fire.gif',
+                          alignment: Alignment.bottomCenter,
+                          fit: BoxFit.cover,
+                          gaplessPlayback: true,
+                          filterQuality: FilterQuality.medium,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         IgnorePointer(child: CustomPaint(painter: _BurnPainter(progress))),
       ],
     ),
@@ -346,6 +425,41 @@ Path _front(Size s, double p, [double shift = 0]) {
     path.lineTo(x, _edge(x, s, p) + shift);
   }
   return path;
+}
+
+void _drawFallingAsh(Canvas canvas, Size size, double progress) {
+  for (var i = 0; i < 22; i++) {
+    final seed = i.toDouble();
+    final age = (progress * 2.6 + seed * .173) % 1;
+    final originX = ((seed * 47.17 + 13) % 100) / 100 * size.width;
+    final drift = math.sin(age * math.pi * 2 + seed * 2.7) * size.width * .018;
+    final x = originX + drift + age * size.width * .035;
+    final y = _edge(originX, size, progress) + age * size.height * .28;
+    final opacity = (1 - age) * math.sin(math.pi * progress) * .8;
+    final width = size.shortestSide * (.008 + (seed % 3) * .002);
+    final height = width * (1.2 + (seed % 4) * .35);
+    final rotation = age * math.pi * 2 + seed * 1.9;
+    final shard = Path()
+      ..moveTo(-width * .5, -height * .35)
+      ..lineTo(width * .32, -height * .5)
+      ..lineTo(width * .5, height * .18)
+      ..lineTo(-width * .12, height * .5)
+      ..close();
+
+    canvas.save();
+    canvas.translate(x, y);
+    canvas.rotate(rotation);
+    canvas.drawPath(
+      shard,
+      Paint()
+        ..color = Color.lerp(
+          const Color(0xFF3A3028),
+          const Color(0xFFB05A25),
+          (seed % 5) / 5,
+        )!.withValues(alpha: opacity),
+    );
+    canvas.restore();
+  }
 }
 
 class _BurnClipper extends CustomClipper<Path> {
@@ -393,6 +507,7 @@ class _BurnPainter extends CustomPainter {
         ..strokeWidth = 3
         ..color = const Color(0xFFFFD18B),
     );
+    _drawFallingAsh(c, s, p);
     for (var i = 0; i < 42; i++) {
       final x = ((i * 73.91) % 100) / 100 * s.width;
       final phase = (p * 3.4 + i * .173) % 1;
@@ -415,32 +530,6 @@ class _BurnPainter extends CustomPainter {
             phase,
           )!.withValues(alpha: opacity),
       );
-      if (i.isEven) {
-        final base = _edge(x, s, p);
-        final flame = Path()
-          ..moveTo(x - 6, base + 5)
-          ..quadraticBezierTo(
-            x - 10,
-            base - 12,
-            x + math.sin(i + p * 30) * 6,
-            base - 18 - 22 * phase,
-          )
-          ..quadraticBezierTo(x + 12, base - 8, x + 6, base + 5)
-          ..close();
-        c.drawPath(
-          flame,
-          Paint()
-            ..shader = LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                const Color(0xFFFFCC68),
-                const Color(0xFFFF6810).withValues(alpha: .6),
-                Colors.transparent,
-              ],
-            ).createShader(Rect.fromLTWH(x - 12, base - 45, 24, 50)),
-        );
-      }
     }
     c.restore();
   }

@@ -11,3 +11,5 @@ export 'src/game_host.dart';
 export 'src/online_host.dart';
 export 'src/online_errors.dart';
 export 'src/test_bots.dart';
+export 'src/player_mentions.dart';
+export 'src/bot_dialogue.dart';

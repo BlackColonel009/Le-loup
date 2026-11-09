@@ -54,6 +54,10 @@ void main() {
       expect(g.privateState('f')['peek_message'], contains('Premier murmure'));
       expect(g.privateState('f')['peek_message'], contains('Second murmure'));
       expect(g.privateState('w')['spotted_girls'], contains('f'));
+      expect(g.privateState('f')['peek_spotted'], isTrue);
+      expect(g.hostState['spotted_girls'], contains('f'));
+      expect(g.publicState.containsKey('spotted_girls'), isFalse);
+      expect(g.privateState('b').containsKey('spotted_girls'), isFalse);
       expect(g.privateState('b').containsKey('peek_message'), isFalse);
     },
   );

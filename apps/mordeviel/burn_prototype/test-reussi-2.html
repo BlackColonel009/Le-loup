@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test 2 · Coins fondants</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Segoe UI", sans-serif;
+      background: #100d0b;
+      color: #f2e6d5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background:
+        radial-gradient(ellipse at 50% 42%, #382014 0, #18110d 43%, #100d0b 76%);
+    }
+
+    main {
+      width: min(100%, 620px);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      color: #ffd08a;
+      font-size: clamp(20px, 4vw, 29px);
+      letter-spacing: .02em;
+    }
+
+    .description {
+      margin: 9px auto 16px;
+      color: #d3c4b2;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .tests {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      font-size: 13px;
+    }
+
+    .tests a { color: #ffd08a; }
+
+    .stage {
+      position: relative;
+      overflow: hidden;
+      width: min(100%, 560px);
+      margin: 0 auto;
+      border: 1px solid #55351e;
+      border-radius: 18px;
+      background: #100d0b;
+      box-shadow: 0 16px 70px #000b, 0 0 34px #ff6a1914;
+    }
+
+    .fire-overlay {
+      position: absolute;
+      z-index: 1;
+      display: none;
+      pointer-events: none;
+      filter: drop-shadow(0 0 10px #ff5412);
+      transform-origin: 50% 80%;
+      will-change: left, top, width, height, opacity, transform;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 560 / 720;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto minmax(100px, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      width: min(100%, 560px);
+      margin: 14px auto 0;
+    }
+
+    button {
+      min-width: 102px;
+      border: 1px solid #aa642d;
+      border-radius: 9px;
+      padding: 9px 13px;
+      color: #ffe3b4;
+      background: linear-gradient(#482919, #2a1b13);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover { background: #61351d; }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ff8a24;
+    }
+
+    output {
+      min-width: 44px;
+      color: #d5b997;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .caption {
+      min-height: 22px;
+      margin: 9px 0 0;
+      color: #c9b8a5;
+      font-size: 13px;
+    }
+
+    .note {
+      margin: 10px 0 0;
+      color: #827568;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Test 2 · La carte se ronge</h1>
+    <p class="description">
+      Trois foyers fusionnent avec le feu central, puis le coin haut gauche
+      s’embrase à son tour et entraîne le dernier lambeau.
+    </p>
+    <nav class="tests" aria-label="Tests de combustion">
+      <a href="./index.html">Test réussi 1</a>
+      <a href="./test-reussi-2.html" aria-current="page">Test 2 · Coins fondants</a>
+    </nav>
+    <div class="stage">
+      <canvas id="burn" width="1120" height="1440"
+        aria-label="Aperçu de la carte qui brûle du centre vers les bords"></canvas>
+      <img id="fire-center" class="fire-overlay" src="./fire-65.gif" alt="" aria-hidden="true">
+      <img id="fire-bottom-left" class="fire-overlay" src="./fire-65.gif" alt="" aria-hidden="true">
+      <img id="fire-bottom-right" class="fire-overlay" src="./fire-65.gif" alt="" aria-hidden="true">
+      <img id="fire-top-right" class="fire-overlay" src="./fire-65.gif" alt="" aria-hidden="true">
+      <img id="fire-top-left" class="fire-overlay" src="./fire-65.gif" alt="" aria-hidden="true">
+    </div>
+    <div class="controls">
+      <button id="toggle" type="button">Pause</button>
+      <input id="scrub" type="range" min="0" max="1000" value="0"
+        aria-label="Position de l’animation">
+      <output id="time">0 %</output>
+    </div>
+    <p class="caption" id="caption" aria-live="polite">Le feu perce le centre…</p>
+    <p class="note">Prototype indépendant · aucun fichier du jeu ni configuration de build n’est modifié.</p>
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.querySelector("#burn");
+      const ctx = canvas.getContext("2d");
+      const card = new Image();
+      card.src = "../assets/cards/sulfuron.png";
+
+      const cardRect = { x: 108, y: 38, width: 344, height: 491 };
+      const lastCornerStart = .72;
+      const lastCornerEnd = .93;
+      const shredStart = .92;
+      const fireCenter = document.querySelector("#fire-center");
+      const cornerFires = [
+        { image: document.querySelector("#fire-bottom-left"), x: 0, y: cardRect.height },
+        { image: document.querySelector("#fire-bottom-right"), x: cardRect.width, y: cardRect.height },
+        { image: document.querySelector("#fire-top-right"), x: cardRect.width, y: 0 },
+        { image: document.querySelector("#fire-top-left"), x: 0, y: 0, last: true }
+      ];
+      const size = { width: 560, height: 720 };
+      const offscreen = document.createElement("canvas");
+      offscreen.width = cardRect.width * 2;
+      offscreen.height = cardRect.height * 2;
+      const paper = offscreen.getContext("2d");
+      const scrub = document.querySelector("#scrub");
+      const toggle = document.querySelector("#toggle");
+      const output = document.querySelector("#time");
+      const caption = document.querySelector("#caption");
+      const duration = 7200;
+      let startedAt = performance.now();
+      let progress = 0;
+      let playing = true;
+      let scrubbing = false;
+      let previousFrame = 0;
+
+      const fract = value => value - Math.floor(value);
+      const hash = value => fract(Math.sin(value * 127.1 + 311.7) * 43758.5453);
+      const ease = value => {
+        const t = Math.max(0, Math.min(1, value));
+        return t * t * (3 - 2 * t);
+      };
+
+      function drawBackdrop(time) {
+        const background = ctx.createLinearGradient(0, 0, 0, size.height);
+        background.addColorStop(0, "#21150f");
+        background.addColorStop(.58, "#15100c");
+        background.addColorStop(1, "#080707");
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, size.width, size.height);
+
+        const glow = ctx.createRadialGradient(280, 290, 4, 280, 290, 350);
+        glow.addColorStop(0, `rgba(255, 91, 13, ${.06 + Math.sin(time * 7) * .015})`);
+        glow.addColorStop(1, "rgba(255, 91, 13, 0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, size.width, size.height);
+
+        ctx.strokeStyle = "#b8753b22";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(35, 632);
+        ctx.lineTo(525, 632);
+        ctx.stroke();
+      }
+
+      function edgeDistance(angle) {
+        const dx = Math.cos(angle);
+        const dy = Math.sin(angle);
+        const halfWidth = cardRect.width / 2;
+        const halfHeight = cardRect.height / 2;
+        const tx = Math.abs(dx) < 1e-5 ? Infinity : halfWidth / Math.abs(dx);
+        const ty = Math.abs(dy) < 1e-5 ? Infinity : halfHeight / Math.abs(dy);
+        return Math.min(tx, ty);
+      }
+
+      function boundaryRadius(angle, amount, time) {
+        const edge = edgeDistance(angle);
+        const shortest = Math.min(cardRect.width, cardRect.height);
+        const circle = shortest * .47 * amount;
+        const reach = ease((amount - .58) / .4);
+        const expanding = circle * (1 - reach) + edge * amount * reach;
+        const roughness =
+          Math.sin(angle * 5 + .4) * .48 +
+          Math.sin(angle * 11 - 1.2) * .28 +
+          Math.sin(angle * 23 + 2.1) * .16 +
+          Math.sin(angle * 39 - .8) * .08;
+        const flicker = Math.sin(angle * 17 + time * 8) * shortest * .004;
+        const jagged = Math.min(shortest * .052, Math.max(shortest * .008, edge * .13));
+        return Math.max(0, expanding + roughness * jagged * Math.sqrt(amount) + flicker);
+      }
+
+      function burnPath(amount, time) {
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        const path = new Path2D();
+        if (amount >= 1) {
+          path.rect(0, 0, cardRect.width, cardRect.height);
+          return path;
+        }
+        const steps = 240;
+        for (let i = 0; i <= steps; i++) {
+          const angle = i / steps * Math.PI * 2;
+          const radius = boundaryRadius(angle, amount, time);
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
+          if (i === 0) path.moveTo(x, y);
+          else path.lineTo(x, y);
+        }
+        path.closePath();
+        return path;
+      }
+
+      function cornerAmount(corner, amount, p) {
+        return corner.last
+          ? Math.pow(ease((p - lastCornerStart) / (lastCornerEnd - lastCornerStart)), .9)
+          : amount;
+      }
+
+      function cornerBurnRadius(corner, amount, time) {
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        const distance = Math.hypot(centerX - corner.x, centerY - corner.y);
+        const reach = ease((amount - .025) / .78);
+        const roughness =
+          Math.sin(time * 2.7 + corner.x) * .025 +
+          Math.sin(time * 1.9 + corner.y) * .018;
+        const extent = corner.last ? 1.02 : .86;
+        return distance * Math.max(0, reach * extent + roughness);
+      }
+
+      function cornerBurnPath(corner, amount, time) {
+        const path = new Path2D();
+        if (amount >= 1) {
+          path.rect(0, 0, cardRect.width, cardRect.height);
+          return path;
+        }
+        const radius = cornerBurnRadius(corner, amount, time);
+        const steps = 160;
+        for (let i = 0; i <= steps; i++) {
+          const angle = i / steps * Math.PI * 2;
+          const edgeNoise =
+            Math.sin(angle * 5 + corner.x * .03) * .45 +
+            Math.sin(angle * 11 + corner.y * .04) * .3 +
+            Math.sin(angle * 19 - time * 1.7) * .25;
+          const edgeRadius = Math.max(0, radius + edgeNoise * Math.min(12, radius * .075));
+          const x = corner.x + Math.cos(angle) * edgeRadius;
+          const y = corner.y + Math.sin(angle) * edgeRadius;
+          if (i === 0) path.moveTo(x, y);
+          else path.lineTo(x, y);
+        }
+        path.closePath();
+        return path;
+      }
+
+      function drawMaskedCard(amount, time, p) {
+        const width = offscreen.width;
+        const height = offscreen.height;
+        paper.clearRect(0, 0, width, height);
+        paper.save();
+        paper.scale(2, 2);
+        paper.beginPath();
+        paper.roundRect(0, 0, cardRect.width, cardRect.height, 13);
+        paper.clip();
+        paper.drawImage(card, 0, 0, cardRect.width, cardRect.height);
+        paper.globalCompositeOperation = "destination-out";
+        paper.fill(burnPath(amount, time));
+        for (const corner of cornerFires) {
+          paper.fill(cornerBurnPath(corner, cornerAmount(corner, amount, p), time));
+        }
+        paper.restore();
+
+        const shredProgress = ease((p - shredStart) / (1 - shredStart));
+        if (shredProgress === 0) {
+          ctx.drawImage(offscreen, cardRect.x, cardRect.y, cardRect.width, cardRect.height);
+          return;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = 1 - shredProgress;
+        ctx.translate(
+          cardRect.x + cardRect.width / 2 + shredProgress * 38,
+          cardRect.y + cardRect.height / 2 + shredProgress * 168
+        );
+        ctx.rotate(-shredProgress * .18);
+        ctx.drawImage(offscreen, -cardRect.width / 2, -cardRect.height / 2,
+          cardRect.width, cardRect.height);
+        ctx.restore();
+      }
+
+      function hideFire(image) {
+        image.style.display = "none";
+      }
+
+      function positionFireAtHoleTop(amount, time, p) {
+        if (!fireCenter.complete || !fireCenter.naturalWidth || p < .06 || p >= 1) {
+          hideFire(fireCenter);
+          return;
+        }
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        const horizontalRadius = Math.max(
+          boundaryRadius(0, amount, time),
+          boundaryRadius(Math.PI, amount, time)
+        );
+        const verticalRadius = Math.max(
+          boundaryRadius(Math.PI / 2, amount, time),
+          boundaryRadius(Math.PI * 1.5, amount, time)
+        );
+        const holeWidth = horizontalRadius * 2;
+        const holeHeight = verticalRadius * 2;
+        const mergeScale = 1 + .58 * ease((p - .59) / .16);
+        const baseFireWidth = Math.min(
+          holeWidth * .78,
+          holeHeight * fireCenter.naturalWidth / fireCenter.naturalHeight * .78
+        );
+        const fireWidth = Math.min(cardRect.width * .9, baseFireWidth * mergeScale);
+        const fireHeight = fireWidth * fireCenter.naturalHeight / fireCenter.naturalWidth;
+        const holeTop = centerY - verticalRadius;
+        const overlap = holeHeight * .15;
+
+        fireCenter.style.display = "block";
+        fireCenter.style.left = `${(cardRect.x + centerX - fireWidth / 2) / size.width * 100}%`;
+        fireCenter.style.top = `${(cardRect.y + holeTop + overlap - fireHeight) / size.height * 100}%`;
+        fireCenter.style.width = `${fireWidth / size.width * 100}%`;
+        fireCenter.style.height = `${fireHeight / size.height * 100}%`;
+        fireCenter.style.opacity = String(1 - ease((p - .965) / .035));
+      }
+
+      function positionCornerFire(corner, amount, time, p) {
+        const image = corner.image;
+        if (!image.complete || !image.naturalWidth || p < .06 || p >= 1) {
+          hideFire(image);
+          return;
+        }
+
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        const inwardX = centerX - corner.x;
+        const inwardY = centerY - corner.y;
+        const distance = Math.hypot(inwardX, inwardY);
+        const direction = Math.atan2(inwardY, inwardX);
+        const localAmount = cornerAmount(corner, amount, p);
+        const radius = cornerBurnRadius(corner, localAmount, time);
+        const centerRadius = boundaryRadius(direction + Math.PI, amount, time);
+        const joined = ease((radius + centerRadius - distance + 16) / 72);
+        const phaseOut = 1 - ease((p - .965) / .035);
+        const ignition = corner.last
+          ? ease((p - lastCornerStart) / .035)
+          : 1;
+        const opacity = (1 - joined) * phaseOut * ignition;
+
+        if (opacity <= .01 || radius < 2) {
+          hideFire(image);
+          return;
+        }
+
+        const fireWidth = corner.last
+          ? Math.min(194, 94 + radius * .3)
+          : Math.min(112, 42 + radius * .19);
+        const fireHeight = fireWidth * image.naturalHeight / image.naturalWidth;
+        const frontX = corner.x + inwardX / distance * radius;
+        const frontY = corner.y + inwardY / distance * radius;
+        const rotation = direction + Math.PI / 2;
+
+        image.style.display = "block";
+        image.style.left = `${(cardRect.x + frontX - fireWidth / 2) / size.width * 100}%`;
+        image.style.top = `${(cardRect.y + frontY - fireHeight * .8) / size.height * 100}%`;
+        image.style.width = `${fireWidth / size.width * 100}%`;
+        image.style.height = `${fireHeight / size.height * 100}%`;
+        image.style.opacity = String(opacity);
+        image.style.transform = `rotate(${rotation}rad)`;
+      }
+
+      function drawBurnFront(amount, time, p) {
+        if (amount < .018 || p > .985) return;
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        const opacity = Math.max(.18, 1 - Math.max(0, p - .7) * 2.8);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(cardRect.x, cardRect.y, cardRect.width, cardRect.height, 13);
+        ctx.clip();
+        ctx.translate(cardRect.x, cardRect.y);
+        ctx.shadowColor = "#8b310d";
+        ctx.shadowBlur = 5;
+        ctx.strokeStyle = `rgba(36, 20, 15, ${.98 * opacity})`;
+        ctx.lineWidth = 9;
+        ctx.stroke(burnPath(amount, time));
+        for (const corner of cornerFires) {
+          const dx = centerX - corner.x;
+          const dy = centerY - corner.y;
+          const distance = Math.hypot(dx, dy);
+          const direction = Math.atan2(dy, dx);
+          const centerRadius = boundaryRadius(direction + Math.PI, amount, time);
+          const radius = cornerBurnRadius(corner, cornerAmount(corner, amount, p), time);
+          const opacityAtJoin = 1 - ease((radius + centerRadius - distance + 16) / 72);
+          ctx.globalAlpha = opacityAtJoin;
+          ctx.stroke(cornerBurnPath(corner, amount, time));
+        }
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+
+        for (let i = 0; i < 30; i++) {
+          if (hash(i + 947) < .53) continue;
+          const angle = i / 30 * Math.PI * 2 + time * .035;
+          const end = angle + .035 + hash(i + 781) * .075;
+          ctx.beginPath();
+          for (let step = 0; step <= 6; step++) {
+            const a = angle + (end - angle) * step / 6;
+            const radius = boundaryRadius(a, amount, time);
+            const x = centerX + Math.cos(a) * radius;
+            const y = centerY + Math.sin(a) * radius;
+            if (step === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = `rgba(255, ${105 + Math.round(hash(i + 233) * 75)}, 20, ${.7 * opacity})`;
+          ctx.lineWidth = 1.4 + hash(i + 511) * 2.2;
+          ctx.shadowColor = "#ff5b0a";
+          ctx.shadowBlur = 9;
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+
+        ctx.restore();
+      }
+
+      function drawAsh(amount, time, p) {
+        if (p < .06 || p > .98) return;
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        for (let i = 0; i < 34; i++) {
+          const seed = i * 37.17;
+          const age = fract(time * .62 + hash(i + 8));
+          const angle = seed % (Math.PI * 2);
+          const radius = boundaryRadius(angle, amount, time);
+          const x = cardRect.x + centerX + Math.cos(angle) * radius +
+            Math.sin(age * 5 + seed) * 8;
+          const y = cardRect.y + centerY + Math.sin(angle) * radius + age * 106;
+          const opacity = (1 - age) * Math.sin(Math.PI * p) * .82;
+          const w = 2 + hash(i + 72) * 3.2;
+          const h = w * (1.1 + hash(i + 94));
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(age * 5 + seed);
+          ctx.fillStyle = `rgba(${85 + i % 4 * 13}, ${52 + i % 3 * 9}, ${35 + i % 3 * 5}, ${opacity})`;
+          ctx.beginPath();
+          ctx.moveTo(-w, -h * .3);
+          ctx.lineTo(w * .5, -h);
+          ctx.lineTo(w, h * .25);
+          ctx.lineTo(-w * .25, h);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawProgress(p, now) {
+        const time = now / 1000;
+        ctx.setTransform(2, 0, 0, 2, 0, 0);
+        drawBackdrop(time);
+        if (card.complete && card.naturalWidth) {
+          const amount = Math.pow(Math.max(0, Math.min(1, (p - .1) / .9)), 1.25);
+          const maskAmount = p > shredStart
+            ? Math.pow(Math.max(0, Math.min(1, (shredStart - .1) / .9)), 1.25)
+            : amount;
+          drawMaskedCard(maskAmount, time, p);
+          positionFireAtHoleTop(amount, time, p);
+          for (const corner of cornerFires) {
+            positionCornerFire(corner, amount, time, p);
+          }
+          drawBurnFront(amount, time, p);
+          drawAsh(amount, time, p);
+        } else {
+          ctx.fillStyle = "#d9c7ad";
+          ctx.font = "16px Segoe UI";
+          ctx.textAlign = "center";
+          ctx.fillText("Chargement de la carte…", size.width / 2, size.height / 2);
+        }
+        scrub.value = String(Math.round(p * 1000));
+        output.value = `${Math.round(p * 100)} %`;
+        caption.textContent = p < .2
+            ? "Le feu perce le centre et attaque les coins…"
+            : p < .58
+              ? "Les trois foyers rongent la carte…"
+              : p < lastCornerStart
+                ? "Les trois brûlures fusionnent avec le feu central…"
+                : p < shredStart
+                  ? "Le coin haut gauche s’embrase dans une grande flamme…"
+                  : p < .99
+                    ? "Le dernier lambeau se consume et tombe…"
+                    : "La carte est entièrement consumée.";
+      }
+
+      function frame(now) {
+        if (playing && !scrubbing) {
+          if (now - startedAt >= duration) startedAt = now;
+          progress = Math.min(1, (now - startedAt) / duration);
+        }
+        if (now - previousFrame > 30) {
+          drawProgress(progress, now);
+          previousFrame = now;
+        }
+        requestAnimationFrame(frame);
+      }
+
+      scrub.addEventListener("input", () => {
+        scrubbing = true;
+        playing = false;
+        toggle.textContent = "Rejouer";
+        progress = Number(scrub.value) / 1000;
+        drawProgress(progress, performance.now());
+      });
+
+      scrub.addEventListener("change", () => {
+        scrubbing = false;
+        startedAt = performance.now() - progress * duration;
+      });
+
+      toggle.addEventListener("click", () => {
+        if (playing) {
+          playing = false;
+          toggle.textContent = "Rejouer";
+        } else {
+          progress = 0;
+          startedAt = performance.now();
+          playing = true;
+          toggle.textContent = "Pause";
+        }
+      });
+
+      card.addEventListener("load", () => {
+        drawProgress(progress, performance.now());
+      });
+
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

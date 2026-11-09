@@ -189,6 +189,7 @@ class VillageMap extends StatefulWidget {
     this.onPointerActivity,
     this.reactions = const [],
     this.speakers = const {},
+    this.spyingHouses = const {},
   });
   final Map<String, dynamic> room;
   final String? selfId;
@@ -203,6 +204,7 @@ class VillageMap extends StatefulWidget {
   final ValueChanged<bool>? onPointerActivity;
   final List<Map> reactions;
   final Set<String> speakers;
+  final Set<String> spyingHouses;
   @override
   State<VillageMap> createState() => _VillageMapState();
 }
@@ -449,6 +451,11 @@ class _VillageMapState extends State<VillageMap> with WidgetsBindingObserver {
                                       width: _houseWidth,
                                       height: _spriteExtent + 28,
                                       child: _House(
+                                        spying:
+                                            game?['phase'] == 'wolves' &&
+                                            widget.spyingHouses.contains(
+                                              placement.player['id'],
+                                            ),
                                         marked:
                                             (game?['marked_houses'] as List? ??
                                                     const [])
@@ -770,10 +777,12 @@ class _House extends StatelessWidget {
     this.ready = false,
     this.paused = false,
     this.marked = false,
+    this.spying = false,
   });
   final bool ready;
   final bool paused;
   final bool marked;
+  final bool spying;
   final double spriteExtent;
   final bool protected;
   final bool intense;
@@ -853,6 +862,13 @@ class _House extends StatelessWidget {
         ),
       ),
       if (protected) Positioned.fill(child: GuardianAura(intense: intense)),
+      if (spying)
+        const Positioned(
+          left: 0,
+          right: 0,
+          top: -20,
+          child: IgnorePointer(child: Center(child: _PeekingEye())),
+        ),
       if (marked)
         Positioned(
           left: 0,
@@ -879,6 +895,82 @@ class _House extends StatelessWidget {
         ),
     ],
   );
+}
+
+class _PeekingEye extends StatefulWidget {
+  const _PeekingEye();
+  @override
+  State<_PeekingEye> createState() => _PeekingEyeState();
+}
+
+class _PeekingEyeState extends State<_PeekingEye>
+    with SingleTickerProviderStateMixin {
+  late final _motion = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 2400),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _motion.stop();
+      _motion.value = 0;
+    } else if (!_motion.isAnimating) {
+      _motion.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _motion.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: 'La Petite Fille observe la meute',
+    child: CustomPaint(
+      size: const Size(38, 23),
+      painter: _PeekingEyePainter(_motion),
+    ),
+  );
+}
+
+class _PeekingEyePainter extends CustomPainter {
+  _PeekingEyePainter(this.motion) : super(repaint: motion);
+  final Animation<double> motion;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final phase = motion.value;
+    final blink = ((phase - .91).abs() / .055).clamp(.08, 1.0);
+    final center = size.center(Offset.zero);
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.scale(1, blink);
+    final eye = Path()
+      ..moveTo(-17, 0)
+      ..quadraticBezierTo(0, -19, 17, 0)
+      ..quadraticBezierTo(0, 19, -17, 0)
+      ..close();
+    canvas.drawPath(eye, Paint()..color = const Color(0xFF252031));
+    canvas.drawPath(
+      eye,
+      Paint()
+        ..color = const Color(0xFFF6D499)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.8,
+    );
+    final pupil = Offset(7 * math.sin(phase * 2 * math.pi), 0);
+    canvas.drawCircle(pupil, 5, Paint()..color = const Color(0xFFFFC16F));
+    canvas.drawCircle(pupil, 2.4, Paint()..color = const Color(0xFF252031));
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _PeekingEyePainter oldDelegate) =>
+      oldDelegate.motion != motion;
 }
 
 class _HouseGroundGlow extends CustomPainter {

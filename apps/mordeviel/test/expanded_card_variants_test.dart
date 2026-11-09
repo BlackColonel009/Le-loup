@@ -19,6 +19,10 @@ void main() {
     final g = make(editions: {'a': 'intense'});
     g.startNight();
     g.callNight('village_watch');
+    expect(
+      (g.publicState['narration_events'] as List).last['cue'],
+      'mdj_village_watch.wav',
+    );
     act(g, 'a', 'villager.watch', targets: ['b']);
     expect(
       () => act(g, 'a', 'villager.watch', targets: ['c']),

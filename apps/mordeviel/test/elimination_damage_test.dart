@@ -9,6 +9,7 @@ import 'package:mordeviel/cards/classic_role.dart';
 import 'package:mordeviel/design/game_theme.dart';
 import 'package:mordeviel/village/ceremonies.dart';
 import 'package:mordeviel/village/elimination_damage.dart';
+import 'package:mordeviel/village/sulfuron_scene.dart';
 
 void main() {
   test(
@@ -131,6 +132,8 @@ void main() {
         tester.widget<EliminationDamage>(find.byType(EliminationDamage)).cause,
         'poison',
       );
+      expect(find.byType(BurningCard), findsNothing);
+      expect(find.byType(BottomUpGifBurningCard), findsNothing);
       expect(events, ['voix:poison']);
       await tester.drag(find.byType(RoleCardFront), const Offset(0, 170));
       await tester.pumpAndSettle();
@@ -139,10 +142,56 @@ void main() {
         tester.widget<EliminationDamage>(find.byType(EliminationDamage)).cause,
         'hunter',
       );
+      expect(find.byType(BurningCard), findsNothing);
+      expect(find.byType(BottomUpGifBurningCard), findsNothing);
       expect(find.text('Dernier tir du Chasseur'), findsOneWidget);
       await tester.tap(find.text('Retourner au village'));
       await tester.pumpAndSettle();
       expect(events.last, 'fin:hunter');
+    },
+  );
+  testWidgets(
+    'La carte reste masquée après le retour jusqu’à une action du joueur',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: FilledButton(
+                onPressed: () => showElimination(
+                  context,
+                  name: 'Victime',
+                  role: 'seer',
+                  cause: 'night',
+                ),
+                child: const Text('Ouvrir'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Ouvrir'));
+      await tester.pumpAndSettle();
+      expect(find.byType(RoleCardFront), findsOneWidget);
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      expect(find.text('Carte masquée'), findsOneWidget);
+      expect(find.byType(RoleCardFront), findsNothing);
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      expect(find.text('Carte masquée'), findsOneWidget);
+      expect(find.byType(RoleCardFront), findsNothing);
+      expect(find.text('Afficher la carte'), findsOneWidget);
+
+      await tester.tap(find.text('Afficher la carte'));
+      await tester.pump();
+      expect(find.text('Carte masquée'), findsNothing);
+      expect(find.byType(RoleCardFront), findsOneWidget);
+
+      await tester.tap(find.text('Retourner au village'));
+      await tester.pumpAndSettle();
     },
   );
   testWidgets('Un rôle caché reste caché avec le poison', (tester) async {
@@ -168,6 +217,44 @@ void main() {
     );
     await tester.tap(find.text('Retourner au village'));
     await tester.pumpAndSettle();
+  });
+  testWidgets('Seul le feu de Sulfuron brûle la carte selon son thème', (
+    tester,
+  ) async {
+    for (final ambience in CardAmbience.values) {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: FilledButton(
+                onPressed: () => showElimination(
+                  context,
+                  name: 'Victime',
+                  role: 'seer',
+                  cause: 'poison',
+                  effect: 'sulfuron_fire',
+                  ambience: ambience,
+                ),
+                child: const Text('Ouvrir'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Ouvrir'));
+      await tester.pumpAndSettle();
+
+      if (ambience == CardAmbience.horror) {
+        expect(find.byType(BurningCard), findsOneWidget);
+        expect(find.byType(BottomUpGifBurningCard), findsNothing);
+      } else {
+        expect(find.byType(BottomUpGifBurningCard), findsOneWidget);
+        expect(find.byType(BurningCard), findsNothing);
+      }
+
+      await tester.tap(find.text('Retourner au village'));
+      await tester.pumpAndSettle();
+    }
   });
   testWidgets('Les dégâts se dessinent dans tous les thèmes et formats', (
     tester,

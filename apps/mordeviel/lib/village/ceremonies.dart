@@ -3,6 +3,7 @@ import '../services/immersion_preferences.dart';
 import 'package:flutter/material.dart';
 import '../cards/classic_role.dart';
 import '../content/content_image.dart';
+import '../content/pack_store.dart';
 import '../cards/card_gallery.dart';
 import 'elimination_damage.dart';
 import 'sentence_separation.dart';
@@ -10,6 +11,7 @@ import 'electricity.dart';
 import 'blood_splatter.dart';
 import 'mayor_shatter.dart';
 import 'sulfuron_scene.dart';
+import 'wolf_devour_video.dart';
 
 const sentenceIllustrations = [
   'assets/village/intense/sentences/guillotine.jpg',
@@ -373,27 +375,47 @@ Future<void> showElimination(
   bool hasNext = false,
   bool wasMayor = false,
   CardAmbience? mayorAmbience,
-}) => showGeneralDialog<void>(
-  context: context,
-  barrierDismissible: false,
-  barrierLabel: 'Annonce d’élimination',
-  barrierColor: const Color(0xF0080B10),
-  pageBuilder: (context, animation, secondaryAnimation) => _DeathCard(
-    name: name,
-    role: role,
+}) async {
+  final videoAsset = wolfDevourVideoFor(
     cause: cause,
-    effect: effect,
     ambience: ambience,
-    feminine: feminine,
-    cursed: cursed,
-    lastWords: lastWords,
-    onRevealed: onRevealed,
-    onDismissed: onDismissed,
-    hasNext: hasNext,
-    wasMayor: wasMayor,
-    mayorAmbience: mayorAmbience,
-  ),
-);
+    role: role,
+  );
+  String? videoPath;
+  if (videoAsset != null && !MediaQuery.disableAnimationsOf(context)) {
+    final store = PackStore.instance;
+    try {
+      await store.initialize();
+      videoPath = store.pathFor(videoAsset);
+    } catch (_) {
+      // The regular card reveal is available offline.
+    }
+  }
+  if (!context.mounted) return;
+  return showGeneralDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    barrierLabel: 'Annonce d’élimination',
+    barrierColor: const Color(0xF0080B10),
+    pageBuilder: (_, _, _) => _DeathCard(
+      name: name,
+      role: role,
+      cause: cause,
+      effect: effect,
+      ambience: ambience,
+      feminine: feminine,
+      cursed: cursed,
+      lastWords: lastWords,
+      onRevealed: onRevealed,
+      onDismissed: onDismissed,
+      hasNext: hasNext,
+      wasMayor: wasMayor,
+      mayorAmbience: mayorAmbience,
+      videoPath: videoPath,
+      whiteWolfFinishing: videoAsset == whiteWolfDevourVideoAsset,
+    ),
+  );
+}
 
 class _DeathCard extends StatefulWidget {
   const _DeathCard({
@@ -410,6 +432,8 @@ class _DeathCard extends StatefulWidget {
     this.hasNext = false,
     this.wasMayor = false,
     this.mayorAmbience,
+    this.videoPath,
+    required this.whiteWolfFinishing,
   });
   final String? lastWords;
   final VoidCallback? onRevealed, onDismissed;
@@ -423,6 +447,8 @@ class _DeathCard extends StatefulWidget {
   final String? role;
   final String cause;
   final String? effect;
+  final String? videoPath;
+  final bool whiteWolfFinishing;
   @override
   State<_DeathCard> createState() => _DeathCardState();
 }
@@ -443,7 +469,13 @@ class _DeathCardState extends State<_DeathCard>
       ),
     ),
   );
-  int get _baseMilliseconds => widget.effect == 'sulfuron_fire'
+  bool _wolfVideoFailed = false;
+  bool _reducedAnimations = false;
+  bool get _usesWolfDevourVideo =>
+      widget.videoPath != null && !_wolfVideoFailed && !_reducedAnimations;
+  int get _baseMilliseconds => _usesWolfDevourVideo
+      ? wolfDevourVideoDurationMilliseconds
+      : widget.effect == 'sulfuron_fire'
       ? 4300
       : widget.cause == 'poison'
       ? 4000
@@ -454,12 +486,17 @@ class _DeathCardState extends State<_DeathCard>
       : widget.cursed
       ? 2800
       : 1800;
+  int get _mayorIntroMilliseconds =>
+      widget.wasMayor && !_usesWolfDevourVideo ? 1600 : 0;
   double get _deathProgress =>
-      ((_animation.value * (_baseMilliseconds + (widget.wasMayor ? 1600 : 0)) -
-                  (widget.wasMayor ? 1600 : 0)) /
+      ((_animation.value * (_baseMilliseconds + _mayorIntroMilliseconds) -
+                  _mayorIntroMilliseconds) /
               _baseMilliseconds)
           .clamp(0.0, 1.0);
-  Widget _mayorLayer(Widget child) => !widget.wasMayor
+  double get _cardRevealProgress =>
+      _usesWolfDevourVideo ? wolfDevourCardRevealProgress(_deathProgress) : 0;
+  Widget _mayorLayer(Widget child) =>
+      !widget.wasMayor || _usesWolfDevourVideo || _concealed
       ? child
       : MayorShatter(
           progress: (_animation.value * (_baseMilliseconds + 1600) / 1600)
@@ -473,34 +510,69 @@ class _DeathCardState extends State<_DeathCard>
           ),
           child: child,
         );
-  Widget _sentenceCard(Widget child) => widget.effect == 'sulfuron_fire'
-      ? BurningCard(
-          progress: ((_deathProgress - .55) / .45).clamp(0.0, 1.0),
-          child: child,
-        )
-      : widget.cause != 'vote'
-      ? child
-      : SentenceSeparation(
-          progress: ((_deathProgress - .55) / .45).clamp(0.0, 1.0),
-          edition: widget.ambience.asset,
-          seed: widget.name.codeUnits.fold<int>(0, (n, c) => n + c),
-          child: child,
-        );
+  Widget _sentenceCard(Widget child) {
+    final progress = ((_deathProgress - .55) / .45).clamp(0.0, 1.0);
+    if (widget.effect == 'sulfuron_fire') {
+      return widget.ambience == CardAmbience.horror
+          ? BurningCard(progress: progress, child: child)
+          : BottomUpGifBurningCard(progress: progress, child: child);
+    }
+    final sentenced = widget.cause != 'vote'
+        ? child
+        : SentenceSeparation(
+            progress: progress,
+            edition: widget.ambience.asset,
+            seed: widget.name.codeUnits.fold<int>(0, (n, c) => n + c),
+            child: child,
+          );
+    return sentenced;
+  }
+
   late final _animation = AnimationController(
     vsync: this,
     duration: Duration(
-      milliseconds: _baseMilliseconds + (widget.wasMayor ? 1600 : 0),
+      milliseconds: _baseMilliseconds + _mayorIntroMilliseconds,
     ),
   );
   bool _concealed = false;
   bool _spoken = false, _leaving = false;
   double _dragDistance = 0;
   void _revealSpeech() {
-    if (_deathProgress >= .55 && !_spoken && !_concealed && !_leaving) {
+    final revealThreshold = _usesWolfDevourVideo ? .16 : .55;
+    if (_deathProgress >= revealThreshold &&
+        !_spoken &&
+        !_concealed &&
+        !_leaving) {
       _spoken = true;
       ImmersionPreferences.instance.touch(strong: true);
       widget.onRevealed?.call();
     }
+  }
+
+  void _startDeathAnimation() {
+    if (!mounted ||
+        _concealed ||
+        _animation.isAnimating ||
+        _animation.isCompleted) {
+      return;
+    }
+    if (_reducedAnimations) {
+      _animation.value = 1;
+    } else {
+      _animation.forward();
+    }
+  }
+
+  void _handleWolfVideoStarted() => _startDeathAnimation();
+
+  void _handleWolfVideoFailed() {
+    if (!mounted || _wolfVideoFailed) return;
+    _animation.stop();
+    setState(() => _wolfVideoFailed = true);
+    _animation.duration = Duration(
+      milliseconds: _baseMilliseconds + _mayorIntroMilliseconds,
+    );
+    _startDeathAnimation();
   }
 
   Future<void> _dismiss() async {
@@ -516,21 +588,27 @@ class _DeathCardState extends State<_DeathCard>
   @override
   void initState() {
     super.initState();
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _concealed = lifecycle != null && lifecycle != AppLifecycleState.resumed;
     WidgetsBinding.instance.addObserver(this);
     _animation.addListener(_revealSpeech);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      if (MediaQuery.disableAnimationsOf(context)) {
-        _animation.value = 1;
-      } else {
-        _animation.forward();
-      }
+      if (!_usesWolfDevourVideo) _startDeathAnimation();
     });
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _reducedAnimations = MediaQuery.disableAnimationsOf(context);
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed && mounted) {
+    if (!mounted) return;
+    if (state != AppLifecycleState.resumed && !_concealed) {
+      _animation.stop();
       setState(() => _concealed = true);
     }
   }
@@ -596,96 +674,125 @@ class _DeathCardState extends State<_DeathCard>
                       Expanded(
                         child: Center(
                           child: AspectRatio(
-                            aspectRatio: .7,
-                            child: AnimatedBuilder(
-                              animation: _animation,
-                              builder: (context, child) {
-                                final flip = ((_deathProgress - .1) / .45)
-                                    .clamp(0.0, 1.0);
-                                final front =
-                                    (widget.wasMayor || flip > .5) &&
-                                    !_concealed &&
-                                    widget.role != null;
-                                return _mayorLayer(
-                                  Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.identity()
-                                      ..setEntry(3, 2, .001)
-                                      ..rotateY(
-                                        widget.wasMayor
-                                            ? 0
-                                            : (flip > .5 ? flip - 1 : flip) *
-                                                  math.pi,
+                            aspectRatio: _usesWolfDevourVideo ? 9 / 16 : .7,
+                            child: _usesWolfDevourVideo
+                                ? AnimatedBuilder(
+                                    animation: _animation,
+                                    builder: (context, _) => WolfDevourVideo(
+                                      role: configuredRole(
+                                        widget.role!,
+                                        feminine: widget.feminine,
+                                        edition: widget.ambience.asset,
                                       ),
-                                    child: EliminationDamage(
-                                      cause: widget.cause,
-                                      progress: ((_deathProgress - .55) / .45)
-                                          .clamp(0.0, 1.0),
-                                      child: _sentenceCard(
-                                        Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            if (front)
-                                              RoleCardFront(
-                                                role: configuredRole(
-                                                  widget.role!,
-                                                  feminine: widget.feminine,
-                                                  edition:
-                                                      widget.ambience.asset,
-                                                ),
-                                                ambience: widget.ambience,
-                                              )
-                                            else
-                                              ContentImage(
-                                                widget.ambience ==
-                                                        CardAmbience.horror
-                                                    ? 'assets/village/horror/card_back.png'
-                                                    : widget.ambience ==
-                                                          CardAmbience.intense
-                                                    ? (widget.cause == 'night'
-                                                          ? 'assets/village/intense/card_clawed.png'
-                                                          : 'assets/village/intense/card_back.png')
-                                                    : 'assets/village/card_back.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            if (![
-                                              'curse',
-                                              'hunter',
-                                              'poison',
-                                              'vote',
-                                            ].contains(widget.cause))
-                                              ClipRect(
-                                                clipper: _ScratchClipper(
-                                                  ((_deathProgress - .55) / .35)
-                                                      .clamp(0.0, 1.0),
-                                                ),
-                                                child: Image.asset(
-                                                  'assets/village/claws.png',
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            if (widget.cursed)
-                                              Positioned.fill(
-                                                child: IgnorePointer(
-                                                  child: CustomPaint(
-                                                    painter: ElderLightning(
-                                                      _deathProgress,
-                                                      reduced:
-                                                          MediaQuery.disableAnimationsOf(
-                                                            context,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
+                                      videoPath: widget.videoPath!,
+                                      whiteWolfFinishing:
+                                          widget.whiteWolfFinishing,
+                                      revealProgress: _cardRevealProgress,
+                                      concealed: _concealed,
+                                      onPlaybackStarted:
+                                          _handleWolfVideoStarted,
+                                      onPlaybackFailed: _handleWolfVideoFailed,
                                     ),
+                                  )
+                                : AnimatedBuilder(
+                                    animation: _animation,
+                                    builder: (context, child) {
+                                      final flip = ((_deathProgress - .1) / .45)
+                                          .clamp(0.0, 1.0);
+                                      final front =
+                                          (widget.wasMayor || flip > .5) &&
+                                          !_concealed &&
+                                          widget.role != null;
+                                      return _mayorLayer(
+                                        Transform(
+                                          alignment: Alignment.center,
+                                          transform: Matrix4.identity()
+                                            ..setEntry(3, 2, .001)
+                                            ..rotateY(
+                                              widget.wasMayor
+                                                  ? 0
+                                                  : (flip > .5
+                                                            ? flip - 1
+                                                            : flip) *
+                                                        math.pi,
+                                            ),
+                                          child: EliminationDamage(
+                                            cause: widget.cause,
+                                            progress:
+                                                ((_deathProgress - .55) / .45)
+                                                    .clamp(0.0, 1.0),
+                                            child: _sentenceCard(
+                                              Stack(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  if (front)
+                                                    RoleCardFront(
+                                                      role: configuredRole(
+                                                        widget.role!,
+                                                        feminine:
+                                                            widget.feminine,
+                                                        edition: widget
+                                                            .ambience
+                                                            .asset,
+                                                      ),
+                                                      ambience: widget.ambience,
+                                                    )
+                                                  else
+                                                    ContentImage(
+                                                      widget.ambience ==
+                                                              CardAmbience
+                                                                  .horror
+                                                          ? 'assets/village/horror/card_back.png'
+                                                          : widget.ambience ==
+                                                                CardAmbience
+                                                                    .intense
+                                                          ? (widget.cause ==
+                                                                    'night'
+                                                                ? 'assets/village/intense/card_clawed.png'
+                                                                : 'assets/village/intense/card_back.png')
+                                                          : 'assets/village/card_back.png',
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  if (![
+                                                    'curse',
+                                                    'hunter',
+                                                    'poison',
+                                                    'vote',
+                                                  ].contains(widget.cause))
+                                                    ClipRect(
+                                                      clipper: _ScratchClipper(
+                                                        ((_deathProgress -
+                                                                    .55) /
+                                                                .35)
+                                                            .clamp(0.0, 1.0),
+                                                      ),
+                                                      child: Image.asset(
+                                                        'assets/village/claws.png',
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                  if (widget.cursed)
+                                                    Positioned.fill(
+                                                      child: IgnorePointer(
+                                                        child: CustomPaint(
+                                                          painter: ElderLightning(
+                                                            _deathProgress,
+                                                            reduced:
+                                                                MediaQuery.disableAnimationsOf(
+                                                                  context,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
                           ),
                         ),
                       ),
@@ -699,18 +806,29 @@ class _DeathCardState extends State<_DeathCard>
                               ? 'L’identité reste cachée, mais la malédiction frappe le Village.'
                               : widget.role == null
                               ? 'Son rôle reste secret selon les règles du salon.'
-                              : _deathProgress < .55
+                              : _deathProgress <
+                                    (_usesWolfDevourVideo ? .16 : .55)
                               ? 'La carte se révèle…'
                               : 'Rôle : ${configuredRole(widget.role!).name}',
                           textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 12),
+                      if (_concealed)
+                        FilledButton.tonal(
+                          onPressed: () {
+                            setState(() => _concealed = false);
+                            if (!_usesWolfDevourVideo) _startDeathAnimation();
+                          },
+                          child: const Text('Afficher la carte'),
+                        ),
                       if (widget.lastWords != null)
                         AnimatedBuilder(
                           animation: _animation,
                           builder: (_, _) =>
-                              !_concealed && _deathProgress >= .55
+                              !_concealed &&
+                                  _deathProgress >=
+                                      (_usesWolfDevourVideo ? .16 : .55)
                               ? ConstrainedBox(
                                   constraints: const BoxConstraints(
                                     maxHeight: 80,

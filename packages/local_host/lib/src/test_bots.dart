@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'client.dart';
 import 'server.dart';
+import 'bot_dialogue.dart';
 
 /// Makes decisions from a player's public and private views only.
 /// Never accepts a host snapshot, assignments, or another player's private view.
@@ -74,7 +75,9 @@ class BotDecisions {
     final phase = game['phase'];
     // Reactions may belong to an eliminated player (hunter, scapegoat, mayor).
     final variants = (own['variant_abilities'] as List? ?? []).cast<Map>();
-    if (variants.isNotEmpty && _random.nextBool()) {
+    final ability = own['ability'];
+    if (variants.isNotEmpty &&
+        ((phase == 'infection' && ability is! Map) || _random.nextBool())) {
       final ability = variants[_random.nextInt(variants.length)];
       final choices = List<String>.from(ability['targets'] as List)
         ..shuffle(_random);
@@ -92,9 +95,11 @@ class BotDecisions {
     }
     if (phase == 'hunter')
       return action('hunter.shoot', target: choose(others));
-    final ability = own['ability'];
     if (ability is Map) {
-      if (ability['can_pass'] == true && _random.nextInt(5) == 0)
+      if (ability['can_pass'] == true &&
+          phase != 'alpha' &&
+          phase != 'infection' &&
+          _random.nextInt(5) == 0)
         return action('night.pass');
       final choices = List<String>.from(ability['targets'] as List)
         ..shuffle(_random);
@@ -208,7 +213,7 @@ class TestBotTable {
     }
     for (var n = 0; n < count; n++) {
       if ((host.snapshot['players'] as List).length >= 20) break;
-      final bot = _TestBot(this, 'Bot ${++_sequence}');
+      final bot = _TestBot(this, BotPersona.forIndex(++_sequence));
       _bots.add(bot);
       try {
         await bot.connect();
@@ -216,7 +221,11 @@ class TestBotTable {
           await bot.dispose();
           return;
         }
-        host.markBotPlayer(bot.client.id!, practice: practice);
+        host.markBotPlayer(
+          bot.client.id!,
+          practice: practice,
+          gender: bot.persona.gender,
+        );
       } catch (_) {
         _bots.remove(bot);
         await bot.dispose();
@@ -233,9 +242,11 @@ class TestBotTable {
 }
 
 class _TestBot {
-  _TestBot(this.table, this.name);
+  _TestBot(this.table, this.persona) : conversation = BotConversation(persona);
   final TestBotTable table;
-  final String name;
+  final BotPersona persona;
+  String get name => persona.name;
+  final BotConversation conversation;
   final client = LobbyClient();
   final policy = BotDecisions();
   final _joined = Completer<void>();
@@ -311,6 +322,26 @@ class _TestBot {
     if (id == null) return;
     _announceWolfTarget(id);
     final move = policy.next(id, _game, _own);
+    if (_chatReady) {
+      final message = conversation.next(
+        id,
+        _game,
+        _own,
+        DateTime.now(),
+        voteTarget: move != null && move['action'] == 'vote.cast'
+            ? (move['target'] as String?)
+            : null,
+      );
+      if (message != null) {
+        _lastChat = DateTime.now();
+        client.gameAction(
+          'day.chat',
+          message['phase_revision'] as int,
+          text: message['text'] as String,
+          replyTo: message['reply_to'] as String?,
+        );
+      }
+    }
     if (move == null) return;
     final key =
         '${move['phase_revision']}:${move['action']}${['wolves.choose', 'hunter.shoot', 'sisters.transfer_agree'].contains(move['action']) ? ':${move['target'] ?? move['targets']}' : ''}';
@@ -329,17 +360,6 @@ class _TestBot {
       kill: move['kill'] as String?,
       text: move['text'] as String?,
     );
-    // Scripted messages are deliberately neutral: no hidden role disclosure.
-    if (move['action'] == 'vote.cast' &&
-        _game['chat_open'] == true &&
-        _chatReady) {
-      _lastChat = DateTime.now();
-      client.gameAction(
-        'day.chat',
-        move['phase_revision'] as int,
-        text: 'Je garde un œil sur les votes. Mon choix est fait.',
-      );
-    }
   }
 
   bool get _chatReady =>

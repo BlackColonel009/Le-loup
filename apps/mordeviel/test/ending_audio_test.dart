@@ -43,6 +43,28 @@ void main() {
       }
     },
   );
+  test('Le son de combustion est réservé au feu de Sulfuron', () async {
+    final backend = FakeAudio();
+    final audio = ClassicAudio(backend: backend, fadeDuration: Duration.zero);
+    audio.room(state('ended', 10), isHost: true);
+    await audio.settled;
+    backend.calls.clear();
+
+    audio.deathSpeech('seer', cause: 'vote');
+    await flush();
+    expect(backend.calls, isNot(contains('sulfuron_fire.wav')));
+    expect(backend.calls.last, 'neural/classic_female/death_seer.wav');
+
+    audio.stopDeathSpeech();
+    backend.completed.add(null);
+    await flush();
+    audio.deathSpeech('seer', cause: 'vote', burning: true);
+    await flush();
+    expect(backend.calls.last, 'sulfuron_fire.wav');
+    audio.stopDeathSpeech();
+    await audio.settled;
+    audio.dispose();
+  });
   test(
     'La réplique de sauvetage peut être écoutée en privé sur un téléphone local',
     () async {
@@ -213,7 +235,9 @@ void main() {
 
   test('Toutes les nouvelles annonces sont déclarées et livrées', () {
     for (final ending in gameEndings.values) {
-      final profile = voiceProfileById(ending.profile);
+      final profile = ending.profile == 'sulfuron'
+          ? sulfuronCharacterVoice
+          : voiceProfileById(ending.profile);
       expect(profile.supports(ending.cue), isTrue);
       expect(
         File(
@@ -227,7 +251,9 @@ void main() {
       elderCurseSpeech,
       villagerFemaleSpeech,
     ]) {
-      final profile = voiceProfileById(speech.profile);
+      final profile = speech.profile == 'sulfuron'
+          ? sulfuronCharacterVoice
+          : voiceProfileById(speech.profile);
       expect(profile.supports(speech.cue), isTrue);
       expect(
         File(

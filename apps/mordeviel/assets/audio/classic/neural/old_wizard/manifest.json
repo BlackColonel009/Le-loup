@@ -705,6 +705,24 @@
       },
       "generated_locally": true,
       "precision": "int4"
+    },
+    "mdj_village_watch": {
+      "seconds": 5.76,
+      "sha256": "b3dd7d00cc0dd9f0895e2ba0c584a309316faff9209fa64b72bf1dcf75b92816",
+      "text": "Éclaireurs et Veilleurs, ouvrez les yeux. Quelle maison souhaitez-vous observer ?",
+      "generation": {
+        "repo": "onnx-community/Qwen3-TTS-12Hz-1.7B-Base",
+        "revision": "16ec6f3335d919e0e007d825a6f47fdd2cd77594",
+        "tokenizer_repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "tokenizer_revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+        "local_changes": [
+          "disable remote code",
+          "limit CPU threads to four",
+          "omit unused design encoder"
+        ]
+      },
+      "generated_locally": true,
+      "precision": "int4"
     }
   },
   "note": "wolves and preview use the exact approved original recording; remaining game cues pending"

@@ -174,6 +174,10 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                   'horror-cards',
                                   'horror-village',
                                   'horror-ambience',
+                                  if (store.packs.any(
+                                    (p) => p['id'] == 'horror-devour',
+                                  ))
+                                    'horror-devour',
                                 ]) {
                                   if (!store.installed(id)) {
                                     if (!await _install(id)) break;
@@ -207,6 +211,10 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                       if (pack['id'] == 'victory-poses')
                         const Text(
                           'Facultatif · Ajoute les poses illustrées en fin de partie. Sans ce pack, le résultat et les vainqueurs restent affichés.',
+                        ),
+                      if (pack['id'] == 'horror-devour')
+                        const Text(
+                          'Facultatif · Ajoute les vidéos aux dévorations Horreur.',
                         ),
                       Text(
                         '${((pack['size'] as num) / 1048576).toStringAsFixed(1)} Mo · ${store.installed(pack['id'] as String) ? 'Installé' : 'À télécharger / mettre à jour'}',

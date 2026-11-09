@@ -37,6 +37,7 @@ Les annonces du MDJ utilisent le même texte dans les dix profils. Le profil et 
 | Rendormissement : Loup Blanc | « Loup Blanc, referme les yeux et rendors-toi. » |
 | Rendormissement : Joueur de Flûte | « Joueur de Flûte, referme les yeux et rendors-toi. » |
 | Deux Sœurs | « Deux Sœurs, ouvrez les yeux et reconnaissez-vous. » |
+| Éclaireurs et Veilleurs | « Éclaireurs et Veilleurs, ouvrez les yeux. Quelle maison souhaitez-vous observer ? » |
 | Rendormissement : Deux Sœurs | « Deux Sœurs, refermez les yeux et rendormez-vous. » |
 | Élection du Maire | « Le village élit son Maire. Désignez la personne qui portera votre voix. » |
 | Succession du Maire | « Maire, ton dernier devoir est de choisir ton successeur. » |

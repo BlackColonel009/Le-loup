@@ -960,6 +960,8 @@ class _NightPanelState extends State<NightPanel> {
                 ),
               if (private?['peek_message'] != null)
                 Text('Murmure capté : ${private!['peek_message']}'),
+              if (private?['peek_spotted'] == true)
+                const Text('La meute a repéré votre maison.'),
               if ((private?['spotted_girls'] as List? ?? []).isNotEmpty)
                 Text(
                   'Repérée par la meute : ${(private!['spotted_girls'] as List).map(name).join(', ')}',

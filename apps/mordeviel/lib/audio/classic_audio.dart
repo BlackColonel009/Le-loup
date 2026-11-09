@@ -573,6 +573,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     String? edition,
     bool cursed = false,
     bool feminine = false,
+    bool burning = false,
   }) {
     final speech = deathSpeechFor(
       publicRole,
@@ -581,6 +582,7 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     );
     if (!_audible || scene != AudioScene.host) return;
     if (speech == null &&
+        !burning &&
         cause != 'sulfuron_fire' &&
         cause != 'hunter' &&
         !(cause == 'vote' && edition == 'intense')) {
@@ -589,7 +591,8 @@ class ClassicAudio extends ChangeNotifier with WidgetsBindingObserver {
     stopDeathSpeech();
     final ticket = _deathTicket;
     _story([
-      if (cause == 'sulfuron_fire') (asset: 'sulfuron_fire.wav', profile: null),
+      if (burning || cause == 'sulfuron_fire')
+        (asset: 'sulfuron_fire.wav', profile: null),
       if (cause == 'hunter') (asset: 'hunter_volley.wav', profile: null),
       if (cause == 'hunter' && wolfRoleIds.contains(publicRole))
         (asset: 'wolf_fall.wav', profile: null),

@@ -9,6 +9,7 @@ String packLabel(String id) =>
       'horror-cards': 'Horreur · Cartes',
       'intense-cards': 'Intense · Cartes',
       'horror-village': 'Horreur · Village et sentences',
+      'horror-devour': 'Horreur · Vidéos de dévoration',
       'horror-ambience': 'Horreur · Sons d’ambiance',
       'voice-intense-male': 'Voix · Homme intense',
       'voice-intense-female': 'Voix · Femme intense',
@@ -30,6 +31,10 @@ String? downloadablePackForAsset(String asset) {
   if (asset.contains('/stickers/')) return 'stickers-classic';
   if (asset.contains('/cards/horror/')) return 'horror-cards';
   if (asset.contains('/cards/intense/')) return 'intense-cards';
+  if (asset == 'assets/village/horror/wolf_devour.mp4' ||
+      asset == 'assets/village/horror/white_wolf_devour.mp4') {
+    return 'horror-devour';
+  }
   if (asset.contains('/village/horror/')) return 'horror-village';
   if (asset.contains('/audio/horror/')) return 'horror-ambience';
   final match = RegExp(r'(?:^|/)neural/([^/]+)/').firstMatch(asset);

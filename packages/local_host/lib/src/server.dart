@@ -385,12 +385,14 @@ class LocalHost implements GameHost {
   /// Host-only metadata: never accepted as a command from a joining player.
   bool _testMode = false;
   void markTestPlayer(String id) => markBotPlayer(id);
-  void markBotPlayer(String id, {bool practice = true}) {
+  void markBotPlayer(String id, {bool practice = true, String? gender}) {
     if (started || !_players.containsKey(id)) {
       throw StateError('Joueur de test indisponible.');
     }
     if (practice) _testMode = true;
     _players[id]!['is_bot'] = true;
+    if (gender == 'female' || gender == 'male')
+      _players[id]!['bot_gender'] = gender;
     _players[id]!['ready'] = true;
     _publish();
   }

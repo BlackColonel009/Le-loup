@@ -61,6 +61,16 @@ void main() {
     expect(find.text(revivalText), findsOneWidget);
     expect(find.textContaining('Morgane'), findsOneWidget);
     expect(revealed, 1);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.byType(RoleCardFront), findsNothing);
+    expect(find.textContaining('Morgane'), findsNothing);
+    await tester.tap(find.text('Afficher la carte'));
+    await tester.pumpAndSettle();
+    expect(find.byType(RoleCardFront), findsOneWidget);
+    expect(find.textContaining('Morgane'), findsOneWidget);
+    expect(revealed, 1);
     await tester.ensureVisible(find.text('Choisir mon destin'));
     await tester.tap(find.text('Choisir mon destin'));
     await tester.pumpAndSettle();

@@ -4,6 +4,7 @@ import 'package:local_host/local_host.dart' show stickerMessage;
 import '../design/game_theme.dart';
 import '../stickers/chat_stickers.dart';
 import '../chat/message_reply.dart';
+import '../chat/player_mentions.dart';
 import '../stickers/sticker_suggestions.dart';
 import 'package:local_host/local_host.dart' show ChatSticker;
 import 'village_guidance.dart';
@@ -143,6 +144,21 @@ class _VillageChatState extends State<VillageChat> {
                 .map((p) => p['nickname'] as String)
                 .firstOrNull ??
             'Joueur';
+  List<Map> _mentionPlayers(VillageChannel channel) {
+    final self = widget.selfId ?? widget.privateState?['id'];
+    final game = widget.room['game'] as Map? ?? {};
+    final alive = (game['alive_ids'] as List? ?? []).toSet();
+    final members = channel.kind == 'wolves'
+        ? (widget.privateState?['pack'] as List? ?? []).toSet()
+        : channel.private
+        ? (_bond?['members'] as List? ?? []).toSet()
+        : alive;
+    return (widget.room['players'] as List? ?? [])
+        .whereType<Map>()
+        .where((p) => p['id'] != self && members.contains(p['id']))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final channel = _channel;
@@ -316,6 +332,11 @@ class _VillageChatState extends State<VillageChat> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (channel.writable) ...[
+                        PlayerMentionSuggestions(
+                          controller: _text,
+                          focusNode: _focus,
+                          players: _mentionPlayers(channel),
+                        ),
                         StickerSuggestions(
                           controller: _text,
                           scope: channel.scope,
@@ -352,7 +373,7 @@ class _VillageChatState extends State<VillageChat> {
                             decoration: InputDecoration(
                               hintText: channel.private
                                   ? 'Ton message privé…'
-                                  : 'Ton message au conseil…',
+                                  : '@ -- pour taguer un villageois ou un bot',
                               counterText: '',
                               filled: false,
                               border: InputBorder.none,
